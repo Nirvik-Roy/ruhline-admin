@@ -4,6 +4,7 @@ import Button from '../../../Components/Button'
 import photo from '../../../assets/Avatar.png'
 import UpcomingProgramSlider from '../../Coaches/SingleCoache/UpcomingProgramSlider.jsx'
 import ProgramAssignedSlider from '../../Coaches/SingleCoache/ProgramAssignedSlider.jsx'
+import CompletedProgramSlider from './CompletedProgramSlider.jsx'
 const SingleCustomer = () => {
     return (
         <>
@@ -37,7 +38,7 @@ const SingleCustomer = () => {
                     </div>
                 </div>
                 <UpcomingProgramSlider />
-                <ProgramAssignedSlider />
+                <CompletedProgramSlider/>
             </div>
         </>
     )
