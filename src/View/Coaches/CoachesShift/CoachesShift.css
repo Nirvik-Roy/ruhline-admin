@@ -1,0 +1,130 @@
+.coaches_shift_card_wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.coaches_shift_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 10px;
+    border: 1px solid rgba(144, 155, 109, 1);
+    border-radius: 10px;
+    padding: 15px 20px;
+    position: relative;
+}
+.coaches_shift_card i{
+    color: var(--primary-color);
+    position: absolute;
+    top: 8px;
+    right: 3px;
+}
+.coaches_shift_card img{
+    width: 45px;
+}
+.coaches_shift_card p{
+    text-align: center;
+    color: var(--text-color);
+    font-size: 14px;
+    text-wrap: nowrap;
+}
+.dropdown_wrapper662{
+    position: absolute;
+    bottom: -5px;
+    right: -50px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0px;
+    width: fit-content;
+    border-radius: 5px;
+    box-shadow: 0px 8px 12px 0px rgba(9, 30, 66, 0.15);
+    padding: 10px 0px;
+    z-index: 9;
+    cursor: pointer;
+}
+.dropdown_wrapper662 small{
+    font-size: 12px;
+    transition: 0.2s linear all;
+    padding: 5px 15px;
+}
+.dropdown_wrapper662 small:hover{
+    background-color: #f6f4f4;
+}
+.enbale_wrapper{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+}
+.enbale_wrapper p{
+    font-size: 16px;
+    margin-left: 10px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+.enable_toggle_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3px;
+    width: 37px;
+    padding: 0px 3px 0px 5px ;
+    border-radius: 15px;
+    height: 18px;
+    flex-direction: row;
+        transition: 0.2s linear all;
+}
+.enable_toggle_wrapper2{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3px;
+    width: 37px;
+    padding: 0px 3px 0px 5px ;
+    border-radius: 15px;
+    height: 18px;
+    flex-direction: row-reverse;
+    transition: 0.2s linear all;
+}
+.enable_toggle_wrapper i{
+    font-size: 8px;
+    color: #fff;
+}
+.enable_toggle_wrapper2 i{
+        font-size: 8px;
+    color: #fff;
+    position: static !important;
+}
+.toggle_circle{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+.modal_checbox_wrapper{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(60px,1fr));
+    gap: 30px;
+}
+.modal_checbox{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;   
+}
+.modal_checbox input{
+    width: 20px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    accent-color: var(--primary-color);
+    background-color: #fff;
+}
+.modal_checbox p{
+    font-size: 14px;
+    color: var(--text-color);
+}

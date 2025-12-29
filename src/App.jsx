@@ -6,6 +6,9 @@ import Login from './View/Login/Login'
 import Dashboard from './View/Dashboard/Dashboard'
 import Coaches from './View/Coaches/Coaches'
 import SingleCoache from './View/Coaches/SingleCoache/SingleCoache'
+import CoachesShift from './View/Coaches/CoachesShift/CoachesShift'
+import Customers from './View/Customers/Customers'
+import SingleCustomer from './View/Customers/SingleCustomer/SingleCustomer'
 
 function App() {
   return (
@@ -16,7 +19,10 @@ function App() {
           <Route path={'/dashboard'} element={<MainLayout />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='coaches' element={<Coaches />} />
-            <Route path='single-coache/:id' element={<SingleCoache />} />
+            <Route path='coaches/single-coache/:id' element={<SingleCoache />} />
+            <Route path='coaches/coaches-shift/:id' element={<CoachesShift/>}/>
+            <Route path='customers' element={<Customers/>}/>
+            <Route path='customers/single-customer/:id' element={<SingleCustomer/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

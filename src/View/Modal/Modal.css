@@ -28,12 +28,12 @@
 .modal_div h4 {
     font-weight: 600;
     color: var(--text-color);
-    font-size: 17px;
+    font-size: 20px;
 }
 
 .modal_div .fa-xmark {
     position: absolute;
-    top: 23px;
+    top: 35px;
     cursor: pointer;
     right: 20px;
 }

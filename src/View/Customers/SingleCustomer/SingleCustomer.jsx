@@ -1,10 +1,10 @@
 import React from 'react'
-import './SingleCoache.css'
+import '../../Coaches/SingleCoache/SingleCoache.css'
 import Button from '../../../Components/Button'
-import photo from '../../../assets/Photo.png'
-import UpcomingProgramSlider from './UpcomingProgramSlider'
-import ProgramAssignedSlider from './ProgramAssignedSlider'
-const SingleCoache = () => {
+import photo from '../../../assets/Avatar.png'
+import UpcomingProgramSlider from '../../Coaches/SingleCoache/UpcomingProgramSlider.jsx'
+import ProgramAssignedSlider from '../../Coaches/SingleCoache/ProgramAssignedSlider.jsx'
+const SingleCustomer = () => {
     return (
         <>
             <div className='dashboard_container'>
@@ -36,11 +36,11 @@ const SingleCoache = () => {
                         </ul>
                     </div>
                 </div>
-                <UpcomingProgramSlider/>
-                <ProgramAssignedSlider/>
+                <UpcomingProgramSlider />
+                <ProgramAssignedSlider />
             </div>
         </>
     )
 }
 
-export default SingleCoache
+export default SingleCustomer

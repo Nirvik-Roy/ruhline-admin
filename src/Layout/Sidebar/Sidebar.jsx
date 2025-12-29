@@ -23,7 +23,7 @@ const Sidebar = () => {
                 </NavLink>
 
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/customers'}>
                     <img src={user} />
                     <p>Customers</p>
                 </NavLink>
