@@ -1,0 +1,153 @@
+.modal_wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
+}
+
+.modal_div {
+    width: 600px;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 30px 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99;
+    transform: translate(-50%, -50%);
+    height: fit-content;
+    max-height: 95vh;
+    overflow-y: auto;
+}
+.modal_div::-webkit-scrollbar{
+    display: none;
+}
+.modal_div h4 {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 17px;
+}
+
+.modal_div .fa-xmark {
+    position: absolute;
+    top: 23px;
+    cursor: pointer;
+    right: 20px;
+}
+
+.modal_form {
+    margin: 30px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.change_cancel_wrapper button:first-child {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-color);
+    border: none;
+    background-color: transparent;
+}
+
+.change_cancel_wrapper {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 20px;
+}
+
+.files_upload_wrapper {
+    width: 100%;
+    height: 150px;
+    border: 1px solid rgba(217, 217, 217, 1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.files_upload_wrapper p {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.files_upload_wrapper p span {
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.files_upload_wrapper h5 {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.files_upload_wrapper input {
+    position: absolute !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    opacity: 0;
+}
+
+.modal_input_grid_wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    column-gap: 15px;
+    gap: 25px;
+}
+
+.phone_input_Wrapper656 {
+    height: 50px;
+    padding: 0 15px;
+    background: transparent;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid rgba(216, 216, 216, 1);
+}
+
+.phone_input_Wrapper656 input {
+    width: 80%;
+    height: 100% !important;
+    border: none !important;
+    padding-left: 5px !important;
+}
+
+.phone_input_Wrapper656 select {
+    border-radius: 0px !important;
+    height: fit-content !important;
+    padding: 0px 0px !important;
+    background-image: none !important;
+    appearance: unset !important;
+}
+
+.phone_input_Wrapper656 input {
+    border: none !important;
+}
+
+.input_form select {
+    height: 50px;
+    padding: 0px 14px;
+    background: transparent;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    border: 1px solid rgba(216, 216, 216, 1);
+    appearance: none;
+    background-image: url('../../assets/_ChevronDownIcon_.png');
+    background-position: right 0.7rem top 50%;
+    background-size: 25px auto;
+    background-repeat: no-repeat;
+}
