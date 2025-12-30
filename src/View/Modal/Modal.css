@@ -234,3 +234,61 @@
     font-weight: 400;
     color: var(--text-color);
 }
+.coupon_input_wrapper{
+    position: relative;
+}
+.coupon_input_wrapper input{
+    height: 50px;
+    width: 100%;
+    padding: 0 60px 0 10px;
+    border: 1px solid rgba(217, 217, 217, 1);
+    border-radius: 10px;
+    outline: none;
+}
+.coupon_input_wrapper input::placeholder{
+    font-weight: 500;
+    color: var(--text-color);
+}
+.coupon_input_wrapper a{
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 13px;
+    position: absolute;
+    top: 18px;
+    right: 10px;
+}
+.order_summary_wrapper{
+    width: 100%;
+    border: 1px solid rgba(217, 217, 217, 1);
+    border-radius: 15px;
+    padding: 20px;
+}
+.order_summary_wrapper h3{
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 16px;
+}
+.order_summary_list_wrapper{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    margin: 15px 0;
+}
+.order_summary_list_wrapper p{
+    color: var(--text-color);
+    font-weight: 400;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.total_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.total_wrapper h4{
+    color: var(--text-color);
+    font-size: 17px;
+    font-weight: 700;
+}

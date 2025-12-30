@@ -1,0 +1,76 @@
+.single_bill_wrapper {
+    border: 1px solid rgba(217, 217, 217, 1);
+    border-radius: 10px;
+    padding: 30px;
+    margin-top: 20px;
+}
+
+.single_bill_wrapper img {
+    width: 120px;
+}
+
+.single_bill_content_wrapper {
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(217, 217, 217, 1);
+    display: flex;
+    flex-direction: column;
+}
+.billing_invoice_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+.bill_address {
+    width: 250px;
+}
+
+.bill_address p {
+    color: var(--text-color);
+    font-size: 13px;
+    line-height: 20px;
+}
+.bill_id_wrapper p{
+     color: var(--text-color);
+    font-size: 13px;
+    line-height: 20px; 
+}
+.bill_id_wrapper{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+.bill_id_wrapper h1{
+    font-size: 22px;
+    color: var(--text-color);
+}
+.single_invoice_to_wrapper {
+    margin: 20px 0;
+}
+.single_invoice_to_wrapper strong{
+    color: var(--text-color);
+    margin-bottom: 15px;
+    display: block;
+}
+.single_invoice_to_wrapper ul{
+    display: flex;
+    flex-direction: column;
+    row-gap: 3px;
+}
+.single_invoice_to_wrapper ul li{
+    color: var(--text-color);
+    list-style: none;
+    font-size: 13px;
+}
+.bill_total_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px  dashed rgba(217, 217, 217, 1);
+    margin-bottom: 40px;
+}
+.bill_total_wrapper p{
+    color: var(--text-color);
+    font-weight: 600;
+}

@@ -13,6 +13,8 @@ import Disputes from './View/Support/Disputes'
 import Coupons from './View/Coupons/Coupons'
 import OurStaff from './View/OurStaff/OurStaff'
 import Roles from './View/Roles/Roles'
+import Billings from './View/Billings/Billings'
+import SingleBilling from './View/Billings/SingleBilling'
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
             <Route path='coupons' element={<Coupons/>}/>
             <Route path='staff' element={<OurStaff/>}/>
             <Route path='roles' element={<Roles/>}/>
+            <Route path='billings' element={<Billings/>}/>
+            <Route path='billings/single-bill/:id' element={<SingleBilling/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

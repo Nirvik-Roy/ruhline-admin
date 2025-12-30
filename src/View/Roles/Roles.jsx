@@ -65,7 +65,7 @@ const Roles = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {[1, 2, 3, 4, 5, 6,1, 2, 3].map((e, i) => (
                                 <tr>
                                     <td>Role 1</td>
                                     <td>Coupons | Customer | Coaches</td>

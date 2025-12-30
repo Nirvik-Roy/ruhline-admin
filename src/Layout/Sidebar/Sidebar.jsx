@@ -36,7 +36,7 @@ const Sidebar = () => {
 
 
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/billings'}>
                     <img src={billings} />
                     <p>Billings</p>
                 </NavLink>
@@ -49,7 +49,7 @@ const Sidebar = () => {
 
 
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/staff'}>
                     <img src={billings} />
                     <p>Our Staff</p>
                 </NavLink>
@@ -60,12 +60,12 @@ const Sidebar = () => {
                     <p>CMS</p>
                 </NavLink>
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/coupons'}>
                     <img src={coupon} />
                     <p>Coupons</p>
                 </NavLink>
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/support/disputes'}>
                     <img src={billings} />
                     <p>Support</p>
                 </NavLink>
