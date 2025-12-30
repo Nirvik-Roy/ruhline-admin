@@ -18,7 +18,15 @@
     font-size: 30px;
     color: var(--text-color);
 }
+th{
+   text-wrap: nowrap;
+   font-size: 14px !important;
+}
+td{
+    vertical-align: top;
+    word-wrap: break-word;
 
+}
 
 @media(max-width:480px) {
     .all_heading {

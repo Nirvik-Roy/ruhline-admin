@@ -36,8 +36,14 @@
     font-size: 14px; 
     resize: none;
 }
-input::-webkit-calendar-picker-indicator{
+input[type="time"]::-webkit-calendar-picker-indicator{
      width: 18px;
     height: 18px;
     background-image: url('../assets/pace.svg');
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator{
+     width: 18px;
+    height: 18px;
+    background-image: url('../assets/calendar_month.svg');
 }

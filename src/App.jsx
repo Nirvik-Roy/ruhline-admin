@@ -9,6 +9,10 @@ import SingleCoache from './View/Coaches/SingleCoache/SingleCoache'
 import CoachesShift from './View/Coaches/CoachesShift/CoachesShift'
 import Customers from './View/Customers/Customers'
 import SingleCustomer from './View/Customers/SingleCustomer/SingleCustomer'
+import Disputes from './View/Support/Disputes'
+import Coupons from './View/Coupons/Coupons'
+import OurStaff from './View/OurStaff/OurStaff'
+import Roles from './View/Roles/Roles'
 
 function App() {
   return (
@@ -20,9 +24,13 @@ function App() {
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='coaches' element={<Coaches />} />
             <Route path='coaches/single-coache/:id' element={<SingleCoache />} />
-            <Route path='coaches/coaches-shift/:id' element={<CoachesShift/>}/>
+            <Route path='coaches/working-shift' element={<CoachesShift/>}/>
             <Route path='customers' element={<Customers/>}/>
             <Route path='customers/single-customer/:id' element={<SingleCustomer/>}/>
+            <Route path='support/disputes' element={<Disputes/>}/>
+            <Route path='coupons' element={<Coupons/>}/>
+            <Route path='staff' element={<OurStaff/>}/>
+            <Route path='roles' element={<Roles/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

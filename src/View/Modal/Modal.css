@@ -22,9 +22,26 @@
     max-height: 95vh;
     overflow-y: auto;
 }
-.modal_div::-webkit-scrollbar{
+
+.modal_img_div {
+    width: 450px;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 30px 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99;
+    transform: translate(-50%, -50%);
+    height: fit-content;
+    max-height: 95vh;
+    overflow-y: auto;
+}
+
+.modal_div::-webkit-scrollbar {
     display: none;
 }
+
 .modal_div h4 {
     font-weight: 600;
     color: var(--text-color);
@@ -150,4 +167,70 @@
     background-position: right 0.7rem top 50%;
     background-size: 25px auto;
     background-repeat: no-repeat;
+}
+
+.modal_disputes_details {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.modal_disputes_details p {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.modal_disputes_details span {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.download_attachment_wrapper {
+    margin: 20px 0;
+}
+
+.download_attachment_wrapper .brown_button {
+    border: 1px solid var(--primary-color);
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.modal_img_div22 {
+    border: 1px solid rgba(217, 217, 217, 1);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.modal_img_div22 img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.modal_img_div22 hr {
+    margin-top: 10px;
+    border: 1px solid rgba(217, 217, 217, 1)
+}
+
+.modal_img_details {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin-top: 15px;
+}
+
+.modal_img_details p {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-color);
+}
+
+.modal_img_details span {
+    font-weight: 400;
+    color: var(--text-color);
 }
