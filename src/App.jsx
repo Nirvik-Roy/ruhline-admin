@@ -18,7 +18,11 @@ import SingleBilling from './View/Billings/SingleBilling'
 import CmsCategories from './View/CMS/CmsCategories/CmsCategories'
 import SiteDetails from './View/CMS/SiteDetails/SiteDetails'
 import CmsHome from './View/CMS/CmsHome/CmsHome'
-import CmsAbout from './View/CMS/CmsHome/CmsAbout'
+import CmsAbout from './View/CMS/CmsAbout/CmsAbout'
+import CmsTermsConditions from './View/CMS/CmsTermsConditions/CmsTermsConditions'
+import CmsPrivacy from './View/CMS/CmsPrivacy/CmsPrivacy'
+import CmsRefundPolicy from './View/CMS/CmsRefundPolicy/CmsRefundPolicy'
+import CmsContact from './View/CMS/CmsContact/CmsContact'
 
 function App() {
   return (
@@ -43,6 +47,10 @@ function App() {
             <Route path='cms/site-details' element={<SiteDetails/>}/>
             <Route path='cms/cms-home' element={<CmsHome/>}/>
             <Route path='cms/cms-about' element={<CmsAbout/>}/>
+            <Route path='cms/terms-conditions' element={<CmsTermsConditions/>}/>
+            <Route path='cms/privacy-policy' element={<CmsPrivacy/>}/>
+            <Route path='cms/refund-policy' element={<CmsRefundPolicy/>}/>
+            <Route path='cms/contact-queries' element={<CmsContact/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

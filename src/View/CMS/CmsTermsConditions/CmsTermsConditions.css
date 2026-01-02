@@ -1,0 +1,6 @@
+.custom_editor_wrapper{
+    margin-top: 20px;
+}
+.custom_editor_wrapper .editor{
+    min-height: 70px;
+}

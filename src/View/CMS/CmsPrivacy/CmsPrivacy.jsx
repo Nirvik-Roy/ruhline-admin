@@ -1,13 +1,15 @@
 import React from 'react'
 import Button from '../../../Components/Button'
-const CmsAbout = () => {
+import '../CmsTermsConditions/CmsTermsConditions.css'
+import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
+const CmsPrivacy = () => {
     return (
         <>
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
-                        <h1>About Us</h1>
-                        <small> CMS / About Us</small>
+                        <h1>Privacy Policy</h1>
+                        <small> CMS / Privacy Policy</small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -21,7 +23,6 @@ const CmsAbout = () => {
                                 fontWeight: '600'
                             }} />
                         </div>
-
                         <div>
                             <Button children={'Save'} styles={{
                                 fontSize: '15px'
@@ -29,9 +30,13 @@ const CmsAbout = () => {
                         </div>
                     </div>
                 </div>
+                <div className='custom_editor_wrapper'>
+                    <CustomTextEditor label={'Privacy Policy Description'} required={true} />
+                </div>
+
             </div>
         </>
     )
 }
 
-export default CmsAbout
+export default CmsPrivacy

@@ -1,0 +1,13 @@
+.about_mission_options_wrapper{
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+     border: 1px solid rgba(217, 217, 217, 1);
+     border-radius: 15px;
+     padding: 20px;
+     margin-bottom: 20px;
+}
+.about_mission_options_wrapper .option_title_wrapper{
+    border: none ;
+    padding: 0;
+}
