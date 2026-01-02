@@ -15,6 +15,8 @@ import OurStaff from './View/OurStaff/OurStaff'
 import Roles from './View/Roles/Roles'
 import Billings from './View/Billings/Billings'
 import SingleBilling from './View/Billings/SingleBilling'
+import CmsCategories from './View/CMS/CmsCategories/CmsCategories'
+import SiteDetails from './View/CMS/SiteDetails/SiteDetails'
 
 function App() {
   return (
@@ -26,15 +28,17 @@ function App() {
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='coaches' element={<Coaches />} />
             <Route path='coaches/single-coache/:id' element={<SingleCoache />} />
-            <Route path='coaches/working-shift' element={<CoachesShift/>}/>
-            <Route path='customers' element={<Customers/>}/>
-            <Route path='customers/single-customer/:id' element={<SingleCustomer/>}/>
-            <Route path='support/disputes' element={<Disputes/>}/>
-            <Route path='coupons' element={<Coupons/>}/>
-            <Route path='staff' element={<OurStaff/>}/>
-            <Route path='roles' element={<Roles/>}/>
-            <Route path='billings' element={<Billings/>}/>
-            <Route path='billings/single-bill/:id' element={<SingleBilling/>}/>
+            <Route path='coaches/working-shift' element={<CoachesShift />} />
+            <Route path='customers' element={<Customers />} />
+            <Route path='customers/single-customer/:id' element={<SingleCustomer />} />
+            <Route path='support/disputes' element={<Disputes />} />
+            <Route path='coupons' element={<Coupons />} />
+            <Route path='staff' element={<OurStaff />} />
+            <Route path='roles' element={<Roles />} />
+            <Route path='billings' element={<Billings />} />
+            <Route path='billings/single-bill/:id' element={<SingleBilling />} />
+            <Route path='cms/categories' element={<CmsCategories />} />
+            <Route path='cms/site-details' element={<SiteDetails/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
