@@ -17,6 +17,8 @@ import Billings from './View/Billings/Billings'
 import SingleBilling from './View/Billings/SingleBilling'
 import CmsCategories from './View/CMS/CmsCategories/CmsCategories'
 import SiteDetails from './View/CMS/SiteDetails/SiteDetails'
+import CmsHome from './View/CMS/CmsHome/CmsHome'
+import CmsAbout from './View/CMS/CmsHome/CmsAbout'
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
             <Route path='billings/single-bill/:id' element={<SingleBilling />} />
             <Route path='cms/categories' element={<CmsCategories />} />
             <Route path='cms/site-details' element={<SiteDetails/>}/>
+            <Route path='cms/cms-home' element={<CmsHome/>}/>
+            <Route path='cms/cms-about' element={<CmsAbout/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

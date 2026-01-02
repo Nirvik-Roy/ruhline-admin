@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import "./CustomTextEditor.css"; // optional for styling
 
-function CustomTextEditor({ label, required }) {
+function CustomTextEditor({ label, required,defaultValue }) {
     const editorRef = useRef(null);
 
     const applyStyle = (command) => {
@@ -22,10 +22,12 @@ function CustomTextEditor({ label, required }) {
 
                 {/* Editable Typing Area */}
                 <div
+                onChange={((e)=>console.log(e.target))}
                     ref={editorRef}
                     className="editor"
                     contentEditable={true}
                     suppressContentEditableWarning={true}
+                    
                 ></div>
             </div>
         </div>
