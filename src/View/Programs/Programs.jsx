@@ -59,7 +59,7 @@ const Programs = () => {
                                 <p onClick={(()=>navigate('/dashboard/programs/habit-types'))}>Habit Types</p>
                                 <p onClick={(()=>navigate('/dashboard/programs/quote-categories'))}>Quotes Categories</p>
                                 <p onClick={(()=>navigate('/dashboard/programs/card/categories'))}>Cards Categories</p>
-                                <p>Intermediate Steps</p>
+                                <p onClick={(()=>navigate('/dashboard/programs/intermediate'))}>Intermediate Steps</p>
                             </div>}
                         </div>
                     </div>

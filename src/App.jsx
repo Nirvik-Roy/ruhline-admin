@@ -37,6 +37,11 @@ import HabitTypes from './View/Programs/HabitTypes/HabitTypes'
 import GoalTypes from './View/Programs/GoalTypes/GoalTypes'
 import QuotesCategories from './View/Programs/QuotesCategories/QuotesCategories'
 import SingleQutoesCategories from './View/Programs/QuotesCategories/SingleQutoesCategories'
+import IntermediateSteps from './View/Programs/IntermediateSteps/IntermediateSteps'
+import ValuesIntermediate from './View/Programs/IntermediateSteps/ValuesIntermediate'
+import GoalSettingStep from './View/Programs/IntermediateSteps/GoalSettingStep'
+import EachGoalQuestions from './View/Programs/IntermediateSteps/EachGoalQuestions'
+import CommonMistakes from './View/Programs/IntermediateSteps/CommonMistakes'
 
 function App() {
   return (
@@ -79,6 +84,11 @@ function App() {
             <Route path='programs/goal-types' element={<GoalTypes/>}/>
             <Route path='programs/quote-categories' element={<QuotesCategories/>}/>
             <Route path='programs/quote-categories/:id' element={<SingleQutoesCategories/>}/>
+            <Route path='programs/intermediate' element={<IntermediateSteps/>} />
+            <Route path='programs/intermediate/values-intermediate' element={<ValuesIntermediate/>}/>
+            <Route path='programs/intermediate/goal-setting' element={<GoalSettingStep/>}/>
+            <Route path='programs/intermediate/each-goal' element={<EachGoalQuestions/>}/>
+            <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
