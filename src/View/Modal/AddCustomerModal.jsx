@@ -8,7 +8,7 @@ const AddCustomerModal = ({ setaddCustomer }) => {
         <>
             <div className='modal_wrapper' onClick={(() => setaddCustomer(false))}></div>
             <div className='modal_div'>
-                <h4>Add a coach</h4>
+                <h4>Add Customer</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setaddCustomer(false))}></i>
                 <form className='modal_form'>
                     <div className='modal_input_grid_wrapper'>

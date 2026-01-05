@@ -12,7 +12,7 @@ const SingleCustomer = () => {
                 <div className='single_coache_head_Wrapper'>
                     <div className='single_coach_head'>
                         <h1>Bidisha Bhowmick (#ST456666)</h1>
-                        <small> Coaches / Bidisha Bhowmick (#ST456666)</small>
+                        <small> Customers / Bidisha Bhowmick (#ST456666)</small>
                     </div>
                     <div className='single_button_Wrapper'>
                         <button>Delete</button>

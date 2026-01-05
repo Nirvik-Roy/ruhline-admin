@@ -1,0 +1,17 @@
+.cms_faq_wrapper{
+    margin-bottom: 20px;
+}
+
+.cms_faq_list{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+.cms_faq_questions_wrapper{
+    width: 82%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}

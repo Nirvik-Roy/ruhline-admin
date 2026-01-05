@@ -47,6 +47,7 @@
     bottom: -110px;
     left: -50px;
     z-index: 8;
+    cursor: pointer;
 }
 .actions_wrapper p{
     color: var(--text-color);

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import Button from '../../../Components/Button'
+import React, { Activity, lazy, Suspense, useState } from 'react'
 import Pagination from '../../../Components/Pagination/Pagination'
 import { useNavigate } from 'react-router-dom'
 import ellipse from '../../../assets/_MoreIcon_.svg'
+import ContactInqueriesModal from '../../Modal/ContactInqueriesModal.jsx'
 const CmsContact = () => {
     const [index, setIndex] = useState([]);
+    const [isModal, setisModal] = useState(false)
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -13,8 +14,12 @@ const CmsContact = () => {
             setIndex([...index, i])
         }
     }
+
     return (
         <>
+
+            {isModal && <ContactInqueriesModal setisModal={setisModal} />}
+
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
@@ -46,10 +51,10 @@ const CmsContact = () => {
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
-                                            bottom:'-75px'
+                                            bottom: '-75px'
                                         }}>
                                             <p onClick={(() => {
-                                                navigate(`/dashboard/coaches/single-coache/${i + 1}`)
+                                                setisModal(!isModal)
                                             })}>View</p>
                                             <p>Delete</p>
                                         </div>}

@@ -8,7 +8,7 @@ const EditCustomerModal = ({seteditCustomer}) => {
         <>
             <div className='modal_wrapper' onClick={(() => seteditCustomer(false))}></div>
             <div className='modal_div'>
-                <h4>Edit a coach</h4>
+                <h4>Edit Customer </h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditCustomer(false))}></i>
                 <form className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
@@ -31,19 +31,7 @@ const EditCustomerModal = ({seteditCustomer}) => {
                             </div>
                         </div>
 
-                        <div className='input_form'>
-                            <label>Gender<span>*</span></label>
-                            <select>
-                                <option>Female</option>
-                            </select>
-                        </div>
-
-                        <div className='input_form'>
-                            <label>Coach Type<span>*</span></label>
-                            <select>
-                                <option>Mentor</option>
-                            </select>
-                        </div>
+                     
 
 
                     </div>

@@ -29,7 +29,7 @@ const Sidebar = () => {
                 </NavLink>
 
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/programs'}>
                     <img src={report} />
                     <p>Programs</p>
                 </NavLink>
@@ -55,7 +55,7 @@ const Sidebar = () => {
                 </NavLink>
 
 
-                <NavLink to={'/cc'}>
+                <NavLink to={'/dashboard/cms'}>
                     <img src={cms} />
                     <p>CMS</p>
                 </NavLink>

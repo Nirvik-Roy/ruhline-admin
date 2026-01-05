@@ -18,7 +18,7 @@ const EditCoachShift = ({ shiftFunction }) => {
 
                     <div className='enbale_wrapper'>
                         <p>Enable</p>
-                        <div onClick={(() => { setenable(!enable) })} className={enable ? 'enable_toggle_wrapper' : 'enable_toggle_wrapper2'} style={enable ? { background: '#3c745b' } : { background: '#293e5f' }}>
+                        <div onClick={(() => { setenable(!enable) })} className={enable ? 'enable_toggle_wrapper' : 'enable_toggle_wrapper2'} style={enable ? { background: 'var(--primary-color)' } : { background: '#293e5f' }}>
                             {enable ? <i class="fa-solid fa-check"></i> : <i class="fa-solid fa-xmark"></i>}
                             <div className='toggle_circle' ></div>
                         </div>
