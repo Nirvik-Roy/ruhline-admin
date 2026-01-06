@@ -30,7 +30,7 @@ const Programs = () => {
                             }} />
                         </div>
 
-                        <div>
+                        <div onClick={(()=>navigate('/dashboard/programs/create-program'))}>
                             <Button children={'Add program'} styles={{
                                 fontSize: '13px',
                                 padding: '15px 15px',
@@ -75,7 +75,6 @@ const Programs = () => {
                                 <th>Occurrence Type</th>
                                 <th>Price</th>
                                 <th>Actions</th>
-
                             </tr>
                         </thead>
                         <tbody>

@@ -64,10 +64,10 @@ const ProgramCategories = () => {
                                     <td>12</td>
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
-                                        {index.includes(i) && <div className='actions_wrapper'>
-                                            <p onClick={(() => {
-                                                navigate(`/dashboard/coaches/single-coache/${i + 1}`)
-                                            })}>View</p>
+                                        {index.includes(i) && <div className='actions_wrapper' style={{
+                                            width:'70%'
+                                        }}>
+                                            <p>View</p>
                                             <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
                                             <p>Delete</p>
                                         </div>}

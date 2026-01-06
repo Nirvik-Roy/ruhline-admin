@@ -42,7 +42,8 @@ import ValuesIntermediate from './View/Programs/IntermediateSteps/ValuesIntermed
 import GoalSettingStep from './View/Programs/IntermediateSteps/GoalSettingStep'
 import EachGoalQuestions from './View/Programs/IntermediateSteps/EachGoalQuestions'
 import CommonMistakes from './View/Programs/IntermediateSteps/CommonMistakes'
-
+import CreatePrograms from './View/Programs/CreatePrograms/CreatePrograms'
+import SingleCreatedPrograms from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleCreatedPrograms.jsx'
 function App() {
   return (
     <>
@@ -89,6 +90,8 @@ function App() {
             <Route path='programs/intermediate/goal-setting' element={<GoalSettingStep/>}/>
             <Route path='programs/intermediate/each-goal' element={<EachGoalQuestions/>}/>
             <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes/>}/>
+            <Route path='programs/create-program' element={<CreatePrograms/>}/>
+            <Route path='programs/single-program/:id' element={<SingleCreatedPrograms/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
