@@ -44,6 +44,7 @@ import EachGoalQuestions from './View/Programs/IntermediateSteps/EachGoalQuestio
 import CommonMistakes from './View/Programs/IntermediateSteps/CommonMistakes'
 import CreatePrograms from './View/Programs/CreatePrograms/CreatePrograms'
 import SingleCreatedPrograms from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleCreatedPrograms.jsx'
+import ValuesModule from './View/Programs/CreatePrograms/ProgramModule/ValuesModule/ValuesModule.jsx'
 function App() {
   return (
     <>
@@ -92,6 +93,7 @@ function App() {
             <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes/>}/>
             <Route path='programs/create-program' element={<CreatePrograms/>}/>
             <Route path='programs/single-program/:id' element={<SingleCreatedPrograms/>}/>
+            <Route path='programs/single-program/values/:id' element={<ValuesModule/>} />
           </Route>
         </Routes>
       </BrowserRouter>

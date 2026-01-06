@@ -1,11 +1,11 @@
 import React from 'react'
 import './Input.css'
-const Textarea = ({ label, placeholder, required }) => {
+const Textarea = ({ label, placeholder, required,styles }) => {
     return (
         <>
             <div className='input_form'>
                 <label>{label} {required && <span>*</span>}</label>
-                <textarea placeholder={placeholder}></textarea>
+                <textarea style={styles} placeholder={placeholder}></textarea>
             </div>
         </>
     )
