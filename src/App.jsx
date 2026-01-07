@@ -71,42 +71,42 @@ function App() {
             <Route path='billings' element={<Billings />} />
             <Route path='billings/single-bill/:id' element={<SingleBilling />} />
             <Route path='cms' element={<CmsCategories />} />
-            <Route path='cms/site-details' element={<SiteDetails/>}/>
-            <Route path='cms/cms-home' element={<CmsHome/>}/>
-            <Route path='cms/cms-about' element={<CmsAbout/>}/>
-            <Route path='cms/terms-conditions' element={<CmsTermsConditions/>}/>
-            <Route path='cms/privacy-policy' element={<CmsPrivacy/>}/>
-            <Route path='cms/refund-policy' element={<CmsRefundPolicy/>}/>
-            <Route path='cms/contact-queries' element={<CmsContact/>}/>
-            <Route path='cms/faq/categories' element={<CmsFaq/>}/>
-            <Route path='cms/faq/mentee' element={<FaqMentee/>}/>
-            <Route path='cms/faq/mentor' element={<FaqMentor/>}/>
-            <Route path='cms/articles' element={<CmsArticles/>}/>
-            <Route path='cms/add-articles' element={<CmsAddArticles/>}/>
-            <Route path='cms/article-categories' element={<CmsArticleCategories/>}/>
-            <Route path='programs' element={<Programs/>}/>
-            <Route path='programs/categories' element={<ProgramCategories/>}/>
-            <Route path='programs/card/categories' element={<CardsCategories/>}/>
-            <Route path='programs/card/categories/:id' element={<SingleCategories/>}/>
-            <Route path='programs/habit-types' element={<HabitTypes/>}/>
-            <Route path='programs/goal-types' element={<GoalTypes/>}/>
-            <Route path='programs/quote-categories' element={<QuotesCategories/>}/>
-            <Route path='programs/quote-categories/:id' element={<SingleQutoesCategories/>}/>
-            <Route path='programs/intermediate' element={<IntermediateSteps/>} />
-            <Route path='programs/intermediate/values-intermediate' element={<ValuesIntermediate/>}/>
-            <Route path='programs/intermediate/goal-setting' element={<GoalSettingStep/>}/>
-            <Route path='programs/intermediate/each-goal' element={<EachGoalQuestions/>}/>
-            <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes/>}/>
-            <Route path='programs/create-program' element={<CreatePrograms/>}/>
-            <Route path='programs/single-program/:id' element={<SingleCreatedPrograms/>}/>
-            <Route path='programs/single-program/values/:id' element={<ValuesModule/>} />
-            <Route path='programs/single-program/card-game/:id' element={<CardGameModule/>}/>
-            <Route path='programs/card-game/questions/:id' element={<CardGameQuestions/>}/>
-            <Route path='programs/single-program/wheeloflife/:id' element={<WheelOfLifeModule/>}/>
-            <Route path='programs/single-program/life-element/:id' element={<SinglelifeElement/>}/>
-            <Route path='programs/single-program/motivation/:id' element={<MotivationModule/>}/>
-            <Route path='programs/single-program/whoami/:id' element={<Whoamimodule/>}/>
-            <Route path='payouts' element={<Payouts/>}/>
+            <Route path='cms/site-details' element={<SiteDetails />} />
+            <Route path='cms/cms-home' element={<CmsHome />} />
+            <Route path='cms/cms-about' element={<CmsAbout />} />
+            <Route path='cms/terms-conditions' element={<CmsTermsConditions />} />
+            <Route path='cms/privacy-policy' element={<CmsPrivacy />} />
+            <Route path='cms/refund-policy' element={<CmsRefundPolicy />} />
+            <Route path='cms/contact-queries' element={<CmsContact />} />
+            <Route path='cms/faq/categories' element={<CmsFaq />} />
+            <Route path='cms/faq/mentee' element={<FaqMentee />} />
+            <Route path='cms/faq/mentor' element={<FaqMentor />} />
+            <Route path='cms/articles' element={<CmsArticles />} />
+            <Route path='cms/add-articles' element={<CmsAddArticles />} />
+            <Route path='cms/article-categories' element={<CmsArticleCategories />} />
+            <Route path='programs' element={<Programs />} />
+            <Route path='programs/categories' element={<ProgramCategories />} />
+            <Route path='programs/card/categories' element={<CardsCategories />} />
+            <Route path='programs/card/categories/:id' element={<SingleCategories />} />
+            <Route path='programs/habit-types' element={<HabitTypes />} />
+            <Route path='programs/goal-types' element={<GoalTypes />} />
+            <Route path='programs/quote-categories' element={<QuotesCategories />} />
+            <Route path='programs/quote-categories/:id' element={<SingleQutoesCategories />} />
+            <Route path='programs/intermediate' element={<IntermediateSteps />} />
+            <Route path='programs/intermediate/values-intermediate' element={<ValuesIntermediate />} />
+            <Route path='programs/intermediate/goal-setting' element={<GoalSettingStep />} />
+            <Route path='programs/intermediate/each-goal' element={<EachGoalQuestions />} />
+            <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes />} />
+            <Route path='programs/create-program' element={<CreatePrograms />} />
+            <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
+            <Route path='programs/single-program/:id/values' element={<ValuesModule />} />
+            <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
+            <Route path='programs/card-game/:id/questions' element={<CardGameQuestions />} />
+            <Route path='programs/single-program/:id/wheeloflife' element={<WheelOfLifeModule />} />
+            <Route path='programs/single-program/:id/life-element' element={<SinglelifeElement />} />
+            <Route path='programs/single-program/:id/motivation' element={<MotivationModule />} />
+            <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
+            <Route path='payouts' element={<Payouts />} />
           </Route>
         </Routes>
       </BrowserRouter>

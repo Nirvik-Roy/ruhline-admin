@@ -51,7 +51,7 @@ const WheelOfLifeModule = () => {
                                 right: '-30px',
                                 height: 'fit-content'
                             }} onClick={((e) => e.stopPropagation())}>
-                                <small onClick={(()=>navigate(`/dashboard/programs/single-program/life-element/${i}`))}>View</small>
+                                <small onClick={(() => navigate(`/dashboard/programs/single-program/${i}/life-element`))}>View</small>
                                 <small>Edit</small>
                                 <small>Delete</small>
                             </div>}
