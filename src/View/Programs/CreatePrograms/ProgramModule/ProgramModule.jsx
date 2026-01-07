@@ -6,13 +6,17 @@ import deleteicon from '../../../../assets/delete.svg'
 import './ProgramModule.css'
 import AddProgramModule from '../../../Modal/AddProgramModule'
 const ProgramModule = () => {
-    const [modalIsOpen, setmodalIsOpen] = useState(false)
+    const [modalIsOpen, setmodalIsOpen] = useState(false);
+
     return (
         <>
 
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
                 <AddProgramModule setmodalIsOpen={setmodalIsOpen} />
             </Activity>
+
+
+
             <div className='program_modules_wrapper'>
                 <div className='program_module_head_wrapper'>
                     <h2>Modules</h2>

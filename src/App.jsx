@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MainLayout from './MainLayout/MainLayout'
@@ -45,6 +44,10 @@ import CommonMistakes from './View/Programs/IntermediateSteps/CommonMistakes'
 import CreatePrograms from './View/Programs/CreatePrograms/CreatePrograms'
 import SingleCreatedPrograms from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleCreatedPrograms.jsx'
 import ValuesModule from './View/Programs/CreatePrograms/ProgramModule/ValuesModule/ValuesModule.jsx'
+import CardGameModule from './View/Programs/CreatePrograms/ProgramModule/CardGameModule/CardGameModule.jsx'
+import CardGameQuestions from './View/Programs/CreatePrograms/ProgramModule/CardGameModule/CardGameQuestions.jsx'
+import WheelOfLifeModule from './View/Programs/CreatePrograms/ProgramModule/WheelOfLifeModule/WheelOfLifeModule.jsx'
+import SinglelifeElement from './View/Programs/CreatePrograms/ProgramModule/WheelOfLifeModule/SinglelifeElement.jsx'
 function App() {
   return (
     <>
@@ -94,6 +97,10 @@ function App() {
             <Route path='programs/create-program' element={<CreatePrograms/>}/>
             <Route path='programs/single-program/:id' element={<SingleCreatedPrograms/>}/>
             <Route path='programs/single-program/values/:id' element={<ValuesModule/>} />
+            <Route path='programs/single-program/card-game/:id' element={<CardGameModule/>}/>
+            <Route path='programs/card-game/questions/:id' element={<CardGameQuestions/>}/>
+            <Route path='programs/single-program/wheeloflife/:id' element={<WheelOfLifeModule/>}/>
+            <Route path='programs/single-program/life-element/:id' element={<SinglelifeElement/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
