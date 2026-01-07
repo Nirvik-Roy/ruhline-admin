@@ -48,6 +48,8 @@ import CardGameModule from './View/Programs/CreatePrograms/ProgramModule/CardGam
 import CardGameQuestions from './View/Programs/CreatePrograms/ProgramModule/CardGameModule/CardGameQuestions.jsx'
 import WheelOfLifeModule from './View/Programs/CreatePrograms/ProgramModule/WheelOfLifeModule/WheelOfLifeModule.jsx'
 import SinglelifeElement from './View/Programs/CreatePrograms/ProgramModule/WheelOfLifeModule/SinglelifeElement.jsx'
+import MotivationModule from './View/Programs/CreatePrograms/ProgramModule/MotivationModule/MotivationModule.jsx'
+import Whoamimodule from './View/Programs/CreatePrograms/ProgramModule/Whoamimodule/Whoamimodule.jsx'
 function App() {
   return (
     <>
@@ -101,6 +103,8 @@ function App() {
             <Route path='programs/card-game/questions/:id' element={<CardGameQuestions/>}/>
             <Route path='programs/single-program/wheeloflife/:id' element={<WheelOfLifeModule/>}/>
             <Route path='programs/single-program/life-element/:id' element={<SinglelifeElement/>}/>
+            <Route path='programs/single-program/motivation/:id' element={<MotivationModule/>}/>
+            <Route path='programs/single-program/whoami/:id' element={<Whoamimodule/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
