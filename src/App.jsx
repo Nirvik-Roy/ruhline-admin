@@ -50,6 +50,7 @@ import WheelOfLifeModule from './View/Programs/CreatePrograms/ProgramModule/Whee
 import SinglelifeElement from './View/Programs/CreatePrograms/ProgramModule/WheelOfLifeModule/SinglelifeElement.jsx'
 import MotivationModule from './View/Programs/CreatePrograms/ProgramModule/MotivationModule/MotivationModule.jsx'
 import Whoamimodule from './View/Programs/CreatePrograms/ProgramModule/Whoamimodule/Whoamimodule.jsx'
+import Payouts from './View/Payouts/Payouts.jsx'
 function App() {
   return (
     <>
@@ -105,6 +106,7 @@ function App() {
             <Route path='programs/single-program/life-element/:id' element={<SinglelifeElement/>}/>
             <Route path='programs/single-program/motivation/:id' element={<MotivationModule/>}/>
             <Route path='programs/single-program/whoami/:id' element={<Whoamimodule/>}/>
+            <Route path='payouts' element={<Payouts/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
