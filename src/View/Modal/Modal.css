@@ -340,3 +340,11 @@
     font-size: 15px;
     font-weight: 400;
 }
+.single_pay_wrapper{
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+.single_pay_wrapper .enbale_wrapper{
+    margin-top: 30px;
+}

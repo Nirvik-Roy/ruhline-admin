@@ -51,6 +51,7 @@ import SinglelifeElement from './View/Programs/CreatePrograms/ProgramModule/Whee
 import MotivationModule from './View/Programs/CreatePrograms/ProgramModule/MotivationModule/MotivationModule.jsx'
 import Whoamimodule from './View/Programs/CreatePrograms/ProgramModule/Whoamimodule/Whoamimodule.jsx'
 import Payouts from './View/Payouts/Payouts.jsx'
+import PaymentList from './View/Payouts/PaymentList.jsx'
 function App() {
   return (
     <>
@@ -107,6 +108,7 @@ function App() {
             <Route path='programs/single-program/:id/motivation' element={<MotivationModule />} />
             <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
             <Route path='payouts' element={<Payouts />} />
+            <Route path='payouts/payment-list' element={<PaymentList/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
