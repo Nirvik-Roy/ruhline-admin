@@ -5,7 +5,7 @@ import ellipse from '../../../assets/_MoreIcon_.svg'
 import ContactInqueriesModal from '../../Modal/ContactInqueriesModal.jsx'
 const CmsContact = () => {
     const [index, setIndex] = useState([]);
-    const [isModal, setisModal] = useState(false)
+    const [isModal, setisModal] = useState(false);
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -24,7 +24,8 @@ const CmsContact = () => {
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>Contact Inquiries</h1>
-                        <small> CMS / Contact Inquiries</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/contact-queries'))}>Contact Inquiries</span></small>
+
                     </div>
                 </div>
                 <div className='table_container'>

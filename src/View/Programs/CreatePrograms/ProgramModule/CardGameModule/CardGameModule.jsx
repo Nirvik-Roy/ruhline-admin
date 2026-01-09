@@ -33,11 +33,13 @@ const CardGameModule = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Card Game</h2>
-                        <small>Program Creation / Yoga Program 1 / Card Game</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2/card-game'))}>Card Game</span></small>
+
+
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div>
+                        <div onClick={(()=>navigate('/dashboard/programs/card-game/2/questions'))}>
                             <Button children={'Questions'} styles={{
                                 fontSize: '13px'
                             }} />

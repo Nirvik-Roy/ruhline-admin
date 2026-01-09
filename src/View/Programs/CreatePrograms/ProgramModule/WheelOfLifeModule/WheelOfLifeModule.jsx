@@ -20,7 +20,9 @@ const WheelOfLifeModule = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Wheel of Life</h2>
-                        <small>Program Creation / Yoga Program 1 / Wheel of Life</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span>  / <span onClick={(() => navigate('/dashboard/programs/single-program/2/wheeloflife'))}>Wheel of Life</span></small>
+
+
                     </div>
                 </div>
 

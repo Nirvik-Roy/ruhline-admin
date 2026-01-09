@@ -2,10 +2,12 @@ import React,{useState} from 'react'
 import Button from '../../../Components/Button'
 import laptopImg from '../../../assets/Group (2).svg'
 import AddGoalTypesModal from '../../Modal/AddGoalTypesModal'
+import { useNavigate } from 'react-router-dom'
 
 const GoalTypes = () => {
     const [dropdown, setdropdown] = useState(null)
-    const [isModal, setisModal] = useState(false)
+    const [isModal, setisModal] = useState(false);
+    const navigate = useNavigate()
     const dropdownFunction = (i) => {
         if (dropdown === i) {
             setdropdown(null)
@@ -20,7 +22,7 @@ const GoalTypes = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Goal Types</h2>
-                        <small>Programs / Goal Types</small>
+                        <small><span onClick={(()=>navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(()=>navigate('/dashboard/programs/goal-types'))}>Goal Types</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

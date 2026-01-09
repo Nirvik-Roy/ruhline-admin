@@ -18,12 +18,12 @@ const SingleCategories = () => {
     }
     return (
         <>
-        {isModal && <AddCardModal setisModal={setisModal}/>}
+            {isModal && <AddCardModal setisModal={setisModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Cards Category 1</h2>
-                        <small>Programs / Cards Categories / Cards Category 1</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/card/categories'))}>Cards Categories</span> / <span onClick={(() => navigate('/dashboard/programs/card/categories/1'))}>Cards Category 1</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -75,9 +75,7 @@ const SingleCategories = () => {
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
-                                            <p onClick={(() => {
-                                                navigate(`/dashboard/coaches/single-coache/${i + 1}`)
-                                            })}>View</p>
+                                            <p>View</p>
                                             <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
                                             <p>Delete</p>
                                         </div>}

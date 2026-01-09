@@ -5,8 +5,10 @@ import laptopImg from '../../../assets/Group (2).svg'
 import NewShiftModal from '../../Modal/NewShiftModal'
 import EditCoachShift from '../../Modal/EditCoachShift'
 import WorkingDaysModal from '../../Modal/WorkingDaysModal'
+import { useNavigate } from 'react-router-dom'
 const CoachesShift = () => {
-    const [dropdown, setdropdown] = useState(null)
+    const [dropdown, setdropdown] = useState(null);
+    const navigate = useNavigate()
     const [shift, setshift] = useState({
         newShift: false,
         editShift: false,
@@ -35,7 +37,7 @@ const CoachesShift = () => {
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>Working Hours and Shifts</h1>
-                        <small> Coaches / Working Hours and Shifts</small>
+                        <small> <span onClick={(() => navigate('/dashboard/coaches'))}>Coaches</span> / <span onClick={(() => navigate('/dashboard/coaches/working-shift'))}>Working Hours and Shifts</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

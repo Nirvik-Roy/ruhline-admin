@@ -18,7 +18,7 @@ const IntermediateSteps = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Intermediate Steps</h2>
-                        <small>Programs / Intermediate Steps</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/intermediate'))}>Intermediate Steps</span></small>
                     </div>
                 </div>
 
@@ -29,7 +29,7 @@ const IntermediateSteps = () => {
                                 <th>Intermediate Step Name</th>
 
                                 <th style={{
-                                    textAlign:'center'
+                                    textAlign: 'center'
                                 }}>Actions</th>
                             </tr>
                         </thead>
@@ -39,9 +39,9 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(1))} src={ellipse} />
                                     {index.includes(1) && <div className='actions_wrapper' style={{
-                                        bottom:'-80px',
-                                        width:'50%',
-                                        left:'0px'
+                                        bottom: '-80px',
+                                        width: '50%',
+                                        left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/values-intermediate`)
@@ -58,9 +58,9 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(2))} src={ellipse} />
                                     {index.includes(2) && <div className='actions_wrapper' style={{
-                                        bottom:'-80px',
-                                        width:'50%',
-                                        left:'0px'
+                                        bottom: '-80px',
+                                        width: '50%',
+                                        left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/goal-setting`)
@@ -79,9 +79,9 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(3))} src={ellipse} />
                                     {index.includes(3) && <div className='actions_wrapper' style={{
-                                        bottom:'-80px',
-                                        width:'50%',
-                                        left:'0px'
+                                        bottom: '-80px',
+                                        width: '50%',
+                                        left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/common-mistakes`)
@@ -101,9 +101,9 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(4))} src={ellipse} />
                                     {index.includes(4) && <div className='actions_wrapper' style={{
-                                        bottom:'-80px',
-                                        width:'50%',
-                                        left:'0px'
+                                        bottom: '-80px',
+                                        width: '50%',
+                                        left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/each-goal`)

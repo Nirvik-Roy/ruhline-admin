@@ -4,14 +4,16 @@ import crossIcon from '../../../assets/content.svg'
 import './CmsFaq.css'
 import Input from '../../../Components/Input'
 import Textarea from '../../../Components/Textarea.jsx'
+import { useNavigate } from 'react-router-dom'
 const FaqMentee = () => {
+    const navigate = useNavigate()
     return (
         <>
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>Mentee FAQ</h1>
-                        <small> CMS / FAQ / Mentee FAQ</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/faq/categories'))}>FAQ</span> / <span onClick={(()=>navigate('/dashboard/cms/faq/mentee'))}>Mentee FAQ</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

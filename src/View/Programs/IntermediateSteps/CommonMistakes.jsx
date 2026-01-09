@@ -5,15 +5,17 @@ import Input from '../../../Components/Input'
 import crossIcon from '../../../assets/content.svg'
 import Textarea from '../../../Components/Textarea'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
+import { useNavigate } from 'react-router-dom'
 
 const CommonMistakes = () => {
+    const navigate = useNavigate()
     return (
         <>
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Eight most common mistakes Intermediate Page</h2>
-                        <small>Programs / Intermediate Steps / Eight most common mistakes Intermediate Page</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/intermediate'))}>Intermediate Steps</span> / <span onClick={(() => navigate('/dashboard/programs/intermediate/common-mistakes'))}>Eight most common mistakes Intermediate Page</span></small>
                     </div>
                     <div className='coaches_button_wapper'>
 

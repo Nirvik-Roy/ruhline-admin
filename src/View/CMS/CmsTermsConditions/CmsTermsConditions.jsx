@@ -2,14 +2,16 @@ import React from 'react'
 import Button from '../../../Components/Button'
 import './CmsTermsConditions.css'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
+import { useNavigate } from 'react-router-dom'
 const CmsTermsConditions = () => {
+    const navigate = useNavigate()
     return (
         <>
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>Terms & Conditions</h1>
-                        <small> CMS / Terms & Conditions</small>
+                        <small> <span onClick={(()=>navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(()=>navigate('/dashboard/cms/terms-conditions'))}>Terms & Conditions</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

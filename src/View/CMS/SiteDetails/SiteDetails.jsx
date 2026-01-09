@@ -6,8 +6,10 @@ import SiteHeader from './SiteHeader'
 import SiteFooter from './SiteFooter'
 import SiteLinks from './SiteLinks'
 import ContactInfo from './ContactInfo'
+import { useNavigate } from 'react-router-dom'
 const SiteDetails = () => {
-    const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(0);
+    const navigate = useNavigate()
     const [sitetabs, setsiteTabs] = useState({
         favicon: true,
         header: false,
@@ -30,7 +32,7 @@ const SiteDetails = () => {
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>Site Details</h1>
-                        <small> CMS / Site Details</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/site-details'))}>Site Details</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -63,7 +65,7 @@ const SiteDetails = () => {
                                 color: 'var(--primary-color)',
                                 transition: '0.2s linear all'
                             } : { transition: '0.2s linear all' }} onClick={(() => {
-                                setIndex(i )
+                                setIndex(i)
                                 siteTabsFunc(i + 1)
                             })} key={i}>{e}</h2>
                         ))}

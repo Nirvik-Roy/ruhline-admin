@@ -11,11 +11,11 @@ const CreatePrograms = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Create Program</h2>
-                        <small><span onClick={(()=>navigate('/dashboard/programs'))}>Program Creation</span> / Create Program</small>
+                        <small><span onClick={(()=>navigate('/dashboard/programs'))}>Program Creation</span> / <span onClick={(()=>navigate('/dashboard/programs/create-program'))}>Create Program</span></small>
                     </div>
                     <div className='coaches_button_wapper'>
 
-                        <div onClick={(() => setaddCustomer(true))}>
+                        <div>
                             <Button children={'Cancel'} styles={{
                                 fontSize: '13px',
                                 color: 'var(--text-color)',
@@ -23,7 +23,7 @@ const CreatePrograms = () => {
                                 border: 'none'
                             }} />
                         </div>
-                        <div onClick={(() => setaddCustomer(true))}>
+                        <div onClick={(() =>{ navigate('/dashboard/programs/single-program/2')})}>
                             <Button children={'Create'} styles={{
                                 fontSize: '13px'
                             }} />

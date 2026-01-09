@@ -4,10 +4,12 @@ import ellipse from '../../../assets/_MoreIcon_.svg'
 import Button from '../../../Components/Button.jsx'
 import AddArticleCategoriesModal from '../../Modal/AddArticleCategoriesModal.jsx'
 import EditArticleModal from '../../Modal/EditArticleModal.jsx'
+import { useNavigate } from 'react-router-dom'
 const CmsArticleCategories = () => {
     const [index, setIndex] = useState([]);
+    const navigate = useNavigate()
     const [addArticle, setaddArticle] = useState(false);
-    const [editArticle,seteditArticle] = useState(false)
+    const [editArticle, seteditArticle] = useState(false)
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -17,20 +19,20 @@ const CmsArticleCategories = () => {
     }
     return (
         <>
-            {addArticle && <AddArticleCategoriesModal setaddArticle={setaddArticle}/>}
-            {editArticle && <EditArticleModal seteditArticle={seteditArticle}/>}
+            {addArticle && <AddArticleCategoriesModal setaddArticle={setaddArticle} />}
+            {editArticle && <EditArticleModal seteditArticle={seteditArticle} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Article Categories</h2>
-                        <small>CMS / Articles / Article Categories</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/articles'))}>Articles</span> / <span onClick={(() => navigate('/dashboard/cms/article-categories'))}>Article Categories</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div onClick={(()=>setaddArticle(true))}>
+                        <div onClick={(() => setaddArticle(true))}>
                             <Button children={'Add Article Category '} styles={{
                                 fontSize: '13px',
-                                padding:'15px 15px'
+                                padding: '15px 15px'
                             }} />
                         </div>
 

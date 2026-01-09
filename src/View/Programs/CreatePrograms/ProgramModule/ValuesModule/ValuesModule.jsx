@@ -8,7 +8,9 @@ import DescriptiveModal from '../../../../Modal/DescriptiveModal'
 import MultiChoiceModal from '../../../../Modal/MultiChoiceModal'
 import SingleChoiceModal from '../../../../Modal/SingleChoiceModal'
 import DropdownModal from '../../../../Modal/DropdownModal'
+import { useNavigate } from 'react-router-dom'
 const ValuesModule = () => {
+    const navigate = useNavigate()
     const [tabs, setTabs] = useState({
         descriptive: false,
         multiChoice: false,
@@ -33,7 +35,7 @@ const ValuesModule = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Values</h2>
-                        <small>Program Creation / Yoga Program 1 / Values</small>
+                        <small><span onClick={(()=>navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(()=>navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(()=>navigate('/dashboard/programs/single-program/2/values'))}>Values</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

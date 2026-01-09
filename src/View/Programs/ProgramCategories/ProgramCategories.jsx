@@ -23,12 +23,12 @@ const ProgramCategories = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Programs</h2>
-                        <small>Programs / Program category</small>
+                        <small> <span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/categories'))}>Program category</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
 
-                        <div onClick={(()=>setisModal(!isModal))}>
+                        <div onClick={(() => setisModal(!isModal))}>
                             <Button children={'Add New Category'} styles={{
                                 fontSize: '13px',
                                 padding: '15px 15px',
@@ -65,7 +65,7 @@ const ProgramCategories = () => {
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
-                                            width:'70%'
+                                            width: '70%'
                                         }}>
                                             <p>View</p>
                                             <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>

@@ -10,7 +10,7 @@ const CmsFaq = () => {
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>FAQ</h1>
-                        <small> CMS / FAQ</small>
+                        <small><span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/faq/categories'))}>FAQ</span></small>
                     </div>
                 </div>
                 <div className='coaches_shift_card_wrapper'>

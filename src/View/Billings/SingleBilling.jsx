@@ -3,8 +3,10 @@ import Button from '../../Components/Button'
 import './Billings.css'
 import logo from '../../assets/Frame 1984078480.svg'
 import EditInvoiceModal from '../Modal/EditInvoiceModal'
+import { useNavigate } from 'react-router-dom'
 const SingleBilling = () => {
-    const [modal, setModal] = useState(false)
+    const [modal, setModal] = useState(false);
+    const navigate = useNavigate()
     return (
         <>
             {modal && <EditInvoiceModal setModal={setModal}/>}
@@ -12,7 +14,7 @@ const SingleBilling = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>#3492</h2>
-                        <small>Billings / #3492</small>
+                        <small><span onClick={(()=>navigate('/dashboard/billings'))}>Billings</span> / <span onClick={(()=>navigate('/dashboard/billings/single-bill/2'))}>#3492</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

@@ -2,14 +2,16 @@ import React from 'react'
 import Button from '../../../Components/Button'
 import '../CmsTermsConditions/CmsTermsConditions.css'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
+import { useNavigate } from 'react-router-dom'
 const CmsRefundPolicy = () => {
-  return (
-    <>
-        <div className='dashboard_container'>
+    const navigate = useNavigate()
+    return (
+        <>
+            <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>Refund Policy</h1>
-                        <small> CMS / Refund Policy</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/refund-policy'))}>Refund Policy</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -35,8 +37,8 @@ const CmsRefundPolicy = () => {
                 </div>
 
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default CmsRefundPolicy

@@ -8,7 +8,9 @@ import DropdownModal from '../../../../Modal/DropdownModal'
 import menu from '../../../../../assets/menu.svg'
 import edit from '../../../../../assets/Pencil.svg'
 import deleteicon from '../../../../../assets/delete.svg'
+import { useNavigate } from 'react-router-dom'
 const CardGameQuestions = () => {
+    const navigate = useNavigate()
     const [tabs, setTabs] = useState({
         descriptive: false,
         multiChoice: false,
@@ -33,7 +35,9 @@ const CardGameQuestions = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Questions</h2>
-                        <small>Program Creation / Yoga Program 1 / Card Game / Questions</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2/card-game'))}>Card Game</span> / <span onClick={(() => navigate('/dashboard/programs/card-game/2/questions'))}>Questions</span></small>
+
+
                     </div>
                 </div>
 

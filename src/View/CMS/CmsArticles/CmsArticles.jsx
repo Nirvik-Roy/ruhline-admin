@@ -13,11 +13,12 @@ const CmsArticles = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Articles</h2>
-                        <small>CMS / Articles</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/articles'))}>Articles</span></small>
+
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div onClick={(()=>navigate('/dashboard/cms/article-categories'))} >
+                        <div onClick={(() => navigate('/dashboard/cms/article-categories'))} >
                             <Button children={'Article Categories'} styles={{
                                 color: 'var(--primary-color)',
                                 border: '1px solid var(--primary-color)',

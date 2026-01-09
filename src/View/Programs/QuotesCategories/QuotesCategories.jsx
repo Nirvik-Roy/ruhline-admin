@@ -18,12 +18,13 @@ const QuotesCategories = () => {
     }
     return (
         <>
-        {isModal && <AddQutoesCategoriesModal setisModal={setisModal}/>}
+            {isModal && <AddQutoesCategoriesModal setisModal={setisModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Quotes Categories</h2>
-                        <small>Programs / Quotes Categories</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/quote-categories'))}>Quotes Categories</span></small>
+
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -59,13 +60,13 @@ const QuotesCategories = () => {
                             {[1, 2, 3, 4, 5, 6].map((e, i) => (
                                 <tr>
                                     <td>
-                                      Quotes Category 1
+                                        Quotes Category 1
                                     </td>
                                     <td>12</td>
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
-                                            <p >View</p>
+                                            <p onClick={(() => navigate('/dashboard/programs/quote-categories/2'))}>View</p>
                                             <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
                                             <p>Delete</p>
                                         </div>}

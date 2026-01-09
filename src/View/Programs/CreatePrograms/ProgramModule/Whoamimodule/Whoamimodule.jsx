@@ -7,36 +7,39 @@ import DescriptiveModal from '../../../../Modal/DescriptiveModal.jsx'
 import MultiChoiceModal from '../../../../Modal/MultiChoiceModal'
 import SingleChoiceModal from '../../../../Modal/SingleChoiceModal'
 import DropdownModal from '../../../../Modal/DropdownModal'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const Whoamimodule = () => {
-        const [tabs, setTabs] = useState({
-            descriptive: false,
-            multiChoice: false,
-            singleChoice: false,
-            dropdown: false
+    const navigate = useNavigate()
+    const {id} = useParams()
+    const [tabs, setTabs] = useState({
+        descriptive: false,
+        multiChoice: false,
+        singleChoice: false,
+        dropdown: false
+    })
+    const tabsFunction = (i) => {
+        setTabs({
+            descriptive: i === 1 ? true : false,
+            multiChoice: i === 2 ? true : false,
+            singleChoice: i === 3 ? true : false,
+            dropdown: i === 4 ? true : false
         })
-        const tabsFunction = (i) => {
-            setTabs({
-                descriptive: i === 1 ? true : false,
-                multiChoice: i === 2 ? true : false,
-                singleChoice: i === 3 ? true : false,
-                dropdown: i === 4 ? true : false
-            })
-        }
-  return (
-    <>
-       {tabs.descriptive && <DescriptiveModal tabsFunction={tabsFunction} />}
+    }
+    return (
+        <>
+            {tabs.descriptive && <DescriptiveModal tabsFunction={tabsFunction} />}
             {tabs.multiChoice && <MultiChoiceModal tabsFunction={tabsFunction} />}
             {tabs.singleChoice && <SingleChoiceModal tabsFunction={tabsFunction} />}
             {tabs.dropdown && <DropdownModal tabsFunction={tabsFunction} />}
-             <div className='dashboard_container'>
+            <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Who am I?</h2>
-                        <small>Program Creation / Yoga Program 1 / Who am I?</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>Yoga Program 1</span>  / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}/whoami`))}>Who am I?</span></small>
                     </div>
 
-               
+
                 </div>
 
                 <div className='questions_wrapper'>
@@ -149,8 +152,8 @@ const Whoamimodule = () => {
                     </div>
                 </div>
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default Whoamimodule

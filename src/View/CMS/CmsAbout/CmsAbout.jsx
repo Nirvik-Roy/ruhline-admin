@@ -1,14 +1,16 @@
 import React from 'react'
 import Button from '../../../Components/Button'
 import CmsAboutSections from './CmsAboutSections'
+import { useNavigate } from 'react-router-dom'
 const CmsAbout = () => {
+    const navigate = useNavigate()
     return (
         <>
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
                         <h1>About Us</h1>
-                        <small> CMS / About Us</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/cms-about'))}>About Us</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

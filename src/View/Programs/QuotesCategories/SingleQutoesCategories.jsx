@@ -23,7 +23,7 @@ const SingleQutoesCategories = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Quotes Category 1</h2>
-                        <small>Programs / Quotes Categories / Quotes Category 1</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/quote-categories'))}>Quotes Categories</span> / <span onClick={(() => navigate('/dashboard/programs/quote-categories/2'))}>Quotes Category 1</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

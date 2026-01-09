@@ -7,10 +7,11 @@ import DescriptiveModal from '../../../../Modal/DescriptiveModal.jsx'
 import MultiChoiceModal from '../../../../Modal/MultiChoiceModal.jsx'
 import SingleChoiceModal from '../../../../Modal/SingleChoiceModal.jsx'
 import DropdownModal from '../../../../Modal/DropdownModal.jsx'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 const SinglelifeElement = () => {
     const data = ['Anxiety', 'Depression', 'Happiness', 'Success', 'Discipline', 'Honesty'];
-    const { id } = useParams()
+    const { id } = useParams();
+    const navigate = useNavigate()
     const [tabs, setTabs] = useState({
         descriptive: false,
         multiChoice: false,
@@ -35,7 +36,8 @@ const SinglelifeElement = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>{data[id]}</h2>
-                        <small>Program Creation / Yoga Program 1 / Wheel of Life / {data[id]}</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span>  / <span onClick={(() => navigate('/dashboard/programs/single-program/2/wheeloflife'))}>Wheel of Life</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}/life-element`))}>{data[id]}</span></small>
+
                     </div>
                 </div>
                 <div className='questions_wrapper'>

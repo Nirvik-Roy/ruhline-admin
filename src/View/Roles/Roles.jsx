@@ -35,7 +35,7 @@ const Roles = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Roles</h2>
-                        <small>Our Staff / Roles</small>
+                        <small><span onClick={(()=>navigate('/dashboard/staff'))}>Our Staff</span> / <span onClick={(()=>navigate('/dashboard/roles'))}>Roles</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

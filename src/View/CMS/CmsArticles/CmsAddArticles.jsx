@@ -4,8 +4,10 @@ import Input from '../../../Components/Input'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import upload from '../../../assets/Vector (8).svg'
 import Addarticlesectionmodal from '../../Modal/Addarticlesectionmodal.jsx'
+import { useNavigate } from 'react-router-dom'
 const CmsAddArticles = () => {
-    const [isModal, setisModal] = useState(false)
+    const [isModal, setisModal] = useState(false);
+    const navigate = useNavigate()
     return (
         <>
 
@@ -15,7 +17,7 @@ const CmsAddArticles = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Add Articles / Add Article</h2>
-                        <small>CMS / Articles</small>
+                        <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/articles'))}>Articles</span></small>
                     </div>
                     <div className='coaches_button_wapper'>
                         <div>

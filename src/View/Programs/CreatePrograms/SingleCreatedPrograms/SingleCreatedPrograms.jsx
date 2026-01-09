@@ -4,14 +4,16 @@ import SingleProgramDetails from './SingleProgramDetails'
 import Button from '../../../../Components/Button'
 import ProgramTabs from './ProgramTabs'
 import ProgramModule from '../ProgramModule/ProgramModule'
+import { useNavigate } from 'react-router-dom'
 const SingleCreatedPrograms = () => {
+    const navigate = useNavigate()
     return (
         <>
             <div className='dashboard_container one_time_content_wrapper'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Yoga Program 1</h2>
-                        <small>Program Creation / Yoga Program 1</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/create-program'))}>Yoga Program 1</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -34,7 +36,7 @@ const SingleCreatedPrograms = () => {
                 </div>
                 <SingleProgramDetails />
                 <ProgramTabs />
-                <ProgramModule/>
+                <ProgramModule />
 
             </div>
         </>

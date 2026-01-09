@@ -5,14 +5,18 @@ import photo from '../../../assets/Avatar.png'
 import UpcomingProgramSlider from '../../Coaches/SingleCoache/UpcomingProgramSlider.jsx'
 import ProgramAssignedSlider from '../../Coaches/SingleCoache/ProgramAssignedSlider.jsx'
 import CompletedProgramSlider from './CompletedProgramSlider.jsx'
+import { useNavigate } from 'react-router-dom'
 const SingleCustomer = () => {
+    const navigate = useNavigate()
     return (
         <>
             <div className='dashboard_container'>
                 <div className='single_coache_head_Wrapper'>
                     <div className='single_coach_head'>
                         <h1>Bidisha Bhowmick (#ST456666)</h1>
-                        <small> Customers / Bidisha Bhowmick (#ST456666)</small>
+                        <small style={{
+                            cursor:'pointer'
+                        }}> <span onClick={(()=>navigate('/dashboard/customers'))}>Customers</span> / <span onClick={(()=>navigate('/dashboard/customers/single-customer/1'))}>Bidisha Bhowmick (#ST456666)</span></small>
                     </div>
                     <div className='single_button_Wrapper'>
                         <button>Delete</button>

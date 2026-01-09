@@ -4,15 +4,17 @@ import './IntermediateSteps.css'
 import Input from '../../../Components/Input'
 import crossIcon from '../../../assets/content.svg'
 import Textarea from '../../../Components/Textarea'
+import { useNavigate } from 'react-router-dom'
 
 const GoalSettingStep = () => {
-  return (
-    <>
-         <div className='dashboard_container'>
+    const navigate = useNavigate()
+    return (
+        <>
+            <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Goal Settings Intermediate Page</h2>
-                        <small>Programs / Intermediate Steps / Goal Settings Intermediate Page</small>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/intermediate'))}>Intermediate Steps</span> / <span onClick={(() => navigate('/dashboard/programs/intermediate/goal-setting'))}>Goal Settings Intermediate Page</span></small>
                     </div>
                     <div className='coaches_button_wapper'>
 
@@ -41,7 +43,7 @@ const GoalSettingStep = () => {
                     <div className='cms_faq_list'>
                         <p>Step 1</p>
                         <div className='cms_faq_questions_wrapper'>
-                         
+
                             <Textarea label={'Description'} placeholder={'Reflection (Buckets & Test) '} />
                         </div>
                         <img src={crossIcon} />
@@ -68,8 +70,8 @@ const GoalSettingStep = () => {
                     }} />
                 </div>
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default GoalSettingStep
