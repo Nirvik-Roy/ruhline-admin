@@ -14,16 +14,16 @@ const EditArticleModal = ({ seteditArticle }) => {
                 }}>
                     <Input label={'Article Category Name'} required={true} placeholder={'Article Category 1'} />
 
-                   
+
                 </div>
 
-                 <div className='enbale_wrapper'>
-                        <p>Active</p>
-                        <div onClick={(() => { setenable(!enable) })} className={enable ? 'enable_toggle_wrapper' : 'enable_toggle_wrapper2'} style={enable ? { background: 'var(--primary-color)' } : { background: '#293e5f' }}>
-                            {enable ? <i class="fa-solid fa-check"></i> : <i class="fa-solid fa-xmark"></i>}
-                            <div className='toggle_circle' ></div>
-                        </div>
+                <div className='enbale_wrapper'>
+                    <p>Active</p>
+                    <div onClick={(() => { setenable(!enable) })} className={enable ? 'enable_toggle_wrapper' : 'enable_toggle_wrapper2'} style={enable ? { background: 'var(--primary-color)' } : { background: '#293e5f' }}>
+                        {enable ? <i class="fa-solid fa-check"></i> : <i class="fa-solid fa-xmark"></i>}
+                        <div className='toggle_circle' ></div>
                     </div>
+                </div>
 
                 <Button children={'Add'} styles={{
                     marginLeft: 'auto'
