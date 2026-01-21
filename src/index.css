@@ -18,6 +18,9 @@
     font-size: 30px;
     color: var(--text-color);
 }
+.table_container{
+    min-height: 70vh;
+}
 th{
    text-wrap: nowrap;
    font-size: 14px !important;

@@ -1,0 +1,93 @@
+import axios from "axios";
+import { toast } from "react-hot-toast";
+
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+export const Auth = createAsyncThunk('Auth', async (loginParams, { rejectWithValue }) => {
+    const { formData } = loginParams
+    if (formData) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/admin/login`, formData);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Login Success');
+                return res.data.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message)
+            return rejectWithValue(err.response?.data || "Something went wrong");
+        }
+    }
+})
+export const AuthlogOut = createAsyncThunk('AuthlogOut', async (loginParams, { rejectWithValue }) => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/admin/logout`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Logut Success');
+                localStorage.removeItem('token')
+                return res.data.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message)
+            return rejectWithValue(err.response?.data || "Something went wrong");
+        }
+    } else {
+        toast.error('Unauthenticated...')
+        return rejectWithValue("Something went wrong");
+    }
+
+})
+const AuthSlice = createSlice({
+    name: 'auth',
+    initialState: {
+        isLogin: false,
+        isLoading: false,
+        isChecking: true,
+    },
+    reducers: {
+        verifyToken(state,) {
+            const token = localStorage.getItem('token');
+            if (token) {
+                state.isLogin = true,
+                    state.isChecking = false;
+
+            }
+        },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(Auth.pending, (state) => {
+            state.isLoading = true;
+            state.isLogin = false
+        })
+
+        builder.addCase(AuthlogOut.pending, (state) => {
+            state.isLoading = true;
+            state.isLogin = true;
+        })
+        builder.addCase(AuthlogOut.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isLogin = false;
+        })
+        builder.addCase(AuthlogOut.rejected, (state) => {
+            state.isLoading = false;
+            state.isLogin = true;
+        })
+        builder.addCase(Auth.fulfilled, (state, action) => {
+            if (action.payload.token) {
+                state.isLogin = true;
+                state.isLoading = false;
+                localStorage.setItem('token', action.payload.token)
+            }
+        })
+        builder.addCase(Auth.rejected, (state,) => {
+            state.isLoading = false;
+            state.isLogin = false;
+        })
+    }
+})
+export const { verifyToken } = AuthSlice.actions
+export default AuthSlice.reducer;

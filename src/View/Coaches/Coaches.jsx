@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Coaches.css'
 import Button from '../../Components/Button'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
@@ -7,8 +7,15 @@ import Pagination from '../../Components/Pagination/Pagination'
 import AddCoachModal from '../Modal/AddCoachModal'
 import EditCoachModal from '../Modal/EditCoachModal'
 import { useNavigate } from 'react-router-dom'
+import { addNewCoach, deleteCoach, getAllCoaches } from '../../utils/coach'
+import Loaders from '../../Components/Loaders/Loaders'
 const Coaches = () => {
     const [index, setIndex] = useState([]);
+    const [coachData, setcoachData] = useState([]);
+    const [deleted, setdeleted] = useState(false)
+    const [isLoading, setisLoading] = useState(false);
+    const [updateLoading, setUpdateLoading] = useState(false);
+    const [addCoachError, setaddCoachError] = useState()
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -18,10 +25,61 @@ const Coaches = () => {
         }
     }
     const [coachModal, setCoachModal] = useState(false);
-    const [ediCoachModal, seteditCoachModal] = useState(false)
+    const [ediCoachModal, seteditCoachModal] = useState(false);
+
+
+
+    const getAllCoachesFunc = async () => {
+        setisLoading(true)
+        try {
+            const res = await getAllCoaches()
+            if (res) {
+                setcoachData(res.data)
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setisLoading(false)
+        }
+    }
+
+
+    const addNewCoachFunc = async (data) => {
+        if (data) {
+            setUpdateLoading(true)
+            try {
+                const result = await addNewCoach(data);
+                setaddCoachError(result)
+                await getAllCoachesFunc()
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setUpdateLoading(false)
+            }
+        }
+    }
+
+
+    const deletedCoachfunc = async (id) => {
+        if (id) {
+            try {
+                 await deleteCoach(id);
+                getAllCoachesFunc()
+                setdeleted(true)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
+    useEffect(() => {
+        getAllCoachesFunc()
+    }, [deleted])
+
     return (
         <>
-            {coachModal && <AddCoachModal setCoachModal={setCoachModal} />}
+            {updateLoading && <Loaders />}
+            {coachModal && <AddCoachModal addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
             {ediCoachModal && <EditCoachModal seteditCoachModal={seteditCoachModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
@@ -51,6 +109,7 @@ const Coaches = () => {
                 </div>
 
                 <div className='table_container'>
+
                     <table className='total_table_order_wrapper coaches_table_wrapper'>
                         <thead>
                             <tr>
@@ -59,28 +118,34 @@ const Coaches = () => {
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Actions</th>
-
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {(coachData.length <= 0 && !isLoading) && <td colSpan={12} style={{
+                                textAlign: 'center',
+                                fontWeight: '600',
+                                color: '#ce7355',
+                                fontSize: '15px'
+
+                            }}>No data found!...</td>}
+                            {coachData.length > 0 && coachData.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
                                             justifyContent: 'flex-start'
                                         }}>
-                                            <div className='customer_img_div'>
+                                            {/* <div className='customer_img_div'>
                                                 <img src={img} />
-                                            </div>
+                                            </div> */}
                                             <div className='customer_details_wrapper'>
-                                                <p>Bidisha Bhowmick</p>
-                                                <p>#ST456666</p>
+                                                <p>{e?.user?.first_name} {e?.user?.last_name}</p>
+                                                {/* <p>#ST456666</p> */}
                                             </div>
                                         </div>
                                     </td>
-                                    <td>Mentor</td>
-                                    <td>bidishabhowmick@gmail.com</td>
-                                    <td>+1 1234567890</td>
+                                    <td>{e?.profile?.coach_type}</td>
+                                    <td>{e?.user?.email}</td>
+                                    <td>+{e?.profile?.phone_country_code.phone_code} {e?.profile?.phone}</td>
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
@@ -88,7 +153,7 @@ const Coaches = () => {
                                                 navigate(`/dashboard/coaches/single-coache/${i + 1}`)
                                             })}>View</p>
                                             <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
-                                            <p>Delete</p>
+                                            <p onClick={(() => deletedCoachfunc(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>

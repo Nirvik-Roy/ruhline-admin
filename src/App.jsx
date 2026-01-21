@@ -52,12 +52,18 @@ import MotivationModule from './View/Programs/CreatePrograms/ProgramModule/Motiv
 import Whoamimodule from './View/Programs/CreatePrograms/ProgramModule/Whoamimodule/Whoamimodule.jsx'
 import Payouts from './View/Payouts/Payouts.jsx'
 import PaymentList from './View/Payouts/PaymentList.jsx'
+import { Toaster } from 'react-hot-toast'
+import PrivateRoute from './PrivateRoute/PrivateRoute.jsx'
 function App() {
   return (
     <>
       <BrowserRouter>
+      <Toaster toastOptions={{
+        position:'top-right'
+      }}/>
         <Routes>
           <Route path={'/'} element={<Login />} />
+          <Route element={<PrivateRoute/>}>
           <Route path={'/dashboard'} element={<MainLayout />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='coaches' element={<Coaches />} />
@@ -109,6 +115,7 @@ function App() {
             <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
             <Route path='payouts' element={<Payouts />} />
             <Route path='payouts/payment-list' element={<PaymentList/>}/>
+          </Route>
           </Route>
         </Routes>
       </BrowserRouter>
