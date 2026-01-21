@@ -53,7 +53,7 @@ const AuthSlice = createSlice({
             const token = localStorage.getItem('token');
             if (token) {
                 state.isLogin = true,
-                    state.isChecking = false;
+                state.isChecking = false;
             }
         },
     },
