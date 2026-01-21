@@ -54,7 +54,6 @@ const AuthSlice = createSlice({
             if (token) {
                 state.isLogin = true,
                     state.isChecking = false;
-
             }
         },
     },

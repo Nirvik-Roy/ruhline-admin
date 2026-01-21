@@ -63,7 +63,7 @@ const Coaches = () => {
     const deletedCoachfunc = async (id) => {
         if (id) {
             try {
-                 await deleteCoach(id);
+                await deleteCoach(id);
                 getAllCoachesFunc()
                 setdeleted(true)
             } catch (err) {

@@ -56,7 +56,6 @@ export const deleteCoach = async (id) => {
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');
-
         }
     }
 }
