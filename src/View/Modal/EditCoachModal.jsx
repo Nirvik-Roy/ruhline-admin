@@ -7,7 +7,6 @@ import { getAllPhoneCountry } from '../../utils/location'
 import toast from 'react-hot-toast'
 import Loaders from '../../Components/Loaders/Loaders'
 const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading, editNewCoachfunc, updateErrors }) => {
-
     const [emailerrorMessage, setEmailerrorMessage] = useState('');
     const [phoneCodes, setphoneCodes] = useState([]);
     const [contacterrorMessage, setContactErrorMessage] = useState();

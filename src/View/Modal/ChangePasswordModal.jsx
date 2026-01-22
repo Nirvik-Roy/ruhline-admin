@@ -12,7 +12,10 @@ const ChangePasswordModal = ({ modalFunction }) => {
     const [isLoading, setisLoading] = useState(false);
     const dispatch = useDispatch()
     const [passwordMsg, setPasswordMsg] = useState("");
-    const [confirmPasswordMsg, setConfirmPasswordMsg] = useState("");
+    const [confirmPasswordMsg, setConfirmPasswordMsg] = useState();
+    const [type, setType] = useState()
+    const [type2, setType2] = useState()
+    const [type3, setType3] = useState()
     const [userPasswordErrors, setuserPasswordErrors] = useState([])
     const [formData, setformData] = useState({
         current_password: '',
@@ -63,9 +66,12 @@ const ChangePasswordModal = ({ modalFunction }) => {
             setisLoading(true)
             try {
                 const result = await Changeuserpassword(formData);
-                setuserPasswordErrors(result)
-                modalFunction(0)
-                await dispatch(AuthlogOut())
+                setuserPasswordErrors(result);
+                console.log(result)
+                if(result.message == "Your password has been changed successfully."){
+                     dispatch(AuthlogOut()) 
+                }
+              
             } catch (err) {
                 toast.error(err.response?.data?.message);
             } finally {
@@ -90,14 +96,23 @@ const ChangePasswordModal = ({ modalFunction }) => {
                         <label>Current Password <span>*</span></label>
                         <input name='current_password' onChange={handleChange} style={{
                             padding: '0 40px 0 15px '
-                        }} value={formData.current_password} type='password' placeholder='*********' />
-                        <img style={{
+                        }} value={formData.current_password} type={type ? 'text' : 'password'} placeholder='*********' />
+                        {type && <i style={{
                             position: 'absolute',
                             top: '47px',
                             right: '10px',
                             width: '20px',
                             cursor: 'pointer'
-                        }} src={eye} />
+                        }} class="fa-regular fa-eye" onClick={(() => setType(!type))}></i>}
+
+                        {!type && <i style={{
+                            position: 'absolute',
+                            top: '47px',
+                            right: '10px',
+                            width: '20px',
+                            cursor: 'pointer'
+                        }} class="fa-regular fa-eye-slash" onClick={(() => setType(!type))}></i>}
+
                     </div>
                     <small style={{
                         fontSize: '0.7rem',
@@ -111,14 +126,22 @@ const ChangePasswordModal = ({ modalFunction }) => {
                         <label>New Password <span>*</span></label>
                         <input name='password' onChange={handleChange} style={{
                             padding: '0 40px 0 15px '
-                        }} value={formData.password} type='password' placeholder='*********' />
-                        <img style={{
+                        }} value={formData.password} type={type2 ? 'text' : 'password'} placeholder='*********' />
+                        {type2 && <i style={{
                             position: 'absolute',
                             top: '47px',
                             right: '10px',
                             width: '20px',
                             cursor: 'pointer'
-                        }} src={eye} />
+                        }} class="fa-regular fa-eye" onClick={(() => setType2(!type2))}></i>}
+
+                        {!type2 && <i style={{
+                            position: 'absolute',
+                            top: '47px',
+                            right: '10px',
+                            width: '20px',
+                            cursor: 'pointer'
+                        }} class="fa-regular fa-eye-slash" onClick={(() => setType2(!type2))}></i>}
                         <small style={{
                             fontSize: '0.7rem',
                             display: 'block',
@@ -133,22 +156,29 @@ const ChangePasswordModal = ({ modalFunction }) => {
                         <label>Confirm Password <span>*</span></label>
                         <input value={formData.password_confirmation} name='password_confirmation' onChange={handleChange} style={{
                             padding: '0 40px 0 15px '
-                        }} type='password' placeholder='*********' />
-                        <img style={{
+                        }} type={type3 ? 'text' : 'password'} placeholder='*********' />
+                        {type3 && <i style={{
                             position: 'absolute',
                             top: '47px',
                             right: '10px',
                             width: '20px',
                             cursor: 'pointer'
-                        }} src={eye} />
+                        }} class="fa-regular fa-eye" onClick={(() => setType3(!type3))}></i>}
 
-                        <img style={{
+                        {!type3 && <i style={{
+                            position: 'absolute',
+                            top: '47px',
+                            right: '10px',
+                            width: '20px',
+                            cursor: 'pointer'
+                        }} class="fa-regular fa-eye-slash" onClick={(() => setType3(!type3))}></i>}
+                        {confirmPasswordMsg == '' && <img style={{
                             position: 'absolute',
                             top: '50px',
                             right: '40px',
                             width: '15px',
                             cursor: 'pointer'
-                        }} src={tick} />
+                        }} src={tick} />}
                         <small style={{
                             fontSize: '0.7rem',
                             display: 'block',

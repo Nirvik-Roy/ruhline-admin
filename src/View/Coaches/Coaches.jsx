@@ -55,7 +55,6 @@ const Coaches = () => {
                 const result = await addNewCoach(data,file);
                 setaddCoachError(result)
                 await getAllCoachesFunc();
-                setCoachModal(false)
             } catch (err) {
                 console.log(err)
             } finally {
