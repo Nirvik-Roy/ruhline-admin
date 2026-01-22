@@ -13,6 +13,9 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [passwordMsg, setPasswordMsg] = useState("");
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState("");
+    const [type, setType] = useState(false);
+    const [type2, setType2] = useState(false);
+
     const [file, setfile] = useState()
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const contactRegex = /^[0-9]{10}$/;
@@ -166,14 +169,22 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                             <label> Password <span>*</span></label>
                             <input onChange={handleChange} name='password' style={{
                                 padding: '0 40px 0 15px '
-                            }} value={formData.password} type='password' placeholder='*********' />
-                            <img style={{
+                            }} value={formData.password} type={type2 ? 'text' : 'password'} placeholder='*********' />
+                            {type2 && <i style={{
                                 position: 'absolute',
                                 top: '47px',
                                 right: '10px',
                                 width: '20px',
                                 cursor: 'pointer'
-                            }} src={eye} />
+                            }} class="fa-regular fa-eye" onClick={(() => setType2(!type2))}></i>}
+
+                            {!type2 && <i style={{
+                                position: 'absolute',
+                                top: '47px',
+                                right: '10px',
+                                width: '20px',
+                                cursor: 'pointer'
+                            }} class="fa-regular fa-eye-slash" onClick={(() => setType2(!type2))}></i>}
 
                             <small style={{
                                 fontSize: '0.7rem',
@@ -190,14 +201,22 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                             <label>Confirm Password <span>*</span></label>
                             <input onChange={handleChange} name='password_confirmation' style={{
                                 padding: '0 40px 0 15px '
-                            }} value={formData.password_confirmation} type='password' placeholder='*********' />
-                            <img style={{
+                            }} value={formData.password_confirmation} type={type ? 'text' : 'password'} placeholder='*********' />
+                            {type && <i style={{
                                 position: 'absolute',
                                 top: '47px',
                                 right: '10px',
                                 width: '20px',
                                 cursor: 'pointer'
-                            }} src={eye} />
+                            }} class="fa-regular fa-eye" onClick={(() => setType(!type))}></i>}
+
+                            {!type && <i style={{
+                                position: 'absolute',
+                                top: '47px',
+                                right: '10px',
+                                width: '20px',
+                                cursor: 'pointer'
+                            }} class="fa-regular fa-eye-slash" onClick={(() => setType(!type))}></i>}
                             <small style={{
                                 fontSize: '0.7rem',
                                 display: 'block',
@@ -285,10 +304,10 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                             </>}
 
                             {file && <img style={{
-                                width:'100%',
-                                height:'100%',
-                                objectFit:'contain'
-                            }} src={URL.createObjectURL(file)}/>}
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain'
+                            }} src={URL.createObjectURL(file)} />}
                             <input onChange={((e) => handleImage(e))} type='file' />
                         </div>
                         <small style={{

@@ -41,7 +41,7 @@ export const addNewCoach = async (data, file) => {
             })
             if (res.data.success == true) {
                 toast.success(res.data?.message || 'Coach Added succesfully');
-                return res.data.data;
+                return res.data;
             }
         } catch (err) {
             console.log(err.response?.data?.errors)
@@ -102,7 +102,7 @@ export const updateCoach = async (id, data) => {
             })
             if (res?.data?.success == true) {
                 toast.success(res.data?.message || 'Coach Updated Successfully');
-                return res.data.data;
+                return res.data;
 
             }
         } catch (err) {

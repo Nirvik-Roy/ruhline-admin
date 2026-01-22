@@ -13,6 +13,8 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
     const [isLoading, setIsLoading] = useState(false);
     const [passwordMsg, setPasswordMsg] = useState("");
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState("");
+    const [type, setType] = useState(false);
+    const [type2, setType2] = useState(false);
     const [file, setFile] = useState()
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const contactRegex = /^[0-9]{10}$/;
@@ -183,47 +185,51 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
                         <div className='input_form' style={{
                             position: 'relative'
                         }}>
-                            <label> Password <span>*</span></label>
+                            <label> Old Password <span>*</span></label>
                             <input onChange={handleChange} name='password' style={{
                                 padding: '0 40px 0 15px '
-                            }} value={formData.password} type='password' placeholder='*********' />
-                            <img style={{
+                            }} value={formData.password} type={type2 ? 'text' : 'password'} placeholder='*********' />
+                            {type2 && <i style={{
                                 position: 'absolute',
                                 top: '47px',
                                 right: '10px',
                                 width: '20px',
                                 cursor: 'pointer'
-                            }} src={eye} />
+                            }} class="fa-regular fa-eye" onClick={(() => setType2(!type2))}></i>}
 
-                            <small style={{
-                                fontSize: '0.7rem',
-                                display: 'block',
-                                marginTop: '5px',
-                                color: 'red'
-                            }}>{updateErrors?.password ? updateErrors.password : passwordMsg}</small>
+                            {!type2 && <i style={{
+                                position: 'absolute',
+                                top: '47px',
+                                right: '10px',
+                                width: '20px',
+                                cursor: 'pointer'
+                            }} class="fa-regular fa-eye-slash" onClick={(() => setType2(!type2))}></i>}
                         </div>
 
 
                         <div className='input_form' style={{
                             position: 'relative'
                         }}>
-                            <label>Confirm Password <span>*</span></label>
+                            <label>New Password <span>*</span></label>
                             <input onChange={handleChange} name='password_confirmation' style={{
                                 padding: '0 40px 0 15px '
-                            }} value={formData.password_confirmation} type='password' placeholder='*********' />
-                            <img style={{
+                            }} value={formData.password_confirmation} type={type ? 'text' : 'password'} placeholder='*********' />
+                            {type && <i style={{
                                 position: 'absolute',
                                 top: '47px',
                                 right: '10px',
                                 width: '20px',
                                 cursor: 'pointer'
-                            }} src={eye} />
-                            <small style={{
-                                fontSize: '0.7rem',
-                                display: 'block',
-                                marginTop: '5px',
-                                color: 'red'
-                            }}>{updateErrors?.password_confirmation ? updateErrors.password_confirmation : confirmPasswordMsg}</small>
+                            }} class="fa-regular fa-eye" onClick={(() => setType(!type))}></i>}
+
+                            {!type && <i style={{
+                                position: 'absolute',
+                                top: '47px',
+                                right: '10px',
+                                width: '20px',
+                                cursor: 'pointer'
+                            }} class="fa-regular fa-eye-slash" onClick={(() => setType(!type))}></i>}
+
                         </div>
                         <div className='input_form confirm_input_form'>
                             <label>Phone no<span>*</span></label>
@@ -296,7 +302,7 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
                         }}>Upload Image<span>*</span></label>
 
                         <div className='files_upload_wrapper'>
-                            {(!file && !sendCoachData?.profile?.profile_photo) && <>
+                            {(!file && !singleCoachdata?.profile?.profile_image) && <>
                                 <img src={upload} />
                                 <p>Drag your files or <span>Browse</span></p>
                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
@@ -308,11 +314,11 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
                                     objectFit: 'contain',
                                 }} src={URL.createObjectURL(file)} />
                             }
-                            {(sendCoachData?.profile?.profile_photo && !file) && <img style={{
+                            {(singleCoachdata?.profile?.profile_image && !file) && <img style={{
                                 width: '100%',
                                 height: '90%',
                                 objectFit: 'contain',
-                            }} src={sendCoachData?.profile?.profile_photo} />}
+                            }} src={singleCoachdata?.profile?.profile_image} />}
                             <input onChange={handleFileChange} type='file' />
                         </div>
                     </div>

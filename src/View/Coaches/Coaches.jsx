@@ -48,13 +48,17 @@ const Coaches = () => {
     }
 
 
-    const addNewCoachFunc = async (data,file) => {
+    const addNewCoachFunc = async (data, file) => {
         if (data) {
             setUpdateLoading(true)
             try {
-                const result = await addNewCoach(data,file);
+                const result = await addNewCoach(data, file);
                 setaddCoachError(result)
                 await getAllCoachesFunc();
+                console.log(result)
+                if (result.success) {
+                    setCoachModal(false)
+                }
             } catch (err) {
                 console.log(err)
             } finally {
@@ -98,14 +102,16 @@ const Coaches = () => {
     }
 
 
-    const editNewCoachfunc = async (id,data) => {
+    const editNewCoachfunc = async (id, data) => {
         if (data && id) {
             setUpdateLoading(true)
             try {
-                const result = await updateCoach(id,data);
+                const result = await updateCoach(id, data);
                 setupdateErrors(result)
                 await getAllCoachesFunc()
-                seteditCoachModal(false)
+                if (result.success) {
+                    seteditCoachModal(false)
+                }
             } catch (err) {
                 console.log(err)
             } finally {
@@ -175,7 +181,7 @@ const Coaches = () => {
                                             justifyContent: 'flex-start'
                                         }}>
                                             <div className='customer_img_div'>
-                                                <img src={e?.profile?.profile_image ? e?.profile?.profile_image :  img} />
+                                                <img src={e?.profile?.profile_image ? e?.profile?.profile_image : img} />
                                             </div>
                                             <div className='customer_details_wrapper'>
                                                 <p>{e?.user?.first_name} {e?.user?.last_name}</p>
