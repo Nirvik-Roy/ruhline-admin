@@ -12,7 +12,8 @@ export const Auth = createAsyncThunk('Auth', async (loginParams, { rejectWithVal
                 return res.data.data
             }
         } catch (err) {
-            toast.error(err.response?.data?.message)
+            // toast.error(err.response?.data?.data.errors?.email[0])
+            toast.error(err.response?.data?.errors?.email[0])
             return rejectWithValue(err.response?.data || "Something went wrong");
         }
     }
@@ -47,13 +48,14 @@ const AuthSlice = createSlice({
         isLogin: false,
         isLoading: false,
         isChecking: true,
+        errors: ''
     },
     reducers: {
         verifyToken(state,) {
             const token = localStorage.getItem('token');
             if (token) {
                 state.isLogin = true,
-                state.isChecking = false;
+                    state.isChecking = false;
             }
         },
     },
@@ -82,9 +84,10 @@ const AuthSlice = createSlice({
                 localStorage.setItem('token', action.payload.token)
             }
         })
-        builder.addCase(Auth.rejected, (state,) => {
+        builder.addCase(Auth.rejected, (state,action) => {
             state.isLoading = false;
             state.isLogin = false;
+            state.errors = action.payload.errors
         })
     }
 })

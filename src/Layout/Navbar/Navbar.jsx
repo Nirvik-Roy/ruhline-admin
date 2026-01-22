@@ -10,8 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthlogOut } from '../../Store/Slices/Loginslice/AuthSlice'
 import Loaders from '../../Components/Loaders/Loaders.jsx'
 import { useNavigate } from 'react-router-dom'
+import { getUserDetails } from '../../utils/user.js'
 const Navbar = () => {
     const [dropdown, setdropdown] = useState(false);
+    const [userData, setuserData] = useState();
+    const [userLoading, setuserLoading] = useState()
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { isLoading, isLogin } = useSelector(state => state.auth)
@@ -35,16 +38,56 @@ const Navbar = () => {
             navigate('/')
         }
     }, [isLogin, navigate])
+
+
+    const userDataFetch = async () => {
+        setuserLoading(true)
+        try {
+            const result = await getUserDetails();
+            setuserData(result)
+        } catch (err) {
+            console.log('User data fethced failed')
+        } finally {
+            setuserLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        userDataFetch()
+    }, [])
     return (
         <>
-            {isLoading && <Loaders />}
+            {(isLoading || userLoading) && <Loaders />}
             {modalOpen.password && <ChangePasswordModal modalFunction={modalFunction} />}
-            {modalOpen.profile && <ChangeProfileModal modalFunction={modalFunction} />}
+            {modalOpen.profile && <ChangeProfileModal userData={userData} userDataFetch={userDataFetch} modalFunction={modalFunction} />}
             <div className='navbar_wrapper'>
                 <div className='container navbar_content_wrapper'>
                     <img src={logo} />
                     <div className='navbar_logout_wrapper'>
-                        <img onClick={(() => { setdropdown(!dropdown) })} src={user} />
+                    <div style={{
+                        display:'flex',
+                        justifyContent:'flex-end',
+                        alignItems:'center',
+                        gap:'10px',
+                        width:'fit-content'
+                    }}>
+                        <div>
+                            <h5 style={{
+                                textAlign:'right'
+                            }}>{userData?.first_name && userData?.first_name} {userData?.last_name && userData?.last_name}</h5>
+                            <small style={{
+                                fontSize:'0.7rem'
+                            }}>{userData?.email && userData?.email}</small>
+                        </div>
+                        <img onClick={(() => { setdropdown(!dropdown) })} style={{
+                            backgroundColor: userData?.profile_photo && 'transparent',
+                            padding: userData?.profile_photo && '0px',
+                            width: userData?.profile_photo && '35px',
+                            height: userData?.profile_photo && '35px',
+                            borderRadius: userData?.profile_photo && '50%',
+                            objectFit: userData?.profile_photo && 'cover',
+                        }} src={userData?.profile_photo ? userData?.profile_photo : user} />
+                    </div>
                         <img onClick={(() => LogoutFunc())} src={logout} />
                         {dropdown && <div className='user_dropdown'>
                             <div className='user_square'></div>

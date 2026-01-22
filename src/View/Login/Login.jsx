@@ -12,15 +12,22 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Loaders from '../../Components/Loaders/Loaders.jsx'
 const Login = () => {
     const [emailErrormessage, setEmailerrorMessage] = useState('');
+    const [type, setType] = useState(false)
     const location = useLocation()
-    const navigate = useNavigate()
-    const { isLogin, isLoading } = useSelector(state => state.auth)
+    const navigate = useNavigate();
+    const [adminErrors, setadminErrrors] = useState()
+    const { isLogin, isLoading, errors } = useSelector(state => state.auth)
     const dispatch = useDispatch()
     const [formData, setformData] = useState({
         email: '',
         password: ''
     })
 
+    useEffect(() => {
+        setadminErrrors(errors)
+    }, [errors])
+
+    console.log(adminErrors)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const ValidateEmail = (email) => {
         if (!email) {
@@ -43,7 +50,6 @@ const Login = () => {
             [name]: value
         })
     }
-
 
     const loginFunc = () => {
         if (formData.email == '' && formData.password == '') {
@@ -81,29 +87,44 @@ const Login = () => {
                         marginTop: '-15px',
                         color: 'rgba(255, 0, 0, 1)',
                         cursor: 'pointer'
-                    }}>{emailErrormessage}</small>
+                    }}>{errors.email ? errors.email[0] : emailErrormessage}</small>
                     <div className='input_form' style={{
                         position: 'relative'
                     }}>
                         <label>Password <span>*</span></label>
                         <input name='password' onChange={handleChange} style={{
                             padding: '0 40px 0 15px '
-                        }} type='password' placeholder='*********' />
-                        <img style={{
+                        }} type={type ? 'text' : 'password'} placeholder='*********' />
+                        <small style={{
+                            marginLeft: '15px',
+                            fontSize: '11px',
+                            marginTop: '-15px',
+                            color: 'rgba(255, 0, 0, 1)',
+                            cursor: 'pointer'
+                        }}>{errors.password && errors.password[0] }</small>
+                        {type && <i style={{
                             position: 'absolute',
                             top: '47px',
                             right: '10px',
                             width: '20px',
                             cursor: 'pointer'
-                        }} src={eye} />
+                        }} class="fa-regular fa-eye" onClick={(() => setType(!type))}></i>}
 
-                        <img style={{
+                        {!type && <i style={{
+                            position: 'absolute',
+                            top: '47px',
+                            right: '10px',
+                            width: '20px',
+                            cursor: 'pointer'
+                        }} class="fa-regular fa-eye-slash" onClick={(() => setType(!type))}></i>}
+
+                        {/* <img style={{
                             position: 'absolute',
                             top: '50px',
                             right: '40px',
                             width: '15px',
                             cursor: 'pointer'
-                        }} src={tick} />
+                        }} src={tick} /> */}
                         <small style={{
                             // marginLeft: '15px',
                             fontSize: '11px',

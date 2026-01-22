@@ -6,8 +6,11 @@ import Button from '../../Components/Button'
 import toast from 'react-hot-toast'
 import Loaders from '../../Components/Loaders/Loaders'
 import { Changeuserpassword } from '../../utils/user'
+import { useDispatch } from 'react-redux'
+import { AuthlogOut } from '../../Store/Slices/Loginslice/AuthSlice'
 const ChangePasswordModal = ({ modalFunction }) => {
     const [isLoading, setisLoading] = useState(false);
+    const dispatch = useDispatch()
     const [passwordMsg, setPasswordMsg] = useState("");
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState("");
     const [userPasswordErrors, setuserPasswordErrors] = useState([])
@@ -61,6 +64,8 @@ const ChangePasswordModal = ({ modalFunction }) => {
             try {
                 const result = await Changeuserpassword(formData);
                 setuserPasswordErrors(result)
+                modalFunction(0)
+                await dispatch(AuthlogOut())
             } catch (err) {
                 toast.error(err.response?.data?.message);
             } finally {

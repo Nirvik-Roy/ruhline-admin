@@ -13,10 +13,13 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [passwordMsg, setPasswordMsg] = useState("");
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState("");
-
+    const [file, setfile] = useState()
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const contactRegex = /^[0-9]{10}$/;
-
+    const handleImage = (e) => {
+        setfile(e.target.files[0]);
+        console.log(file)
+    }
     const [formData, setformData] = useState({
         first_name: '',
         last_name: '',
@@ -115,8 +118,8 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
             phone_country_code_id, gender, coach_type,
             password, password_confirmation } = formData
         if (first_name != '' && last_name != '' && email != '' && phone != '' &&
-            phone_country_code_id != '', password != '', password_confirmation != '', gender != '', coach_type != '' ) {
-            addNewCoachFunc(formData)
+            phone_country_code_id != '', password != '', password_confirmation != '', gender != '', coach_type != '') {
+            addNewCoachFunc(formData, file)
         } else {
             toast.error('Plz enter all the necessary fields...')
         }
@@ -131,8 +134,22 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                 <i class="fa-solid fa-xmark" onClick={(() => setCoachModal(false))}></i>
                 <form className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
-                        <Input onChange={handleChange} name="first_name" value={formData.first_name} label={'First Name'} required={true} placeholder={'Enter first name'} />
-                        <Input onChange={handleChange} name='last_name' value={formData.last_name} label={'Last Name'} required={true} placeholder={'Enter last name'} />
+                        <div>
+                            <Input onChange={handleChange} name="first_name" value={formData.first_name} label={'First Name'} required={true} placeholder={'Enter first name'} />
+                            <small style={{
+                                fontSize: '0.7rem',
+                                display: 'block',
+                                color: 'red',
+                            }}>{addCoachError?.first_name && addCoachError.first_name}</small>
+                        </div>
+                        <div>
+                            <Input onChange={handleChange} name='last_name' value={formData.last_name} label={'Last Name'} required={true} placeholder={'Enter last name'} />
+                            <small style={{
+                                fontSize: '0.7rem',
+                                display: 'block',
+                                color: 'red',
+                            }}>{addCoachError?.last_name && addCoachError.last_name}</small>
+                        </div>
                         <div>
                             <Input onChange={handleChange} name='email' value={formData.email} label={'Email'} required={true} placeholder={'Enter email'} />
                             <small style={{
@@ -243,14 +260,16 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                                 <option value={'Mentor'}>Mentor</option>
                                 <option value={'Yoga Trainer'}>Yoga Trainer</option>
                             </select>
+
+
+                            <small style={{
+                                fontSize: '0.7rem',
+                                display: 'block',
+                                color: 'red',
+                                marginLeft: 'auto'
+                            }}>{addCoachError?.coach_type && addCoachError.coach_type}</small>
                         </div>
 
-                        <small style={{
-                            fontSize: '0.7rem',
-                            display: 'block',
-                            color: 'red',
-                            marginLeft: 'auto'
-                        }}>{addCoachError?.coach_type && addCoachError.coach_type}</small>
                     </div>
                     <div className='input_form'>
                         <label style={{
@@ -259,11 +278,31 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                         }}>Upload Image<span>*</span></label>
 
                         <div className='files_upload_wrapper'>
-                            <img src={upload} />
-                            <p>Drag your files or <span>Browse</span></p>
-                            <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                            <input type='file' />
+                            {!file && <>
+                                <img src={upload} />
+                                <p>Drag your files or <span>Browse</span></p>
+                                <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                            </>}
+
+                            {file && <img style={{
+                                width:'100%',
+                                height:'100%',
+                                objectFit:'contain'
+                            }} src={URL.createObjectURL(file)}/>}
+                            <input onChange={((e) => handleImage(e))} type='file' />
                         </div>
+                        <small style={{
+                            fontSize: '0.7rem',
+                            display: 'block',
+                            marginTop: '5px',
+                            color: 'red'
+                        }}>{addCoachError?.profile_image && addCoachError.profile_image[0]}</small>
+                        <small style={{
+                            fontSize: '0.7rem',
+                            display: 'block',
+                            marginTop: '5px',
+                            color: 'red'
+                        }}>{addCoachError?.profile_image && addCoachError.profile_image[1]}</small>
                     </div>
                     <div onClick={(() => sendCoachData())} className='change_cancel_wrapper'>
                         <Button children={'Add'} />

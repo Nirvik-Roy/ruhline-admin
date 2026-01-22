@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import upload from '../../assets/Vector (8).svg'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import { UpdateuserProfile } from '../../utils/user'
 import toast from 'react-hot-toast'
 import Loaders from '../../Components/Loaders/Loaders'
-const ChangeProfileModal = ({ modalFunction }) => {
+const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [isloading, setIsLoading] = useState(false)
@@ -22,6 +22,15 @@ const ChangeProfileModal = ({ modalFunction }) => {
             setLastName(value)
         }
     }
+    useEffect(() => {
+        userDataFetch()
+    }, [])
+
+
+    useEffect(() => {
+        setFirstName(userData?.first_name && userData?.first_name)
+        setLastName(userData?.last_name && userData?.last_name);
+    }, [userData])
 
     const UpdateFunc = async () => {
         if (lastName != '' && firstName != '' && file != '') {
@@ -30,9 +39,11 @@ const ChangeProfileModal = ({ modalFunction }) => {
                 const result = await UpdateuserProfile({
                     lastName,
                     firstName,
-                    file
+                    file,
+                    profileLink : userData?.profile_photo
                 })
-                console.log(result)
+                await userDataFetch()
+                modalFunction(0)
             } catch (err) {
                 toast.error(err.response?.data?.message);
             } finally {
@@ -61,18 +72,23 @@ const ChangeProfileModal = ({ modalFunction }) => {
                         }}>Upload Profile Picture<span>*</span></label>
 
                         <div className='files_upload_wrapper'>
-                            {!file && <>
+                            {!file || !userData?.profile_photo && <>
                                 <img src={upload} />
                                 <p>Drag your files or <span>Browse</span></p>
                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
                             </>}
                             {
-                                file && <img style={{
+                               file && <img style={{
                                     width: '100%',
                                     height: '90%',
                                     objectFit: 'contain',
-                                }} src={URL.createObjectURL(file)} />
+                                }} src={ URL.createObjectURL(file)} />
                             }
+                            {(userData?.profile_photo && !file) && <img style={{
+                                    width: '100%',
+                                    height: '90%',
+                                    objectFit: 'contain',
+                                }} src={ userData?.profile_photo} />}
                             <input onChange={handleFileChange} type='file' />
                         </div>
                     </div>

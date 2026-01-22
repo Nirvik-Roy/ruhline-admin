@@ -7,15 +7,19 @@ import Pagination from '../../Components/Pagination/Pagination'
 import AddCoachModal from '../Modal/AddCoachModal'
 import EditCoachModal from '../Modal/EditCoachModal'
 import { useNavigate } from 'react-router-dom'
-import { addNewCoach, deleteCoach, getAllCoaches } from '../../utils/coach'
+import { addNewCoach, deleteCoach, getAllCoaches, updateCoach } from '../../utils/coach'
 import Loaders from '../../Components/Loaders/Loaders'
+import { getSingleCoach } from '../../utils/coach'
 const Coaches = () => {
     const [index, setIndex] = useState([]);
     const [coachData, setcoachData] = useState([]);
     const [deleted, setdeleted] = useState(false)
     const [isLoading, setisLoading] = useState(false);
+    const [updateErrors, setupdateErrors] = useState()
     const [updateLoading, setUpdateLoading] = useState(false);
-    const [addCoachError, setaddCoachError] = useState()
+    const [addCoachError, setaddCoachError] = useState();
+    const [singleCoachdata, setsingleCoachData] = useState({});
+    const [singleCoachLoading, setsingleCoachLoading] = useState(false)
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -44,13 +48,14 @@ const Coaches = () => {
     }
 
 
-    const addNewCoachFunc = async (data) => {
+    const addNewCoachFunc = async (data,file) => {
         if (data) {
             setUpdateLoading(true)
             try {
-                const result = await addNewCoach(data);
+                const result = await addNewCoach(data,file);
                 setaddCoachError(result)
-                await getAllCoachesFunc()
+                await getAllCoachesFunc();
+                setCoachModal(false)
             } catch (err) {
                 console.log(err)
             } finally {
@@ -76,11 +81,47 @@ const Coaches = () => {
         getAllCoachesFunc()
     }, [deleted])
 
+
+
+
+    const getSingleCoachFunc = async (id) => {
+        if (id) {
+            setsingleCoachLoading(true)
+            try {
+                const result = await getSingleCoach(id);
+                setsingleCoachData(result)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setsingleCoachLoading(false)
+            }
+        }
+    }
+
+
+    const editNewCoachfunc = async (id,data) => {
+        if (data && id) {
+            setUpdateLoading(true)
+            try {
+                const result = await updateCoach(id,data);
+                setupdateErrors(result)
+                await getAllCoachesFunc()
+                seteditCoachModal(false)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setUpdateLoading(false)
+            }
+        }
+    }
+
+    console.log(coachData)
+
     return (
         <>
             {updateLoading && <Loaders />}
             {coachModal && <AddCoachModal addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
-            {ediCoachModal && <EditCoachModal seteditCoachModal={seteditCoachModal} />}
+            {ediCoachModal && <EditCoachModal updateErrors={updateErrors} editNewCoachfunc={editNewCoachfunc} singleCoachdata={singleCoachdata} singleCoachLoading={singleCoachLoading} seteditCoachModal={seteditCoachModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Coaches</h2>
@@ -134,9 +175,9 @@ const Coaches = () => {
                                         <div className='customer_wrapper' style={{
                                             justifyContent: 'flex-start'
                                         }}>
-                                            {/* <div className='customer_img_div'>
-                                                <img src={img} />
-                                            </div> */}
+                                            <div className='customer_img_div'>
+                                                <img src={e?.profile?.profile_image ? e?.profile?.profile_image :  img} />
+                                            </div>
                                             <div className='customer_details_wrapper'>
                                                 <p>{e?.user?.first_name} {e?.user?.last_name}</p>
                                                 {/* <p>#ST456666</p> */}
@@ -150,9 +191,12 @@ const Coaches = () => {
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
-                                                navigate(`/dashboard/coaches/single-coache/${i + 1}`)
+                                                navigate(`/dashboard/coaches/single-coache/${e?.id}`)
                                             })}>View</p>
-                                            <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
+                                            <p onClick={(() => {
+                                                getSingleCoachFunc(e?.id)
+                                                seteditCoachModal(true)
+                                            })}>Edit</p>
                                             <p onClick={(() => deletedCoachfunc(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
