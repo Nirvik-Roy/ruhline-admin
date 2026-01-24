@@ -120,7 +120,6 @@ const Coaches = () => {
         }
     }
 
-    console.log(coachData)
 
     return (
         <>
