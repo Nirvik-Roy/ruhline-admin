@@ -46,7 +46,7 @@ const Navbar = () => {
             const result = await getUserDetails();
             setuserData(result)
         } catch (err) {
-            console.log('User data fethced failed')
+            console.log('User data fethced failed',err)
         } finally {
             setuserLoading(false)
         }

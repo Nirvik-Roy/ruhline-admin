@@ -1,11 +1,16 @@
-import React, { Activity, lazy, Suspense, useState } from 'react'
+import React, { Activity, lazy, Suspense, useState,useEffect } from 'react'
 import Pagination from '../../../Components/Pagination/Pagination'
 import { useNavigate } from 'react-router-dom'
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import ContactInqueriesModal from '../../Modal/ContactInqueriesModal.jsx'
+import { deleteContactEnquires, getAllContactEnquires } from '../../../utils/contactEnquires.js'
+import Loaders from '../../../Components/Loaders/Loaders.jsx'
 const CmsContact = () => {
     const [index, setIndex] = useState([]);
     const [isModal, setisModal] = useState(false);
+    const [loading, setIsloading] = useState(false);
+    const [contactData,setcontactData] = useState([]);
+    const [contactId,setContactId] = useState('')
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -14,11 +19,42 @@ const CmsContact = () => {
             setIndex([...index, i])
         }
     }
+  const fetchContact = async () => {
+        setIsloading(true)
+        try {
+            const result = await getAllContactEnquires();
+            setcontactData(result.data);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setIsloading(false)
+        }
+    }
+    useEffect(() => {
+        fetchContact()
+    }, [])
+    
 
+     const deleteCustomerFunc = async (id) =>{
+           setIsloading(true)
+            if(id){
+                try{
+                    const result = await deleteContactEnquires(id);
+                    console.log(result)
+                    if(result.success){
+                        fetchContact()
+                    }
+                }catch(err){
+                    console.log(err)
+                }finally{
+                    setIsloading(false)
+                }
+            }
+        }
     return (
         <>
-
-            {isModal && <ContactInqueriesModal setisModal={setisModal} />}
+            {loading && <Loaders/>}
+            {isModal && <ContactInqueriesModal contactId={contactId} setisModal={setisModal} />}
 
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
@@ -37,32 +73,32 @@ const CmsContact = () => {
                                 <th>Phone</th>
                                 <th>Message</th>
                                 <th>Actions</th>
-
                             </tr>
                         </thead>
-                        <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                     { contactData.length > 0 ?   <tbody>
+                            {contactData?.map((e, i) => (
                                 <tr>
                                     <td>
-                                        Bidisha Bhowmick
+                                        {e?.name}
                                     </td>
-                                    <td>bidishabhowmick@gmail.com</td>
-                                    <td>+1 1234567890</td>
-                                    <td>Lorem ipsum dolor sit amet, consectet.....</td>
+                                    <td>{e?.email}</td>
+                                    <td>+{e?.phone_country_code?.phone_code} {e?.phone}</td>
+                                    <td>{e?.message}</td>
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-75px'
                                         }}>
                                             <p onClick={(() => {
-                                                setisModal(!isModal)
+                                                setisModal(!isModal);
+                                                setContactId(e?.id)
                                             })}>View</p>
-                                            <p>Delete</p>
+                                            <p onClick={(() => deleteCustomerFunc(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody> : <td colSpan={12}>No contact details found</td>}
                     </table>
                 </div>
                 <Pagination />

@@ -79,7 +79,8 @@ export const getUserDetails = async () => {
                 return res.data.data
             }
         } catch (err) {
-            toast.error('Error fetching admin details')
+            toast.error('Error fetching admin details');
+            console.log(err?.response?.data)
             return err.response.data
         }
     }

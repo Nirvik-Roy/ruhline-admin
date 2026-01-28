@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Customers.css'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
@@ -7,8 +7,15 @@ import Button from '../../Components/Button'
 import Pagination from '../../Components/Pagination/Pagination'
 import AddCustomerModal from '../Modal/AddCustomerModal'
 import EditCustomerModal from '../Modal/EditCustomerModal'
+import { deleteCustomer, getAllCutomer } from '../../utils/cutomer'
+import Loaders from '../../Components/Loaders/Loaders'
+import { useSelector } from 'react-redux'
 const Customers = () => {
     const [index, setIndex] = useState([]);
+    const [customerData, setcustomerData] = useState([]);
+    const { isEdited } = useSelector(state => state.editCustomer)
+    const [customerId,setCustomerId] = useState()
+    const [loading, setIsloading] = useState(false)
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -19,10 +26,43 @@ const Customers = () => {
     }
     const [addCustomer, setaddCustomer] = useState(false);
     const [editCustomer, seteditCustomer] = useState(false);
+
+    const fetchCustomer = async () => {
+        setIsloading(true)
+        try {
+            const result = await getAllCutomer();
+            setcustomerData(result.data);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setIsloading(false)
+        }
+    }
+    useEffect(() => {
+        fetchCustomer()
+    }, [isEdited])
+
+    const deleteCustomerFunc = async (id) =>{
+        setIsloading(true)
+        if(id){
+            try{
+                const result = await deleteCustomer(id);
+                console.log(result)
+                if(result.success){
+                    fetchCustomer()
+                }
+            }catch(err){
+                console.log(err)
+            }finally{
+                setIsloading(false)
+            }
+        }
+    }
     return (
         <>
-            {addCustomer && <AddCustomerModal setaddCustomer={setaddCustomer} />}
-            {editCustomer && <EditCustomerModal seteditCustomer={seteditCustomer} />}
+            {loading && <Loaders />}
+            {addCustomer && <AddCustomerModal fetchCustomer={fetchCustomer} setaddCustomer={setaddCustomer} />}
+            {editCustomer && <EditCustomerModal customerId={customerId} seteditCustomer={seteditCustomer} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Customers</h2>
@@ -53,34 +93,40 @@ const Customers = () => {
 
                             </tr>
                         </thead>
-                        <tbody>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 7].map((e, i) => (
+                  { customerData.length > 0 ?     <tbody>
+                            {customerData?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
                                             justifyContent: 'flex-start'
                                         }}>
                                             <div className='customer_details_wrapper'>
-                                                <p>Bidisha Bhowmick</p>
-                                                <p>#ST456666</p>
+                                                <p>{e?.user?.name}</p>
+                                                {/* <p>#ST456666</p> */}
                                             </div>
                                         </div>
                                     </td>
-                                    <td>bidishabhowmick@gmail.com</td>
-                                    <td>+1 1234567890</td>
+                                    <td>{e?.user?.email}</td>
+                                    <td>+{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone}</td>
                                     <td>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/customers/single-customer/${i + 1}`)
                                             })}>View</p>
-                                            <p onClick={(()=>seteditCustomer(true))}>Edit</p>
-                                            <p>Delete</p>
+                                            <p onClick={(() =>{ 
+                                                setCustomerId(e.id)
+                                                seteditCustomer(true)})}>Edit</p>
+                                            <p onClick={(()=>{
+                                                deleteCustomerFunc(e.id)
+                                            })}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody> : <td colSpan={12} style={{
+                            textAlign:'center'
+                        }}>No Customer data found</td>}
                     </table>
                 </div>
                 <Pagination />

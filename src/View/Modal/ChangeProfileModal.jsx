@@ -72,23 +72,37 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
                         }}>Upload Profile Picture<span>*</span></label>
 
                         <div className='files_upload_wrapper'>
-                            {!file || !userData?.profile_photo && <>
-                                <img src={upload} />
-                                <p>Drag your files or <span>Browse</span></p>
-                                <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                            </>}
                             {
-                               file && <img style={{
-                                    width: '100%',
-                                    height: '90%',
-                                    objectFit: 'contain',
-                                }} src={ URL.createObjectURL(file)} />
+                                (() => {
+                                    if (!file && !userData?.profile_photo) {
+                                        return (
+                                            <>
+                                                <img src={upload} alt="Upload prompt" />
+                                                <p>Drag your files or <span>Browse</span></p>
+                                                <h5>PNG, JPG, JPEG supported | max file size: 250 KB</h5>
+                                            </>
+                                        );
+                                    }
+
+                                    if (file) {
+                                        return (
+                                            <img
+                                                style={{ width: '100%', height: '90%', objectFit: 'contain' }}
+                                                src={URL.createObjectURL(file)}
+                                                alt="Selected preview"
+                                            />
+                                        );
+                                    }
+
+                                    return (
+                                        <img
+                                            style={{ width: '100%', height: '90%', objectFit: 'contain' }}
+                                            src={userData.profile_photo}
+                                            alt="Profile"
+                                        />
+                                    );
+                                })()
                             }
-                            {(userData?.profile_photo && !file) && <img style={{
-                                    width: '100%',
-                                    height: '90%',
-                                    objectFit: 'contain',
-                                }} src={ userData?.profile_photo} />}
                             <input onChange={handleFileChange} type='file' />
                         </div>
                     </div>
