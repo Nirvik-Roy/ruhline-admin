@@ -69,7 +69,7 @@ export const editProfile = async (data) => {
                 }
             },);
             if (res.data.success == true) {
-                toast.success(res.data?.message || 'Password Update Successfully');
+                toast.success(res.data?.message || 'Customer Edited Successfully');
                 return res.data.data
             }
         } catch (err) {

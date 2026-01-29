@@ -49,7 +49,7 @@ export const deleteContactEnquires = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Coach Deleted Successfully');
+            toast.success(res.data?.message || 'Contact inquiry deleted succesfully');
             return res.data
         } catch (err) {
             console.log(err.response.data)

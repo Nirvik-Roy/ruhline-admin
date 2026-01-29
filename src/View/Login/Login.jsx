@@ -78,7 +78,7 @@ const Login = () => {
                 <form className='login_form'>
                     <img src={logo} />
                     <h1>Welcome Back Admin!</h1>
-                    <Input name={'email'} onChange={handleChange} type={'email'} label={'Email Address'} required={true} placeholder={'example@mail.com'} />
+                    <Input name={'email'} onChange={handleChange} type={'email'} label={'Email Address'} required={true} placeholder={'Enter email'} />
                     <small style={{
                         marginLeft: '15px',
                         fontSize: '11px',
