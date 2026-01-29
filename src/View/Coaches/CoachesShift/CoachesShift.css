@@ -32,11 +32,12 @@
     text-wrap: nowrap;
 }
 .dropdown_wrapper662{
-    position: absolute;
-    bottom: -5px;
-    right: -50px;
+      position: absolute;
+    top: 30px;
+    right: -39px;
     background-color: #fff;
-    display: flex;
+    display: flex
+;
     flex-direction: column;
     row-gap: 0px;
     width: fit-content;
@@ -107,7 +108,7 @@
 }
 .modal_checbox_wrapper{
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(60px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(103px,1fr));
     gap: 30px;
 }
 .modal_checbox{

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './CoachesShift.css'
 import Button from '../../../Components/Button'
 import laptopImg from '../../../assets/Group (2).svg'
@@ -68,6 +68,19 @@ const CoachesShift = () => {
             setdropdown(i)
         }
     }
+    const dropdownRef = useRef(null);
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setdropdown(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
     return (
         <>
             {shift.newShift && <NewShiftModal shiftFunction={shiftFunction} onSuccess={fetchShifts} />}
@@ -123,14 +136,16 @@ const CoachesShift = () => {
                         <p>No shifts found.</p>
                     ) : (
                         shiftsData.map((item, i) => (
-                            <div key={item.id} className='coaches_shift_card' onClick={() => dropdownFunction(i)}>
+                            <div key={item.id} className='coaches_shift_card' onClick={(e) =>{ 
+                                e.stopPropagation()
+                                dropdownFunction(i)}}>
                                 <img src={laptopImg} alt="" />
                                 <i className="fa-solid fa-ellipsis-vertical"></i>
                                 <p>{item.name}</p>
                                 <small>{item.start_time} - {item.end_time}</small>
 
                                 {dropdown === i && (
-                                    <div className='dropdown_wrapper662' onClick={(e) => e.stopPropagation()}>
+                                    <div className='dropdown_wrapper662' ref={dropdownRef} onClick={(e) => e.stopPropagation()}>
                                         <small onClick={() => openEditModal(item)}>Edit</small>
                                         <small onClick={() => openDeleteConfirm(item)}>Delete</small>
                                     </div>
