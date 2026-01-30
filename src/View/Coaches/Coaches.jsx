@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import './Coaches.css'
 import Button from '../../Components/Button'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
@@ -12,6 +12,9 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { getSingleCoach } from '../../utils/coach'
 const Coaches = () => {
     const [index, setIndex] = useState([]);
+    const [dropdown, setdropdown] = useState(null);
+    const dropdownRef = useRef(null);
+
     const [coachData, setcoachData] = useState([]);
     const [deleted, setdeleted] = useState(false)
     const [isLoading, setisLoading] = useState(false);
@@ -120,6 +123,22 @@ const Coaches = () => {
         }
     }
 
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
+
+
 
     return (
         <>
@@ -191,8 +210,10 @@ const Coaches = () => {
                                     <td>{e?.profile?.coach_type}</td>
                                     <td>{e?.user?.email}</td>
                                     <td>+{e?.profile?.phone_country_code.phone_code} {e?.profile?.phone}</td>
-                                    <td>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                    <td ref={dropdownRef}>
+                                        <img onClick={((e) => {
+                                            e.stopPropagation()
+                                            indexFunction(i)})} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/coaches/single-coache/${e?.id}`)

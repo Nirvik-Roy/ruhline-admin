@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useRef} from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Customers.css'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
@@ -12,9 +12,11 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { useSelector } from 'react-redux'
 const Customers = () => {
     const [index, setIndex] = useState([]);
+    const dropdownRef = useRef(null);
+
     const [customerData, setcustomerData] = useState([]);
     const { isEdited } = useSelector(state => state.editCustomer)
-    const [customerId,setCustomerId] = useState()
+    const [customerId, setCustomerId] = useState()
     const [loading, setIsloading] = useState(false)
     const navigate = useNavigate()
     const indexFunction = (i) => {
@@ -42,22 +44,37 @@ const Customers = () => {
         fetchCustomer()
     }, [isEdited])
 
-    const deleteCustomerFunc = async (id) =>{
+    const deleteCustomerFunc = async (id) => {
         setIsloading(true)
-        if(id){
-            try{
+        if (id) {
+            try {
                 const result = await deleteCustomer(id);
                 console.log(result)
-                if(result.success){
+                if (result.success) {
                     fetchCustomer()
                 }
-            }catch(err){
+            } catch (err) {
                 console.log(err)
-            }finally{
+            } finally {
                 setIsloading(false)
             }
         }
     }
+
+
+     const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIndex([]);
+            }
+        };
+    
+    
+        useEffect(() => {
+            document.addEventListener("click", handleClickOutside);
+            return () => {
+                document.removeEventListener("click", handleClickOutside);
+            };
+        }, []);
     return (
         <>
             {loading && <Loaders />}
@@ -93,7 +110,7 @@ const Customers = () => {
 
                             </tr>
                         </thead>
-                  { customerData.length > 0 ?     <tbody>
+                        {customerData.length > 0 ? <tbody>
                             {customerData?.map((e, i) => (
                                 <tr>
                                     <td>
@@ -108,16 +125,19 @@ const Customers = () => {
                                     </td>
                                     <td>{e?.user?.email}</td>
                                     <td>+{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone}</td>
-                                    <td>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                    <td ref={dropdownRef}>
+                                        <img onClick={((e) =>{ 
+                                            e.stopPropagation()
+                                            indexFunction(i)})} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/customers/single-customer/${i + 1}`)
                                             })}>View</p>
-                                            <p onClick={(() =>{ 
+                                            <p onClick={(() => {
                                                 setCustomerId(e.id)
-                                                seteditCustomer(true)})}>Edit</p>
-                                            <p onClick={(()=>{
+                                                seteditCustomer(true)
+                                            })}>Edit</p>
+                                            <p onClick={(() => {
                                                 deleteCustomerFunc(e.id)
                                             })}>Delete</p>
                                         </div>}
@@ -125,7 +145,7 @@ const Customers = () => {
                                 </tr>
                             ))}
                         </tbody> : <td colSpan={12} style={{
-                            textAlign:'center'
+                            textAlign: 'center'
                         }}>No Customer data found</td>}
                     </table>
                 </div>
