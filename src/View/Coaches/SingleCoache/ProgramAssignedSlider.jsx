@@ -7,13 +7,14 @@ import Slider from "react-slick";
 import img from '../../../assets/Rectangle 448 (1).png'
 import './SingleCoache.css'
 
-const ProgramAssignedSlider = () => {
+const ProgramAssignedSlider = ({ programs = [] }) => {
     const sliderref = useRef()
+    const list = Array.isArray(programs) && programs.length > 0 ? programs : []
     var settings = {
         dots: false,
-        infinite: true,
+        infinite: list.length > 5,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: Math.min(5, list.length || 1),
         slidesToScroll: 1,
     };
     return (
@@ -22,25 +23,26 @@ const ProgramAssignedSlider = () => {
                 <div className='upcoming_program_slider_head_Wrapper'>
                     <h1>Programs assigned to Coach</h1>
                     <div className='upcoming_slider_wrapper'>
-                        <img onClick={(() => sliderref?.current?.slickPrev())} src={leftarrow} />
-                        <img onClick={(() => sliderref?.current?.slickNext())} src={rightarrow} />
+                        <img onClick={() => sliderref?.current?.slickPrev()} src={leftarrow} alt='prev' />
+                        <img onClick={() => sliderref?.current?.slickNext()} src={rightarrow} alt='next' />
                     </div>
                 </div>
 
                 <div className='upcoming_program_slide'>
-                    <Slider ref={sliderref} {...settings}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((e, i) => (
-                            <div>
-                              <div className='program_assign_slide'>
-                                <img src={img}/>
-                                <h4>Service 1</h4>
-                              </div>
-                            </div>
-
-                        ))}
-
-                    </Slider>
-
+                    {list.length > 0 ? (
+                        <Slider ref={sliderref} {...settings}>
+                            {list.map((item, i) => (
+                                <div key={item?.id ?? i}>
+                                    <div className='program_assign_slide'>
+                                        <img src={item?.image ?? item?.thumbnail ?? item?.profile_image ?? img} alt={item?.name ?? ''} />
+                                        <h4>{item?.name ?? item?.title ?? item?.program_name ?? '—'}</h4>
+                                    </div>
+                                </div>
+                            ))}
+                        </Slider>
+                    ) : (
+                        <p style={{ padding: '1rem', color: '#666' }}>No programs assigned</p>
+                    )}
                 </div>
 
             </div>

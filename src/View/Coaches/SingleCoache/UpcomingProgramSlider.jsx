@@ -6,15 +6,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
-const UpcomingProgramSlider = () => {
+const UpcomingProgramSlider = ({ programs = [] }) => {
     const sliderref = useRef()
     var settings = {
         dots: false,
-        infinite: true,
+        infinite: programs?.length > 4,
         speed: 500,
-        slidesToShow: 4,
+        slidesToShow: Math.min(4, programs?.length || 1),
         slidesToScroll: 1,
     };
+    const list = Array.isArray(programs) && programs.length > 0 ? programs : []
 
     return (
         <>
@@ -22,33 +23,34 @@ const UpcomingProgramSlider = () => {
                 <div className='upcoming_program_slider_head_Wrapper'>
                     <h1>Upcoming Programs</h1>
                     <div className='upcoming_slider_wrapper'>
-                        <img onClick={(() => sliderref?.current?.slickPrev())} src={leftarrow} />
-                        <img onClick={(() => sliderref?.current?.slickNext())} src={rightarrow} />
+                        <img onClick={() => sliderref?.current?.slickPrev()} src={leftarrow} alt='prev' />
+                        <img onClick={() => sliderref?.current?.slickNext()} src={rightarrow} alt='next' />
                     </div>
                 </div>
 
                 <div className='upcoming_program_slide'>
-                    <Slider ref={sliderref} {...settings}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((e, i) => (
-                            <div>
-                                <div className='program_slide'>
-                                    <div className='program_head_slider'>
-                                        <img src={calendar} />
-                                        <h5>Program Name: Service 1 </h5>
+                    {list.length > 0 ? (
+                        <Slider ref={sliderref} {...settings}>
+                            {list.map((item, i) => (
+                                <div key={item?.id ?? i}>
+                                    <div className='program_slide'>
+                                        <div className='program_head_slider'>
+                                            <img src={calendar} alt='' />
+                                            <h5>Program Name: {item?.program_name ?? item?.name ?? item?.title ?? '—'}</h5>
+                                        </div>
+                                        <div className='program_session_wrapper'>
+                                            <p>Session <span>{item?.session_name ?? item?.session ?? '—'}</span></p>
+                                            <span>{item?.date ?? item?.session_date ?? item?.scheduled_at ?? '—'}</span>
+                                        </div>
+                                        <p>Customer Name: <span>{item?.customer_name ?? item?.customer ?? '—'}</span></p>
+                                        {item?.program_link && <Link to={item.program_link}>Program Link</Link>}
                                     </div>
-                                    <div className='program_session_wrapper'>
-                                        <p>Session <span>Session 1</span></p>
-                                        <span>25/05/2025 - 09:30 PM</span>
-                                    </div>
-                                    <p>Customer Name: <span>Bidisha Bhowmick</span></p>
-                                    <Link>Program Link</Link>
                                 </div>
-                            </div>
-
-                        ))}
-
-                    </Slider>
-
+                            ))}
+                        </Slider>
+                    ) : (
+                        <p style={{ padding: '1rem', color: '#666' }}>No upcoming programs</p>
+                    )}
                 </div>
 
             </div>

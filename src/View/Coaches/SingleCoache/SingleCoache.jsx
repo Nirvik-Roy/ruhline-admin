@@ -6,12 +6,14 @@ import UpcomingProgramSlider from './UpcomingProgramSlider'
 import ProgramAssignedSlider from './ProgramAssignedSlider'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../Components/Loaders/Loaders'
-import { deleteCoach, getSingleCoach, updateCoach } from '../../../utils/coach'
+import { deleteCoach, getSingleCoach, getCoachUpcomingPrograms, getCoachAssignedPrograms, updateCoach } from '../../../utils/coach'
 import EditCoachModal from '../../Modal/EditCoachModal'
 const SingleCoache = () => {
     const navigate = useNavigate();
     const [ediCoachModal, seteditCoachModal] = useState(false);
-    const [singleCoachdata, setsingleCoachData] = useState([]);
+    const [singleCoachdata, setsingleCoachData] = useState({});
+    const [upcomingPrograms, setUpcomingPrograms] = useState([]);
+    const [assignedPrograms, setAssignedPrograms] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const [updateErrors, setupdateErrors] = useState()
     const [updateLoading, setUpdateLoading] = useState(false);
@@ -21,9 +23,16 @@ const SingleCoache = () => {
             setisLoading(true)
             try {
                 const result = await getSingleCoach(id);
-                setsingleCoachData(result)
+                if (result?.user != null || result?.id != null) {
+                    setsingleCoachData(result)
+                    if (Array.isArray(result?.upcoming_programs)) setUpcomingPrograms(result.upcoming_programs)
+                    if (Array.isArray(result?.assigned_programs)) setAssignedPrograms(result.assigned_programs)
+                } else {
+                    setsingleCoachData({})
+                }
             } catch (err) {
                 console.log(err)
+                setsingleCoachData({})
             } finally {
                 setisLoading(false)
             }
@@ -31,6 +40,25 @@ const SingleCoache = () => {
     }
     useEffect(() => {
         getSingleCoachFunc(id)
+    }, [id]);
+
+    useEffect(() => {
+        if (!id) return
+        const fetchPrograms = async () => {
+            try {
+                const [upcoming, assigned] = await Promise.all([
+                    getCoachUpcomingPrograms(id),
+                    getCoachAssignedPrograms(id)
+                ])
+                const up = Array.isArray(upcoming) ? upcoming : []
+                const as = Array.isArray(assigned) ? assigned : []
+                setUpcomingPrograms(prev => (up.length > 0 ? up : prev))
+                setAssignedPrograms(prev => (as.length > 0 ? as : prev))
+            } catch (_) {
+                // keep existing from coach detail if endpoints fail
+            }
+        }
+        fetchPrograms()
     }, [id]);
 
     const editNewCoachfunc = async (id, data) => {
@@ -72,7 +100,7 @@ const SingleCoache = () => {
                         <h1>{singleCoachdata?.user?.name} </h1>
                         <small style={{
                             cursor: 'pointer'
-                        }}> <span onClick={(() => navigate('/dashboard/coaches'))}>Coaches</span> / <span onClick={(() => navigate('/dashboard/coaches/single-coache/1'))}>{singleCoachdata?.user?.name}</span></small>
+                        }}> <span onClick={() => navigate('/dashboard/coaches')}>Coaches</span> / <span onClick={() => navigate(`/dashboard/coaches/single-coache/${id}`)}>{singleCoachdata?.user?.name}</span></small>
                     </div>
                     <div className='single_button_Wrapper'>
                         <button onClick={(()=>{deletedCoachfunc(singleCoachdata.id)})}>Delete</button>
@@ -89,7 +117,7 @@ const SingleCoache = () => {
                     <div className='single_coache_details'>
                         <div className='single_coach_details_head_Wrapper'>
                             <h3>{singleCoachdata?.user?.name}</h3>
-                            <h5>Total Earned: SAR 2,245</h5>
+                            <h5>Total Earned: {singleCoachdata?.total_earned != null ? `SAR ${Number(singleCoachdata.total_earned).toLocaleString()}` : singleCoachdata?.total_earned_amount != null ? `SAR ${Number(singleCoachdata.total_earned_amount).toLocaleString()}` : '—'}</h5>
                         </div>
 
                         <ul className='single_coach_list'>
@@ -99,8 +127,8 @@ const SingleCoache = () => {
                         </ul>
                     </div>
                 </div>
-                <UpcomingProgramSlider />
-                <ProgramAssignedSlider />
+                <UpcomingProgramSlider programs={upcomingPrograms} />
+                <ProgramAssignedSlider programs={assignedPrograms} />
             </div>
         </>
     )
