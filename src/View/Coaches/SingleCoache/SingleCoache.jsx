@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../Components/Loaders/Loaders'
 import { deleteCoach, getSingleCoach, updateCoach } from '../../../utils/coach'
 import EditCoachModal from '../../Modal/EditCoachModal'
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 const SingleCoache = () => {
     const navigate = useNavigate();
     const [ediCoachModal, seteditCoachModal] = useState(false);
@@ -15,6 +16,7 @@ const SingleCoache = () => {
     const [isLoading, setisLoading] = useState(false);
     const [updateErrors, setupdateErrors] = useState()
     const [updateLoading, setUpdateLoading] = useState(false);
+    const [deleteModal, setdeleteModal] = useState(false)
     const { id } = useParams();
     const getSingleCoachFunc = async (id) => {
         if (id) {
@@ -49,23 +51,30 @@ const SingleCoache = () => {
         }
     }
 
-    const deletedCoachfunc = async (id) => {
+    const deletedCoachfunc = async () => {
         if (id) {
             setisLoading(true)
             try {
                 await deleteCoach(id);
             } catch (err) {
                 console.log(err)
-            }finally{
+            } finally {
                 setisLoading(false);
-                navigate('/dashboard/coaches',{replace:true})
+                navigate('/dashboard/coaches', { replace: true })
             }
         }
+    }
+    const handleDelete = () => {
+        setdeleteModal(true)
     }
     return (
         <>
             {(isLoading || updateLoading) && <Loaders />}
-            {ediCoachModal && <EditCoachModal editNewCoachfunc={editNewCoachfunc} seteditCoachModal={seteditCoachModal} singleCoachLoading={isLoading} singleCoachdata={singleCoachdata} updateErrors={updateErrors} />}
+            {
+                deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />
+            }
+            {ediCoachModal && <EditCoachModal editNewCoachfunc={editNewCoachfunc}
+                seteditCoachModal={seteditCoachModal} singleCoachLoading={isLoading} singleCoachdata={singleCoachdata} updateErrors={updateErrors} />}
             <div className='dashboard_container'>
                 <div className='single_coache_head_Wrapper'>
                     <div className='single_coach_head'>
@@ -75,7 +84,7 @@ const SingleCoache = () => {
                         }}> <span onClick={(() => navigate('/dashboard/coaches'))}>Coaches</span> / <span onClick={(() => navigate('/dashboard/coaches/single-coache/1'))}>{singleCoachdata?.user?.name}</span></small>
                     </div>
                     <div className='single_button_Wrapper'>
-                        <button onClick={(()=>{deletedCoachfunc(singleCoachdata.id)})}>Delete</button>
+                        <button onClick={(() => { handleDelete() })}>Delete</button>
                         <div onClick={(() => seteditCoachModal(true))}>
                             <Button children={'Edit'} />
                         </div>

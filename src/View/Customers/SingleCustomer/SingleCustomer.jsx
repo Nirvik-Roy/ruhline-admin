@@ -7,18 +7,19 @@ import ProgramAssignedSlider from '../../Coaches/SingleCoache/ProgramAssignedSli
 import CompletedProgramSlider from './CompletedProgramSlider.jsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
-import { getSingleCustomer } from '../../../utils/cutomer'
+import { deleteCustomer, getSingleCustomer } from '../../../utils/cutomer'
 import EditCustomerModal from '../../Modal/EditCustomerModal.jsx'
 import { useSelector } from 'react-redux'
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
 const SingleCustomer = () => {
     const navigate = useNavigate();
     const { isEdited } = useSelector(state => state.editCustomer)
-
     const [singleData, setsingleData] = useState([]);
     const [loading, setLoading] = useState(false);
     const { id } = useParams();
     const [editCustomer, seteditCustomer] = useState(false);
-    const [customerId, setCustomerId] = useState()
+    const [customerId, setCustomerId] = useState();
+    const [deleteModal,setdeleteModal] = useState(false)
 
 
     const singleDataFetch = async () => {
@@ -35,13 +36,32 @@ const SingleCustomer = () => {
         }
     }
 
+    const deleteFunc = async()=>{
+        setLoading(true)
+        try{
+         const res = await deleteCustomer(id);
+         if(res.success){
+            navigate('/dashboard/customers',{replace:true})
+         }
+        }catch(err){
+          console.log(err)
+        }finally{
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         singleDataFetch()
     }, [isEdited])
+
+    const handleDelete = () =>{
+        setdeleteModal(true)
+    }
     
     return (
         <>
             {editCustomer && <EditCustomerModal customerId={customerId} seteditCustomer={seteditCustomer} />}
+            {deleteModal && <DeleteModal onClick={deleteFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'} />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='single_coache_head_Wrapper'>
@@ -52,7 +72,7 @@ const SingleCustomer = () => {
                         }}> <span onClick={(() => navigate('/dashboard/customers'))}>Customers</span> / <span onClick={(() => navigate('/dashboard/customers/single-customer/1'))}>{singleData?.user?.name}</span></small>
                     </div>
                     <div className='single_button_Wrapper'>
-                        <button>Delete</button>
+                        <button onClick={(() => handleDelete())}>Delete</button>
                         <div onClick={(() =>{ setCustomerId(singleData?.id)
                         seteditCustomer(true)
                         })}>

@@ -10,12 +10,14 @@ import EditCustomerModal from '../Modal/EditCustomerModal'
 import { deleteCustomer, getAllCutomer } from '../../utils/cutomer'
 import Loaders from '../../Components/Loaders/Loaders'
 import { useSelector } from 'react-redux'
+import DeleteModal from '../../Components/DeleteModal/DeleteModal'
 const Customers = () => {
     const [index, setIndex] = useState([]);
     const dropdownRef = useRef(null);
-
+    const [deletedId,setdeletedId] = useState()
     const [customerData, setcustomerData] = useState([]);
     const { isEdited } = useSelector(state => state.editCustomer)
+    const [deleteModal,setdeleteModal]=useState(false)
     const [customerId, setCustomerId] = useState()
     const [loading, setIsloading] = useState(false)
     const navigate = useNavigate()
@@ -44,14 +46,15 @@ const Customers = () => {
         fetchCustomer()
     }, [isEdited])
 
-    const deleteCustomerFunc = async (id) => {
+    const deleteCustomerFunc = async () => {
         setIsloading(true)
-        if (id) {
+        if (deletedId) {
             try {
-                const result = await deleteCustomer(id);
+                const result = await deleteCustomer(deletedId);
                 console.log(result)
                 if (result.success) {
-                    fetchCustomer()
+                    fetchCustomer();
+                    setdeleteModal(false)
                 }
             } catch (err) {
                 console.log(err)
@@ -59,6 +62,11 @@ const Customers = () => {
                 setIsloading(false)
             }
         }
+    }
+
+    const handleDelete = (id) =>{
+     setdeletedId(id)
+        setdeleteModal(true)
     }
 
 
@@ -77,6 +85,7 @@ const Customers = () => {
         }, []);
     return (
         <>
+            {deleteModal && <DeleteModal onClick={deleteCustomerFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'}/>}
             {loading && <Loaders />}
             {addCustomer && <AddCustomerModal fetchCustomer={fetchCustomer} setaddCustomer={setaddCustomer} />}
             {editCustomer && <EditCustomerModal customerId={customerId} seteditCustomer={seteditCustomer} />}
@@ -138,7 +147,7 @@ const Customers = () => {
                                                 seteditCustomer(true)
                                             })}>Edit</p>
                                             <p onClick={(() => {
-                                                deleteCustomerFunc(e.id)
+                                                handleDelete(e.id)
                                             })}>Delete</p>
                                         </div>}
                                     </td>

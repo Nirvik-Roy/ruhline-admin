@@ -10,14 +10,16 @@ import { useNavigate } from 'react-router-dom'
 import { addNewCoach, deleteCoach, getAllCoaches, updateCoach } from '../../utils/coach'
 import Loaders from '../../Components/Loaders/Loaders'
 import { getSingleCoach } from '../../utils/coach'
+import DeleteModal from '../../Components/DeleteModal/DeleteModal'
 const Coaches = () => {
     const [index, setIndex] = useState([]);
     const [dropdown, setdropdown] = useState(null);
     const dropdownRef = useRef(null);
-
+    const [deleteModal, setdeleteModal] = useState(false)
     const [coachData, setcoachData] = useState([]);
-    const [deleted, setdeleted] = useState(false)
+    const [deletedloading, setDeletedLoading] = useState(false)
     const [isLoading, setisLoading] = useState(false);
+    const [deletedId,setdeletedId] = useState()
     const [updateErrors, setupdateErrors] = useState()
     const [updateLoading, setUpdateLoading] = useState(false);
     const [addCoachError, setaddCoachError] = useState();
@@ -71,21 +73,32 @@ const Coaches = () => {
     }
 
 
-    const deletedCoachfunc = async (id) => {
-        if (id) {
+    const deletedCoachfunc = async () => {
+        setDeletedLoading(true)
+        if (deletedId) {
             try {
-                await deleteCoach(id);
+                const result = await deleteCoach(deletedId);
                 getAllCoachesFunc()
-                setdeleted(true)
+                console.log(result)
+                if(result.success){
+                    setdeleteModal(false)
+                }
             } catch (err) {
                 console.log(err)
+            }finally{
+                setDeletedLoading(false)
             }
         }
+    } 
+
+    const handleDelete = (id) =>{
+        setdeleteModal(true)
+        setdeletedId(id)
     }
 
     useEffect(() => {
         getAllCoachesFunc()
-    }, [deleted])
+    }, [])
 
 
 
@@ -137,12 +150,11 @@ const Coaches = () => {
         };
     }, []);
 
-
-
-
     return (
         <>
-            {updateLoading && <Loaders />}
+            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal}  onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
+            {(updateLoading || deletedloading) && <Loaders />}
+            
             {coachModal && <AddCoachModal addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
             {ediCoachModal && <EditCoachModal updateErrors={updateErrors} editNewCoachfunc={editNewCoachfunc} singleCoachdata={singleCoachdata} singleCoachLoading={singleCoachLoading} seteditCoachModal={seteditCoachModal} />}
             <div className='dashboard_container'>
@@ -213,7 +225,8 @@ const Coaches = () => {
                                     <td ref={dropdownRef}>
                                         <img onClick={((e) => {
                                             e.stopPropagation()
-                                            indexFunction(i)})} src={ellipse} />
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/coaches/single-coache/${e?.id}`)
@@ -222,7 +235,7 @@ const Coaches = () => {
                                                 getSingleCoachFunc(e?.id)
                                                 seteditCoachModal(true)
                                             })}>Edit</p>
-                                            <p onClick={(() => deletedCoachfunc(e?.id))}>Delete</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>
