@@ -111,3 +111,35 @@ export const updateCoach = async (id, data) => {
         }
     }
 }
+
+export const getCoachUpcomingPrograms = async (coachId) => {
+    const Token = localStorage.getItem('token')
+    if (coachId && Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach/${coachId}/upcoming-programs`, {
+                headers: { 'Authorization': `Bearer ${Token}` }
+            })
+            if (res?.data?.success === true) return res.data?.data ?? res.data?.upcoming_programs ?? []
+            return []
+        } catch (err) {
+            return []
+        }
+    }
+    return []
+}
+
+export const getCoachAssignedPrograms = async (coachId) => {
+    const Token = localStorage.getItem('token')
+    if (coachId && Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach/${coachId}/assigned-programs`, {
+                headers: { 'Authorization': `Bearer ${Token}` }
+            })
+            if (res?.data?.success === true) return res.data?.data ?? res.data?.assigned_programs ?? []
+            return []
+        } catch (err) {
+            return []
+        }
+    }
+    return []
+}
