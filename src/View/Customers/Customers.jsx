@@ -131,7 +131,7 @@ const Customers = () => {
                                             indexFunction(i)})} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
-                                                navigate(`/dashboard/customers/single-customer/${i + 1}`)
+                                                navigate(`/dashboard/customers/single-customer/${e?.id}`)
                                             })}>View</p>
                                             <p onClick={(() => {
                                                 setCustomerId(e.id)

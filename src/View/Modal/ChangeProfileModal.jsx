@@ -62,8 +62,8 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
                 <i class="fa-solid fa-xmark" onClick={(() => modalFunction(0))}></i>
                 <form className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
-                        <Input value={firstName} onChange={handleChange} name={'firstName'} label={'First Name'} required={true} placeholder={'Bidisha'} />
-                        <Input value={lastName} onChange={handleChange} name={'lastName'} label={'Last Name'} required={true} placeholder={'Bhowmick'} />
+                        <Input value={firstName} onChange={handleChange} name={'firstName'} label={'First Name'} required={true} placeholder={'Enter first name'} />
+                        <Input value={lastName} onChange={handleChange} name={'lastName'} label={'Last Name'} required={true} placeholder={'Enter last name'} />
                     </div>
                     <div className='input_form'>
                         <label style={{

@@ -46,11 +46,12 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                 last_name: singleCustomerData?.user?.last_name || '',
                 email: singleCustomerData.user?.email || '',
                 phone: singleCustomerData.profile?.phone || '',
-                phone_country_code_id: singleCustomerData.profile?.phone_country_code?.id
+                phone_country_code_id: singleCustomerData.profile?.phone_country_code?.id || 5
             })
         }
     }, [singleCustomerData])
 
+    console.log(errors)
 
     const fetchSingleCustomer = async () => {
         setisLoading(true)
@@ -78,7 +79,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
         })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const { first_name, last_name, phone, phone_country_code_id, email } = formData
         if (customerId) {
             const formDataNew = new FormData()
@@ -88,12 +89,15 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
             formDataNew.append('phone_country_code_id', phone_country_code_id);
             { email != singleCustomerData.user?.email && formDataNew.append('email', email) }
             { file && formDataNew.append('profile_image', file) }
-            dispatch(EditCustomer(
+            const result = await dispatch(EditCustomer(
                 {
                     id: customerId,
                     formData: formDataNew,
                 }
             ))
+            if (EditCustomer.fulfilled.match(result)) {
+                seteditCustomer(false)
+            }
         }
     }
     return (
@@ -146,6 +150,13 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                                 </select>
                                 <input onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter phone number' />
                             </div>
+
+                            <small style={{
+                                fontSize: '0.7rem',
+                                display: 'block',
+                                marginTop: '5px',
+                                color: 'red'
+                            }}>{errors?.phone_country_code_id && errors?.phone_country_code_id[0]}</small>
                             <small style={{
                                 fontSize: '0.7rem',
                                 display: 'block',

@@ -14,14 +14,13 @@ export const EditCustomer = createAsyncThunk('EditCustomer', async (loginParams,
                 }
             });
             if (res.data.success == true) {
-                toast.success(res.data?.message || 'Custome edited success');
+                toast.success(res.data?.message || 'Customer edited success');
                 return res.data.data
             }
         } catch (err) {
             // toast.error(err.response?.data?.data.errors?.email[0])
-            toast.error(err.response?.data?.errors)
-            console.log(err?.response?.data)
-            return rejectWithValue(err.response?.data || "Something went wrong");
+            toast.error(err?.response.data?.message)
+            return rejectWithValue(err.response?.data?.errors || "Something went wrong");
         }
     }
 })

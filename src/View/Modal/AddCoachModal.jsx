@@ -127,7 +127,7 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
             toast.error('Plz enter all the necessary fields...')
         }
     }
-
+    console.log(addCoachError)
     return (
         <>
             {isLoading && <Loaders />}
