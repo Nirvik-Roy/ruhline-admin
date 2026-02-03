@@ -147,15 +147,19 @@ const ProgramCategories = () => {
                                             -{e?.name}
                                         </td>
                                         <td>12</td>
-                                        <td ref={dropdownRef}>
+                                        <td style={{
+                                            position:'relative'
+                                        }} ref={dropdownRef}>
                                             <img onClick={((e) => {
                                                 e.stopPropagation()
                                                 indexFunction(i)
                                             })} src={ellipse} />
                                             {index.includes(i) && <div className='actions_wrapper' style={{
-                                                width: '70%'
+                                                width: '50%',
+                                                bottom:'-80px',
+                                                left:'0'
                                             }}>
-                                                <p>View</p>
+                                                {/* <p>View</p> */}
                                                 <p onClick={(() => {
                                                     setEditIndex(e?.id);
                                                     setEditModal(true)

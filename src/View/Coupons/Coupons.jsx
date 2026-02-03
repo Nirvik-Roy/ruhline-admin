@@ -10,7 +10,8 @@ import DeleteModal from '../../Components/DeleteModal/DeleteModal.jsx'
 const Coupons = () => {
     const [index, setIndex] = useState([]);
     const [coupon, setCoupon] = useState(false);
-    const [couponId, setCouponId] = useState()
+    const [couponId, setCouponId] = useState();
+    const [isModal, setisModal] = useState(false)
     const [editCoupon, seteditCoupon] = useState(false);
     const dropdownRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -141,7 +142,6 @@ const Coupons = () => {
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-80px'
                                         }}>
-
                                             <p onClick={(() => {
                                                 seteditCoupon(true)
                                                 setCouponId(e?.id)
