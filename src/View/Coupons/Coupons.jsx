@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
-import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
+import React, { useEffect, useState, useRef } from 'react'
 import ellipse from '../../assets/_MoreIcon_.svg'
 import Pagination from '../../Components/Pagination/Pagination'
 import Button from '../../Components/Button'
 import AddCouponModal from '../Modal/AddCouponModal'
 import EditCouponModal from '../Modal/EditCouponModal.jsx'
+import { getAllCoupons } from '../../utils/coupons.js'
+import Loaders from '../../Components/Loaders/Loaders.jsx'
 const Coupons = () => {
     const [index, setIndex] = useState([]);
-    const [coupon, setCoupon] = useState(false)
-    const [editCoupon, seteditCoupon] = useState(false)
+    const [coupon, setCoupon] = useState(false);
+    const [couponId, setCouponId] = useState()
+    const [editCoupon, seteditCoupon] = useState(false);
+    const dropdownRef = useRef(null);
+    const [loading, setLoading] = useState(false);
+    const [allCoupondata, setallCouponData] = useState([])
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -16,10 +21,40 @@ const Coupons = () => {
             setIndex([...index, i])
         }
     }
+
+    const fetchCoupons = async () => {
+        try {
+            setLoading(true);
+            const res = await getAllCoupons();
+            setallCouponData(res?.data?.data);
+
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        fetchCoupons()
+    }, [])
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
     return (
         <>
+            {loading && <Loaders />}
             {coupon && <AddCouponModal setCoupon={setCoupon} />}
-            {editCoupon && <EditCouponModal seteditCoupon={seteditCoupon} />}
+            {editCoupon && <EditCouponModal fetchCoupons={fetchCoupons} couponId={couponId} seteditCoupon={seteditCoupon} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Coupons</h2>
@@ -42,37 +77,50 @@ const Coupons = () => {
                         <thead>
                             <tr>
                                 <th>Coupon Name</th>
+                                <th>Coupon Code</th>
                                 <th>Coupon Type</th>
-                                <th>Value</th>
+                                <th>Amount</th>
                                 <th>Usage Limit (per user)</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Applied To</th>
                                 <th>Actions</th>
-
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {allCoupondata.length < 0 && <td colSpan={12} style={{
+                                textAlign: 'center'
+                            }}>No coupons available</td>}
+                            {allCoupondata.length > 0 && allCoupondata?.map((e, i) => (
                                 <tr>
                                     <td>
-                                        Festive10
+                                        {e?.name}
                                     </td>
-                                    <td>Percentage</td>
-                                    <td>10%</td>
+                                    <td>
+                                        {e?.code}
+                                    </td>
+                                    <td>{e?.type}</td>
+                                    <td>{e?.amount}</td>
                                     <td style={{
                                         textAlign: 'center'
-                                    }}>1</td>
-                                    <td>27/10/2025</td>
-                                    <td>27/10/2025</td>
-                                    <td>All Services </td>
-                                    <td>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                    }}>{e?.usage_limit_per_user}</td>
+                                    <td>{new Date(`${e.starts_at}`)
+                                        .toLocaleDateString("en-GB")}</td>
+                                    <td>{new Date(`${e.ends_at}`)
+                                        .toLocaleDateString("en-GB")}</td>
+                                    <td>{e?.applies_to_all ? 'Few categories' : 'All Services'}</td>
+                                    <td ref={dropdownRef}>
+                                        <img onClick={((e) =>{
+                                             e.stopPropagation()
+                                             indexFunction(i)})} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-80px'
                                         }}>
 
-                                            <p onClick={(() => { seteditCoupon(true) })}>Edit</p>
+                                            <p onClick={(() => {
+                                                seteditCoupon(true)
+                                                setCouponId(e?.id)
+                                            })}>Edit</p>
                                             <p>Delete</p>
                                         </div>}
                                     </td>

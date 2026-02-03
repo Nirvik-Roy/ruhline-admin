@@ -25,7 +25,6 @@ const Login = () => {
         setadminErrrors(errors)
     }, [errors])
 
-    console.log(adminErrors)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const ValidateEmail = (email) => {
         if (!email) {
@@ -85,7 +84,7 @@ const Login = () => {
                         marginTop: '-15px',
                         color: 'rgba(255, 0, 0, 1)',
                         cursor: 'pointer'
-                    }}>{errors.email ? errors.email[0] : emailErrormessage}</small>
+                    }}>{errors.email ? errors?.email[0] : emailErrormessage}</small>
                     <div className='input_form' style={{
                         position: 'relative'
                     }}>
