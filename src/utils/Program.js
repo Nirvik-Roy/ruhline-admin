@@ -77,3 +77,22 @@ export const getSingleProgram = async (id) => {
         }
     }
 }
+
+
+export const deleteCategories = async (id) => {
+    const Token = localStorage.getItem('token')
+    if (id && Token) {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program-category/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            });
+            toast.success(res.data?.message || 'Coach Deleted Successfully');
+            return res.data
+        } catch (err) {
+            console.log(err.response.data)
+            toast.error(err.response?.data?.message || 'Unexpected Error Occured');
+        }
+    }
+}

@@ -4,8 +4,9 @@ import Pagination from '../../Components/Pagination/Pagination'
 import Button from '../../Components/Button'
 import AddCouponModal from '../Modal/AddCouponModal'
 import EditCouponModal from '../Modal/EditCouponModal.jsx'
-import { getAllCoupons } from '../../utils/coupons.js'
+import { deleteCoupons, getAllCoupons } from '../../utils/coupons.js'
 import Loaders from '../../Components/Loaders/Loaders.jsx'
+import DeleteModal from '../../Components/DeleteModal/DeleteModal.jsx'
 const Coupons = () => {
     const [index, setIndex] = useState([]);
     const [coupon, setCoupon] = useState(false);
@@ -13,7 +14,9 @@ const Coupons = () => {
     const [editCoupon, seteditCoupon] = useState(false);
     const dropdownRef = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [allCoupondata, setallCouponData] = useState([])
+    const [deletedId, setdeletedId] = useState()
+    const [allCoupondata, setallCouponData] = useState([]);
+    const [deleteModal, setdeleteModal] = useState(false)
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -42,17 +45,38 @@ const Coupons = () => {
             setIndex([]);
         }
     };
-
-
     useEffect(() => {
         document.addEventListener("click", handleClickOutside);
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
+
+    const handleDelete = (id) => {
+        setdeleteModal(true)
+        setdeletedId(id)
+    }
+
+    const deleteFunc = async () => {
+        try {
+            setLoading(true)
+            const res = await deleteCoupons(deletedId);
+            if (res.success) {
+                setdeleteModal(false)
+                fetchCoupons()
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+
     return (
         <>
             {loading && <Loaders />}
+            {deleteModal && <DeleteModal title={'Delete coupons'} details={"Do you really want to delete this coupon?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
             {coupon && <AddCouponModal setCoupon={setCoupon} />}
             {editCoupon && <EditCouponModal fetchCoupons={fetchCoupons} couponId={couponId} seteditCoupon={seteditCoupon} />}
             <div className='dashboard_container'>
@@ -110,9 +134,10 @@ const Coupons = () => {
                                         .toLocaleDateString("en-GB")}</td>
                                     <td>{e?.applies_to_all ? 'Few categories' : 'All Services'}</td>
                                     <td ref={dropdownRef}>
-                                        <img onClick={((e) =>{
-                                             e.stopPropagation()
-                                             indexFunction(i)})} src={ellipse} />
+                                        <img onClick={((e) => {
+                                            e.stopPropagation()
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-80px'
                                         }}>
@@ -121,7 +146,9 @@ const Coupons = () => {
                                                 seteditCoupon(true)
                                                 setCouponId(e?.id)
                                             })}>Edit</p>
-                                            <p>Delete</p>
+                                            <p onClick={(() => {
+                                                handleDelete(e?.id)
+                                            })}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>

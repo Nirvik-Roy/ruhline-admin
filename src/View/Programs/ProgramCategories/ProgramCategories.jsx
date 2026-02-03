@@ -4,9 +4,10 @@ import Button from '../../../Components/Button.jsx';
 import Pagination from '../../../Components/Pagination/Pagination.jsx';
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import AddProgramCategoriesModal from '../../Modal/AddProgramCategoriesModal.jsx';
-import { getAllPrograms } from '../../../utils/Program.js';
+import { deleteCategories, getAllPrograms } from '../../../utils/Program.js';
 import Loaders from '../../../Components/Loaders/Loaders.jsx';
 import EditProgramCategoriesModal from '../../Modal/EditProgramCategoriesModal.jsx';
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx';
 
 const ProgramCategories = () => {
     const [index, setIndex] = useState([]);
@@ -17,6 +18,8 @@ const ProgramCategories = () => {
     const [editIndex, setEditIndex] = useState('')
     const dropdownRef = useRef(null);
     const [isModal, setisModal] = useState(false)
+    const [deletedId, setdeletedId] = useState()
+    const [deleteModal, setdeleteModal] = useState(false)
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -38,6 +41,8 @@ const ProgramCategories = () => {
     useEffect(() => {
         fetchPrograms()
     }, []);
+
+
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setIndex([]);
@@ -51,9 +56,31 @@ const ProgramCategories = () => {
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
+
+    const handleDelete = (id) => {
+        setdeleteModal(true)
+        setdeletedId(id)
+    }
+
+    const deleteFunc = async () => {
+        try {
+            setLoading(true)
+            const res = await deleteCategories(deletedId);
+            if (res.success) {
+                setdeleteModal(false)
+                fetchPrograms()
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <>
             {loading && <Loaders />}
+            {deleteModal && <DeleteModal title={'Delete program categories'} details={"Do you really want to delete this category?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
             {editModal && <EditProgramCategoriesModal editModal={editModal} allPrograms={allPrograms} editIndex={editIndex} fetchPrograms={fetchPrograms} setEditModal={setEditModal} />}
             {isModal && <AddProgramCategoriesModal fetchPrograms={fetchPrograms} setisModal={setisModal} />}
             <div className='dashboard_container'>
@@ -94,7 +121,7 @@ const ProgramCategories = () => {
                         </thead>
                         <tbody>
                             {allPrograms?.length < 0 && <td colSpan={12} style={{
-                                textAlign:'center'
+                                textAlign: 'center'
                             }}>No program categories available...</td>}
                             {allPrograms?.length > 0 && allPrograms?.map((e, i) => (
                                 <>
@@ -121,9 +148,10 @@ const ProgramCategories = () => {
                                         </td>
                                         <td>12</td>
                                         <td ref={dropdownRef}>
-                                            <img onClick={((e) =>{ 
+                                            <img onClick={((e) => {
                                                 e.stopPropagation()
-                                                indexFunction(i)})} src={ellipse} />
+                                                indexFunction(i)
+                                            })} src={ellipse} />
                                             {index.includes(i) && <div className='actions_wrapper' style={{
                                                 width: '70%'
                                             }}>
@@ -132,7 +160,9 @@ const ProgramCategories = () => {
                                                     setEditIndex(e?.id);
                                                     setEditModal(true)
                                                 })}>Edit</p>
-                                                <p>Delete</p>
+                                                <p onClick={(() => {
+                                                    handleDelete(e?.id)
+                                                })}>Delete</p>
                                             </div>}
                                         </td>
                                     </tr>}
