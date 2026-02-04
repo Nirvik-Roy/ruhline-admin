@@ -4,7 +4,9 @@ import crossIcon from '../../../assets/content.svg'
 import './CmsFaq.css'
 import Input from '../../../Components/Input'
 import Textarea from '../../../Components/Textarea.jsx'
+import { useNavigate } from 'react-router-dom'
 const FaqMentor = () => {
+    const navigate = useNavigate();
     return (
         <>
             <div className='dashboard_container'>

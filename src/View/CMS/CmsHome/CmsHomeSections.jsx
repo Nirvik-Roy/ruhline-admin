@@ -1,9 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Input from '../../../Components/Input.jsx'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import upload from '../../../assets/Vector (8).svg'
 import Button from '../../../Components/Button.jsx'
 const CmsHomeSections = () => {
+    const [optionsData, setoptionsData] = useState([
+        {
+            id: 1,
+            title: '',
+            description: ''
+        }
+    ])
+
+
+    const addOptions = () => {
+        setoptionsData([
+            ...optionsData,
+            {
+                id: Date.now(),
+                title: '',
+                description: ''
+            }
+        ])
+    }
+
+    const hanleOptionChanges = (e, id) => {
+        const { name, value } = e.target
+        setoptionsData((prev) =>
+            prev.map((item) =>
+                item.id === id ? { ...item, [name]: value } : item
+            )
+        );
+    }
+
+    const deleteFunc = (id) => {
+        console.log(id)
+        if(id !=1){
+            const dummyData = [...optionsData];
+            const filteredData = dummyData.filter((e) => e.id != id);
+            setoptionsData(filteredData)
+        }
+    }
+
+    console.log(optionsData)
     return (
         <>
             <div className='cms_home_sections_wrapper'>
@@ -123,14 +162,26 @@ const CmsHomeSections = () => {
                                 <input type='file' />
                             </div>
                         </div>
-                        <div className='option_title_wrapper'>
-                            <div className='option'>
-                                <h4>Option 1</h4>
-                                <i class="fa-regular fa-trash-can"></i>
-                            </div>
-                            <div className='option_details_wrapper'>
-                                <Input label={'Title'} required={true} defaultValue={'Lorem ipsum dolor'} />
-                                <Input label={'Description'} required={true} defaultValue={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
+                        <div className='option_border_wrapper'>
+                            {optionsData.map((element, i) => (
+                                <div className='option_title_wrapper'>
+                                    <div className='option'>
+                                        <h4>Option {i + 1}</h4>
+                                        <i onClick={(() => deleteFunc(element?.id))} class="fa-regular fa-trash-can"></i>
+                                    </div>
+                                    <div className='option_details_wrapper'>
+                                        <div>
+                                            <Input onChange={((e) => hanleOptionChanges(e, element?.id))} value={element.title} label={'Title'} name={'title'} required={true} placeholder={'Enter option title'} />
+                                        </div>
+                                        <Input onChange={((e) => hanleOptionChanges(e, element?.id))} value={element.description} label={'Description'} name={'description'} required={true} placeholder={'Enter description '} />
+
+                                    </div>
+                                </div>
+                            ))}
+
+                            <div onClick={(() => { addOptions() })} style={{
+                                marginTop: '20px'
+                            }}>
                                 <Button children={'Add another option'} styles={{
                                     border: '1px solid var(--primary-color)',
                                     color: 'var(--text-color)',
