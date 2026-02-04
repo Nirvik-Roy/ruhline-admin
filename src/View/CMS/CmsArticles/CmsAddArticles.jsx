@@ -7,7 +7,17 @@ import Addarticlesectionmodal from '../../Modal/Addarticlesectionmodal.jsx'
 import { useNavigate } from 'react-router-dom'
 const CmsAddArticles = () => {
     const [isModal, setisModal] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const formStructure = [
+        {
+            id:1,
+            name:true,
+            blogCategory:true,
+            description:true,
+            uploadImage:true,
+            shareOption:true,
+        },
+    ]
     return (
         <>
 
