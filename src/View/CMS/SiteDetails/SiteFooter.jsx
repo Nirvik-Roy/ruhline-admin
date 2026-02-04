@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
 import upload from '../../../assets/Vector (8).svg'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import Input from '../../../Components/Input'
-const SiteFooter = () => {
-
+const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleChange, siteDetailsForm }) => {
     return (
         <>
             <div className='site_header_logo_wrapper'>
@@ -14,21 +12,28 @@ const SiteFooter = () => {
 
                         }}>Footer Logo<span>*</span></label>
                         <div className='files_upload_wrapper'>
-                            <img src={upload} />
-                            <p>Drag your files or <span>Browse</span></p>
-                            <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                            <input type='file' />
+                            {!footerLogo && <>
+                                <img src={upload} />
+                                <p>Drag your files or <span>Browse</span></p>
+                                <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                            </>}
+                            <input onChange={((e) => setfooterLogo(e.target.files[0]))} type='file' />
+                            {footerLogo && <img style={{
+                                width:'100%',
+                                height:'100%',
+                                objectFit:'contain'
+                            }} src={URL.createObjectURL(footerLogo)}/>}
                         </div>
                     </div>
                 </div>
                 <div className='site_left_header_logo'>
-                   <CustomTextEditor label={'Footer Description'} required={true}/>
-                   <div style={{
-                    marginTop:'20px'
-                   }}>
-                   <Input label={'Copyright'} required={true} defaultValue={'© 2025 Ruhline. All rights reserved.'}/>
+                    <CustomTextEditor onChange={((data) => setfooterDescription(data))} label={'Footer Description'} required={true} />
+                    <div style={{
+                        marginTop: '20px'
+                    }}>
+                        <Input onChange={handleChange} value={siteDetailsForm.copyright} label={'Copyright'} name={'copyright'} required={true} placeholder={'Enter copyright detail'} />
 
-                   </div>
+                    </div>
                 </div>
             </div>
         </>

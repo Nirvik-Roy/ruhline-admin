@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Activity, useState } from 'react'
 import './SiteDetails.css'
 import Button from '../../../Components/Button'
 import SiteFavicon from './SiteFavicon'
@@ -9,7 +9,12 @@ import ContactInfo from './ContactInfo'
 import { useNavigate } from 'react-router-dom'
 const SiteDetails = () => {
     const [index, setIndex] = useState(0);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [siteFavicon, setSiteFavicon] = useState();
+    const [headerLogo, setheaderLogo] = useState();
+    const [pageHeaderlogo, setpageheaderlogo] = useState();
+    const [footerLogo,setfooterLogo] = useState();
+    const [footerDescription,setfooterDescription] = useState()
     const [sitetabs, setsiteTabs] = useState({
         favicon: true,
         header: false,
@@ -17,6 +22,34 @@ const SiteDetails = () => {
         socialMedia: false,
         contactInfo: false
     })
+
+    const [siteDetailsForm, setsiteDetailsForm] = useState({
+        favicon: '',
+        header_logo: '',
+        page_header_image: '',
+        footer_logo: '',
+        footer_description: '',
+        copyright: '',
+        facebook_url: '',
+        instagram_url: '',
+        linkedin_url: '',
+        address_line_1: '',
+        address_line_2: '',
+        landmark: '',
+        city_id: '',
+        state_id: '',
+        country_id: '',
+        zipcode: ''
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setsiteDetailsForm({
+            ...siteDetailsForm,
+            [name]: value
+        })
+    }
+    console.log(siteDetailsForm)
     const siteTabsFunc = (i) => {
         setsiteTabs({
             favicon: i === 1 ? true : false,
@@ -26,6 +59,7 @@ const SiteDetails = () => {
             contactInfo: i === 5 ? true : false
         })
     }
+
     return (
         <>
             <div className='dashboard_container'>
@@ -72,11 +106,33 @@ const SiteDetails = () => {
 
                     </div>
                     <div className='site_right_wrapper'>
-                        {sitetabs.favicon && <SiteFavicon />}
-                        {sitetabs.header && <SiteHeader />}
-                        {sitetabs.footer && <SiteFooter />}
-                        {sitetabs.socialMedia && <SiteLinks />}
-                        {sitetabs.contactInfo && <ContactInfo />}
+                        {<Activity mode={sitetabs.favicon ? 'visible' : 'hidden'}>
+                            <SiteFavicon siteFavicon={siteFavicon} setSiteFavicon={setSiteFavicon} />
+                        </Activity>
+                        }
+                        {
+                            <Activity mode={sitetabs.header ? 'visible' : 'hidden'}>
+                                <SiteHeader pageHeaderlogo={pageHeaderlogo} setpageheaderlogo={setpageheaderlogo} headerLogo={headerLogo} setheaderLogo={setheaderLogo} />
+                            </Activity>
+                        }
+
+                        {
+                            <Activity mode={sitetabs.footer ? 'visible' : 'hidden'}>
+                                <SiteFooter siteDetailsForm={siteDetailsForm} handleChange={handleChange} setfooterDescription={setfooterDescription} footerLogo={footerLogo} setfooterLogo={setfooterLogo} />
+                            </Activity>
+                        }
+
+                        {
+                            <Activity mode={sitetabs.socialMedia ? 'visible' : 'hidden'}>
+                                <SiteLinks handleChange={handleChange} siteDetailsForm={siteDetailsForm} />
+                            </Activity>
+                        }
+                        {
+                            <Activity mode={sitetabs.contactInfo ? 'visible' : 'hidden'}>
+                                <ContactInfo />
+                            </Activity>
+                        }
+
                     </div>
                 </div>
             </div>
