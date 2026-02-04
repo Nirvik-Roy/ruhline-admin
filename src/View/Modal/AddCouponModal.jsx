@@ -5,7 +5,7 @@ import { getAllPrograms } from '../../utils/Program';
 import Loaders from '../../Components/Loaders/Loaders';
 import Select from 'react-select/base';
 import { postCoupons } from '../../utils/coupons';
-const AddCouponModal = ({ setCoupon }) => {
+const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
     const [loading, setLoading] = useState(false);
     const [allPrograms, setallPrograms] = useState([]);
     const [selectedPrograms, setSelectedPrograms] = useState([]);
@@ -73,7 +73,11 @@ const AddCouponModal = ({ setCoupon }) => {
             }
             const res = await postCoupons(dummyData);
             setcouponErrors(res)
-            console.log(res)
+            if(res.success){
+                fetchCoupons();
+                setCoupon(false)
+            }
+
         } catch (err) {
             console.log(err)
         } finally {

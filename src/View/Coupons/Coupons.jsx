@@ -78,7 +78,7 @@ const Coupons = () => {
         <>
             {loading && <Loaders />}
             {deleteModal && <DeleteModal title={'Delete coupons'} details={"Do you really want to delete this coupon?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
-            {coupon && <AddCouponModal setCoupon={setCoupon} />}
+            {coupon && <AddCouponModal fetchCoupons={fetchCoupons} setCoupon={setCoupon} />}
             {editCoupon && <EditCouponModal fetchCoupons={fetchCoupons} couponId={couponId} seteditCoupon={seteditCoupon} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
@@ -133,7 +133,7 @@ const Coupons = () => {
                                         .toLocaleDateString("en-GB")}</td>
                                     <td>{new Date(`${e.ends_at}`)
                                         .toLocaleDateString("en-GB")}</td>
-                                    <td>{e?.applies_to_all ? 'Few categories' : 'All Services'}</td>
+                                    <td>{e?.applies_to_all ? 'All Services' : 'Few services'}</td>
                                     <td ref={dropdownRef}>
                                         <img onClick={((e) => {
                                             e.stopPropagation()
