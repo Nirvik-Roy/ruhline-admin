@@ -120,7 +120,7 @@ const ProgramCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allPrograms?.length < 0 && <td colSpan={12} style={{
+                            {allPrograms?.length <= 0 && <td colSpan={12} style={{
                                 textAlign: 'center'
                             }}>No program categories available...</td>}
                             {allPrograms?.length > 0 && allPrograms?.map((e, i) => (
@@ -138,7 +138,9 @@ const ProgramCategories = () => {
                                                 }}>
                                                     <p>View</p>
                                                     <p onClick={(() => e?.id)}>Edit</p>
-                                                    <p>Delete</p>
+                                                    <p onClick={(() => {
+                                                        handleDelete(e?.id)
+                                                    })}>Delete</p>
                                                 </div>}
                                             </td>
                                         </tr>

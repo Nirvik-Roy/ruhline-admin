@@ -99,7 +99,7 @@ const Programs = () => {
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p>View</p>
-                                            <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
+                                            <p >Edit</p>
                                             <p>Delete</p>
                                         </div>}
                                     </td>

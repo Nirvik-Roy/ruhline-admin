@@ -1,34 +1,45 @@
-import React, { useRef, useEffect, useState } from "react";
-import "./CustomTextEditor.css"; // optional for styling
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import "./CustomTextEditor.css";
 
-function CustomTextEditor({ label, required, defaultValue, onChange }) {
+function CustomTextEditor({ name, required, defaultValue = "", onChange, label }) {
     const editorRef = useRef(null);
     const textareaRef = useRef(null);
-    const [content, setContent] = useState(defaultValue || "");
+    const [content, setContent] = useState(defaultValue);
+    const [isDirty, setIsDirty] = useState(false);
 
-    // Sync contentEditable div with textarea
-    const syncContent = () => {
-        if (editorRef.current && textareaRef.current) {
-            const htmlContent = editorRef.current.innerHTML;
-            setContent(htmlContent);
+    // Memoized sync function
+    const syncContent = useCallback((newContent) => {
+        const htmlContent = newContent || (editorRef.current ? editorRef.current.innerHTML : '');
 
-            // Call onChange prop if provided
-            if (onChange) {
-                onChange(htmlContent);
-            }
+        setContent(htmlContent);
 
-            // Sync with hidden textarea
+        if (textareaRef.current) {
             textareaRef.current.value = htmlContent;
         }
-    };
 
-    // Initialize content
-    useEffect(() => {
-        if (editorRef.current && defaultValue) {
-            editorRef.current.innerHTML = defaultValue;
-            syncContent();
+        if (onChange) {
+            onChange(htmlContent);
         }
-    }, [defaultValue]);
+
+        setIsDirty(true);
+    }, [onChange]);
+
+    // Initialize with defaultValue
+    useEffect(() => {
+        if (editorRef.current && defaultValue && !isDirty) {
+            editorRef.current.innerHTML = defaultValue;
+            syncContent(defaultValue);
+        }
+    }, [defaultValue, isDirty, syncContent]);
+
+    // Reset when defaultValue is cleared (e.g., form reset)
+    useEffect(() => {
+        if (editorRef.current && defaultValue === "" && content !== "") {
+            editorRef.current.innerHTML = "";
+            syncContent("");
+            setIsDirty(false);
+        }
+    }, [defaultValue, content, syncContent]);
 
     const applyStyle = (command, value = null) => {
         document.execCommand(command, false, value);
@@ -44,21 +55,43 @@ function CustomTextEditor({ label, required, defaultValue, onChange }) {
         syncContent();
     };
 
+    // const handleClear = () => {
+    //     if (editorRef.current) {
+    //         editorRef.current.innerHTML = "";
+    //         syncContent("");
+    //     }
+    // };
+
     return (
         <div className="input_form">
             <label>
                 {label} {required && <span>*</span>}
+                {/* <button
+                    type="button"
+                    onClick={handleClear}
+                    style={{ marginLeft: '10px', fontSize: '12px' }}
+                    title="Clear content"
+                >
+                    Clear
+                </button> */}
             </label>
 
             <div className="editor-container">
                 {/* Toolbar */}
                 <div className="toolbar">
-                    <button type="button" onClick={() => applyStyle("bold")}>B</button>
-                    <button type="button" onClick={() => applyStyle("italic")}>I</button>
-                    <button type="button" onClick={() => applyStyle("underline")}>U</button>
-
-                    {/* LIST BUTTONS */}
-                    <button type="button" onClick={() => applyStyle("insertOrderedList")}>
+                    <button type="button" onClick={() => applyStyle("bold")} title="Bold">
+                        <strong>B</strong>
+                    </button>
+                    <button type="button" onClick={() => applyStyle("italic")} title="Italic">
+                        <em>I</em>
+                    </button>
+                    <button type="button" onClick={() => applyStyle("underline")} title="Underline">
+                        <u>U</u>
+                    </button>
+                    <button type="button" onClick={() => applyStyle("insertOrderedList")} title="Ordered List">
+                        <i className="fa-solid fa-list-ol"></i>
+                    </button>
+                    <button type="button" onClick={() => applyStyle("insertUnorderedList")} title="Bulleted List">
                         <i className="fa-solid fa-list"></i>
                     </button>
                 </div>
@@ -66,13 +99,13 @@ function CustomTextEditor({ label, required, defaultValue, onChange }) {
                 {/* Hidden textarea for form submission */}
                 <textarea
                     ref={textareaRef}
-                    name={`${label}`}
+                    name={name}
                     style={{ display: "none" }}
-                    value={content}
+                    defaultValue={defaultValue}
                     readOnly
                 />
 
-                {/* Editable Typing Area (still contentEditable for rich text) */}
+                {/* Editable Typing Area */}
                 <div
                     ref={editorRef}
                     className="editor"
@@ -80,7 +113,20 @@ function CustomTextEditor({ label, required, defaultValue, onChange }) {
                     suppressContentEditableWarning={true}
                     onInput={handleEditorInput}
                     onBlur={handleEditorBlur}
-                    dangerouslySetInnerHTML={{ __html: defaultValue }}
+                    onPaste={(e) => {
+                        e.preventDefault();
+                        const text = e.clipboardData.getData('text/plain');
+                        document.execCommand('insertText', false, text);
+                        syncContent();
+                    }}
+                    onKeyDown={(e) => {
+                        // Allow normal editing operations
+                        if (e.key === 'Backspace' || e.key === 'Delete') {
+                            // Let the browser handle it, then sync
+                            setTimeout(() => syncContent(), 0);
+                        }
+                    }}
+                    placeholder="Type here..."
                 />
             </div>
         </div>

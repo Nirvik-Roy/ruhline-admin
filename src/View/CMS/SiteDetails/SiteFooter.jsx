@@ -12,22 +12,27 @@ const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleCha
 
                         }}>Footer Logo<span>*</span></label>
                         <div className='files_upload_wrapper'>
-                            {!footerLogo && <>
+                            {!footerLogo && !siteDetailsForm.footer_logo && <>
                                 <img src={upload} />
                                 <p>Drag your files or <span>Browse</span></p>
                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
                             </>}
                             <input onChange={((e) => setfooterLogo(e.target.files[0]))} type='file' />
                             {footerLogo && <img style={{
-                                width:'100%',
-                                height:'100%',
-                                objectFit:'contain'
-                            }} src={URL.createObjectURL(footerLogo)}/>}
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain'
+                            }} src={URL.createObjectURL(footerLogo)} />}
+                            {siteDetailsForm.footer_logo && !footerLogo && <img style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain'
+                            }} src={siteDetailsForm.footer_logo} />}
                         </div>
                     </div>
                 </div>
                 <div className='site_left_header_logo'>
-                    <CustomTextEditor onChange={((data) => setfooterDescription(data))} label={'Footer Description'} required={true} />
+                    <CustomTextEditor defaultValue={siteDetailsForm.footer_description} onChange={((data) => setfooterDescription(data))} label={'Footer Description'} required={true} />
                     <div style={{
                         marginTop: '20px'
                     }}>
