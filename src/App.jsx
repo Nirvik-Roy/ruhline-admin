@@ -54,6 +54,7 @@ import Payouts from './View/Payouts/Payouts.jsx'
 import PaymentList from './View/Payouts/PaymentList.jsx'
 import { Toaster } from 'react-hot-toast'
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx'
+import CmsEditArticles from './View/CMS/CmsArticles/CmsEditArticles.jsx'
 function App() {
   return (
     <>
@@ -90,6 +91,7 @@ function App() {
             <Route path='cms/faq/mentor' element={<FaqMentor />} />
             <Route path='cms/articles' element={<CmsArticles />} />
             <Route path='cms/add-articles' element={<CmsAddArticles />} />
+            <Route path='cms/edit-articles/:id' element={<CmsEditArticles/>}/>
             <Route path='cms/article-categories' element={<CmsArticleCategories />} />
             <Route path='programs' element={<Programs />} />
             <Route path='programs/categories' element={<ProgramCategories />} />

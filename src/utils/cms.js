@@ -160,3 +160,24 @@ export const postAllCmsData = async (url,data) => {
         toast.error('Plz provide all the info..')
     }
 }
+
+
+export const editAllCmsData = async (url,data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id && url) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}${url}/${id}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Article updated succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}

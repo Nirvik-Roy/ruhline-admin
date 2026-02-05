@@ -4,22 +4,25 @@ import Input from '../../../Components/Input'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import upload from '../../../assets/Vector (8).svg'
 import Addarticlesectionmodal from '../../Modal/Addarticlesectionmodal.jsx'
-import { useNavigate } from 'react-router-dom'
-import { getAllCmsData, postAllCmsData } from '../../../utils/cms.js'
+import { useNavigate, useParams } from 'react-router-dom'
+import { editAllCmsData, getAllCmsData, getAllSingleCmsData, postAllCmsData } from '../../../utils/cms.js'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
-const CmsAddArticles = () => {
+const CmsEditArticles = () => {
     const [isModal, setisModal] = useState(false);
     const navigate = useNavigate();
     const [dynamicFormstructure, setdynamicformstructure] = useState([]);
-    const [articleCategories, setarticleCategories] = useState([])
+    const [articleCategories, setarticleCategories] = useState([]);
+    const [singleArticle, setsingleArticle] = useState([])
     const [textAreaContent, settextareacontent] = useState();
     const [articlesErrors, setarticlesErrors] = useState()
     const [fixedDescriptionContent, setfixedDescriptionContent] = useState()
     const [facebookCheck, setfacebookCheck] = useState();
     const [twitterCheck, settwitterCheck] = useState();
     const [linkedinCheck, setlinkedinCheck] = useState();
+    const [success, setsuccess] = useState()
     const [fixedThumnailImage, setfixedThumbnailImage] = useState()
     const [loading, setloading] = useState();
+    const { id } = useParams()
     const [fixedData, setfixedData] = useState({
         article_category_id: '',
         name: '',
@@ -80,15 +83,68 @@ const CmsAddArticles = () => {
         fetchArticleCmsData()
     }, [])
 
+    const fetchSingleCmsData = async () => {
+        if (id) {
+            try {
+                setloading(true)
+                const res = await getAllSingleCmsData('/admin/article/article', id);
+                setsingleArticle(res?.data)
+                setsuccess(true)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        }
+
+    }
+
+    useEffect(() => {
+        fetchSingleCmsData()
+    }, [])
+
+    useEffect(() => {
+        if (success) {
+            setfixedData({
+                article_category_id: singleArticle?.article_category?.id || '',
+                name: singleArticle?.name || '',
+                description: singleArticle?.description || '',
+                share_facebook: singleArticle?.share_facebook && 'true' || 'false',
+                share_twitter: singleArticle?.share_twitter && 'true' || 'false',
+                share_linkedin: singleArticle?.share_linkedin && 'true' || 'false',
+            })
+
+            const mapped = singleArticle?.sections?.map(e => {
+                return {
+                    heading: e?.heading || null,
+                    uploadImage: e?.image || null,
+                    image_position: e?.image_position ,
+                    description: e?.description || null,
+                    buttonName: e?.button || null,
+                    buttonUrl: e?.button_url || null
+                };
+            });
+            setfacebookCheck(singleArticle?.share_facebook && true || false)
+            settwitterCheck(singleArticle?.share_twitter && true || false)
+            setlinkedinCheck(singleArticle?.share_linkedin && true || false)
+            setdynamicformstructure(mapped)
+
+            setfixedDescriptionContent(singleArticle?.description || '');
+        }
+
+
+    }, [success])
+
+
 
     const handleSubmit = async () => {
         try {
             setloading(true);
             const dummyData = { ...fixedData };
             dummyData.share_facebook = facebookCheck ? 'true' : 'false',
-            dummyData.share_twitter = twitterCheck ? 'true' : 'false',
-            dummyData.share_linkedin = linkedinCheck ? 'true' : 'false',
-            setfixedData(dummyData)
+                dummyData.share_twitter = twitterCheck ? 'true' : 'false',
+                dummyData.share_linkedin = linkedinCheck ? 'true' : 'false',
+                setfixedData(dummyData)
             const formData = new FormData();
             { fixedData.article_category_id && formData.append('article_category_id', fixedData.article_category_id); }
             { fixedData.name && formData.append('name', fixedData.name); }
@@ -115,14 +171,13 @@ const CmsAddArticles = () => {
                         formData.append(`sections[${index}][button_url]`, element.buttonUrl)
                     }
 
-                    if (element?.uploadImage) {
+                    if (element?.uploadImage != singleArticle?.sections[0].image) {
                         formData.append(`sections[${index}][image]`, element.uploadImage)
                     }
                     formData.append(`sections[${index}][sort_order]`, index)
                 });
             }
-
-            const res = await postAllCmsData('/admin/article/article', formData);
+            const res = await editAllCmsData('/admin/article/article', formData, id);
             setarticlesErrors(res)
         } catch (err) {
             console.log(err)
@@ -130,6 +185,7 @@ const CmsAddArticles = () => {
             setloading(false)
         }
     }
+
     return (
         <>
             {loading && <Loaders />}
@@ -138,7 +194,7 @@ const CmsAddArticles = () => {
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
-                        <h2>Add Articles / Add Article</h2>
+                        <h2> Articles / Edit Article</h2>
                         <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/articles'))}>Articles</span></small>
                     </div>
                     <div className='coaches_button_wapper'>
@@ -153,7 +209,7 @@ const CmsAddArticles = () => {
                         </div>
 
                         <div onClick={(() => handleSubmit())}>
-                            <Button children={'Add'} styles={{
+                            <Button children={'Update'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -165,11 +221,11 @@ const CmsAddArticles = () => {
                             <div>
                                 <Input name={'name'} value={fixedData.name} onChange={fixedDataChange} label={'Article Name'} required={true} placeholder={'Enter article name'} />
 
-                                {articlesErrors?.name &&   <small style={{
-                                    color:'red',
-                                    marginLeft:'15px',
-                                    marginTop:'10px'
-                                }}>{articlesErrors?.name && articlesErrors?.name[0] }</small>}
+                                {articlesErrors?.name && <small style={{
+                                    color: 'red',
+                                    marginLeft: '15px',
+                                    marginTop: '10px'
+                                }}>{articlesErrors?.name && articlesErrors?.name[0]}</small>}
                             </div>
 
                             <div className='input_form'>
@@ -204,7 +260,7 @@ const CmsAddArticles = () => {
                                 }}>Upload Thumbnail Image<span>*</span></label>
 
                                 <div className='files_upload_wrapper'>
-                                    {!fixedThumnailImage && <>
+                                    {!fixedThumnailImage && !singleArticle?.thumbnail_image && <>
                                         <img src={upload} />
                                         <p>Drag your files or <span>Browse</span></p>
                                         <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
@@ -215,6 +271,12 @@ const CmsAddArticles = () => {
                                         height: '95%',
                                         objectFit: 'contain'
                                     }} src={URL.createObjectURL(fixedThumnailImage)} />}
+                                    {singleArticle?.thumbnail_image && !fixedThumnailImage && <img style={{
+                                        width: '100%',
+                                        height: '95%',
+                                        objectFit: 'contain'
+                                    }} src={singleArticle?.thumbnail_image} />}
+
                                     <input onChange={((e) => setfixedThumbnailImage(e.target.files[0]))} type='file' />
                                 </div>
 
@@ -243,7 +305,7 @@ const CmsAddArticles = () => {
                                     <input checked={linkedinCheck} onChange={(() => setlinkedinCheck(!linkedinCheck))} type='checkbox' />
                                     <span>LinkedIn</span>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -256,15 +318,15 @@ const CmsAddArticles = () => {
                             <div className='add_articles_wrapper'>
                                 <div className='articles_form_left'>
                                     {(e?.heading != null) && <div>
-                                        <Input name={'heading'} onChange={((ele) => { handleChange(e?.id, ele) })} label={'Heading'} required={true} placeholder={'Enter blog heading..'} />
+                                        <Input value={dynamicFormstructure[i]?.heading} name={'heading'} onChange={((ele) => { handleChange(e?.id, ele) })} label={'Heading'} required={true} placeholder={'Enter blog heading..'} />
                                     </div>}
 
                                     {(e?.buttonName != null && (e?.buttonUrl != null)) && <div className='modal_input_grid_wrapper'>
                                         <div>
-                                            <Input name={'buttonName'} onChange={((ele) => { handleChange(e?.id, ele) })} label={'Button Name'} required={true} placeholder={'Learn More'} />
+                                            <Input value={dynamicFormstructure[i]?.buttonName} name={'buttonName'} onChange={((ele) => { handleChange(e?.id, ele) })} label={'Button Name'} required={true} placeholder={'Learn More'} />
                                         </div>
                                         <div>
-                                            <Input name={'buttonUrl'} onChange={((ele) => { handleChange(e?.id, ele) })} label={'Button Url'} required={true} placeholder={'www.website.com'} />
+                                            <Input value={dynamicFormstructure[i]?.buttonUrl} name={'buttonUrl'} onChange={((ele) => { handleChange(e?.id, ele) })} label={'Button Url'} required={true} placeholder={'www.website.com'} />
                                         </div>
 
                                     </div>}
@@ -284,7 +346,7 @@ const CmsAddArticles = () => {
                                             <div className='image_position_wrapper'>
                                                 <p>Place image on</p>
                                                 <select value={dynamicFormstructure[i]?.image_position} name='image_position' onChange={((ele) => handleChange(e?.id, ele))}>
-                                                    <option>--slect-image-position--</option>
+                                                    <option >--slect-image-position--</option>
                                                     <option value={'left'}>Left Side</option>
                                                     <option value={'right'}>Right Side</option>
                                                     <option value={'center'}>Center</option>
@@ -301,13 +363,18 @@ const CmsAddArticles = () => {
                                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
                                             </>}
 
-                                            {(e?.uploadImage != '') && <>
-                                                <img src={URL.createObjectURL(e?.uploadImage)} style={{
-                                                    width: '100%',
-                                                    objectFit: 'contain',
-                                                    height: '95%'
-                                                }} />
-                                            </>}
+                                            {e?.uploadImage != singleArticle?.sections[i]?.image && e?.uploadImage && <img src={URL.createObjectURL(e?.uploadImage)} style={{
+                                                width: '100%',
+                                                objectFit: 'contain',
+                                                height: '95%'
+                                            }} />}
+
+                                            {e?.uploadImage == singleArticle?.sections[i]?.image && singleArticle?.sections[i] && <img src={singleArticle?.sections[i]?.image} style={{
+                                                width: '100%',
+                                                objectFit: 'contain',
+                                                height: '95%'
+                                            }} />}
+
                                             <input onChange={((ele) => { handleImage(e?.id, ele) })} type='file' />
                                         </div>
                                     </div>}
@@ -337,4 +404,4 @@ const CmsAddArticles = () => {
     )
 }
 
-export default CmsAddArticles
+export default CmsEditArticles
