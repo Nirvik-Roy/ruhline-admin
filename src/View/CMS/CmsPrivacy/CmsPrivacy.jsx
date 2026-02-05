@@ -1,12 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../../Components/Button'
 import '../CmsTermsConditions/CmsTermsConditions.css'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import { useNavigate } from 'react-router-dom'
+import { getAllCmsData, postAllCmsData, putAllCmsData } from '../../../utils/cms'
+import Loaders from '../../../Components/Loaders/Loaders'
 const CmsPrivacy = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [loading, setloading] = useState(false);
+    const [contentErrors, setcontentErrors] = useState();
+    const [content, setcontent] = useState('')
+    const updatePrivacy = async () => {
+        try {
+            setloading(true)
+            const res = await putAllCmsData('/admin/legal-page/privacy-policy', {
+                content:`${content}`
+            });
+            setcontentErrors(res)
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setloading(false)
+        }
+    }
+
+    const getdata = async () => {
+        try {
+            setloading(true)
+            const res = await getAllCmsData('/admin/legal-page/privacy-policy');
+            setcontent(res?.data?.content);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        getdata()
+    }, [])
     return (
         <>
+            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
@@ -25,7 +60,7 @@ const CmsPrivacy = () => {
                                 fontWeight: '600'
                             }} />
                         </div>
-                        <div>
+                        <div onClick={(() => { updatePrivacy() })}>
                             <Button children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
@@ -33,7 +68,12 @@ const CmsPrivacy = () => {
                     </div>
                 </div>
                 <div className='custom_editor_wrapper'>
-                    <CustomTextEditor label={'Privacy Policy Description'} required={true} />
+                    <CustomTextEditor defaultValue={content} onChange={((data) => setcontent(data))} label={'Privacy Policy Description'} required={true} />
+                    {contentErrors?.content && <small style={{
+                        color: 'red',
+                        marginTop: '10px',
+                        marginLeft: '15px',
+                    }}>*{contentErrors?.content && contentErrors?.content[0]}</small>}
                 </div>
 
             </div>
