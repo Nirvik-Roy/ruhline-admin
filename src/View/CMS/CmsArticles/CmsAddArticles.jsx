@@ -1,15 +1,41 @@
-import React, { lazy, Suspense, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '../../../Components/Button'
 import Input from '../../../Components/Input'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import upload from '../../../assets/Vector (8).svg'
 import Addarticlesectionmodal from '../../Modal/Addarticlesectionmodal.jsx'
 import { useNavigate } from 'react-router-dom'
+import { getAllCmsData, postAllCmsData } from '../../../utils/cms.js'
+import Loaders from '../../../Components/Loaders/Loaders.jsx'
 const CmsAddArticles = () => {
     const [isModal, setisModal] = useState(false);
     const navigate = useNavigate();
     const [dynamicFormstructure, setdynamicformstructure] = useState([]);
-    const [textAreaContent, settextareacontent] = useState()
+    const [articleCategories, setarticleCategories] = useState([])
+    const [textAreaContent, settextareacontent] = useState();
+    const [articlesErrors, setarticlesErrors] = useState()
+    const [fixedDescriptionContent, setfixedDescriptionContent] = useState()
+    const [facebookCheck, setfacebookCheck] = useState();
+    const [twitterCheck, settwitterCheck] = useState();
+    const [linkedinCheck, setlinkedinCheck] = useState();
+    const [fixedThumnailImage, setfixedThumbnailImage] = useState()
+    const [loading, setloading] = useState();
+    const [fixedData, setfixedData] = useState({
+        article_category_id: '',
+        name: '',
+        description: '',
+        share_facebook: 'false',
+        share_twitter: 'false',
+        share_linkedin: 'false'
+    })
+
+    const fixedDataChange = (e) => {
+        const { name, value } = e.target;
+        setfixedData({
+            ...fixedData,
+            [name]: value
+        })
+    }
 
     const deleteFunc = (id) => {
         const dummyData = [...dynamicFormstructure];
@@ -38,10 +64,75 @@ const CmsAddArticles = () => {
         ))
     }
 
-    console.log(dynamicFormstructure)
+    const fetchArticleCmsData = async () => {
+        try {
+            setloading(true);
+            const res = await getAllCmsData('/admin/article/article-category');
+            setarticleCategories(res?.data?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchArticleCmsData()
+    }, [])
+
+
+    const handleSubmit = async () => {
+        try {
+            setloading(true);
+            const dummyData = { ...fixedData };
+            dummyData.share_facebook = facebookCheck ? 'true' : 'false',
+            dummyData.share_twitter = twitterCheck ? 'true' : 'false',
+            dummyData.share_linkedin = linkedinCheck ? 'true' : 'false',
+            setfixedData(dummyData)
+            const formData = new FormData();
+            { fixedData.article_category_id && formData.append('article_category_id', fixedData.article_category_id); }
+            { fixedData.name && formData.append('name', fixedData.name); }
+            { fixedDescriptionContent && formData.append('description', fixedDescriptionContent) }
+            formData.append('share_facebook', fixedData.share_facebook)
+            formData.append('share_twitter', fixedData.share_twitter)
+            formData.append('share_linkedin', fixedData.share_linkedin)
+            { fixedThumnailImage && formData.append('thumbnail_image', fixedThumnailImage) }
+            if (dynamicFormstructure.length > 0) {
+                dynamicFormstructure.forEach((element, index) => {
+                    if (element?.heading) {
+                        formData.append(`sections[${index}][heading]`, element.heading);
+                    }
+                    if (element?.description) {
+                        formData.append(`sections[${index}][description]`, element.description);
+                    }
+                    if (element?.image_position) {
+                        formData.append(`sections[${index}][image_position]`, element.image_position);
+                    }
+                    if (element?.buttonName) {
+                        formData.append(`sections[${index}][button]`, element.buttonName,)
+                    }
+                    if (element?.buttonUrl) {
+                        formData.append(`sections[${index}][button_url]`, element.buttonUrl)
+                    }
+
+                    if (element?.uploadImage) {
+                        formData.append(`sections[${index}][image]`, element.uploadImage)
+                    }
+                    formData.append(`sections[${index}][sort_order]`, index)
+                });
+            }
+
+            const res = await postAllCmsData('/admin/article/article', formData);
+            setarticlesErrors(res)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
     return (
         <>
-
+            {loading && <Loaders />}
             {isModal && <Addarticlesectionmodal setdynamicformstructure={setdynamicformstructure} dynamicFormstructure={dynamicFormstructure} setisModal={setisModal} />}
 
             <div className='dashboard_container'>
@@ -61,7 +152,7 @@ const CmsAddArticles = () => {
                             }} />
                         </div>
 
-                        <div >
+                        <div onClick={(() => handleSubmit())}>
                             <Button children={'Add'} styles={{
                                 fontSize: '13px'
                             }} />
@@ -71,16 +162,39 @@ const CmsAddArticles = () => {
                 <form>
                     <div className='add_articles_wrapper'>
                         <div className='articles_form_left'>
-                            <Input label={'Blog Name'} required={true} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'} />
+                            <div>
+                                <Input name={'name'} value={fixedData.name} onChange={fixedDataChange} label={'Article Name'} required={true} placeholder={'Enter article name'} />
 
-                            <div className='input_form'>
-                                <label>Select Blog Category <span>*</span></label>
-                                <select>
-                                    <option>Blog Category 1</option>
-                                </select>
+                                {articlesErrors?.name &&   <small style={{
+                                    color:'red',
+                                    marginLeft:'15px',
+                                    marginTop:'10px'
+                                }}>{articlesErrors?.name && articlesErrors?.name[0] }</small>}
                             </div>
 
-                            <CustomTextEditor label={'Description'} required={true} />
+                            <div className='input_form'>
+                                <label> Article Category <span>*</span></label>
+                                <select name={'article_category_id'} value={fixedData.article_category_id} onChange={fixedDataChange}>
+                                    <option>--select-article-category--</option>
+                                    {articleCategories.length > 0 && articleCategories?.map((e) => (
+                                        <option key={e?.id} value={e?.id}>{e?.name}</option>
+                                    ))}
+                                </select>
+                                {articlesErrors?.article_category_id && <small style={{
+                                    color: 'red',
+                                    marginLeft: '15px',
+                                    marginTop: '10px'
+                                }}>{articlesErrors?.article_category_id && articlesErrors?.article_category_id[0]}</small>}
+                            </div>
+                            <div>
+                                <CustomTextEditor defaultValue={fixedDescriptionContent} onChange={((data) => setfixedDescriptionContent(data))} label={'Description'} required={true} />
+
+                                {articlesErrors?.description && <small style={{
+                                    color: 'red',
+                                    marginLeft: '15px',
+                                    marginTop: '10px'
+                                }}>{articlesErrors?.description && articlesErrors?.description[0]}</small>}
+                            </div>
 
                         </div>
                         <div className='articles_form_left'>
@@ -90,29 +204,46 @@ const CmsAddArticles = () => {
                                 }}>Upload Thumbnail Image<span>*</span></label>
 
                                 <div className='files_upload_wrapper'>
-                                    <img src={upload} />
-                                    <p>Drag your files or <span>Browse</span></p>
-                                    <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                    <input type='file' />
+                                    {!fixedThumnailImage && <>
+                                        <img src={upload} />
+                                        <p>Drag your files or <span>Browse</span></p>
+                                        <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                                    </>
+                                    }
+                                    {fixedThumnailImage && <img style={{
+                                        width: '100%',
+                                        height: '95%',
+                                        objectFit: 'contain'
+                                    }} src={URL.createObjectURL(fixedThumnailImage)} />}
+                                    <input onChange={((e) => setfixedThumbnailImage(e.target.files[0]))} type='file' />
                                 </div>
+
+                                {articlesErrors?.thumbnail_image && <small style={{
+                                    color: 'red',
+                                    marginLeft: '15px',
+                                    marginTop: '10px'
+                                }}>{articlesErrors?.thumbnail_image && articlesErrors?.thumbnail_image[0]}</small>}
                             </div>
 
                             <div className='share_post_wrapper'>
                                 <p>Share the post option</p>
                                 <div className='share_checkbox_Wrapper'>
-                                    <input type='checkbox' />
+                                    <input checked={facebookCheck} onChange={(() => {
+                                        setfacebookCheck(!facebookCheck)
+                                    })} type='checkbox' />
                                     <span>Facebook</span>
                                 </div>
 
                                 <div className='share_checkbox_Wrapper'>
-                                    <input type='checkbox' />
+                                    <input checked={twitterCheck} onChange={(() => settwitterCheck(!twitterCheck))} type='checkbox' />
                                     <span>Twitter</span>
                                 </div>
 
                                 <div className='share_checkbox_Wrapper'>
-                                    <input type='checkbox' />
+                                    <input checked={linkedinCheck} onChange={(() => setlinkedinCheck(!linkedinCheck))} type='checkbox' />
                                     <span>LinkedIn</span>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -139,23 +270,23 @@ const CmsAddArticles = () => {
                                     </div>}
 
                                     {(e?.description != null) && <div>
-                                        <CustomTextEditor onChange={((data) => ontextChange(e?.id, data))} label={'Description'} required={true} />
+                                        <CustomTextEditor defaultValue={e?.description} onChange={((data) => ontextChange(e?.id, data))} label={'Description'} required={true} />
 
                                     </div>}
 
                                 </div>
                                 <div className='articles_form_left'>
-                                    {(e?.uploadImage!= null) && <div className='input_form'>
+                                    {(e?.uploadImage != null) && <div className='input_form'>
                                         <div className='input_label_wrapper462'>
                                             <label style={{
                                                 fontSize: '15px',
                                             }}>Upload Thumbnail Image<span>*</span></label>
                                             <div className='image_position_wrapper'>
                                                 <p>Place image on</p>
-                                                <select>
-                                                    <option>Left Side</option>
-                                                    <option>Right Side</option>
-
+                                                <select name='image_position' onChange={((ele) => handleChange(e?.id, ele))}>
+                                                    <option value={'left'}>Left Side</option>
+                                                    <option value={'right'}>Right Side</option>
+                                                    <option value={'center'}>Center</option>
                                                 </select>
                                             </div>
 

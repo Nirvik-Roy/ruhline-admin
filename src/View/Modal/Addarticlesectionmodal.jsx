@@ -12,9 +12,10 @@ const Addarticlesectionmodal = ({ setisModal, setdynamicformstructure, dynamicFo
         if (imageCheck || headingCheck || descriptioncheck || buttonCheck) {
             const data = {}
             data.id = Date.now()
-            data.section = `Section ${(dynamicFormstructure?.length) +1}`
+            data.section = `Section ${(dynamicFormstructure?.length) + 1}`
             if (imageCheck) {
-                data.uploadImage = ''
+                data.uploadImage = '',
+                data.image_position = ''
             }
             if (headingCheck) {
                 data.heading = ''

@@ -1,15 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Pagination from '../../../Components/Pagination/Pagination.jsx'
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import Button from '../../../Components/Button.jsx'
 import AddArticleCategoriesModal from '../../Modal/AddArticleCategoriesModal.jsx'
 import EditArticleModal from '../../Modal/EditArticleModal.jsx'
 import { useNavigate } from 'react-router-dom'
+import { deleteCmsData, getAllCmsData } from '../../../utils/cms.js'
+import Loaders from '../../../Components/Loaders/Loaders.jsx'
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
 const CmsArticleCategories = () => {
     const [index, setIndex] = useState([]);
     const navigate = useNavigate()
     const [addArticle, setaddArticle] = useState(false);
-    const [editArticle, seteditArticle] = useState(false)
+    const [articleId,setarticleId] = useState()
+    const [editArticle, seteditArticle] = useState(false);
+    const [loading, setloading] = useState(false)
+    const [allArticles, setallArticles] = useState([]);
+    const [deleteModal,setdeleteModal] = useState(false);
+    const [deleteId,setdeleteId] = useState()
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -17,10 +25,48 @@ const CmsArticleCategories = () => {
             setIndex([...index, i])
         }
     }
+
+    const fetchArticleCmsData = async () => {
+        try {
+            setloading(true);
+            const res = await getAllCmsData('/admin/article/article-category');
+            setallArticles(res?.data?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchArticleCmsData()
+    }, [])
+
+    const deleteFunc = async() =>{
+        if(deleteId){
+            setloading(true);
+            const res = await deleteCmsData('/admin/article/article-category',deleteId);
+            if(res.success){
+                setloading(false);
+                setdeleteModal(false);
+                fetchArticleCmsData()
+            }else{
+                setloading(false)
+            }
+        }
+    }
+
+    const handleDelete = (id) =>{
+        setdeleteModal(true);
+        setdeleteId(id)
+    }
+
     return (
         <>
-            {addArticle && <AddArticleCategoriesModal setaddArticle={setaddArticle} />}
-            {editArticle && <EditArticleModal seteditArticle={seteditArticle} />}
+            {loading && <Loaders />}
+            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} title={'Delete article categories'} details={'Do you really want to delete this category?'} onClick={deleteFunc}/>}
+            {addArticle && <AddArticleCategoriesModal fetchArticleCmsData={fetchArticleCmsData} addArticle={addArticle} setaddArticle={setaddArticle} />}
+            {editArticle && <EditArticleModal articleId={articleId} editArticle={editArticle} fetchArticleCmsData={fetchArticleCmsData} seteditArticle={seteditArticle} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -48,6 +94,7 @@ const CmsArticleCategories = () => {
                         <thead>
                             <tr>
                                 <th>Article Category Name</th>
+                                <th>Articles Count</th>
                                 <th>Status </th>
                                 <th style={{
                                     textAlign: 'center'
@@ -55,13 +102,15 @@ const CmsArticleCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {addArticle?.length <=0 && <td colSpan={12}>No article categories data found!.</td>}
+                            {allArticles?.length > 0 && allArticles?.map((e, i) => (
                                 <tr>
                                     <td>
-                                        Article Category 1
+                                        {e?.name}
                                     </td>
+                                    <td></td>
                                     <td>
-                                        <p style={{
+                                      {!e?.is_active &&  <p style={{
                                             padding: '5px',
                                             borderRadius: '5px',
                                             color: '#fff',
@@ -69,17 +118,31 @@ const CmsArticleCategories = () => {
                                             fontWeight: '600',
                                             background: 'rgba(231, 62, 69, 1)',
                                             width: 'fit-content'
-                                        }}>Inactive</p>
+                                        }}>Inactive</p>}
+                                        {e?.is_active && <p style={{
+                                            padding: '5px',
+                                            borderRadius: '5px',
+                                            color: '#fff',
+                                            fontSize: '11px',
+                                            fontWeight: '600',
+                                            background: 'rgb(10, 128, 13)',
+                                            width: 'fit-content'
+                                        }}>Active</p>}
                                     </td>
-                                    <td>
+                                    <td style={{
+                                        position: 'relative'
+                                    }}>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             width: '50%',
-                                            left: '20px'
+                                            left: '20px',
+                                            top: '30px',
+                                            height: 'fit-content'
                                         }}>
-                                            <p>View</p>
-                                            <p onClick={(() => { seteditArticle(true) })}>Edit</p>
-                                            <p>Delete</p>
+                                            <p onClick={(() => { seteditArticle(true)
+                                                setarticleId(e?.id)
+                                             })}>Edit</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>

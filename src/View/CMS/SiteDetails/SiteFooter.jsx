@@ -1,7 +1,7 @@
 import upload from '../../../assets/Vector (8).svg'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import Input from '../../../Components/Input'
-const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleChange, siteDetailsForm }) => {
+const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleChange, siteDetailsForm, footerDescription }) => {
     return (
         <>
             <div className='site_header_logo_wrapper'>
@@ -32,7 +32,7 @@ const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleCha
                     </div>
                 </div>
                 <div className='site_left_header_logo'>
-                    <CustomTextEditor defaultValue={siteDetailsForm.footer_description} onChange={((data) => setfooterDescription(data))} label={'Footer Description'} required={true} />
+                    <CustomTextEditor defaultValue={siteDetailsForm.footer_description || footerDescription} onChange={((data) => setfooterDescription(data))} label={'Footer Description'} required={true} />
                     <div style={{
                         marginTop: '20px'
                     }}>

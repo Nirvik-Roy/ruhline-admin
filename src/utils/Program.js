@@ -88,7 +88,7 @@ export const deleteCategories = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Coach Deleted Successfully');
+            toast.success(res.data?.message || 'Category Deleted Successfully');
             return res.data
         } catch (err) {
             console.log(err.response.data)

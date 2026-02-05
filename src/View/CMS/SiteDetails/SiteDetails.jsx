@@ -192,7 +192,7 @@ const SiteDetails = () => {
 
                         {
                             <Activity mode={sitetabs.footer ? 'visible' : 'hidden'}>
-                                <SiteFooter siteDetailsForm={siteDetailsForm} handleChange={handleChange} setfooterDescription={setfooterDescription} footerLogo={footerLogo} setfooterLogo={setfooterLogo} />
+                                <SiteFooter footerDescription={footerDescription} siteDetailsForm={siteDetailsForm} handleChange={handleChange} setfooterDescription={setfooterDescription} footerLogo={footerLogo} setfooterLogo={setfooterLogo} />
                             </Activity>
                         }
 
