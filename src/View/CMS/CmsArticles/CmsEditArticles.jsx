@@ -5,7 +5,7 @@ import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEdi
 import upload from '../../../assets/Vector (8).svg'
 import Addarticlesectionmodal from '../../Modal/Addarticlesectionmodal.jsx'
 import { useNavigate, useParams } from 'react-router-dom'
-import { editAllCmsData, getAllCmsData, getAllSingleCmsData, postAllCmsData } from '../../../utils/cms.js'
+import { editAllCmsData, getAllCmsData, getAllSingleCmsData, } from '../../../utils/cms.js'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
 const CmsEditArticles = () => {
     const [isModal, setisModal] = useState(false);
@@ -113,29 +113,26 @@ const CmsEditArticles = () => {
                 share_linkedin: singleArticle?.share_linkedin && 'true' || 'false',
             })
 
-            const mapped = singleArticle?.sections?.map(e => {
-                return {
-                    id:Date.now(),
-                    heading: e?.heading || null,
-                    uploadImage: e?.image || null,
-                    image_position: e?.image_position ,
-                    description: e?.description || null,
-                    buttonName: e?.button || null,
-                    buttonUrl: e?.button_url || null
-                };
-            });
+            const mappedSections = singleArticle?.sections?.length > 0 && singleArticle?.sections?.map((section, index) => ({
+                id: section.id || Date.now() + index,
+                heading: section?.heading || null,
+                uploadImage: section?.image || '',
+                image_position: section?.image_position || '',
+                description: section?.description || null,
+                buttonName: section?.button || null,
+                buttonUrl: section?.button_url || null
+            }))
             setfacebookCheck(singleArticle?.share_facebook && true || false)
             settwitterCheck(singleArticle?.share_twitter && true || false)
             setlinkedinCheck(singleArticle?.share_linkedin && true || false)
-            setdynamicformstructure(mapped)
+            setdynamicformstructure(mappedSections)
             setfixedDescriptionContent(singleArticle?.description || '');
         }
 
 
     }, [success])
 
-
-   
+    console.log(singleArticle)
     const handleSubmit = async () => {
         try {
             setloading(true);
@@ -153,7 +150,7 @@ const CmsEditArticles = () => {
             formData.append('share_linkedin', fixedData.share_linkedin)
             { fixedThumnailImage && formData.append('thumbnail_image', fixedThumnailImage) }
             if (dynamicFormstructure.length > 0) {
-                dynamicFormstructure.forEach((element, index) => {
+                dynamicFormstructure?.forEach((element, index) => {
                     if (element?.heading) {
                         formData.append(`sections[${index}][heading]`, element.heading);
                     }
@@ -170,7 +167,7 @@ const CmsEditArticles = () => {
                         formData.append(`sections[${index}][button_url]`, element.buttonUrl)
                     }
 
-                    if (element?.uploadImage != singleArticle?.sections[0].image) {
+                    if (element?.uploadImage != singleArticle?.sections[index]?.image) {
                         formData.append(`sections[${index}][image]`, element.uploadImage)
                     }
                     formData.append(`sections[${index}][sort_order]`, index)
@@ -181,7 +178,8 @@ const CmsEditArticles = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setloading(false);
+            console.log(dynamicFormstructure)
         }
     }
 

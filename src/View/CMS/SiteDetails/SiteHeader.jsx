@@ -12,24 +12,42 @@ const SiteHeader = ({ pageHeaderlogo, setpageheaderlogo, headerLogo, setheaderLo
 
                         }}>Header Logo<span>*</span></label>
                         <div className='files_upload_wrapper'>
-                            {!headerLogo || !siteDetailsForm.header_logo && <>
-                                <img src={upload} />
-                                <p>Drag your files or <span>Browse</span></p>
-                                <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                            </>}
-                            <input onChange={((e) => setheaderLogo(e.target.files[0]))} type='file' />
-                            {headerLogo && <img style={{
-                                width: '100%',
-                                height: '95%',
-                                objectFit: 'contain'
-                            }} src={URL.createObjectURL(headerLogo)} />}
-                            {siteDetailsForm.header_logo && !headerLogo && <img style={{
-                                width: '100%',
-                                height: '95%',
-                                objectFit: 'contain'
-                            }} src={siteDetailsForm.header_logo} />}
+                            {/* 3) Placeholder — only if neither new file nor existing logo */}
+                            {!headerLogo && !siteDetailsForm.header_logo && (
+                                <>
+                                    <img src={upload} alt="placeholder" />
+                                    <p>
+                                        Drag your files or <span>Browse</span>
+                                    </p>
+                                    <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                                </>
+                            )}
 
+                            {/* 1) New file preview */}
+                            {headerLogo && (
+                                <img
+                                    style={{ width: "100%", height: "95%", objectFit: "contain" }}
+                                    src={URL.createObjectURL(headerLogo)}
+                                    alt="new header logo"
+                                />
+                            )}
+
+                            {/* 2) Existing logo — only if no new file selected */}
+                            {!headerLogo && siteDetailsForm.header_logo && (
+                                <img
+                                    style={{ width: "100%", height: "95%", objectFit: "contain" }}
+                                    src={siteDetailsForm.header_logo}
+                                    alt="existing header logo"
+                                />
+                            )}
+
+                            {/* File input */}
+                            <input
+                                type="file"
+                                onChange={(e) => setheaderLogo(e.target.files[0])}
+                            />
                         </div>
+
                     </div>
                 </div>
                 <div className='site_left_header_logo'>
@@ -39,7 +57,7 @@ const SiteHeader = ({ pageHeaderlogo, setpageheaderlogo, headerLogo, setheaderLo
 
                         }}>Page Header Image<span>*</span></label>
                         <div className='files_upload_wrapper'>
-                            {!pageHeaderlogo || !siteDetailsForm.page_header_image && <>
+                            {!pageHeaderlogo && !siteDetailsForm.page_header_image && <>
                                 <img src={upload} />
                                 <p>Drag your files or <span>Browse</span></p>
                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>

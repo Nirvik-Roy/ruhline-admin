@@ -11,8 +11,27 @@ const CmsHomeSections = () => {
             description: ''
         }
     ])
-
-
+    const {homepageFormData,sethomepageformData} = useState({
+        hero_headline:'',
+        hero_section_image:'',
+        hero_description:'',
+        headline:'',
+        about_us_section_image:'',
+        secondary_headline:'',
+        description:'',
+        button_name:'',
+        button_url:'',
+        headline3:'',
+        secondary_headline3:'',
+        headline4:'',
+        secondary_headline4:'',
+        why_choose_us_section_image:'',
+        background_image4:'',
+        headline5:'',
+        secondary_headline5:'',
+        headline6:'',
+        secondary_headline6:''
+    })
     const addOptions = () => {
         setoptionsData([
             ...optionsData,
@@ -23,7 +42,6 @@ const CmsHomeSections = () => {
             }
         ])
     }
-
     const hanleOptionChanges = (e, id) => {
         const { name, value } = e.target
         setoptionsData((prev) =>
@@ -32,17 +50,13 @@ const CmsHomeSections = () => {
             )
         );
     }
-
     const deleteFunc = (id) => {
-        console.log(id)
-        if(id !=1){
+        if (id != 1) {
             const dummyData = [...optionsData];
             const filteredData = dummyData.filter((e) => e.id != id);
             setoptionsData(filteredData)
         }
     }
-
-    console.log(optionsData)
     return (
         <>
             <div className='cms_home_sections_wrapper'>
