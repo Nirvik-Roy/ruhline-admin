@@ -96,7 +96,6 @@ const CmsEditArticles = () => {
                 setloading(false)
             }
         }
-
     }
 
     useEffect(() => {
@@ -116,6 +115,7 @@ const CmsEditArticles = () => {
 
             const mapped = singleArticle?.sections?.map(e => {
                 return {
+                    id:Date.now(),
                     heading: e?.heading || null,
                     uploadImage: e?.image || null,
                     image_position: e?.image_position ,
@@ -128,7 +128,6 @@ const CmsEditArticles = () => {
             settwitterCheck(singleArticle?.share_twitter && true || false)
             setlinkedinCheck(singleArticle?.share_linkedin && true || false)
             setdynamicformstructure(mapped)
-
             setfixedDescriptionContent(singleArticle?.description || '');
         }
 
@@ -136,7 +135,7 @@ const CmsEditArticles = () => {
     }, [success])
 
 
-
+   
     const handleSubmit = async () => {
         try {
             setloading(true);
@@ -186,6 +185,7 @@ const CmsEditArticles = () => {
         }
     }
 
+    console.log(dynamicFormstructure)
     return (
         <>
             {loading && <Loaders />}
@@ -332,8 +332,7 @@ const CmsEditArticles = () => {
                                     </div>}
 
                                     {(e?.description != null) && <div>
-                                        <CustomTextEditor defaultValue={e?.description} onChange={((data) => ontextChange(e?.id, data))} label={'Description'} required={true} />
-
+                                        <CustomTextEditor defaultValue={dynamicFormstructure[i]?.description} onChange={((data) => ontextChange(e?.id, data))} label={'Description'} required={true} />
                                     </div>}
 
                                 </div>
