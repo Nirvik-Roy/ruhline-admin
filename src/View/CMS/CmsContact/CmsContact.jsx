@@ -1,16 +1,20 @@
-import React, { Activity, lazy, Suspense, useState,useEffect } from 'react'
+import React, { Activity, lazy, Suspense, useState, useEffect, useRef } from 'react'
 import Pagination from '../../../Components/Pagination/Pagination'
 import { useNavigate } from 'react-router-dom'
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import ContactInqueriesModal from '../../Modal/ContactInqueriesModal.jsx'
 import { deleteContactEnquires, getAllContactEnquires } from '../../../utils/contactEnquires.js'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
 const CmsContact = () => {
     const [index, setIndex] = useState([]);
+    const dropdownRef = useRef(null);
     const [isModal, setisModal] = useState(false);
     const [loading, setIsloading] = useState(false);
-    const [contactData,setcontactData] = useState([]);
-    const [contactId,setContactId] = useState('')
+    const [contactData, setcontactData] = useState([]);
+    const [deleteId, setdeleteId] = useState();
+    const [deleteModal, setdeletModal] = useState(false)
+    const [contactId, setContactId] = useState('')
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -19,7 +23,7 @@ const CmsContact = () => {
             setIndex([...index, i])
         }
     }
-  const fetchContact = async () => {
+    const fetchContact = async () => {
         setIsloading(true)
         try {
             const result = await getAllContactEnquires();
@@ -33,27 +37,49 @@ const CmsContact = () => {
     useEffect(() => {
         fetchContact()
     }, [])
-    
 
-     const deleteCustomerFunc = async (id) =>{
-           setIsloading(true)
-            if(id){
-                try{
-                    const result = await deleteContactEnquires(id);
-                    console.log(result)
-                    if(result.success){
-                        fetchContact()
-                    }
-                }catch(err){
-                    console.log(err)
-                }finally{
-                    setIsloading(false)
+
+    const deleteContactEnquiresFunc = async () => {
+        setIsloading(true)
+        if (deleteId) {
+            try {
+                const result = await deleteContactEnquires(deleteId);
+                console.log(result)
+                if (result.success) {
+                    fetchContact()
+                    setdeletModal(false)
                 }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setIsloading(false)
             }
         }
+    }
+    const handleDelete = (id) => {
+        setdeletModal(true)
+        setdeleteId(id)
+    }
+
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
     return (
         <>
-            {loading && <Loaders/>}
+            {loading && <Loaders />}
+            {deleteModal && <DeleteModal details={'Do you really want to delete this contact enquiry?'} title={'Delete contact enquiry'} setdeleteModal={setdeletModal} onClick={deleteContactEnquiresFunc} />}
             {isModal && <ContactInqueriesModal contactId={contactId} setisModal={setisModal} />}
 
             <div className='dashboard_container'>
@@ -75,7 +101,7 @@ const CmsContact = () => {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                     { contactData.length > 0 ?   <tbody>
+                        {contactData.length > 0 ? <tbody>
                             {contactData?.map((e, i) => (
                                 <tr>
                                     <td>
@@ -84,8 +110,10 @@ const CmsContact = () => {
                                     <td>{e?.email}</td>
                                     <td>+{e?.phone_country_code?.phone_code} {e?.phone}</td>
                                     <td>{e?.message}</td>
-                                    <td>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                    <td ref={dropdownRef}>
+                                        <img onClick={((e) =>{ 
+                                            e.stopPropagation()
+                                            indexFunction(i)})} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-75px'
                                         }}>
@@ -93,7 +121,7 @@ const CmsContact = () => {
                                                 setisModal(!isModal);
                                                 setContactId(e?.id)
                                             })}>View</p>
-                                            <p onClick={(() => deleteCustomerFunc(e?.id))}>Delete</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>

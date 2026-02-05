@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Pagination from '../../../Components/Pagination/Pagination.jsx'
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import Button from '../../../Components/Button.jsx'
@@ -11,13 +11,14 @@ import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
 const CmsArticleCategories = () => {
     const [index, setIndex] = useState([]);
     const navigate = useNavigate()
+    const dropdownRef = useRef(null);
     const [addArticle, setaddArticle] = useState(false);
-    const [articleId,setarticleId] = useState()
+    const [articleId, setarticleId] = useState()
     const [editArticle, seteditArticle] = useState(false);
     const [loading, setloading] = useState(false)
     const [allArticles, setallArticles] = useState([]);
-    const [deleteModal,setdeleteModal] = useState(false);
-    const [deleteId,setdeleteId] = useState()
+    const [deleteModal, setdeleteModal] = useState(false);
+    const [deleteId, setdeleteId] = useState()
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -42,29 +43,42 @@ const CmsArticleCategories = () => {
         fetchArticleCmsData()
     }, [])
 
-    const deleteFunc = async() =>{
-        if(deleteId){
+    const deleteFunc = async () => {
+        if (deleteId) {
             setloading(true);
-            const res = await deleteCmsData('/admin/article/article-category',deleteId);
-            if(res.success){
+            const res = await deleteCmsData('/admin/article/article-category', deleteId);
+            if (res.success) {
                 setloading(false);
                 setdeleteModal(false);
                 fetchArticleCmsData()
-            }else{
+            } else {
                 setloading(false)
             }
         }
     }
 
-    const handleDelete = (id) =>{
+    const handleDelete = (id) => {
         setdeleteModal(true);
         setdeleteId(id)
     }
 
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} title={'Delete article categories'} details={'Do you really want to delete this category?'} onClick={deleteFunc}/>}
+            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} title={'Delete article categories'} details={'Do you really want to delete this category?'} onClick={deleteFunc} />}
             {addArticle && <AddArticleCategoriesModal fetchArticleCmsData={fetchArticleCmsData} addArticle={addArticle} setaddArticle={setaddArticle} />}
             {editArticle && <EditArticleModal articleId={articleId} editArticle={editArticle} fetchArticleCmsData={fetchArticleCmsData} seteditArticle={seteditArticle} />}
             <div className='dashboard_container'>
@@ -102,7 +116,7 @@ const CmsArticleCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {addArticle?.length <=0 && <td colSpan={12}>No article categories data found!.</td>}
+                            {addArticle?.length <= 0 && <td colSpan={12}>No article categories data found!.</td>}
                             {allArticles?.length > 0 && allArticles?.map((e, i) => (
                                 <tr>
                                     <td>
@@ -110,7 +124,7 @@ const CmsArticleCategories = () => {
                                     </td>
                                     <td></td>
                                     <td>
-                                      {!e?.is_active &&  <p style={{
+                                        {!e?.is_active && <p style={{
                                             padding: '5px',
                                             borderRadius: '5px',
                                             color: '#fff',
@@ -129,19 +143,23 @@ const CmsArticleCategories = () => {
                                             width: 'fit-content'
                                         }}>Active</p>}
                                     </td>
-                                    <td style={{
+                                    <td ref={dropdownRef} style={{
                                         position: 'relative'
                                     }}>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                        <img onClick={((e) => {
+                                            e.stopPropagation()
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             width: '50%',
                                             left: '20px',
                                             top: '30px',
                                             height: 'fit-content'
                                         }}>
-                                            <p onClick={(() => { seteditArticle(true)
+                                            <p onClick={(() => {
+                                                seteditArticle(true)
                                                 setarticleId(e?.id)
-                                             })}>Edit</p>
+                                            })}>Edit</p>
                                             <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>

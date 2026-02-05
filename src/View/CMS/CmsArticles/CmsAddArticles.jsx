@@ -90,12 +90,12 @@ const CmsAddArticles = () => {
             dummyData.share_linkedin = linkedinCheck ? 'true' : 'false',
             setfixedData(dummyData)
             const formData = new FormData();
-            { fixedData.article_category_id && formData.append('article_category_id', fixedData.article_category_id); }
-            { fixedData.name && formData.append('name', fixedData.name); }
+            { dummyData.article_category_id && formData.append('article_category_id', dummyData.article_category_id); }
+            { dummyData.name && formData.append('name', dummyData.name); }
             { fixedDescriptionContent && formData.append('description', fixedDescriptionContent) }
-            formData.append('share_facebook', fixedData.share_facebook)
-            formData.append('share_twitter', fixedData.share_twitter)
-            formData.append('share_linkedin', fixedData.share_linkedin)
+            formData.append('share_facebook', dummyData.share_facebook)
+            formData.append('share_twitter', dummyData.share_twitter)
+            formData.append('share_linkedin', dummyData.share_linkedin)
             { fixedThumnailImage && formData.append('thumbnail_image', fixedThumnailImage) }
             if (dynamicFormstructure.length > 0) {
                 dynamicFormstructure.forEach((element, index) => {

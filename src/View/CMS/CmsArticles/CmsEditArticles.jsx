@@ -116,7 +116,7 @@ const CmsEditArticles = () => {
             const mappedSections = singleArticle?.sections?.length > 0 && singleArticle?.sections?.map((section, index) => ({
                 id: section.id || Date.now() + index,
                 heading: section?.heading || null,
-                uploadImage: section?.image || '',
+                uploadImage: section?.image || null,
                 image_position: section?.image_position || '',
                 description: section?.description || null,
                 buttonName: section?.button || null,
