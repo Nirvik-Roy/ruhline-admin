@@ -3,6 +3,7 @@ import Input from '../../../Components/Input.jsx'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import upload from '../../../assets/Vector (8).svg'
 import Button from '../../../Components/Button.jsx'
+import Loaders from '../../../Components/Loaders/Loaders.jsx'
 const CmsHomeSections = () => {
     const [optionsData, setoptionsData] = useState([
         {
@@ -11,27 +12,14 @@ const CmsHomeSections = () => {
             description: ''
         }
     ])
-    const {homepageFormData,sethomepageformData} = useState({
-        hero_headline:'',
-        hero_section_image:'',
-        hero_description:'',
-        headline:'',
-        about_us_section_image:'',
-        secondary_headline:'',
-        description:'',
-        button_name:'',
-        button_url:'',
-        headline3:'',
-        secondary_headline3:'',
-        headline4:'',
-        secondary_headline4:'',
-        why_choose_us_section_image:'',
-        background_image4:'',
-        headline5:'',
-        secondary_headline5:'',
-        headline6:'',
-        secondary_headline6:''
-    })
+    const [loading, setloading] = useState(false)
+    const [heroDescription, setherodescription] = useState('');
+    const [aboutDescription, setaboutDescription] = useState('');
+    const [heroSectionImage, setheroSectionImage] = useState();
+    const [aboutSectionImage, setaboutSectionImage] = useState();
+    const [whyChooseImage, setwhyChooseImage] = useState();
+    const [whyChooseBackgroundImage, setwhychooseBackgroundImage] = useState()
+
     const addOptions = () => {
         setoptionsData([
             ...optionsData,
@@ -57,8 +45,96 @@ const CmsHomeSections = () => {
             setoptionsData(filteredData)
         }
     }
+
+    const [homepageFormData, sethomepageformData] = useState({
+        hero_headline: '',
+        about_headline: '',
+        about_secondary_headline: '',
+        about_button_name: '',
+        about_button_url: '',
+        programs_headline: '',
+        programs_secondary_headline: '',
+        why_choose_us_headline: '',
+        why_choose_use_secondary_headline: '',
+        why_choose_us_section_image: '',
+        why_choose_us_background_image: '',
+        coaches_headline: '',
+        coaches_secondary_headline: '',
+        articles_headline: '',
+        articles_secondary_headline: ''
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        sethomepageformData({
+            ...homepageFormData,
+            [name]: value
+        })
+    }
+
+    const handleSubmit = async () => {
+        try {
+            setloading(true);
+            const formData = new FormData();
+            { homepageFormData.hero_headline && formData.append('section_01[hero_headline]', homepageFormData.hero_headline) }
+
+            { heroSectionImage instanceof File && formData.append('section_01[hero_section_image]', heroSectionImage) }
+
+            { heroDescription && formData.append('section_01[hero_description]', heroDescription) }
+
+            { homepageFormData.about_headline && formData.append('section_02[headline]', homepageFormData.about_headline) }
+
+            { aboutSectionImage instanceof File && formData.append('section_02[about_us_section_image]', aboutSectionImage) }
+
+            { homepageFormData.about_secondary_headline && formData.append('section_02[secondary_headline]', homepageFormData.about_secondary_headline) }
+
+            { aboutDescription && formData.append('section_02[description]', aboutDescription) }
+
+            { homepageFormData.about_button_name && formData.append('section_02[button_name]', homepageFormData.about_button_name) }
+
+            { homepageFormData.about_button_url && formData.append('section_02[button_url]', homepageFormData.about_button_url) }
+
+            { homepageFormData.programs_headline && formData.append('section_03[headline]', homepageFormData.programs_headline) }
+
+            { homepageFormData.programs_secondary_headline && formData.append('section_03[secondary_headline]', homepageFormData.programs_secondary_headline) }
+
+            { homepageFormData.why_choose_us_headline && formData.append('section_04[headline]', homepageFormData.why_choose_us_headline) }
+
+            { homepageFormData.why_choose_use_secondary_headline && formData.append('section_04[secondary_headline]', homepageFormData.why_choose_use_secondary_headline) }
+
+            { whyChooseImage instanceof File && formData.append('section_04[why_choose_us_section_image]', homepageFormData.why_choose_use_secondary_headline) }
+
+            { whyChooseBackgroundImage instanceof File && formData.append('section_04[background_image]', homepageFormData.why_choose_use_secondary_headline) }
+
+            if (optionsData.length > 0) {
+                optionsData.forEach((e, index) => {
+                    if (e?.description) {
+                        formData.append(`section_04[options][${index}][description]`, e.description);
+                    }
+
+                    if (e?.title) {
+                        formData.append(`section_04[options][${index}][title]`, e.title)
+                    }
+                    formData.append(`section_04[options][${index}][sort_order]`, index)
+                });
+            }
+            { homepageFormData.coaches_headline && formData.append('section_05[headline]', homepageFormData.coaches_headline) }
+
+            { homepageFormData.coaches_secondary_headline && formData.append('section_05[secondary_headline]', homepageFormData.coaches_secondary_headline) }
+
+            { homepageFormData.articles_headline && formData.append('section_06[headline]', homepageFormData.articles_headline) }
+
+            { homepageFormData.articles_secondary_headline && formData.append('section_06[secondary_headline]', homepageFormData.articles_secondary_headline) }
+
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
     return (
         <>
+            {loading && <Loaders />}
             <div className='cms_home_sections_wrapper'>
                 <div className='section_dropdown_head'>
                     <h3>Section 1 (Hero Section)</h3>
@@ -70,8 +146,12 @@ const CmsHomeSections = () => {
                 <div className='section_dropdown_content_wrapper'>
                     <div className='section_1_content_wrapper'>
                         <div className='section_1_details'>
-                            <Input label={'Hero Headline'} required={true} defaultValue={'Find Your Inner Balance'} />
-                            <CustomTextEditor label={'Hero Description'} required={true} defaultValue={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
+                            <div>
+                                <Input value={homepageFormData.hero_headline} name={'hero_headline'} onChange={handleChange} label={'Hero Headline'} required={true} placeholder={'Enter hero headline'} />
+                            </div>
+                            <div>
+                                <CustomTextEditor onChange={((data) => setherodescription(data))} label={'Hero Description'} required={true} defaultValue={heroDescription} />
+                            </div>
                         </div>
                         <div className='section_1_details'>
                             <div className='input_form'>
@@ -82,7 +162,7 @@ const CmsHomeSections = () => {
                                     <img src={upload} />
                                     <p>Drag your files or <span>Browse</span></p>
                                     <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                    <input type='file' />
+                                    <input onChange={((e) => setheroSectionImage(e.target.files[0]))} type='file' />
                                 </div>
                             </div>
                         </div>
@@ -101,24 +181,36 @@ const CmsHomeSections = () => {
                 <div className='section_dropdown_content_wrapper'>
                     <div className='section_1_content_wrapper'>
                         <div className='section_1_details'>
-                            <Input label={'Headline'} required={true} defaultValue={'About us'} />
-                            <Input label={'Secondary Headline'} required={true} defaultValue={'Align your body. Center your mind.'} />
-                            <CustomTextEditor label={'Description'} required={true} defaultValue={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
+                            <div>
+                                <Input onChange={handleChange} value={homepageFormData.about_headline} name={'about_headline'} label={'Headline'} required={true} placeholder={'Enter about use heading'} />
+                            </div>
+                            <div>
+                                <Input onChange={handleChange} value={homepageFormData.about_secondary_headline} label={'Secondary Headline'} required={true} placeholder={'Enter about seconday headline'} />
+                            </div>
+                            <div>
+                                <CustomTextEditor onChange={((data) => setaboutDescription(data))} label={'Description'} required={true} defaultValue={aboutDescription} />
+                            </div>
+
                             <div className='section_form_grid_Wrapper'>
-                                <Input label={'Button Name'} required={true} defaultValue={'Learn More'} />
-                                <Input label={'Button Url'} required={true} defaultValue={'www.website.com'} />
+                                <div>
+                                    <Input name={'about_button_name'} onChange={handleChange} value={homepageFormData.about_button_name} label={'Button Name'} required={true} placeholder={'Enter button name'} />
+                                </div>
+                                <div>
+                                    <Input name={'about_button_url'} label={'Button Url'} value={homepageFormData.about_button_url} onChange={handleChange} required={true} placeholder={'Enter button url'} />
+                                </div>
+
                             </div>
                         </div>
                         <div className='section_1_details'>
                             <div className='input_form'>
                                 <label style={{
                                     fontSize: '15px',
-                                }}>Upload Hero Section Image<span>*</span></label>
+                                }}>Upload About Us Section Image<span>*</span></label>
                                 <div className='files_upload_wrapper'>
                                     <img src={upload} />
                                     <p>Drag your files or <span>Browse</span></p>
                                     <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                    <input type='file' />
+                                    <input onChange={((e) => setaboutSectionImage(e.target.files[0]))} type='file' />
                                 </div>
                             </div>
                         </div>
@@ -135,8 +227,14 @@ const CmsHomeSections = () => {
 
                 <div className='section_dropdown_content_wrapper'>
                     <div className='program_section_grid_wrapper'>
-                        <Input label={' Headline'} required={true} defaultValue={'Programs'} />
-                        <Input label={'Secondary Headline'} required={true} defaultValue={'Align your body. Center your mind.'} />
+                        <div>
+                            <Input name={'programs_headline'} value={homepageFormData.programs_headline} label={' Headline'} required={true} placeholder={'Enter programs headline'} />
+
+                        </div>
+                        <div>
+                            <Input name={'programs_secondary_headline'} onChange={homepageFormData.programs_secondary_headline} label={'Secondary Headline'} required={true} placeholder={'Enter program secondary headline'} />
+                        </div>
+
                     </div>
                 </div>
 
@@ -152,8 +250,14 @@ const CmsHomeSections = () => {
 
                 <div className='section_dropdown_content_wrapper'>
                     <div className='program_section_grid_wrapper'>
-                        <Input label={' Headline'} required={true} defaultValue={'Programs'} />
-                        <Input label={'Secondary Headline'} required={true} defaultValue={'Align your body. Center your mind.'} />
+                        <div>
+                            <Input onChange={handleChange} value={homepageFormData.why_choose_us_headline} name={'why_choose_us_headline'} label={' Headline'} required={true} placeholder={'Enter why choose us heading..'} />
+
+                        </div>
+                        <div>
+                            <Input onChange={handleChange} value={homepageFormData.why_choose_use_secondary_headline} label={'Secondary Headline'} required={true} defaultValue={'Enter why choose us secondary headline'} />
+                        </div>
+
                         <div className='input_form'>
                             <label style={{
                                 fontSize: '15px',
@@ -162,7 +266,7 @@ const CmsHomeSections = () => {
                                 <img src={upload} />
                                 <p>Drag your files or <span>Browse</span></p>
                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                <input type='file' />
+                                <input onChange={((e) => setwhyChooseImage(e.target.files[0]))} type='file' />
                             </div>
                         </div>
                         <div className='input_form'>
@@ -173,7 +277,7 @@ const CmsHomeSections = () => {
                                 <img src={upload} />
                                 <p>Drag your files or <span>Browse</span></p>
                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                <input type='file' />
+                                <input onChange={((e) => setwhychooseBackgroundImage(e.target.files[0]))} type='file' />
                             </div>
                         </div>
                         <div className='option_border_wrapper'>
@@ -188,7 +292,6 @@ const CmsHomeSections = () => {
                                             <Input onChange={((e) => hanleOptionChanges(e, element?.id))} value={element.title} label={'Title'} name={'title'} required={true} placeholder={'Enter option title'} />
                                         </div>
                                         <Input onChange={((e) => hanleOptionChanges(e, element?.id))} value={element.description} label={'Description'} name={'description'} required={true} placeholder={'Enter description '} />
-
                                     </div>
                                 </div>
                             ))}
