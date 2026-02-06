@@ -5,19 +5,24 @@ import './CmsFaq.css'
 import Input from '../../../Components/Input'
 import Textarea from '../../../Components/Textarea.jsx'
 import { useNavigate } from 'react-router-dom'
-import { editAllCmsData, getAllCmsData, postAllCmsData } from '../../../utils/cms.js'
+import { deleteCmsData, editAllCmsData, getAllCmsData, postAllCmsData } from '../../../utils/cms.js'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
 import AddFaqModal from '../../Modal/AddFaqModal.jsx'
 import toast from 'react-hot-toast'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import EditFaqModal from '../../Modal/EditFaqModal.jsx'
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
+import CustomTextEditor2 from '../../../Components/CustomTextEditor/CustomTextEditor2.jsx'
 const FaqMentee = () => {
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
     const [faqData, setfaqData] = useState();
     const [faqId, setfaqId] = useState()
     const [addModal, setaddModal] = useState(false)
-    const [editModal, setEditModal] = useState(false)
+    const [editModal, setEditModal] = useState(false);
+    const [deleteId, setdeleteId] = useState();
+    const [actions,setactions] = useState(false)
+    const [deleteModal, setdeleteModal] = useState(false)
     const fetchData = async () => {
         try {
             setloading(true);
@@ -79,10 +84,37 @@ const FaqMentee = () => {
             toast.error('Plz fill the fields')
         }
     }
+
+    const handleDelete = (id) => {
+        setdeleteId(id)
+        setdeleteModal(true)
+    }
+
+    const deleteFAq = async () => {
+        setloading(true)
+        if (deleteId) {
+            try {
+                const result = await deleteCmsData('/admin/faq', deleteId);
+                console.log(result)
+                if (result.success) {
+                    fetchData()
+                    setdeleteModal(false)
+                    setactions(true)
+                }else{
+                    setactions(false)
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        }
+    }
     return (
         <>
             {loading && <Loaders />}
-            {editModal && <EditFaqModal  faqId={faqId} seteditModal={setEditModal} editFunc={menteeFaqEdit} />}
+            {deleteModal && <DeleteModal onClick={deleteFAq} setdeleteModal={setdeleteModal} title={'Delete FAQ'} details={'Do you really want to delete this faq?'} />}
+            {editModal && <EditFaqModal faqId={faqId} seteditModal={setEditModal} editFunc={menteeFaqEdit} />}
             {addModal && <AddFaqModal setaddModal={setaddModal} addFunction={menteeFaqAdd} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
@@ -122,7 +154,7 @@ const FaqMentee = () => {
                                 <p>FAQ {i + 1}</p>
                                 <div className='cms_faq_questions_wrapper'>
                                     <Input label={'Heading'} readOnly={true} value={e?.heading} />
-                                    <CustomTextEditor readOnly={true} label={'Description'} defaultValue={e?.description} />
+                                    <CustomTextEditor2 readOnly={true} label={'Description'} defaultValue={e?.description} />
                                 </div>
                                 <i style={{
                                     color: 'var(--primary-color)',
@@ -138,7 +170,7 @@ const FaqMentee = () => {
                                     setEditModal(true)
                                     setfaqId(e?.id)
                                 })} class="fa-solid fa-pen-to-square"></i>
-                                <img style={{
+                                <img onClick={(()=>handleDelete(e?.id))} style={{
                                     cursor: 'pointer'
                                 }} src={crossIcon} />
                             </div>
@@ -149,7 +181,7 @@ const FaqMentee = () => {
 
 
                 <div onClick={(() => setaddModal(true))}>
-                    <Button children={'Add another option'} styles={{
+                    <Button children={'Add FAQ'} styles={{
                         color: 'var(--text-color)',
                         border: '1px solid var(--primary-color)',
                         padding: '12px 15px',
