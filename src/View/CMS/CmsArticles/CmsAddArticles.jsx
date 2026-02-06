@@ -115,7 +115,7 @@ const CmsAddArticles = () => {
                         formData.append(`sections[${index}][button_url]`, element.buttonUrl)
                     }
 
-                    if (element?.uploadImage) {
+                    if (element?.uploadImage instanceof File) {
                         formData.append(`sections[${index}][image]`, element.uploadImage)
                     }
                     formData.append(`sections[${index}][sort_order]`, index)
