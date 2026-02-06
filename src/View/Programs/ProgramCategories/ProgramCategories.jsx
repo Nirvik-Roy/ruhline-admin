@@ -131,12 +131,19 @@ const ProgramCategories = () => {
                                                 {e?.name}
                                             </td>
                                             <td>12</td>
-                                            <td>
-                                                <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                            <td style={{
+                                                height:'fit-content'
+                                            }}>
+                                                <img onClick={((e) => {
+                                                    e.stopPropagation()
+                                                    indexFunction(i)
+                                                })} src={ellipse} />
                                                 {index.includes(i) && <div className='actions_wrapper' style={{
-                                                    width: '70%'
+                                                    width: '50%',
+                                                    left:'0%',
+                                                    top:'40px',
+                                                    height:'fit-content'
                                                 }}>
-                                                    <p>View</p>
                                                     <p onClick={(() => e?.id)}>Edit</p>
                                                     <p onClick={(() => {
                                                         handleDelete(e?.id)
@@ -150,7 +157,7 @@ const ProgramCategories = () => {
                                         </td>
                                         <td>12</td>
                                         <td style={{
-                                            position:'relative'
+                                            position: 'relative'
                                         }} ref={dropdownRef}>
                                             <img onClick={((e) => {
                                                 e.stopPropagation()
@@ -158,8 +165,8 @@ const ProgramCategories = () => {
                                             })} src={ellipse} />
                                             {index.includes(i) && <div className='actions_wrapper' style={{
                                                 width: '50%',
-                                                bottom:'-80px',
-                                                left:'0'
+                                                bottom: '-80px',
+                                                left: '0'
                                             }}>
                                                 {/* <p>View</p> */}
                                                 <p onClick={(() => {

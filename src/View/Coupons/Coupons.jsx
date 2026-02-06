@@ -113,7 +113,7 @@ const Coupons = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allCoupondata.length < 0 && <td colSpan={12} style={{
+                            {allCoupondata.length <= 0 && <td colSpan={12} style={{
                                 textAlign: 'center'
                             }}>No coupons available</td>}
                             {allCoupondata.length > 0 && allCoupondata?.map((e, i) => (
