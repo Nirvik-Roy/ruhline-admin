@@ -202,24 +202,24 @@ const SiteDetails = () => {
                     </div>
                     <div className='site_right_wrapper'>
                         {<Activity mode={sitetabs.favicon ? 'visible' : 'hidden'}>
-                            <SiteFavicon siteDetailsForm={siteDetailsForm} siteFavicon={siteFavicon} setSiteFavicon={setSiteFavicon} />
+                            <SiteFavicon siteErrors={siteErrors} siteDetailsForm={siteDetailsForm} siteFavicon={siteFavicon} setSiteFavicon={setSiteFavicon} />
                         </Activity>
                         }
                         {
                             <Activity mode={sitetabs.header ? 'visible' : 'hidden'}>
-                                <SiteHeader siteDetailsForm={siteDetailsForm} pageHeaderlogo={pageHeaderlogo} setpageheaderlogo={setpageheaderlogo} headerLogo={headerLogo} setheaderLogo={setheaderLogo} />
+                                <SiteHeader siteErrors={siteErrors} siteDetailsForm={siteDetailsForm} pageHeaderlogo={pageHeaderlogo} setpageheaderlogo={setpageheaderlogo} headerLogo={headerLogo} setheaderLogo={setheaderLogo} />
                             </Activity>
                         }
 
                         {
                             <Activity mode={sitetabs.footer ? 'visible' : 'hidden'}>
-                                <SiteFooter footerDescription={footerDescription} siteDetailsForm={siteDetailsForm} handleChange={handleChange} setfooterDescription={setfooterDescription} footerLogo={footerLogo} setfooterLogo={setfooterLogo} />
+                                <SiteFooter siteErrors={siteErrors} footerDescription={footerDescription} siteDetailsForm={siteDetailsForm} handleChange={handleChange} setfooterDescription={setfooterDescription} footerLogo={footerLogo} setfooterLogo={setfooterLogo} />
                             </Activity>
                         }
 
                         {
                             <Activity mode={sitetabs.socialMedia ? 'visible' : 'hidden'}>
-                                <SiteLinks handleChange={handleChange} siteDetailsForm={siteDetailsForm} />
+                                <SiteLinks siteErrors={siteErrors} handleChange={handleChange} siteDetailsForm={siteDetailsForm} />
                             </Activity>
                         }
                         {

@@ -15,7 +15,7 @@ const Addarticlesectionmodal = ({ setisModal, setdynamicformstructure, dynamicFo
             data.section = `Section ${(dynamicFormstructure?.length) + 1}`
             if (imageCheck) {
                 data.uploadImage = '',
-                data.image_position = ''
+                data.image_position = 'center'
             }
             if (headingCheck) {
                 data.heading = ''

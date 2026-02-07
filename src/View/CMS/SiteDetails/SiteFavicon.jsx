@@ -1,5 +1,5 @@
 import upload from '../../../assets/Vector (8).svg'
-const SiteFavicon = ({ setSiteFavicon, siteFavicon, siteDetailsForm }) => {
+const SiteFavicon = ({ setSiteFavicon, siteFavicon, siteDetailsForm, siteErrors }) => {
     const handleFaviconImage = (e) => {
         setSiteFavicon(e.target.files[0])
     }
@@ -52,6 +52,13 @@ const SiteFavicon = ({ setSiteFavicon, siteFavicon, siteDetailsForm }) => {
                     <input type="file" onChange={handleFaviconImage} />
                 </div>
             </div>
+
+            {siteErrors?.favicon && <small style={{
+                marginLeft:'25px',
+                color:'red',
+                fontSize:'12px',
+                marginTop:'3px'
+            }}>* {siteErrors?.favicon[0]}</small>}
         </>
     )
 }

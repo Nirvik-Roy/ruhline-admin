@@ -1,7 +1,7 @@
 import upload from '../../../assets/Vector (8).svg'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import Input from '../../../Components/Input'
-const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleChange, siteDetailsForm, footerDescription }) => {
+const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleChange, siteDetailsForm, footerDescription,siteErrors }) => {
     return (
         <>
             <div className='site_header_logo_wrapper'>
@@ -29,10 +29,20 @@ const SiteFooter = ({ footerLogo, setfooterLogo, setfooterDescription, handleCha
                                 objectFit: 'contain'
                             }} src={siteDetailsForm.footer_logo} />}
                         </div>
+
+                        {siteErrors?.footer_logo && <small style={{
+                            marginLeft: '25px',
+                            color: 'red',
+                            fontSize: '12px',
+                            marginTop: '3px'
+                        }}>* {siteErrors?.footer_logo[0]}</small>}
                     </div>
                 </div>
                 <div className='site_left_header_logo'>
+                <div>
                     <CustomTextEditor defaultValue={siteDetailsForm.footer_description || footerDescription} onChange={((data) => setfooterDescription(data))} label={'Footer Description'} required={true} />
+
+                </div>
                     <div style={{
                         marginTop: '20px'
                     }}>

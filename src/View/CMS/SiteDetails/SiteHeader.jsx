@@ -1,6 +1,6 @@
 import React from 'react'
 import upload from '../../../assets/Vector (8).svg'
-const SiteHeader = ({ pageHeaderlogo, setpageheaderlogo, headerLogo, setheaderLogo, siteDetailsForm }) => {
+const SiteHeader = ({ pageHeaderlogo, setpageheaderlogo, headerLogo, setheaderLogo, siteDetailsForm, siteErrors }) => {
 
     return (
         <>
@@ -47,7 +47,12 @@ const SiteHeader = ({ pageHeaderlogo, setpageheaderlogo, headerLogo, setheaderLo
                                 onChange={(e) => setheaderLogo(e.target.files[0])}
                             />
                         </div>
-
+                        {siteErrors?.header_logo && <small style={{
+                            marginLeft: '25px',
+                            color: 'red',
+                            fontSize: '12px',
+                            marginTop: '3px'
+                        }}>* {siteErrors?.header_logo[0]}</small>}
                     </div>
                 </div>
                 <div className='site_left_header_logo'>
@@ -76,6 +81,13 @@ const SiteHeader = ({ pageHeaderlogo, setpageheaderlogo, headerLogo, setheaderLo
                             }} src={siteDetailsForm.page_header_image} />}
                             <input onChange={((e) => setpageheaderlogo(e.target.files[0]))} type='file' />
                         </div>
+
+                        {siteErrors?.page_header_image && <small style={{
+                            marginLeft: '25px',
+                            color: 'red',
+                            fontSize: '12px',
+                            marginTop: '3px'
+                        }}>* {siteErrors?.page_header_image[0]}</small>}
                     </div>
                 </div>
             </div>

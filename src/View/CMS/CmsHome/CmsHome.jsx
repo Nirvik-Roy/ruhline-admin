@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import './CmsHome.css'
 import { getAllCmsData, putAllCmsData } from '../../../utils/cms.js'
 const CmsHome = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [homepageErrors,sethomePageErrors] = useState()
     const [optionsData, setoptionsData] = useState([
         {
             id: 1,
@@ -162,7 +163,7 @@ const CmsHome = () => {
             { homepageFormData.articles_secondary_headline && formData.append('section_06[secondary_headline]', homepageFormData.articles_secondary_headline) }
 
             const res = await putAllCmsData('/admin/home-page', formData);
-
+            sethomePageErrors(res)
         } catch (err) {
             console.log(err)
         } finally {
