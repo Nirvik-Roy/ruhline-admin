@@ -131,6 +131,27 @@ const SiteDetails = () => {
         }
     }
 
+    const cancelAll = () =>{
+        setsiteDetailsForm({
+            favicon:  '',
+            header_logo:  '',
+            page_header_image:   '',
+            footer_logo:  '',
+            footer_description:   '',
+            copyright:   '',
+            facebook_url:  '',
+            instagram_url:   '',
+            linkedin_url:   '',
+            address_line_1:  '',
+            address_line_2:  '',
+            landmark:  '',
+            city_id:  '',
+            state_id:  '',
+            country_id: '',
+            zipcode:   ''
+        })
+    }
+
 
 
     return (
@@ -144,7 +165,7 @@ const SiteDetails = () => {
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div>
+                        <div onClick={(() => cancelAll())}>
                             <Button children={'Cancel'} styles={{
                                 color: 'var(--text-color)',
                                 border: 'none',
