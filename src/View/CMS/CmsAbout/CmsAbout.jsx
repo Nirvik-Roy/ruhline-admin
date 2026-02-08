@@ -95,57 +95,29 @@ const CmsAbout = () => {
         try {
             setloading(true)
             const formData = new FormData()
-
             formData.append('section_one[headline]', missionData?.sectionHeadline || "")
-
-
-
             formData.append('section_one[secondary_headline]', missionData?.sectionSecondaryHeadline || "")
-
-
             formData.append('section_one[description]', sectionDescription || "")
-
-
             if (sectionAboutImage instanceof File) {
                 formData.append('section_one[about_us_image]', sectionAboutImage)
             }
-
             if (values.length > 0) {
                 values.forEach((e, index) => {
-
                     formData.append(`mission_vision_values[${index}][type]`, e?.type || "")
-
-
                     if (e?.icon_image && e?.icon_image instanceof File) {
                         formData.append(`mission_vision_values[${index}][icon_image]`, e?.icon_image)
                     }
-
-
                     formData.append(`mission_vision_values[${index}][title]`, e?.title || "")
-
-
-
                     formData.append(`mission_vision_values[${index}][description]`, e?.description || "")
 
                 })
             }
-
-
             formData.append('founder[headline]', missionData.founderHeadline || "")
-
-
-
             formData.append('founder[secondary_headline]', missionData.founderSecondaryHeadline || "")
-
-
-
             formData.append('founder[description]', founderDescription || "")
-
-
             if (founderImage && founderImage instanceof File) {
                 formData.append('founder[image]', founderImage)
             }
-
             const res = await putAllCmsData('/admin/about-page', formData);
             console.log(res)
         } catch (err) {
