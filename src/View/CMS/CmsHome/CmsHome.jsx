@@ -199,7 +199,7 @@ const CmsHome = () => {
             coaches_secondary_headline: singleHomePageData?.section_05?.secondary_headline || '',
             articles_headline: singleHomePageData?.section_06
                 ?.headline || '',
-            articles_secondary_headline: singleHomePageData?.section_05?.secondary_headline || ''
+            articles_secondary_headline: singleHomePageData?.section_06?.secondary_headline || ''
         })
         setoptionsData(singleHomePageData?.section_04?.options)
         setheroSectionImage(singleHomePageData?.section_01?.hero_section_image || null)
