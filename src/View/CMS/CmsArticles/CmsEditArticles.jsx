@@ -359,14 +359,19 @@ const CmsEditArticles = () => {
                                                 <p>Drag your files or <span>Browse</span></p>
                                                 <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
                                             </>}
+                                            {(e?.uploadImage instanceof File) && (
+                                                <img
+                                                    src={URL.createObjectURL(e.uploadImage)}
+                                                    style={{
+                                                        width: '100%',
+                                                        objectFit: 'contain',
+                                                        height: '95%'
+                                                    }}
+                                                />
+                                            )}
 
-                                            {e?.uploadImage != singleArticle?.sections[i]?.image && e?.uploadImage && <img src={URL.createObjectURL(e?.uploadImage)} style={{
-                                                width: '100%',
-                                                objectFit: 'contain',
-                                                height: '95%'
-                                            }} />}
 
-                                            {e?.uploadImage == singleArticle?.sections[i]?.image && singleArticle?.sections[i] && <img src={singleArticle?.sections[i]?.image} style={{
+                                            {typeof e?.uploadImage === 'string' && <img src={e?.uploadImage} style={{
                                                 width: '100%',
                                                 objectFit: 'contain',
                                                 height: '95%'
