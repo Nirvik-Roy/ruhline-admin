@@ -110,14 +110,14 @@ const SiteDetails = () => {
             { headerLogo && formData.append('header_logo', headerLogo) }
             { pageHeaderlogo && formData.append('page_header_image', pageHeaderlogo) }
             { footerLogo && formData.append('footer_logo', footerLogo) }
-            { footerDescription && formData.append('footer_description', footerDescription) }
-            { siteDetailsForm.copyright && formData.append('copyright', siteDetailsForm.copyright) }
-            { siteDetailsForm.facebook_url && formData.append('facebook_url', siteDetailsForm.facebook_url) }
-            { siteDetailsForm.instagram_url && formData.append('instagram_url', siteDetailsForm.instagram_url) }
-            { siteDetailsForm.linkedin_url && formData.append('linkedin_url', siteDetailsForm.linkedin_url) }
-            { siteDetailsForm.address_line_1 && formData.append('address_line_1', siteDetailsForm.address_line_1) }
-            { siteDetailsForm.address_line_2 && formData.append('address_line_2', siteDetailsForm.address_line_2) }
-            { siteDetailsForm.landmark && formData.append('landmark', siteDetailsForm.landmark) }
+            formData.append('footer_description', footerDescription || "")
+            formData.append('copyright', siteDetailsForm.copyright || "")
+            formData.append('facebook_url', siteDetailsForm.facebook_url || "")
+            formData.append('instagram_url', siteDetailsForm.instagram_url || "")
+            formData.append('linkedin_url', siteDetailsForm.linkedin_url || "")
+            formData.append('address_line_1', siteDetailsForm.address_line_1 || "")
+            formData.append('address_line_2', siteDetailsForm.address_line_2 || "")
+            formData.append('landmark', siteDetailsForm.landmark || "")
             { siteDetailsForm.city_id && formData.append('city_id', siteDetailsForm.city_id) }
             { siteDetailsForm.state_id && formData.append('state_id', siteDetailsForm.state_id) }
             { siteDetailsForm.country_id && formData.append('country_id', siteDetailsForm.country_id) }
@@ -131,24 +131,24 @@ const SiteDetails = () => {
         }
     }
 
-    const cancelAll = () =>{
+    const cancelAll = () => {
         setsiteDetailsForm({
-            favicon:  '',
-            header_logo:  '',
-            page_header_image:   '',
-            footer_logo:  '',
-            footer_description:   '',
-            copyright:   '',
-            facebook_url:  '',
-            instagram_url:   '',
-            linkedin_url:   '',
-            address_line_1:  '',
-            address_line_2:  '',
-            landmark:  '',
-            city_id:  '',
-            state_id:  '',
+            favicon: '',
+            header_logo: '',
+            page_header_image: '',
+            footer_logo: '',
+            footer_description: '',
+            copyright: '',
+            facebook_url: '',
+            instagram_url: '',
+            linkedin_url: '',
+            address_line_1: '',
+            address_line_2: '',
+            landmark: '',
+            city_id: '',
+            state_id: '',
             country_id: '',
-            zipcode:   ''
+            zipcode: ''
         })
     }
 
