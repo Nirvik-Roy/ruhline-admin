@@ -95,17 +95,16 @@ const CmsAbout = () => {
         try {
             setloading(true)
             const formData = new FormData()
-            if (missionData.sectionHeadline != '') {
-                formData.append('section_one[headline]', missionData.sectionHeadline)
-            }
 
-            if (missionData.sectionSecondaryHeadline != '') {
-                formData.append('section_one[secondary_headline]', missionData.sectionSecondaryHeadline)
-            }
+            formData.append('section_one[headline]', missionData?.sectionHeadline || "")
 
-            if (sectionDescription) {
-                formData.append('section_one[description]', sectionDescription)
-            }
+
+
+            formData.append('section_one[secondary_headline]', missionData?.sectionSecondaryHeadline || "")
+
+
+            formData.append('section_one[description]', sectionDescription || "")
+
 
             if (sectionAboutImage instanceof File) {
                 formData.append('section_one[about_us_image]', sectionAboutImage)
@@ -113,35 +112,35 @@ const CmsAbout = () => {
 
             if (values.length > 0) {
                 values.forEach((e, index) => {
-                    if (e?.type) {
-                        formData.append(`mission_vision_values[${index}][type]`, e?.type)
-                    }
+
+                    formData.append(`mission_vision_values[${index}][type]`, e?.type || "")
+
 
                     if (e?.icon_image && e?.icon_image instanceof File) {
                         formData.append(`mission_vision_values[${index}][icon_image]`, e?.icon_image)
                     }
 
-                    if (e?.title) {
-                        formData.append(`mission_vision_values[${index}][title]`, e?.title)
-                    }
 
-                    if (e?.description) {
-                        formData.append(`mission_vision_values[${index}][description]`, e?.description)
-                    }
+                    formData.append(`mission_vision_values[${index}][title]`, e?.title || "")
+
+
+
+                    formData.append(`mission_vision_values[${index}][description]`, e?.description || "")
+
                 })
             }
 
-            if (missionData.founderHeadline != '') {
-                formData.append('founder[headline]', missionData.founderHeadline)
-            }
 
-            if (missionData.founderSecondaryHeadline != '') {
-                formData.append('founder[secondary_headline]', missionData.founderSecondaryHeadline)
-            }
+            formData.append('founder[headline]', missionData.founderHeadline || "")
 
-            if (founderDescription) {
-                formData.append('founder[description]', founderDescription)
-            }
+
+
+            formData.append('founder[secondary_headline]', missionData.founderSecondaryHeadline || "")
+
+
+
+            formData.append('founder[description]', founderDescription || "")
+
 
             if (founderImage && founderImage instanceof File) {
                 formData.append('founder[image]', founderImage)
