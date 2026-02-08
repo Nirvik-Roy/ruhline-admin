@@ -32,3 +32,21 @@
 .toolbar button:last-child{
     text-decoration: underline;
 }
+/* Add this to prevent empty content issues */
+.editor:empty::before {
+    content: attr(placeholder);
+    color: #999;
+    pointer-events: none;
+}
+
+.editor:not(:focus):empty::after {
+    content: '';
+    display: inline-block;
+}
+
+/* Style for read-only mode */
+.editor-readonly {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    border-color: #ddd;
+}
