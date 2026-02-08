@@ -80,57 +80,53 @@ const CmsHome = () => {
         try {
             setloading(true);
             const formData = new FormData();
-            if (homepageFormData.hero_headline) {
-                formData.append('section_01[hero_headline]', homepageFormData.hero_headline);
-            }
+            formData.append('section_01[hero_headline]', homepageFormData?.hero_headline || '');
 
             if (heroSectionImage instanceof File) {
                 formData.append('section_01[hero_section_image]', heroSectionImage);
             }
 
             formData.append('section_01[hero_description]', heroDescription || "");
-            console.log(heroDescription)
 
-            if (homepageFormData.about_headline) {
-                formData.append('section_02[headline]', homepageFormData.about_headline);
-            }
+
+            formData.append('section_02[headline]', homepageFormData?.about_headline || "");
+
 
             if (aboutSectionImage instanceof File) {
                 formData.append('section_02[about_us_section_image]', aboutSectionImage);
             }
 
-            if (homepageFormData.about_secondary_headline) {
-                formData.append('section_02[secondary_headline]', homepageFormData.about_secondary_headline);
-            }
 
-            if (aboutDescription) {
-                formData.append('section_02[description]', aboutDescription);
-            }
+            formData.append('section_02[secondary_headline]', homepageFormData?.about_secondary_headline || "");
+
+
+
+            formData.append('section_02[description]', aboutDescription || "");
+
 
             if (homepageFormData.about_button_name) {
-                formData.append('section_02[button_name]', homepageFormData.about_button_name);
-            }
-
-            if (homepageFormData.about_button_url) {
-                formData.append('section_02[button_url]', homepageFormData.about_button_url);
-            }
-
-            if (homepageFormData.programs_headline) {
-                formData.append('section_03[headline]', homepageFormData.programs_headline);
+                formData.append('section_02[button_name]', homepageFormData?.about_button_name);
             }
 
 
-            if (homepageFormData.programs_secondary_headline) {
-                formData.append('section_03[secondary_headline]', homepageFormData.programs_secondary_headline);
-            }
+            formData.append('section_02[button_url]', homepageFormData?.about_button_url || "");
 
-            if (homepageFormData.why_choose_us_headline) {
-                formData.append('section_04[headline]', homepageFormData.why_choose_us_headline);
-            }
 
-            if (homepageFormData.why_choose_use_secondary_headline) {
-                formData.append('section_04[secondary_headline]', homepageFormData.why_choose_use_secondary_headline);
-            }
+            formData.append('section_03[headline]', homepageFormData?.programs_headline || "");
+
+
+
+
+            formData.append('section_03[secondary_headline]', homepageFormData?.programs_secondary_headline || "");
+
+
+
+            formData.append('section_04[headline]', homepageFormData?.why_choose_us_headline || "");
+
+
+
+            formData.append('section_04[secondary_headline]', homepageFormData?.why_choose_use_secondary_headline || "");
+
 
             if (whyChooseImage instanceof File) {
                 formData.append('section_04[why_choose_us_section_image]', whyChooseImage);
@@ -153,13 +149,13 @@ const CmsHome = () => {
                     formData.append(`section_04[options][${index}][sort_order]`, index)
                 });
             }
-            { homepageFormData.coaches_headline && formData.append('section_05[headline]', homepageFormData.coaches_headline) }
+            { formData.append('section_05[headline]', homepageFormData.coaches_headline || "") }
 
-            { homepageFormData.coaches_secondary_headline && formData.append('section_05[secondary_headline]', homepageFormData.coaches_secondary_headline) }
+            { formData.append('section_05[secondary_headline]', homepageFormData.coaches_secondary_headline || "") }
 
-            { homepageFormData.articles_headline && formData.append('section_06[headline]', homepageFormData.articles_headline) }
+            { formData.append('section_06[headline]', homepageFormData.articles_headline || "") }
 
-            { homepageFormData.articles_secondary_headline && formData.append('section_06[secondary_headline]', homepageFormData.articles_secondary_headline) }
+            { formData.append('section_06[secondary_headline]', homepageFormData.articles_secondary_headline || "") }
 
             const res = await putAllCmsData('/admin/home-page', formData);
             sethomePageErrors(res)
