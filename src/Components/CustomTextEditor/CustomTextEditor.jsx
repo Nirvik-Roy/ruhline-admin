@@ -7,37 +7,84 @@ function CustomTextEditor({
     defaultValue = "",
     onChange,
     label,
-    readOnly = false  // New prop with default value
+    readOnly = false
 }) {
     const editorRef = useRef(null);
     const textareaRef = useRef(null);
     const [content, setContent] = useState(defaultValue);
     const [isDirty, setIsDirty] = useState(false);
 
+    // Helper function to normalize empty content
+    const normalizeContent = useCallback((htmlContent) => {
+        if (!htmlContent) return "";
+
+        // Remove all whitespace, <br> tags, and empty divs
+        const testDiv = document.createElement('div');
+        testDiv.innerHTML = htmlContent;
+
+        // Check if there's any visible text content
+        const hasContent = testDiv.textContent && testDiv.textContent.trim().length > 0;
+
+        // Check if there are any meaningful elements (not just formatting)
+        const meaningfulElements = testDiv.querySelectorAll('*');
+        let hasMeaningfulElements = false;
+
+        meaningfulElements.forEach(el => {
+            // If element has text content, attributes, or is not just a line break
+            if (el.textContent && el.textContent.trim().length > 0) {
+                hasMeaningfulElements = true;
+            }
+            if (el.hasAttributes() && el.attributes.length > 0) {
+                hasMeaningfulElements = true;
+            }
+        });
+
+        // If no content and no meaningful elements, return empty string
+        if (!hasContent && !hasMeaningfulElements) {
+            return "";
+        }
+
+        return htmlContent;
+    }, []);
+
     // Memoized sync function
     const syncContent = useCallback((newContent) => {
-        const htmlContent = newContent || (editorRef.current ? editorRef.current.innerHTML : '');
+        const rawContent = newContent || (editorRef.current ? editorRef.current.innerHTML : '');
+        const normalizedContent = normalizeContent(rawContent);
 
-        setContent(htmlContent);
+        setContent(normalizedContent);
 
         if (textareaRef.current) {
-            textareaRef.current.value = htmlContent;
+            textareaRef.current.value = normalizedContent;
         }
 
         if (onChange) {
-            onChange(htmlContent);
+            onChange(normalizedContent);
         }
 
         setIsDirty(true);
-    }, [onChange]);
+    }, [onChange, normalizeContent]);
+
+    // Clean up empty content in the editor
+    const cleanEditorContent = useCallback(() => {
+        if (!editorRef.current) return;
+
+        const html = editorRef.current.innerHTML;
+        const normalized = normalizeContent(html);
+
+        if (html !== normalized) {
+            editorRef.current.innerHTML = normalized;
+        }
+    }, [normalizeContent]);
 
     // Initialize with defaultValue
     useEffect(() => {
         if (editorRef.current && defaultValue && !isDirty) {
-            editorRef.current.innerHTML = defaultValue;
-            syncContent(defaultValue);
+            const normalizedDefault = normalizeContent(defaultValue);
+            editorRef.current.innerHTML = normalizedDefault;
+            syncContent(normalizedDefault);
         }
-    }, [defaultValue, isDirty, syncContent]);
+    }, [defaultValue, isDirty, syncContent, normalizeContent]);
 
     // Reset when defaultValue is cleared (e.g., form reset)
     useEffect(() => {
@@ -49,50 +96,57 @@ function CustomTextEditor({
     }, [defaultValue, content, syncContent]);
 
     const applyStyle = (command, value = null) => {
-        if (readOnly) return; // Prevent styling in readOnly mode
+        if (readOnly) return;
         document.execCommand(command, false, value);
+
+        // Clean up after applying style
+        setTimeout(cleanEditorContent, 0);
+
         editorRef.current.focus();
         syncContent();
     };
 
     const handleEditorInput = () => {
-        if (readOnly) return; // Prevent input in readOnly mode
+        if (readOnly) return;
+
+        // Clean up the content during input
+        setTimeout(cleanEditorContent, 0);
+
         syncContent();
     };
 
     const handleEditorBlur = () => {
-        if (readOnly) return; // Prevent sync in readOnly mode
+        if (readOnly) return;
+
+        // Final cleanup on blur
+        cleanEditorContent();
         syncContent();
     };
 
-    // If you want to keep the clear button functionality but disable it in readOnly mode:
-    // const handleClear = () => {
-    //     if (readOnly) return;
-    //     if (editorRef.current) {
-    //         editorRef.current.innerHTML = "";
-    //         syncContent("");
-    //     }
-    // };
+    const handleEditorPaste = (e) => {
+        if (readOnly) {
+            e.preventDefault();
+            return;
+        }
+
+        e.preventDefault();
+        const text = e.clipboardData.getData('text/plain');
+        document.execCommand('insertText', false, text);
+
+        // Clean up after paste
+        setTimeout(() => {
+            cleanEditorContent();
+            syncContent();
+        }, 0);
+    };
 
     return (
         <div className="input_form">
             <label>
                 {label} {required && <span>*</span>}
-                {/* Optional: Show read-only indicator */}
-                {/* {readOnly && (
-                    <span style={{
-                        marginLeft: '10px',
-                        fontSize: '12px',
-                        color: '#666',
-                        fontStyle: 'italic'
-                    }}>
-                        (Read Only)
-                    </span>
-                )} */}
             </label>
 
             <div className="editor-container">
-                {/* Toolbar - only show when not readOnly */}
                 {!readOnly && (
                     <div className="toolbar">
                         <button type="button" onClick={() => applyStyle("bold")} title="Bold">
@@ -113,7 +167,6 @@ function CustomTextEditor({
                     </div>
                 )}
 
-                {/* Hidden textarea for form submission */}
                 <textarea
                     ref={textareaRef}
                     name={name}
@@ -122,42 +175,32 @@ function CustomTextEditor({
                     readOnly
                 />
 
-                {/* Editable Typing Area - conditionally set contentEditable */}
                 <div
                     ref={editorRef}
-                    className={`editor ${readOnly ? 'editor-readonly' : ''}`} // Add CSS class for styling
-                    contentEditable={!readOnly} // Disable editing when readOnly is true
+                    className={`editor ${readOnly ? 'editor-readonly' : ''}`}
+                    contentEditable={!readOnly}
                     suppressContentEditableWarning={true}
                     onInput={handleEditorInput}
                     onBlur={handleEditorBlur}
-                    onPaste={(e) => {
-                        if (readOnly) {
-                            e.preventDefault();
-                            return;
-                        }
-                        e.preventDefault();
-                        const text = e.clipboardData.getData('text/plain');
-                        document.execCommand('insertText', false, text);
-                        syncContent();
-                    }}
+                    onPaste={handleEditorPaste}
                     onKeyDown={(e) => {
                         if (readOnly) {
-                            // Prevent all keyboard modifications in readOnly mode
                             e.preventDefault();
                             return;
                         }
 
-                        // Allow normal editing operations only when not readOnly
                         if (e.key === 'Backspace' || e.key === 'Delete') {
-                            // Let the browser handle it, then sync
-                            setTimeout(() => syncContent(), 0);
+                            setTimeout(() => {
+                                cleanEditorContent();
+                                syncContent();
+                            }, 0);
                         }
                     }}
-                    placeholder={readOnly ? "" : "Type here..."} // Remove placeholder in readOnly mode
+                    placeholder={readOnly ? "" : "Type here..."}
                 />
             </div>
         </div>
     );
 }
 
-export default CustomTextEditor; 
+export default CustomTextEditor;

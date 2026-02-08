@@ -9,7 +9,7 @@ import './CmsHome.css'
 import { getAllCmsData, putAllCmsData } from '../../../utils/cms.js'
 const CmsHome = () => {
     const navigate = useNavigate();
-    const [homepageErrors,sethomePageErrors] = useState()
+    const [homepageErrors, sethomePageErrors] = useState()
     const [optionsData, setoptionsData] = useState([
         {
             id: 1,
@@ -88,9 +88,8 @@ const CmsHome = () => {
                 formData.append('section_01[hero_section_image]', heroSectionImage);
             }
 
-            if (heroDescription) {
-                formData.append('section_01[hero_description]', heroDescription);
-            }
+            formData.append('section_01[hero_description]', heroDescription || "");
+            console.log(heroDescription)
 
             if (homepageFormData.about_headline) {
                 formData.append('section_02[headline]', homepageFormData.about_headline);
