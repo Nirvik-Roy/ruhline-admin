@@ -462,7 +462,7 @@ const CmsHome = () => {
                                             width: '100%',
                                             height: '95%',
                                             objectFit: 'contain'
-                                        }} src={heroSectionImage} />
+                                        }} src={whyChooseImage} />
                                         <input
                                             type='file'
                                             onChange={(e) => setwhyChooseImage(e.target.files[0])}
@@ -506,7 +506,7 @@ const CmsHome = () => {
                                             width: '100%',
                                             height: '95%',
                                             objectFit: 'contain'
-                                        }} src={heroSectionImage} />
+                                        }} src={whyChooseBackgroundImage} />
                                         <input
                                             type='file'
                                             onChange={(e) => setwhychooseBackgroundImage(e.target.files[0])}
