@@ -23,7 +23,6 @@ const ContactInqueriesModal = ({ setisModal, contactId }) => {
     }
   }, [contactId])
 
-  console.log(singleContactData)
   
   return (
     <>
