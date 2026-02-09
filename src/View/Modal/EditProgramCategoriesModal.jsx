@@ -64,6 +64,7 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
             }))
             if (Editprogram.fulfilled.match(result)) {
                 setEditModal(false)
+                fetchPrograms()
             }
         } catch (err) { console.log(err) }
         finally {
@@ -77,9 +78,10 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
             <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit Program Category</h4>
-                <i class="fa-solid fa-xmark" onClick={(() =>{ 
-                dispatch(clearErrors())
-                setEditModal(false)})}></i>
+                <i class="fa-solid fa-xmark" onClick={(() => {
+                    dispatch(clearErrors())
+                    setEditModal(false)
+                })}></i>
                 <div style={{
                     margin: '25px 0',
                     display: 'flex',
