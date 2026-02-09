@@ -22,6 +22,8 @@ const ContactInqueriesModal = ({ setisModal, contactId }) => {
       fetchSingle(contactId)
     }
   }, [contactId])
+
+  console.log(singleContactData)
   
   return (
     <>
@@ -32,7 +34,7 @@ const ContactInqueriesModal = ({ setisModal, contactId }) => {
         <div className='contact_modal_name_wrapper'>
           <p>Name: <span>{singleContactData?.name}</span></p>
           <p>Email: <span>{singleContactData?.email}</span></p>
-          <p>Phone: <span>+{singleContactData?.phone_country_code.id} {singleContactData?.phone}</span></p>
+          <p>Phone: <span>+{singleContactData?.phone_country_code?.phone_code} {singleContactData?.phone}</span></p>
         </div>
         <div className='contact_message_wrapper'>
           <p>Message: </p>
