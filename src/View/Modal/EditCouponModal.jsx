@@ -144,7 +144,7 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
             {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => seteditCoupon(false))}></div>
             <div className='modal_div'>
-                <h4>Add Coupon</h4>
+                <h4>Edit Coupon</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditCoupon(false))}></i>
                 <form className='modal_form'>
                     <div className='codeName_input'>
@@ -272,7 +272,7 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
                         </div>}
                     </div>
                     <div className='change_cancel_wrapper' onClick={(() => handleSubmit())}>
-                        <Button children={'Add'} />
+                        <Button children={'Edit'} />
                     </div>
                 </form>
             </div>

@@ -4,7 +4,7 @@ import Loaders from '../../Components/Loaders/Loaders';
 import Input from '../../Components/Input';
 import Button from '../../Components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { Editprogram } from '../../Store/Slices/ProgramCategorySlice/EditProgramCategorySlice';
+import { clearErrors, Editprogram } from '../../Store/Slices/ProgramCategorySlice/EditProgramCategorySlice';
 const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, allPrograms, editModal }) => {
     const [singleProgram, setsingleProgram] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -41,8 +41,9 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
     }, [])
 
     useEffect(() => {
+        // Only sync errors when modal is open
         setEditErrors(errors);
-    }, [errors])
+    }, [errors]);
 
     useEffect(() => {
         setformData({
@@ -73,10 +74,12 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
     return (
         <>
             {loading && <Loaders />}
-            <div className='modal_wrapper' onClick={(() => setEditModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit Program Category</h4>
-                <i class="fa-solid fa-xmark" onClick={(() => setEditModal(false))}></i>
+                <i class="fa-solid fa-xmark" onClick={(() =>{ 
+                dispatch(clearErrors())
+                setEditModal(false)})}></i>
                 <div style={{
                     margin: '25px 0',
                     display: 'flex',

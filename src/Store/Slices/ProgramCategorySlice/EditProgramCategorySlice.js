@@ -32,25 +32,30 @@ const EditprogramSlice = createSlice({
         errors: [],
         isEdited: false,
     },
+    reducers: {
+        clearErrors(state) {
+            state.errors = [];
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(Editprogram.pending, (state) => {
             state.editLoading = true,
-            state.errors = [];
+                state.errors = [];
             state.isEdited = false
         })
 
         builder.addCase(Editprogram.fulfilled, (state) => {
             state.errors = [];
             state.editLoading = false,
-            state.isEdited = true
+                state.isEdited = true
         })
 
         builder.addCase(Editprogram.rejected, (state, action) => {
             state.isEdited = false,
-            state.editLoading = false,
-            state.errors = action.payload
+                state.editLoading = false,
+                state.errors = action.payload
         })
     }
 })
-
+export const { clearErrors } = EditprogramSlice.actions
 export default EditprogramSlice.reducer;

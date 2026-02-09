@@ -144,7 +144,10 @@ const ProgramCategories = () => {
                                                     top:'40px',
                                                     height:'fit-content'
                                                 }}>
-                                                    <p onClick={(() => e?.id)}>Edit</p>
+                                                    <p onClick={(() => {
+                                                        setEditIndex(e?.id);
+                                                        setEditModal(true)
+                                                    })}>Edit</p>
                                                     <p onClick={(() => {
                                                         handleDelete(e?.id)
                                                     })}>Delete</p>
