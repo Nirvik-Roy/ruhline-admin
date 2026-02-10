@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
-const AddCategoryModal = ({setisModal}) => {
+const AddCategoryModal = ({ setisModal, postCategories, setcardGame, cardGame }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
@@ -14,12 +14,13 @@ const AddCategoryModal = ({setisModal}) => {
                     flexDirection: 'column',
                     rowGap: '20px'
                 }}>
-                    <Input label={'Card Category Name'} required={true} placeholder={'Cards Category 1'} />
+                    <Input value={cardGame} onChange={((e) => setcardGame(e.target.value))} label={'Card Category Name'} required={true} placeholder={'Enter card category'} />
                 </div>
-
-                <Button children={'Add'} styles={{
-                    marginLeft: 'auto'
-                }} />
+                <div onClick={postCategories}>
+                    <Button children={'Add'} styles={{
+                        marginLeft: 'auto'
+                    }} />
+                </div>
             </div>
         </>
     )
