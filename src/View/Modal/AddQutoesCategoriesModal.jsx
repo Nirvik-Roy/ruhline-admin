@@ -1,9 +1,9 @@
 import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
-const AddQutoesCategoriesModal = ({setisModal}) => {
-  return (
-    <>
+const AddQutoesCategoriesModal = ({ setisModal, setquoteName, postCategories, quoteName }) => {
+    return (
+        <>
             <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
             <div className='modal_div'>
                 <h4>Add Quotes Category</h4>
@@ -11,15 +11,17 @@ const AddQutoesCategoriesModal = ({setisModal}) => {
                 <div style={{
                     margin: '25px 0'
                 }}>
-                    <Input label={'Quotes Category Name'} required={true} placeholder={'Quotes Category 1'} />
+                    <Input onChange={((e) => setquoteName(e.target.value))} label={'Quotes Category Name'} value={quoteName} required={true} placeholder={'Enter category name'} />
                 </div>
+                <div onClick={postCategories}>
 
-                <Button children={'Add'} styles={{
-                    marginLeft: 'auto'
-                }} />
+                    <Button children={'Add'} styles={{
+                        marginLeft: 'auto'
+                    }} />
+                </div>
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default AddQutoesCategoriesModal

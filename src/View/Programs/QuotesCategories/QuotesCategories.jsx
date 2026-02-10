@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../Components/Button.jsx';
 import Pagination from '../../../Components/Pagination/Pagination.jsx';
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import AddQutoesCategoriesModal from '../../Modal/AddQutoesCategoriesModal.jsx';
+import toast from 'react-hot-toast';
+import { getAllquoteCategory, postQuoteCategory } from '../../../utils/Program.js';
+import Loaders from '../../../Components/Loaders/Loaders.jsx'
+import EditQuoteCategory from '../../Modal/EditQuoteCategory.jsx';
+import { commonDelelteApi } from '../../../utils/common.js';
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx';
 
 const QuotesCategories = () => {
     const [index, setIndex] = useState([]);
+    const dropdownRef = useRef(null);
+    const [quoteName, setquoteName] = useState()
+    const [loading, setloading] = useState(false);
+    const [quoteCategoryData, setquoteCategoryData] = useState([])
     const navigate = useNavigate();
-    const [isModal, setisModal] = useState(false)
+    const [isModal, setisModal] = useState(false);
+    const [quoteId, setquoteId] = useState();
+    const [editModal, seteditModal] = useState(false);
+    const [deleteId,setdeleId] = useState();
+    const [deleleteModal,setdeleteModal] = useState(false)
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -16,9 +30,77 @@ const QuotesCategories = () => {
             setIndex([...index, i])
         }
     }
+    const fetchQuotes = async () => {
+        try {
+            setloading(true)
+            const res = await getAllquoteCategory()
+            console.log(res);
+            setquoteCategoryData(res?.data?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchQuotes()
+    }, [])
+    const postCategories = async () => {
+        if (quoteName != '') {
+            try {
+                setloading(true);
+                const res = await postQuoteCategory({
+                    name: quoteName
+                });
+                if (res?.success) {
+                    fetchQuotes()
+                    setisModal(false)
+                    setquoteName('')
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        } else {
+            toast.error('Plz enter the filed...')
+        }
+    }
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
+    const deleteFunc = async() =>{
+        setloading(true)
+        const res = await commonDelelteApi('/admin/quote-category', deleteId);
+        if(res?.success){
+          setloading(false)
+          setdeleteModal(false)
+          fetchQuotes();
+          
+        }
+    }
+
+    const handleDelete = (id)=>{
+       setdeleId(id)
+       setdeleteModal(true)
+    }
     return (
         <>
-            {isModal && <AddQutoesCategoriesModal setisModal={setisModal} />}
+            {loading && <Loaders />}
+            {deleleteModal && <DeleteModal details={'Do you really want to delete this category?'} title={'Delete Quote Category'} setdeleteModal={setdeleteModal} onClick={deleteFunc}/>}
+            {isModal && <AddQutoesCategoriesModal quoteName={quoteName} setquoteName={setquoteName} postCategories={postCategories} setisModal={setisModal} />}
+            {editModal && <EditQuoteCategory fetchQuotes={fetchQuotes} quoteId={quoteId} seteditModal={seteditModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -57,18 +139,25 @@ const QuotesCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {quoteCategoryData?.length <= 0 && <td colSpan={12}>No quotes categories available...</td>}
+                            {quoteCategoryData?.length > 0 && quoteCategoryData?.map((e, i) => (
                                 <tr>
                                     <td>
-                                        Quotes Category 1
+                                        {e?.name}
                                     </td>
-                                    <td>12</td>
-                                    <td>
+                                    <td>{e?.quotes_count}</td>
+                                    <td ref={dropdownRef}>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
-                                        {index.includes(i) && <div className='actions_wrapper'>
-                                            <p onClick={(() => navigate('/dashboard/programs/quote-categories/2'))}>View</p>
-                                            <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
-                                            <p>Delete</p>
+                                        {index.includes(i) && <div style={{
+                                            width: '50%',
+                                            left: '0'
+                                        }} className='actions_wrapper'>
+                                            <p onClick={(() => navigate(`/dashboard/programs/quote-categories/${e?.id}`))}>View</p>
+                                            <p onClick={(() => {
+                                                setquoteId(e?.id);
+                                                seteditModal(true)
+                                            })}>Edit</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>
