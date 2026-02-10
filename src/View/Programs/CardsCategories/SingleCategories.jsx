@@ -1,14 +1,31 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../Components/Button.jsx';
 import Pagination from '../../../Components/Pagination/Pagination.jsx';
 import ellipse from '../../../assets/_MoreIcon_.svg'
 import AddCardModal from '../../Modal/AddCardModal.jsx';
+import toast from 'react-hot-toast';
+import { commonDelelteApi } from '../../../utils/common.js';
+import { getAllcards, getSingleCard, getSingleCardCategory, postCard } from '../../../utils/Program.js';
+import EditCardModal from '../../Modal/EditCardModal.jsx';
+import Loaders from '../../../Components/Loaders/Loaders.jsx';
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx';
 
 const SingleCategories = () => {
     const [index, setIndex] = useState([]);
     const navigate = useNavigate();
-    const [isModal, setisModal] = useState(false)
+    const [isModal, setisModal] = useState(false);
+    const [loading, setloading] = useState(false)
+    const [allCardsdata, setallCardsdata] = useState([]);
+    const [isEditModal, setisEditModal] = useState(false)
+    const [cardId, setcardId] = useState()
+    const [cardName, setcardName] = useState('');
+    const [cardDescription, setcardDescription] = useState()
+    const dropdownRef = useRef(null);
+    const [singleCardData, setsingleCardData] = useState({})
+    const [deleteId, setdeleId] = useState();
+    const [deleleteModal, setdeleteModal] = useState(false)
+    const { id } = useParams()
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -16,14 +33,90 @@ const SingleCategories = () => {
             setIndex([...index, i])
         }
     }
+    const fetchCards = async () => {
+        setloading(true)
+        const res = await getAllcards(id);
+        if (res?.success) {
+            setallCardsdata(res?.data?.data)
+        }
+        setloading(false)
+    }
+
+    console.log(allCardsdata)
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
+
+    const fetchSingleQuoteCategory = async () => {
+        setloading(true)
+        const res = await getSingleCardCategory(id);
+        if (res?.success) {
+            setsingleCardData(res?.data)
+        }
+        setloading(false)
+    }
+
+    useEffect(() => {
+        fetchCards()
+        fetchSingleQuoteCategory()
+    }, [id])
+    const addCardFunc = async () => {
+        if (cardName != "" && cardDescription != '') {
+            setloading(true)
+            const res = await postCard({
+                name: cardName,
+                card_category_id: id,
+                description: cardDescription || ''
+            });
+            if (res?.success) {
+                fetchCards()
+                fetchSingleQuoteCategory()
+                setisModal(false)
+                setcardDescription("")
+                setcardName("")
+            }
+            setloading(false)
+        } else {
+            toast.error("Plz enter the fields")
+        }
+    }
+    const deleteFunc = async () => {
+        setloading(true)
+        const res = await commonDelelteApi('/admin/card-category/cards', deleteId);
+        if (res?.success) {
+            setloading(false)
+            setdeleteModal(false)
+            fetchCards();
+            setIndex([])
+        }
+        setloading(false)
+    }
+
+    const handleDelete = (id) => {
+        setdeleId(id)
+        setdeleteModal(true)
+    }
     return (
         <>
-            {isModal && <AddCardModal setisModal={setisModal} />}
+            {loading && <Loaders />}
+            {isModal && <AddCardModal addCardFunc={addCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} setisModal={setisModal} />}
+            {deleleteModal && <DeleteModal details={'Do you really want to delete this card?'} setdeleteModal={setdeleteModal} title={'Delete card'} onClick={deleteFunc} />}
+            {isEditModal && <EditCardModal setisEditModal={setisEditModal} fetchCards={fetchCards} cardId={cardId} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
-                        <h2>Cards Category 1</h2>
-                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/card/categories'))}>Cards Categories</span> / <span onClick={(() => navigate('/dashboard/programs/card/categories/1'))}>Cards Category 1</span></small>
+                        <h2>{singleCardData?.name}</h2>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Programs</span> / <span onClick={(() => navigate('/dashboard/programs/card/categories'))}>Cards Categories</span> / <span onClick={(() => navigate(`/dashboard/programs/card/categories/${id}`))}>{singleCardData?.name}</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -56,7 +149,8 @@ const SingleCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {allCardsdata?.length <= 0 && <td colSpan={12}>No cards found...</td>}
+                            {allCardsdata?.length > 0 && allCardsdata?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -64,20 +158,31 @@ const SingleCategories = () => {
                                         }}>
 
                                             <div className='customer_details_wrapper'>
-                                                <p>Anxiety</p>
+                                                <p>{e?.name}</p>
                                                 <p style={{
                                                     fontSize: '10px'
-                                                }}>Card 1</p>
+                                                }}>{e?.card_category?.name}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi...</td>
-                                    <td>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
-                                        {index.includes(i) && <div className='actions_wrapper'>
-                                            <p>View</p>
-                                            <p onClick={(() => { seteditCoachModal(true) })}>Edit</p>
-                                            <p>Delete</p>
+                                    <td>{e?.description}</td>
+                                    <td ref={dropdownRef} style={{
+                                        position: 'relative'
+                                    }}>
+                                        <img onClick={((event) => {
+                                            event.stopPropagation()
+                                            indexFunction(i)
+                                        })} src={ellipse} />
+                                        {index.includes(i) && <div className='actions_wrapper' style={{
+                                            width: 'fit-content',
+                                            left: '70px',
+                                            bottom: '-80px'
+                                        }}>
+                                            <p onClick={(() => {
+                                                setcardId(e?.id);
+                                                setisEditModal(true)
+                                            })}>Edit</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>

@@ -57,12 +57,12 @@ const EditCardCategory = ({ cardId, seteditModal, fetchCards }) => {
           {loading && <Loaders />}
           <div className='modal_wrapper' onClick={(() => seteditModal(false))}></div>
           <div className='modal_div'>
-              <h4>Edit Quotes Category</h4>
+              <h4>Edit Card Category</h4>
               <i class="fa-solid fa-xmark" onClick={(() => seteditModal(false))}></i>
               <div style={{
                   margin: '25px 0'
               }}>
-                  <Input value={cardname} onChange={((e) => setcardname(e.target.value))} label={'Quotes Category Name'} required={true} placeholder={'Enter category name'} />
+                  <Input value={cardname} onChange={((e) => setcardname(e.target.value))} label={'Card Category Name'} required={true} placeholder={'Enter category name'} />
               </div>
               <div onClick={editCategories}>
                   <Button children={'Edit'} styles={{

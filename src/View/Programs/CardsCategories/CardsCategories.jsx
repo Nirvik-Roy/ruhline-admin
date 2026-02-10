@@ -91,7 +91,7 @@ const CardsCategories = () => {
                 setloading(false)
                 setdeleteModal(false)
                 fetchCards();
-                setIndex(null)
+                setIndex([])
             }
         }
     

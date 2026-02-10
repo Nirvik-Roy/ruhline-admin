@@ -337,3 +337,85 @@ export const getSingleCardCategory = async (id) => {
         }
     }
 }
+
+
+export const getAllcards = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/card-category/cards?card_category_id=${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postCard = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/card-category/cards`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote Added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const editCard = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/card-category/cards/${id}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote edited succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getSingleCard = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/card-category/cards/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}

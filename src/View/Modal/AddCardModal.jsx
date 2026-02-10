@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import Textarea from '../../Components/Textarea'
-const AddCardModal = ({ setisModal }) => {
+const AddCardModal = ({ setisModal, cardDescription, setcardDescription, cardName, setcardName, addCardFunc }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
@@ -16,13 +16,15 @@ const AddCardModal = ({ setisModal }) => {
                     rowGap: '20px'
                 }}>
 
-                    <Input label={'Card Name'} required={true} placeholder={'Anxiety'} />
-                    <Textarea label={'Description'} required={true} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt '} />
+                    <Input value={cardName} onChange={((e) => setcardName(e.target.value))} label={'Card Name'} required={true} placeholder={'Enter card name'} />
+                    <Textarea value={cardDescription} onChange={((e) => setcardDescription(e.target.value))} label={'Description'} required={true} placeholder={'Enter card description '} />
                 </div>
+                <div onClick={addCardFunc}>
 
                 <Button children={'Add'} styles={{
                     marginLeft: 'auto'
                 }} />
+                </div>
             </div>
         </>
     )
