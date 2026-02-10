@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
-const AddQuoteModal = ({setisModal}) => {
+const AddQuoteModal = ({ setisModal, setquoteName, quoteName, addQuoteFunc }) => {
   return (
     <>
          <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
@@ -11,12 +11,14 @@ const AddQuoteModal = ({setisModal}) => {
                 <div style={{
                     margin: '25px 0'
                 }}>
-                    <Input label={'Quote'} required={true} placeholder={'Be who you are and say what you feel'} />
+                  <Input value={quoteName} onChange={((e) => setquoteName(e.target.value))} label={'Quote'} required={true} placeholder={'Add quote'} />
                 </div>
+              <div onClick={addQuoteFunc}>
 
                 <Button children={'Add'} styles={{
                     marginLeft: 'auto'
                 }} />
+                 </div>
             </div>
     </>
   )

@@ -21,8 +21,8 @@ const QuotesCategories = () => {
     const [isModal, setisModal] = useState(false);
     const [quoteId, setquoteId] = useState();
     const [editModal, seteditModal] = useState(false);
-    const [deleteId,setdeleId] = useState();
-    const [deleleteModal,setdeleteModal] = useState(false)
+    const [deleteId, setdeleId] = useState();
+    const [deleleteModal, setdeleteModal] = useState(false)
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -80,25 +80,25 @@ const QuotesCategories = () => {
         };
     }, []);
 
-    const deleteFunc = async() =>{
+    const deleteFunc = async () => {
         setloading(true)
         const res = await commonDelelteApi('/admin/quote-category', deleteId);
-        if(res?.success){
-          setloading(false)
-          setdeleteModal(false)
-          fetchQuotes();
-          
+        if (res?.success) {
+            setloading(false)
+            setdeleteModal(false)
+            fetchQuotes();
+
         }
     }
 
-    const handleDelete = (id)=>{
-       setdeleId(id)
-       setdeleteModal(true)
+    const handleDelete = (id) => {
+        setdeleId(id)
+        setdeleteModal(true)
     }
     return (
         <>
             {loading && <Loaders />}
-            {deleleteModal && <DeleteModal details={'Do you really want to delete this category?'} title={'Delete Quote Category'} setdeleteModal={setdeleteModal} onClick={deleteFunc}/>}
+            {deleleteModal && <DeleteModal details={'Do you really want to delete this category?'} title={'Delete Quote Category'} setdeleteModal={setdeleteModal} onClick={deleteFunc} />}
             {isModal && <AddQutoesCategoriesModal quoteName={quoteName} setquoteName={setquoteName} postCategories={postCategories} setisModal={setisModal} />}
             {editModal && <EditQuoteCategory fetchQuotes={fetchQuotes} quoteId={quoteId} seteditModal={seteditModal} />}
             <div className='dashboard_container'>
@@ -147,7 +147,10 @@ const QuotesCategories = () => {
                                     </td>
                                     <td>{e?.quotes_count}</td>
                                     <td ref={dropdownRef}>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                        <img onClick={((event) => {
+                                            event.stopPropagation()
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div style={{
                                             width: '50%',
                                             left: '0'
