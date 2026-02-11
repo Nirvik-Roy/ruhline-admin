@@ -176,7 +176,7 @@ export const getSingleQuoteCategory = async (id) => {
     }
 }
 
-export const getAllQuotes = async(id)=>{
+export const getAllQuotes = async (id) => {
     const Token = localStorage.getItem('token');
     if (Token && id) {
         try {
@@ -411,6 +411,171 @@ export const getSingleCard = async (id) => {
                 }
             },);
             if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getAllGoalTypes = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/goal-type`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postGoalType = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/goal-type`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote Added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getSingleGoal = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/goal-type/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const editGoalTypes = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/goal-type/${id}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote edited succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+
+export const getAllHabitTypes = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/habit-type`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postHabitType = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/habit-type`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote Added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getSingleHabitType = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/habit-type/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const editHabitTypes = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/habit-type/${id}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote edited succesfully');
                 return res.data
             }
         } catch (err) {

@@ -137,7 +137,7 @@ const CmsHome = () => {
             }
 
 
-            if (optionsData.length > 0) {
+            if (optionsData?.length > 0) {
                 optionsData?.forEach((e, index) => {
                     if (e?.description) {
                         formData.append(`section_04[options][${index}][description]`, e.description);
