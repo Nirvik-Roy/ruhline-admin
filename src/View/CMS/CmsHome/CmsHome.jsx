@@ -45,11 +45,12 @@ const CmsHome = () => {
         );
     }
     const deleteFunc = (id) => {
-        if (id != 1 && optionsData.length != 1) {
+        if(optionsData.length != 1){
             const dummyData = [...optionsData];
             const filteredData = dummyData.filter((e) => e.id != id);
             setoptionsData(filteredData)
         }
+
     }
 
     const [homepageFormData, sethomepageformData] = useState({
@@ -201,7 +202,7 @@ const CmsHome = () => {
                 ?.headline || '',
             articles_secondary_headline: singleHomePageData?.section_06?.secondary_headline || ''
         })
-        setoptionsData(singleHomePageData?.section_04?.options)
+        setoptionsData(singleHomePageData?.section_04?.options.length > 0 && singleHomePageData?.section_04?.options || [])
         setheroSectionImage(singleHomePageData?.section_01?.hero_section_image || null)
         setherodescription(singleHomePageData?.section_01?.hero_description || '')
         setaboutDescription(singleHomePageData?.section_02?.description || '')
@@ -209,6 +210,7 @@ const CmsHome = () => {
         setwhyChooseImage(singleHomePageData?.section_04?.why_choose_us_section_image || null)
         setwhychooseBackgroundImage(singleHomePageData?.section_04?.background_image || null)
     }, [singleHomePageData])
+
     return (
         <>
             {loading && <Loaders />}
@@ -515,7 +517,7 @@ const CmsHome = () => {
                                 )}
                             </div>
                             <div className='option_border_wrapper'>
-                                {optionsData?.map((element, i) => (
+                                {optionsData?.length > 0 && optionsData.map((element, i) => (
                                     <div className='option_title_wrapper'>
                                         <div className='option'>
                                             <h4>Option {i + 1}</h4>
