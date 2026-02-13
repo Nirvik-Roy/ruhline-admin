@@ -84,7 +84,7 @@ const Login = () => {
                         marginTop: '-15px',
                         color: 'rgba(255, 0, 0, 1)',
                         cursor: 'pointer'
-                    }}>{errors.email ? errors?.email[0] : emailErrormessage}</small>
+                    }}>{errors?.email ? errors?.email[0] : emailErrormessage}</small>
                     <div className='input_form' style={{
                         position: 'relative'
                     }}>
@@ -98,7 +98,7 @@ const Login = () => {
                             marginTop: '-15px',
                             color: 'rgba(255, 0, 0, 1)',
                             cursor: 'pointer'
-                        }}>{errors.password && errors.password[0] }</small>
+                        }}>{errors?.password && errors.password[0] }</small>
                         {type && <i style={{
                             position: 'absolute',
                             top: '47px',
