@@ -38,7 +38,7 @@ import QuotesCategories from './View/Programs/QuotesCategories/QuotesCategories'
 import SingleQutoesCategories from './View/Programs/QuotesCategories/SingleQutoesCategories'
 import IntermediateSteps from './View/Programs/IntermediateSteps/IntermediateSteps'
 import ValuesIntermediate from './View/Programs/IntermediateSteps/ValuesIntermediate'
-import GoalSettingStep from './View/Programs/IntermediateSteps/GoalSettingStep'
+import GoalSettingStep from './View/Programs/IntermediateSteps/TheYMethod.jsx'
 import EachGoalQuestions from './View/Programs/IntermediateSteps/EachGoalQuestions'
 import CommonMistakes from './View/Programs/IntermediateSteps/CommonMistakes'
 import CreatePrograms from './View/Programs/CreatePrograms/CreatePrograms'
@@ -55,69 +55,72 @@ import PaymentList from './View/Payouts/PaymentList.jsx'
 import { Toaster } from 'react-hot-toast'
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx'
 import CmsEditArticles from './View/CMS/CmsArticles/CmsEditArticles.jsx'
+import TheYMethod from './View/Programs/IntermediateSteps/TheYMethod.jsx'
+import GoalSettingsPage from './View/Programs/IntermediateSteps/GoalSettingsPage.jsx'
 function App() {
   return (
     <>
       <BrowserRouter>
-      <Toaster toastOptions={{
-        position:'top-right'
-      }}/>
+        <Toaster toastOptions={{
+          position: 'top-right'
+        }} />
         <Routes>
           <Route path={'/'} element={<Login />} />
-          <Route element={<PrivateRoute/>}>
-          <Route path={'/dashboard'} element={<MainLayout />}>
-            <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='coaches' element={<Coaches />} />
-            <Route path='coaches/single-coache/:id' element={<SingleCoache />} />
-            <Route path='coaches/working-shift' element={<CoachesShift />} />
-            <Route path='customers' element={<Customers />} />
-            <Route path='customers/single-customer/:id' element={<SingleCustomer />} />
-            <Route path='support/disputes' element={<Disputes />} />
-            <Route path='coupons' element={<Coupons />} />
-            <Route path='staff' element={<OurStaff />} />
-            <Route path='roles' element={<Roles />} />
-            <Route path='billings' element={<Billings />} />
-            <Route path='billings/single-bill/:id' element={<SingleBilling />} />
-            <Route path='cms' element={<CmsCategories />} />
-            <Route path='cms/site-details' element={<SiteDetails />} />
-            <Route path='cms/cms-home' element={<CmsHome />} />
-            <Route path='cms/cms-about' element={<CmsAbout />} />
-            <Route path='cms/terms-conditions' element={<CmsTermsConditions />} />
-            <Route path='cms/privacy-policy' element={<CmsPrivacy />} />
-            <Route path='cms/refund-policy' element={<CmsRefundPolicy />} />
-            <Route path='cms/contact-queries' element={<CmsContact />} />
-            <Route path='cms/faq/categories' element={<CmsFaq />} />
-            <Route path='cms/faq/mentee' element={<FaqMentee />} />
-            <Route path='cms/faq/mentor' element={<FaqMentor />} />
-            <Route path='cms/articles' element={<CmsArticles />} />
-            <Route path='cms/add-articles' element={<CmsAddArticles />} />
-            <Route path='cms/edit-articles/:id' element={<CmsEditArticles/>}/>
-            <Route path='cms/article-categories' element={<CmsArticleCategories />} />
-            <Route path='programs' element={<Programs />} />
-            <Route path='programs/categories' element={<ProgramCategories />} />
-            <Route path='programs/card/categories' element={<CardsCategories />} />
-            <Route path='programs/card/categories/:id' element={<SingleCategories />} />
-            <Route path='programs/habit-types' element={<HabitTypes />} />
-            <Route path='programs/goal-types' element={<GoalTypes />} />
-            <Route path='programs/quote-categories' element={<QuotesCategories />} />
-            <Route path='programs/quote-categories/:id' element={<SingleQutoesCategories />} />
-            <Route path='programs/intermediate' element={<IntermediateSteps />} />
-            <Route path='programs/intermediate/values-intermediate' element={<ValuesIntermediate />} />
-            <Route path='programs/intermediate/goal-setting' element={<GoalSettingStep />} />
-            <Route path='programs/intermediate/each-goal' element={<EachGoalQuestions />} />
-            <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes />} />
-            <Route path='programs/create-program' element={<CreatePrograms />} />
-            <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
-            <Route path='programs/single-program/:id/values' element={<ValuesModule />} />
-            <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
-            <Route path='programs/card-game/:id/questions' element={<CardGameQuestions />} />
-            <Route path='programs/single-program/:id/wheeloflife' element={<WheelOfLifeModule />} />
-            <Route path='programs/single-program/:id/life-element' element={<SinglelifeElement />} />
-            <Route path='programs/single-program/:id/motivation' element={<MotivationModule />} />
-            <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
-            <Route path='payouts' element={<Payouts />} />
-            <Route path='payouts/payment-list' element={<PaymentList/>}/>
-          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path={'/dashboard'} element={<MainLayout />}>
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='coaches' element={<Coaches />} />
+              <Route path='coaches/single-coache/:id' element={<SingleCoache />} />
+              <Route path='coaches/working-shift' element={<CoachesShift />} />
+              <Route path='customers' element={<Customers />} />
+              <Route path='customers/single-customer/:id' element={<SingleCustomer />} />
+              <Route path='support/disputes' element={<Disputes />} />
+              <Route path='coupons' element={<Coupons />} />
+              <Route path='staff' element={<OurStaff />} />
+              <Route path='roles' element={<Roles />} />
+              <Route path='billings' element={<Billings />} />
+              <Route path='billings/single-bill/:id' element={<SingleBilling />} />
+              <Route path='cms' element={<CmsCategories />} />
+              <Route path='cms/site-details' element={<SiteDetails />} />
+              <Route path='cms/cms-home' element={<CmsHome />} />
+              <Route path='cms/cms-about' element={<CmsAbout />} />
+              <Route path='cms/terms-conditions' element={<CmsTermsConditions />} />
+              <Route path='cms/privacy-policy' element={<CmsPrivacy />} />
+              <Route path='cms/refund-policy' element={<CmsRefundPolicy />} />
+              <Route path='cms/contact-queries' element={<CmsContact />} />
+              <Route path='cms/faq/categories' element={<CmsFaq />} />
+              <Route path='cms/faq/mentee' element={<FaqMentee />} />
+              <Route path='cms/faq/mentor' element={<FaqMentor />} />
+              <Route path='cms/articles' element={<CmsArticles />} />
+              <Route path='cms/add-articles' element={<CmsAddArticles />} />
+              <Route path='cms/edit-articles/:id' element={<CmsEditArticles />} />
+              <Route path='cms/article-categories' element={<CmsArticleCategories />} />
+              <Route path='programs' element={<Programs />} />
+              <Route path='programs/categories' element={<ProgramCategories />} />
+              <Route path='programs/card/categories' element={<CardsCategories />} />
+              <Route path='programs/card/categories/:id' element={<SingleCategories />} />
+              <Route path='programs/habit-types' element={<HabitTypes />} />
+              <Route path='programs/goal-types' element={<GoalTypes />} />
+              <Route path='programs/quote-categories' element={<QuotesCategories />} />
+              <Route path='programs/quote-categories/:id' element={<SingleQutoesCategories />} />
+              <Route path='programs/intermediate' element={<IntermediateSteps />} />
+              <Route path='programs/intermediate/values-intermediate' element={<ValuesIntermediate />} />
+              <Route path='programs/intermediate/y-method' element={<TheYMethod />} />
+              <Route path='programs/intermediate/each-goal' element={<EachGoalQuestions />} />
+              <Route path='programs/intermediate/goal-settings' element={<GoalSettingsPage />} />
+              <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes />} />
+              <Route path='programs/create-program' element={<CreatePrograms />} />
+              <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
+              <Route path='programs/single-program/:id/values' element={<ValuesModule />} />
+              <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
+              <Route path='programs/card-game/:id/questions' element={<CardGameQuestions />} />
+              <Route path='programs/single-program/:id/wheeloflife' element={<WheelOfLifeModule />} />
+              <Route path='programs/single-program/:id/life-element' element={<SinglelifeElement />} />
+              <Route path='programs/single-program/:id/motivation' element={<MotivationModule />} />
+              <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
+              <Route path='payouts' element={<Payouts />} />
+              <Route path='payouts/payment-list' element={<PaymentList />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

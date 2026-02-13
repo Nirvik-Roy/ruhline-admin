@@ -584,3 +584,207 @@ export const editHabitTypes = async (data, id) => {
         }
     }
 }
+
+
+export const postYMethod = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/y-method`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Y method added success');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getYMethod = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/y-method`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+
+export const postEachGoal = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/questions-goal-why`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Goal Added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getEachGoal = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/questions-goal-why`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postGoalSettings = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/goal-settings`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Goal settings added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const getGoalSettings = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/goal-settings`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postCommonMistakes = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/eight-most-common-mistakes`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Mistakes added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getCommonMistakes = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/eight-most-common-mistakes`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postValuesIntermediate = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/values`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Mistakes added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const getValuesIntermediate = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/intermediate-steps/values`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}

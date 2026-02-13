@@ -4,3 +4,8 @@
     flex-direction: column;
     row-gap: 30px;
 }
+.each_goal_grid_wrapper{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap: 15px;
+}

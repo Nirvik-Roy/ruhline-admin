@@ -11,26 +11,21 @@ function CustomTextEditor({
 }) {
     const editorRef = useRef(null);
     const textareaRef = useRef(null);
-    const [content, setContent] = useState(defaultValue);
-    const [isDirty, setIsDirty] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+    const isInternalChange = useRef(false);
 
     // Helper function to normalize empty content
     const normalizeContent = useCallback((htmlContent) => {
         if (!htmlContent) return "";
 
-        // Remove all whitespace, <br> tags, and empty divs
         const testDiv = document.createElement('div');
         testDiv.innerHTML = htmlContent;
 
-        // Check if there's any visible text content
         const hasContent = testDiv.textContent && testDiv.textContent.trim().length > 0;
-
-        // Check if there are any meaningful elements (not just formatting)
         const meaningfulElements = testDiv.querySelectorAll('*');
         let hasMeaningfulElements = false;
 
         meaningfulElements.forEach(el => {
-            // If element has text content, attributes, or is not just a line break
             if (el.textContent && el.textContent.trim().length > 0) {
                 hasMeaningfulElements = true;
             }
@@ -39,7 +34,6 @@ function CustomTextEditor({
             }
         });
 
-        // If no content and no meaningful elements, return empty string
         if (!hasContent && !hasMeaningfulElements) {
             return "";
         }
@@ -47,12 +41,12 @@ function CustomTextEditor({
         return htmlContent;
     }, []);
 
-    // Memoized sync function
-    const syncContent = useCallback((newContent) => {
-        const rawContent = newContent || (editorRef.current ? editorRef.current.innerHTML : '');
-        const normalizedContent = normalizeContent(rawContent);
+    // Sync content to parent
+    const syncContent = useCallback(() => {
+        if (!editorRef.current) return;
 
-        setContent(normalizedContent);
+        const rawContent = editorRef.current.innerHTML;
+        const normalizedContent = normalizeContent(rawContent);
 
         if (textareaRef.current) {
             textareaRef.current.value = normalizedContent;
@@ -61,11 +55,9 @@ function CustomTextEditor({
         if (onChange) {
             onChange(normalizedContent);
         }
-
-        setIsDirty(true);
     }, [onChange, normalizeContent]);
 
-    // Clean up empty content in the editor
+    // Clean up empty content
     const cleanEditorContent = useCallback(() => {
         if (!editorRef.current) return;
 
@@ -77,48 +69,53 @@ function CustomTextEditor({
         }
     }, [normalizeContent]);
 
-    // Initialize with defaultValue
+    // Handle defaultValue changes from parent - ONLY when not focused
     useEffect(() => {
-        if (editorRef.current && defaultValue && !isDirty) {
+        // Only update from parent if the editor is not focused
+        // This prevents cursor jumps while typing
+        if (!isFocused && editorRef.current) {
+            const normalizedDefault = normalizeContent(defaultValue);
+            if (editorRef.current.innerHTML !== normalizedDefault) {
+                isInternalChange.current = false;
+                editorRef.current.innerHTML = normalizedDefault;
+                if (textareaRef.current) {
+                    textareaRef.current.value = normalizedDefault;
+                }
+            }
+        }
+    }, [defaultValue, normalizeContent, isFocused]);
+
+    // Initialize on mount
+    useEffect(() => {
+        if (editorRef.current) {
             const normalizedDefault = normalizeContent(defaultValue);
             editorRef.current.innerHTML = normalizedDefault;
-            syncContent(normalizedDefault);
+            if (textareaRef.current) {
+                textareaRef.current.value = normalizedDefault;
+            }
         }
-    }, [defaultValue, isDirty, syncContent, normalizeContent]);
-
-    // Reset when defaultValue is cleared (e.g., form reset)
-    useEffect(() => {
-        if (editorRef.current && defaultValue === "" && content !== "") {
-            editorRef.current.innerHTML = "";
-            syncContent("");
-            setIsDirty(false);
-        }
-    }, [defaultValue, content, syncContent]);
+    }, []); // Empty deps - only run once
 
     const applyStyle = (command, value = null) => {
         if (readOnly) return;
         document.execCommand(command, false, value);
-
-        // Clean up after applying style
         setTimeout(cleanEditorContent, 0);
-
         editorRef.current.focus();
         syncContent();
     };
 
     const handleEditorInput = () => {
         if (readOnly) return;
-
-        // Clean up the content during input
-        setTimeout(cleanEditorContent, 0);
-
+        isInternalChange.current = true;
         syncContent();
     };
 
-    const handleEditorBlur = () => {
-        if (readOnly) return;
+    const handleEditorFocus = () => {
+        setIsFocused(true);
+    };
 
-        // Final cleanup on blur
+    const handleEditorBlur = () => {
+        setIsFocused(false);
         cleanEditorContent();
         syncContent();
     };
@@ -133,7 +130,6 @@ function CustomTextEditor({
         const text = e.clipboardData.getData('text/plain');
         document.execCommand('insertText', false, text);
 
-        // Clean up after paste
         setTimeout(() => {
             cleanEditorContent();
             syncContent();
@@ -181,6 +177,7 @@ function CustomTextEditor({
                     contentEditable={!readOnly}
                     suppressContentEditableWarning={true}
                     onInput={handleEditorInput}
+                    onFocus={handleEditorFocus}
                     onBlur={handleEditorBlur}
                     onPaste={handleEditorPaste}
                     onKeyDown={(e) => {

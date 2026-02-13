@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use, useEffect, useState } from 'react'
 import Button from '../../../Components/Button'
 import './IntermediateSteps.css'
 import Input from '../../../Components/Input'
@@ -6,11 +6,98 @@ import crossIcon from '../../../assets/content.svg'
 import Textarea from '../../../Components/Textarea'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 import { useNavigate } from 'react-router-dom'
-
+import Loaders from '../../../Components/Loaders/Loaders'
+import { getCommonMistakes, postCommonMistakes } from '../../../utils/Program'
+import toast from 'react-hot-toast'
 const CommonMistakes = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [allMistakesData, setallMistakesData] = useState({})
+    const [headline, setheadline] = useState("");
+    const [loading, setloading] = useState(false)
+    const [mistakesData, setmistakesData] = useState([
+        {
+            id: 0 + 1,
+            description: ''
+        }
+    ])
+
+    const handleMistakes = (data, id) => {
+        setmistakesData(prevItems =>
+            prevItems.map(item =>
+                item.id === id ? { ...item, description: data } : item
+            )
+        );
+    }
+
+    const addMistakes = () => {
+        setmistakesData([
+            ...mistakesData,
+            {
+                id: mistakesData.length + 1,
+                description: ""
+            }
+        ])
+    }
+
+    const deleteOptions = (id) => {
+        if (mistakesData.length != 1) {
+            const dummyData = [...mistakesData];
+            const filteredData = dummyData.filter((e) => e.id != id);
+            setmistakesData(filteredData)
+        }
+    }
+
+    const handleSubmit = async () => {
+        if (headline != '') {
+            try {
+                setloading(true);
+                const formData = new FormData();
+                formData.append('headline', headline || "")
+                if (mistakesData.length > 0) {
+                    mistakesData.forEach((e, index) => {
+                        formData.append(`mistakes[${index}][description]`, e?.description || "")
+                        formData.append(`mistakes[${index}][sort_order] `, index)
+                    })
+                }
+                const res = await postCommonMistakes(formData)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        } else {
+            toast.error('Plz enter the headline field')
+        }
+
+    }
+
+    const fetchData = async () => {
+        try {
+            setloading(true);
+            const res = await getCommonMistakes()
+            setallMistakesData(res?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    useEffect(() => {
+        setheadline(allMistakesData?.headline || "")
+        setmistakesData(allMistakesData?.mistakes || [
+            {
+                id: 0 + 1,
+                description: ""
+            }
+        ])
+    }, [allMistakesData])
     return (
         <>
+            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -19,7 +106,7 @@ const CommonMistakes = () => {
                     </div>
                     <div className='coaches_button_wapper'>
 
-                        <div onClick={(() => setaddCustomer(true))}>
+                        <div>
                             <Button children={'Cancel'} styles={{
                                 fontSize: '13px',
                                 color: 'var(--text-color)',
@@ -27,7 +114,7 @@ const CommonMistakes = () => {
                                 border: 'none'
                             }} />
                         </div>
-                        <div onClick={(() => setaddCustomer(true))}>
+                        <div onClick={handleSubmit}>
                             <Button children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
@@ -36,37 +123,30 @@ const CommonMistakes = () => {
                 </div>
 
                 <div className='values_inputs_wrapper462'>
-                    <Input label={'Headline 1'} required={'true'} placeholder={'Questions for each goal - why?'} />
-                    <CustomTextEditor label={'Description'} required={true} />
-                    <Input label={'Headline 2'} required={'true'} placeholder={'For every goal you have, answer these 3 questions:'} />
-
+                    <Input value={headline} onChange={((e) => setheadline(e.target.value))} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
                 </div>
 
 
                 <div className='cms_faq_wrapper'>
-                    <div className='cms_faq_list'>
-                        <p>Mistake 1</p>
-                        <div className='cms_faq_questions_wrapper'>
-                            <Input label={'Heading'} placeholder={'Motivation'} />
-                            <Textarea label={'Description'} placeholder={'Why do you want to achieve this? '} />
+                    {mistakesData?.length > 0 && mistakesData?.map((e, i) => (
+                        <div className='cms_faq_list'>
+                            <p>Mistake {i + 1}</p>
+                            <div className='cms_faq_questions_wrapper'>
+                                <CustomTextEditor defaultValue={e?.description} onChange={((data) => handleMistakes(data, e?.id))} label={'Description'} />
+                            </div>
+                            <img onClick={(() => deleteOptions(e?.id))} style={i != 0 ? {
+                                visibility: 'visible'
+                            } : {
+                                visibility: 'hidden'
+                            }} src={crossIcon} />
                         </div>
-                        <img src={crossIcon} />
-                    </div>
+                    ))}
 
-
-                    <div className='cms_faq_list'>
-                        <p>Mistake 2</p>
-                        <div className='cms_faq_questions_wrapper'>
-                            <Input label={'Heading'} placeholder={'Reward'} />
-                            <Textarea label={'Description'} placeholder={'What will you do to reward yourself when you achieve this?'} />
-                        </div>
-                        <img src={crossIcon} />
-                    </div>
                 </div>
 
 
-                <div>
-                    <Button children={'Add step'} styles={{
+                <div onClick={addMistakes}>
+                    <Button children={'Add Mistake'} styles={{
                         color: 'var(--text-color)',
                         border: '1px solid var(--primary-color)',
                         padding: '12px 15px',
