@@ -39,14 +39,14 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(1))} src={ellipse} />
                                     {index.includes(1) && <div className='actions_wrapper' style={{
-                                        bottom: '-80px',
+                                        bottom: '-50px',
                                         width: '50%',
                                         left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/values-intermediate`)
                                         })}>View</p>
-                                        <p >Edit</p>
+                                        {/* <p >Edit</p> */}
                                         {/* <p>Delete</p> */}
                                     </div>}
                                 </td>
@@ -58,14 +58,14 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(2))} src={ellipse} />
                                     {index.includes(2) && <div className='actions_wrapper' style={{
-                                        bottom: '-80px',
+                                        bottom: '-50px',
                                         width: '50%',
                                         left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/y-method`)
                                         })}>View</p>
-                                        <p >Edit</p>
+                                        {/* <p >Edit</p> */}
                                         {/* <p>Delete</p> */}
                                     </div>}
                                 </td>
@@ -77,14 +77,14 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(4))} src={ellipse} />
                                     {index.includes(4) && <div className='actions_wrapper' style={{
-                                        bottom: '-80px',
+                                        bottom: '-50px',
                                         width: '50%',
                                         left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/goal-settings`)
                                         })}>View</p>
-                                        <p >Edit</p>
+                                        {/* <p >Edit</p> */}
                                         {/* <p>Delete</p> */}
                                     </div>}
                                 </td>
@@ -96,14 +96,14 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(5))} src={ellipse} />
                                     {index.includes(5) && <div className='actions_wrapper' style={{
-                                        bottom: '-80px',
+                                        bottom: '-50px',
                                         width: '50%',
                                         left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/common-mistakes`)
                                         })}>View</p>
-                                        <p >Edit</p>
+                                        {/* <p >Edit</p> */}
                                         {/* <p>Delete</p> */}
                                     </div>}
                                 </td>
@@ -118,14 +118,14 @@ const IntermediateSteps = () => {
                                 <td>
                                     <img onClick={(() => indexFunction(6))} src={ellipse} />
                                     {index.includes(6) && <div className='actions_wrapper' style={{
-                                        bottom: '-80px',
+                                        bottom: '-40px',
                                         width: '50%',
                                         left: '0px'
                                     }}>
                                         <p onClick={(() => {
                                             navigate(`/dashboard/programs/intermediate/each-goal`)
                                         })}>View</p>
-                                        <p >Edit</p>
+                                        {/* <p >Edit</p> */}
                                         {/* <p>Delete</p> */}
                                     </div>}
                                 </td>
