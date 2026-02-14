@@ -7,7 +7,7 @@ import Input from '../../../Components/Input'
 import Loaders from '../../../Components/Loaders/Loaders'
 import { getGoalSettings, postGoalSettings } from '../../../utils/Program'
 const GoalSettingsPage = () => {
-    const navigate = useNavigate;
+    const navigate = useNavigate();
     const [description2, setdescription2] = useState("");
     const [goalSettingsData,setgoalSettingsData] = useState({})
     const [loading, setloading] = useState(false)
