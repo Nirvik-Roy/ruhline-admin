@@ -146,28 +146,24 @@ const SingleQutoesCategories = () => {
                             {allQuotesData.length > 0 && allQuotesData?.map((e, i) => (
                                 <tr>
                                     <td>{e?.quote}</td>
-                                    <td ref={dropdownRef} >
-                                        <div style={{
-                                            position: 'relative'
+                                    <td ref={dropdownRef} style={{
+                                        position: 'relative'
+                                    }}>
+                                        <img onClick={((event) =>{ 
+                                            event.stopPropagation()
+                                            indexFunction(i)})} src={ellipse} />
+                                        {index.includes(i) && <div className='actions_wrapper' style={{
+                                            width: 'fit-content',
+                                            right: '-50px',
+                                            left:'180px',
+                                            bottom: '-80px'
                                         }}>
-                                            <img onClick={((event) => {
-                                                event.stopPropagation()
-                                                indexFunction(i)
-                                            })} src={ellipse} />
-                                            {index.includes(i) && <div className='actions_wrapper' style={{
-                                                width: 'fit-content',
-                                                right: '-50px',
-                                                left: '25px',
-                                                bottom: '-80px'
-                                            }}>
-                                                <p onClick={(() => {
-                                                    setisEditModal(true)
-                                                    setquoteId(e?.id)
-                                                })}>Edit</p>
-                                                <p onClick={(() => handleDelete(e?.id))}>Delete</p>
-                                            </div>}
-                                    </div>
-                                       
+                                            <p onClick={(() => {
+                                                setisEditModal(true)
+                                                setquoteId(e?.id)
+                                            })}>Edit</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
+                                        </div>}
                                     </td>
                                 </tr>
                             ))}
