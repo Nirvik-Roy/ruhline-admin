@@ -155,7 +155,7 @@ const SingleQutoesCategories = () => {
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             width: 'fit-content',
                                             right: '-50px',
-                                            left:'180px',
+                                            left:'0px',
                                             bottom: '-80px'
                                         }}>
                                             <p onClick={(() => {

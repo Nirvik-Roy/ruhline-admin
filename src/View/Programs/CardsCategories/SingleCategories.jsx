@@ -175,7 +175,7 @@ const SingleCategories = () => {
                                         })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             width: 'fit-content',
-                                            left: '70px',
+                                            left: '0px',
                                             bottom: '-80px'
                                         }}>
                                             <p onClick={(() => {

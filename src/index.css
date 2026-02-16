@@ -30,6 +30,10 @@ td{
     word-wrap: break-word;
 
 }
+.total_table_order_wrapper th:last-child{
+    min-width: 160px;
+    width: 160px;
+}
 
 @media(max-width:480px) {
     .all_heading {
