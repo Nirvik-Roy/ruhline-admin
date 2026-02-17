@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import DOMPurify from 'dompurify';
 import "./CustomTextEditor.css";
 
 function CustomTextEditor({
@@ -14,12 +15,28 @@ function CustomTextEditor({
     const [isFocused, setIsFocused] = useState(false);
     const isInternalChange = useRef(false);
 
+    // Configure DOMPurify to allow basic formatting
+    const purifyConfig = {
+        ALLOWED_TAGS: [
+            'b', 'i', 'u', 'strong', 'em', 'ul', 'ol', 'li',
+            'p', 'br', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+        ],
+        ALLOWED_ATTR: ['style'], // Allow style attributes for basic formatting
+        FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input'],
+        FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'], // Remove event handlers
+        ALLOWED_STYLE: ['font-weight', 'font-style', 'text-decoration'], // Only allow these styles
+        KEEP_CONTENT: true // Keep content even if tags are removed
+    };
+
     // Helper function to normalize empty content
     const normalizeContent = useCallback((htmlContent) => {
         if (!htmlContent) return "";
 
+        // First sanitize with DOMPurify to ensure clean HTML
+        const sanitized = DOMPurify.sanitize(htmlContent, purifyConfig);
+
         const testDiv = document.createElement('div');
-        testDiv.innerHTML = htmlContent;
+        testDiv.innerHTML = sanitized;
 
         const hasContent = testDiv.textContent && testDiv.textContent.trim().length > 0;
         const meaningfulElements = testDiv.querySelectorAll('*');
@@ -38,7 +55,7 @@ function CustomTextEditor({
             return "";
         }
 
-        return htmlContent;
+        return sanitized;
     }, []);
 
     // Sync content to parent
@@ -127,8 +144,21 @@ function CustomTextEditor({
         }
 
         e.preventDefault();
-        const text = e.clipboardData.getData('text/plain');
-        document.execCommand('insertText', false, text);
+
+        // Try to get HTML content first
+        let html = e.clipboardData.getData('text/html');
+
+        if (html) {
+            // Sanitize the HTML with DOMPurify
+            const cleanHtml = DOMPurify.sanitize(html, purifyConfig);
+
+            // Insert the cleaned HTML
+            document.execCommand('insertHTML', false, cleanHtml);
+        } else {
+            // Fallback to plain text if no HTML is available
+            const text = e.clipboardData.getData('text/plain');
+            document.execCommand('insertText', false, text);
+        }
 
         setTimeout(() => {
             cleanEditorContent();
