@@ -149,7 +149,8 @@ const CmsEditArticles = () => {
             formData.append('share_twitter', fixedData.share_twitter)
             formData.append('share_linkedin', fixedData.share_linkedin)
             { fixedThumnailImage && formData.append('thumbnail_image', fixedThumnailImage) }
-            if (dynamicFormstructure.length > 0) {
+            if (dynamicFormstructure?.length > 0) {
+                console.log('Array is not empty')
                 dynamicFormstructure?.forEach((element, index) => {
                     if (element?.heading) {
                         formData.append(`sections[${index}][heading]`, element.heading);
@@ -172,6 +173,8 @@ const CmsEditArticles = () => {
                     }
                     formData.append(`sections[${index}][sort_order]`, index)
                 });
+            }else{
+                console.log('Array is empty')
             }
             const res = await editAllCmsData('/admin/article/article', formData, id);
             setarticlesErrors(res)
