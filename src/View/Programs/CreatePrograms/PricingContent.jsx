@@ -1,21 +1,22 @@
 import React from 'react'
+import Input from '../../../Components/Input'
 
-const PricingContent = () => {
+const PricingContent = ({ staticdata, handleChange }) => {
     return (
         <>
             <div className='other_details_grid_wrapper'>
-                <div className='input_form'>
-                    <label>Original Price <span>*</span></label>
-                    <select>
-                        <option>SAR126</option>
-                    </select>
+                <div className='input_form' style={{
+                    gap: '0'
+                }}>
+                    <label>Original Price(SAR) <span>*</span></label>
+                    <Input onChange={handleChange} name={'originalPrice'} value={staticdata.originalPrice} />
                 </div>
 
-                <div className='input_form'>
+                <div className='input_form' style={{
+                    gap: '0'
+                }}>
                     <label>Sale Price <span>*</span></label>
-                    <select>
-                        <option>SAR96</option>
-                    </select>
+                    <Input name={'salePrice'} onChange={handleChange} value={staticdata.salePrice} />
                 </div>
             </div>
         </>

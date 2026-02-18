@@ -4,36 +4,45 @@ import Textarea from '../../../Components/Textarea'
 import crossIcon from '../../../assets/content.svg'
 import Button from '../../../Components/Button'
 import upload from '../../../assets/Vector (8).svg'
+import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 
-const CreateProgramsBenefits = () => {
+const CreateProgramsBenefits = ({ dynamicBenefits, setdynamicBenefits, benefitImage, setbenefitImage }) => {
+    const addDynamicBenefits = () => {
+        setdynamicBenefits([
+            ...dynamicBenefits,
+            {
+                id: Date.now(),
+                description: "",
+            }
+        ])
+    }
+
+    const handleDelelte = (id) => {
+        const dummyData = [...dynamicBenefits];
+        const filteredData = dummyData.filter((e) => e.id != id)
+        setdynamicBenefits(filteredData)
+    }
+
+    const ontextChange = (id, data) => {
+        setdynamicBenefits(prevItems => (
+            prevItems.map(item => item.id === id ? { ...item, ['description']: data } : item)
+        ))
+    }
     return (
         <>
             <div className='dropdown_content_wrapper45'>
-                <div className='dropdown_content4623'>
-                    <div className='drodown_head456'>
-                        <p>Benefit 1</p>
-                        <img src={crossIcon} />
+                {dynamicBenefits?.length > 0 && dynamicBenefits?.map((element, index) => (
+                    <div className='dropdown_content4623'>
+                        <div className='drodown_head456'>
+                            <p>Benefit {index + 1}</p>
+                            <img onClick={(() => handleDelelte(element?.id))} src={crossIcon} />
+                        </div>
+                        <CustomTextEditor onChange={((data) => ontextChange(element?.id, data))} defaultValue={element?.description} label={'Description'} />
                     </div>
-                    <Textarea label={'Description'} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
-                </div>
-
-                <div className='dropdown_content4623'>
-                    <div className='drodown_head456'>
-                        <p>Benefit 2</p>
-                        <img src={crossIcon} />
-                    </div>
-                    <Textarea label={'Description'} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
-                </div>
+                ))}
 
 
-                <div className='dropdown_content4623'>
-                    <div className='drodown_head456'>
-                        <p>Benefit 3</p>
-                        <img src={crossIcon} />
-                    </div>
-                    <Textarea label={'Description'} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
-                </div>
-                <Button children={'Add Another Option'} styles={{
+                <Button onClick={addDynamicBenefits} children={'Add Another Option'} styles={{
                     border: '1px solid var(--primary-color)',
                     backgroundColor: 'transparent',
                     color: 'var(--text-color)',
@@ -46,10 +55,32 @@ const CreateProgramsBenefits = () => {
                         fontWeight: '600'
                     }}>Benefit Image</label>
                     <div className='files_upload_wrapper'>
-                        <img src={upload} />
-                        <p>Drag your files or <span>Browse</span></p>
-                        <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                        <input type='file' />
+                        {!benefitImage && <>
+                            <img src={upload} />
+                            <p>Drag your files or <span>Browse</span></p>
+                            <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                        </>
+                        }
+
+                        {benefitImage instanceof File && <img style={{
+                            width: '100%',
+                            height: '95%',
+                            objectFit: 'contain'
+                        }} src={URL.createObjectURL(benefitImage)} alt="Preview" />}
+
+
+                        {typeof benefitImage === "string" && (
+                            <img
+                                style={{
+                                    width: "100%",
+                                    height: "95%",
+                                    objectFit: "contain"
+                                }}
+                                src={benefitImage}
+                                alt="Preview"
+                            />
+                        )}
+                        <input onChange={((e)=>setbenefitImage(e.target.files[0]))} type='file' />
                     </div>
                 </div>
             </div>

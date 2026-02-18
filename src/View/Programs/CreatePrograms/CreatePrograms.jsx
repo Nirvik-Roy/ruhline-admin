@@ -16,19 +16,69 @@ import TagContent from './TagContent.jsx'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import { getAllCoaches } from '../../../utils/coach'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
-import { getGlobalComission } from '../../../utils/Program.js'
+import { getAllPrograms, getGlobalComission } from '../../../utils/Program.js'
 const CreatePrograms = () => {
     const navigate = useNavigate()
     const [index, setIndex] = useState(1)
     const [loading, setloading] = useState(false);
     const [allcoach, setallCoach] = useState([])
     const [data, setdata] = useState()
+    const [dynamicFaq, setdynamicFaq] = useState([])
+    const [dynamicBenefits, setdynamicBenefits] = useState([])
+    const [faqImage, setfaqImage] = useState()
+    const [benefitImage, setbenefitImage] = useState()
+    const [dynamicHowItWorks, setdynamicHowItWorks] = useState([])
+    const [HowItWorksImage, setHowItWorksImage] = useState();
+    const [allProgramsCategory, setallProgramsCategory] = useState([]);
+    const [mainImage, setmainImage] = useState();
+    const [programCategoryId, setprogramCategoryId] = useState();
+    const [programDescription, setprogramDescription] = useState();
+    const [occurenceType, setoccurenceType] = useState('One Time')
+    const [galleryImage, setgalleryImage] = useState([]);
+    const [staticdata, setstaticdata] = useState({
+        name: '',
+        oneTimeSession: '',
+        tenureWeeks: '',
+        noofSessions: '',
+        recurringSession: '',
+        originalPrice: '',
+        salePrice: '',
+        customcommisionRate: '',
+        tag: ''
+    })
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setstaticdata({
+            ...staticdata,
+            [name]: value
+        })
+    }
     const fetchCommisionValue = async () => {
         setloading(true)
         const res = await getGlobalComission()
         setdata(res?.data)
         setloading(false)
     }
+
+    const handleGalleryImages = (e) => {
+        const mappedData = [...e.target.files]?.map((e,index) => (
+            {
+                id: Date.now() + index,
+                img: e
+            }
+        ))
+        setgalleryImage([
+            ...galleryImage,
+            ...mappedData
+        ])
+    }
+
+    const handleGalleryImageDelete = (id) => {
+        const dummyData = [...galleryImage]
+        const filteredData = dummyData.filter((e) => e.id != id)
+        setgalleryImage(filteredData)
+    }
+
     useEffect(() => {
         fetchCommisionValue()
     }, [])
@@ -43,9 +93,21 @@ const CreatePrograms = () => {
             setloading(false)
         }
     }
+    const fetchPrograms = async () => {
+        setloading(true)
+        try {
+            const res = await getAllPrograms();
+            setallProgramsCategory(res?.data?.data);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
 
     useEffect(() => {
         fetchCoach()
+        fetchPrograms()
     }, []);
     const [tabs, setTabs] = useState({
         occurenceType: true,
@@ -81,6 +143,8 @@ const CreatePrograms = () => {
             tag: i === 5 ? true : false
         })
     }
+
+    console.log(staticdata)
     return (
         <>
             {loading && <Loaders />}
@@ -111,11 +175,16 @@ const CreatePrograms = () => {
                     <div className='create_programs_left'>
                         <h4>Basic Details</h4>
                         <div className='create_program_form_wrapper'>
-                            <Input label={'Program Name'} required={true} defaultValue={'Yoga Program 1'} />
+                            <div>
+                                <Input onChange={handleChange} name={'name'} value={staticdata?.name} label={'Program Name'} required={true} placeholder={'Enter program name'} />
+                            </div>
                             <div className='input_form'>
                                 <label>Program Category <span>*</span></label>
-                                <select>
-                                    <option>Life Coaching</option>
+                                <select onChange={((e) => setprogramCategoryId(e.target.value))}>
+                                    <option value={''}>--select-program-category--</option>
+                                    {allProgramsCategory?.length > 0 && allProgramsCategory?.map((e, i) => (
+                                        <option value={e?.id} key={i}>{e?.name}</option>
+                                    ))}
                                 </select>
                             </div>
                             {/* <div className='create_input_grid_wrapper'>
@@ -134,8 +203,7 @@ const CreatePrograms = () => {
                                 </div>
                             </div> */}
                             <div>
-
-                                <CustomTextEditor label={'Description'} required={true} />
+                                <CustomTextEditor defaultValue={programDescription} onChange={((data) => setprogramDescription(data))} label={'Description'} required={true} />
                             </div>
                             <div className='input_form'>
                                 <label style={{
@@ -144,10 +212,32 @@ const CreatePrograms = () => {
                                 }}>Main Image<span>*</span></label>
 
                                 <div className='files_upload_wrapper'>
-                                    <img src={upload} />
-                                    <p>Drag your files or <span>Browse</span></p>
-                                    <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                    <input type='file' />
+                                    {!mainImage && <>
+                                        <img src={upload} />
+                                        <p>Drag your files or <span>Browse</span></p>
+                                        <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                                    </>
+                                    }
+
+                                    {mainImage instanceof File && <img style={{
+                                        width: '100%',
+                                        height: '95%',
+                                        objectFit: 'contain'
+                                    }} src={URL.createObjectURL(mainImage)} alt="Preview" />}
+
+
+                                    {typeof mainImage === "string" && (
+                                        <img
+                                            style={{
+                                                width: "100%",
+                                                height: "95%",
+                                                objectFit: "contain"
+                                            }}
+                                            src={mainImage}
+                                            alt="Preview"
+                                        />
+                                    )}
+                                    <input onChange={((e) => setmainImage(e.target.files[0]))} type='file' />
                                 </div>
                             </div>
 
@@ -160,8 +250,47 @@ const CreatePrograms = () => {
                                     <img src={upload} />
                                     <p>Drag your files or <span>Browse</span></p>
                                     <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                                    <input type='file' />
+                                    <input multiple onChange={handleGalleryImages} type='file' />
                                 </div>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-start',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    flexWrap: 'wrap',
+                                    marginTop: '10px'
+                                }}>
+                                    {galleryImage?.length > 0 && galleryImage?.map((e, i) => (
+                                        <div style={{
+                                            width: '80px',
+                                            height: '80px',
+                                            borderRadius: '10px',
+                                            position: 'relative'
+                                        }}>
+                                            <i onClick={(() => handleGalleryImageDelete(e?.id))} style={{
+                                                position: 'absolute',
+                                                top: '-10px',
+                                                right: '-20px',
+                                                cursor: 'pointer'
+                                            }} class="fa-regular fa-circle-xmark"></i>
+                                            {e.img instanceof File && <img style={{
+                                                width: '100%',
+                                                objectFit: 'cover',
+                                                height: '100%',
+                                                borderRadius: '10px'
+                                            }} key={i} src={URL.createObjectURL(e.img)} />}
+
+                                            {typeof e.img == 'string' && <img style={{
+                                                width: '100%',
+                                                objectFit: 'cover',
+                                                height: '100%',
+                                                borderRadius: '10px'
+                                            }} key={i} src={e.img} />}
+                                        </div>
+
+                                    ))}
+                                </div>
+
                             </div>
 
                             <div className='other_details_wrapper'>
@@ -205,16 +334,16 @@ const CreatePrograms = () => {
                                     <div className='other_details_content_right'>
                                         {/* Pricing Content */}
 
-                                        <Activity mode={tabs.pricing ? 'visible' : 'hidden'}>
-                                            <PricingContent />
-                                        </Activity>
+
 
                                         {/* Occurence Type content */}
 
                                         <Activity mode={tabs.occurenceType ? 'visible' : 'hidden'}>
-                                            <OccurenceType />
+                                            <OccurenceType staticdata={staticdata} handleChange={handleChange} occurenceType={occurenceType} setoccurenceType={setoccurenceType} />
                                         </Activity>
-
+                                        <Activity mode={tabs.pricing ? 'visible' : 'hidden'}>
+                                            <PricingContent handleChange={handleChange} staticdata={staticdata} />
+                                        </Activity>
 
                                         {/* Select Coaches Content */}
                                         <Activity mode={tabs.coaches ? 'visible' : 'hidden'}>
@@ -225,14 +354,14 @@ const CreatePrograms = () => {
                                         {/* Coach Commission Content */}
 
                                         <Activity mode={tabs.commission ? 'visible' : 'hidden'}>
-                                            <CoachCommission data={data} />
+                                            <CoachCommission handleChange={handleChange} staticdata={staticdata} data={data} />
                                         </Activity>
 
 
                                         {/* Tag Content */}
 
                                         <Activity mode={tabs.tag ? 'visible' : 'hidden'}>
-                                            <TagContent />
+                                            <TagContent handleChange={handleChange} />
                                         </Activity>
                                     </div>
                                 </div>
@@ -249,7 +378,7 @@ const CreatePrograms = () => {
                                     <i class="fa-solid fa-angle-down" style={toggle.programFaq ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>
                             </div>
-                            {toggle.programFaq && <ProgramsFaqContent />}
+                            {toggle.programFaq && <ProgramsFaqContent faqImage={faqImage} setfaqImage={setfaqImage} dynamicFaq={dynamicFaq} setdynamicFaq={setdynamicFaq} />}
                         </div>
 
 
@@ -260,7 +389,10 @@ const CreatePrograms = () => {
                                     <i class="fa-solid fa-angle-down" style={toggle.programBenefit ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>
                             </div>
-                            {toggle.programBenefit && <CreateProgramsBenefits />}
+                            {toggle.programBenefit && <CreateProgramsBenefits
+                                benefitImage={benefitImage}
+                                setbenefitImage={setbenefitImage}
+                                setdynamicBenefits={setdynamicBenefits} dynamicBenefits={dynamicBenefits} />}
                         </div>
 
 
@@ -272,7 +404,7 @@ const CreatePrograms = () => {
                                     <i class="fa-solid fa-angle-down" style={toggle.programWorks ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>
                             </div>
-                            {toggle.programWorks && <CreateProgramsHowWorks />}
+                            {toggle.programWorks && <CreateProgramsHowWorks setHowItWorksImage={setHowItWorksImage} HowItWorksImage={HowItWorksImage} dynamicHowItWorks={dynamicHowItWorks} setdynamicHowItWorks={setdynamicHowItWorks} />}
                         </div>
 
                     </div>

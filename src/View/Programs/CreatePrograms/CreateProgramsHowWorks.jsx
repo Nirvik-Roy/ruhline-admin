@@ -4,36 +4,46 @@ import Textarea from '../../../Components/Textarea'
 import crossIcon from '../../../assets/content.svg'
 import Button from '../../../Components/Button'
 import upload from '../../../assets/Vector (8).svg'
+import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 
-const CreateProgramsHowWorks = () => {
+const CreateProgramsHowWorks = ({ setHowItWorksImage, HowItWorksImage, dynamicHowItWorks, setdynamicHowItWorks }) => {
+
+    const addDynamicHowItWorks = () => {
+        setdynamicHowItWorks([
+            ...dynamicHowItWorks,
+            {
+                id: Date.now(),
+                description: "",
+            }
+        ])
+    }
+
+    const handleDelelte = (id) => {
+        const dummyData = [...dynamicHowItWorks];
+        const filteredData = dummyData.filter((e) => e.id != id)
+        setdynamicHowItWorks(filteredData)
+    }
+
+    const ontextChange = (id, data) => {
+        setdynamicHowItWorks(prevItems => (
+            prevItems.map(item => item.id === id ? { ...item, ['description']: data } : item)
+        ))
+    }
     return (
         <>
             <div className='dropdown_content_wrapper45'>
-                <div className='dropdown_content4623'>
-                    <div className='drodown_head456'>
-                        <p>Point 1</p>
-                        <img src={crossIcon} />
+                {dynamicHowItWorks?.length > 0 && dynamicHowItWorks?.map((element, index) => (
+                    <div className='dropdown_content4623'>
+                        <div className='drodown_head456'>
+                            <p>Point {index + 1}</p>
+                            <img onClick={(() => handleDelelte(element?.id))} src={crossIcon} />
+                        </div>
+                        <CustomTextEditor onChange={((data) => ontextChange(element?.id, data))} defaultValue={element?.description} label={'Description'} />
                     </div>
-                    <Textarea label={'Description'} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
-                </div>
 
-                <div className='dropdown_content4623'>
-                    <div className='drodown_head456'>
-                        <p>Point 2</p>
-                        <img src={crossIcon} />
-                    </div>
-                    <Textarea label={'Description'} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
-                </div>
+                ))}
 
-
-                <div className='dropdown_content4623'>
-                    <div className='drodown_head456'>
-                        <p>Point 3</p>
-                        <img src={crossIcon} />
-                    </div>
-                    <Textarea label={'Description'} placeholder={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl lacinia nunc, a fermentum nunc nulla at quam. '} />
-                </div>
-                <Button children={'Add Another Option'} styles={{
+                <Button onClick={addDynamicHowItWorks} children={'Add Another Option'} styles={{
                     border: '1px solid var(--primary-color)',
                     backgroundColor: 'transparent',
                     color: 'var(--text-color)',
@@ -46,10 +56,32 @@ const CreateProgramsHowWorks = () => {
                         fontWeight: '600'
                     }}>How it works Image</label>
                     <div className='files_upload_wrapper'>
-                        <img src={upload} />
-                        <p>Drag your files or <span>Browse</span></p>
-                        <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
-                        <input type='file' />
+                        {!HowItWorksImage && <>
+                            <img src={upload} />
+                            <p>Drag your files or <span>Browse</span></p>
+                            <h5>Png, Jpg, Jpeg supported | file size: 250 KB</h5>
+                        </>
+                        }
+
+                        {HowItWorksImage instanceof File && <img style={{
+                            width: '100%',
+                            height: '95%',
+                            objectFit: 'contain'
+                        }} src={URL.createObjectURL(HowItWorksImage)} alt="Preview" />}
+
+
+                        {typeof HowItWorksImage === "string" && (
+                            <img
+                                style={{
+                                    width: "100%",
+                                    height: "95%",
+                                    objectFit: "contain"
+                                }}
+                                src={HowItWorksImage}
+                                alt="Preview"
+                            />
+                        )}
+                        <input onChange={((e) => setHowItWorksImage(e.target.files[0]))} type='file' />
                     </div>
                 </div>
             </div>

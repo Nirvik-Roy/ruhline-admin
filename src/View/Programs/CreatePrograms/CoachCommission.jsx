@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import Input from '../../../Components/Input'
 
-const CoachCommission = ({ data }) => {
+const CoachCommission = ({ data, handleChange, staticdata }) => {
     const [radioValue, setradioValue] = useState('Global Commission')
-    
+
     return (
         <>
-        
+
             <div className='occurence_radio_wrapper'>
                 <div className='occurence_radio'>
                     <input value={'Global Commission'} onClick={(() => setradioValue('Global Commission'))} checked={radioValue === 'Global Commission'} type='radio' />
@@ -28,7 +28,7 @@ const CoachCommission = ({ data }) => {
 
             {radioValue === 'Custom' &&
                 <div className='occurence_form_wrapper'>
-                   <Input label={'Commission rate'} required={true} placeholder={'Enter commission rate'}/>
+                    <Input onChange={handleChange} value={staticdata.customcommisionRate} name={'customcommisionRate'} label={'Commission rate'} required={true} placeholder={'Enter commission rate'} />
                 </div>}
         </>
     )
