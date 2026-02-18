@@ -451,7 +451,7 @@ export const postGoalType = async (data) => {
                 }
             },);
             if (res.data.success == true) {
-                toast.success(res.data?.message || 'Quote Added Success..');
+                toast.success(res.data?.message || 'Goal added Added Success..');
                 return res.data
             }
         } catch (err) {
@@ -826,6 +826,27 @@ export const postGlobalCommission = async (data) => {
         } catch (err) {
             toast.error(err.response?.data?.message);
             console.log(err)
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const createProgram = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/project`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Progam Created Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
             return err.response.data.errors
         }
     }

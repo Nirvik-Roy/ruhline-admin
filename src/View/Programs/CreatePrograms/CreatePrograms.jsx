@@ -16,7 +16,8 @@ import TagContent from './TagContent.jsx'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import { getAllCoaches } from '../../../utils/coach'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
-import { getAllPrograms, getGlobalComission } from '../../../utils/Program.js'
+import { createProgram, getAllPrograms, getGlobalComission } from '../../../utils/Program.js'
+import toast from 'react-hot-toast'
 const CreatePrograms = () => {
     const navigate = useNavigate()
     const [index, setIndex] = useState(1);
@@ -36,6 +37,8 @@ const CreatePrograms = () => {
     const [programDescription, setprogramDescription] = useState();
     const [occurenceType, setoccurenceType] = useState('One Time')
     const [galleryImage, setgalleryImage] = useState([]);
+    const [commissionTab, setcommissionTab] = useState('Global Commission');
+    const [coachIds, setcoachIds] = useState([])
     const [staticdata, setstaticdata] = useState({
         name: '',
         oneTimeSession: '',
@@ -147,15 +150,102 @@ const CreatePrograms = () => {
     }
 
     const handleSubmit = async () => {
-        try {
-            setloading(true)
-            const formData = new FormData()
-            
-        } catch (err) {
-            console.log(err)
-        } finally {
-            setloading(false)
+        if (staticdata.name != '' && programCategoryId != '') {
+            try {
+                setloading(true)
+                const formData = new FormData()
+                formData.append('name', staticdata.name)
+                formData.append('program_category_id', programCategoryId)
+                formData.append('description', programDescription || "")
+                if (mainImage instanceof File) {
+                    formData.append('main_image', mainImage)
+                }
+                if (galleryImage?.length > 0) {
+                    galleryImage.forEach((element) => {
+                        formData.append('gallery_images[]', element.img);
+                    });
+                } else {
+                    formData.append('gallery_images[]', null);
+                }
+
+                if (faqImage instanceof File) {
+                    formData.append('faqs_section_image', faqImage)
+                }
+
+                if (dynamicFaq?.length > 0) {
+                    dynamicFaq.forEach((element, index) => {
+                        formData.append(`faqs[${index}][heading]`, element.heading || "")
+                        formData.append(`faqs[${index}][description]`, element.description || "")
+                        formData.append(`faqs[${index}][sort_order]`, index)
+                    })
+                }
+                else {
+                    formData.append(`faqs`, '[]')
+                }
+
+                if (benefitImage instanceof File) {
+                    formData.append('benefits_section_image ', benefitImage)
+                }
+
+
+                if (dynamicBenefits?.length > 0) {
+                    dynamicBenefits.forEach((element, index) => {
+                        formData.append(`benefits[${index}][description]`, element.description)
+                        formData.append(`benefits[${index}][sort_order]`, index)
+                    })
+                } else {
+                    formData.append(`benefits`, '[]')
+                }
+
+                if (HowItWorksImage instanceof File) {
+                    formData.append('how_it_works_section_image', HowItWorksImage)
+                }
+
+
+                if (dynamicHowItWorks?.length > 0) {
+                    dynamicHowItWorks.forEach((element, index) => {
+                        formData.append(`how_it_works[${index}][description]`, element.description)
+                        formData.append(`how_it_works[${index}][sort_order]`, index)
+                    })
+                } else {
+                    formData.append(`how_it_works`, '[]')
+                }
+
+               
+                if (occurenceType == 'One Time') {
+                    if (staticdata.oneTimeSession) {
+                        formData.append('session_duration_minutes', Number(staticdata.oneTimeSession))
+                        formData.append('occurrence_type', 'one_time')
+                    } else {
+                        formData.append('occurrence_type', 'recurring')
+                        formData.append('tenure_weeks', Number(staticdata.tenureWeeks) || "")
+                        formData.append('sessions_per_week   ', Number(staticdata.noofSessions) || "")
+                        formData.append('session_duration_minutes', Number(staticdata.recurringSession))
+                    }
+                }
+
+                formData.append('sale_price', Number(staticdata.salePrice) || 0)
+                formData.append('original_price', Number(staticdata.originalPrice) || 0)
+                if (commissionTab == 'Global Commission') {
+                    formData.append('coach_commission_type', 'global')
+                } else {
+                    formData.append('coach_commission_type', 'custom')
+                    formData.append('custom_commission_rate', staticdata.customcommisionRate || 0)
+                }
+                formData.append('tag', staticdata.tag || "")
+                formData.append('coach_ids', coachIds || [])
+                const res = await createProgram(formData);
+                console.log(res)
+
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        } else {
+            toast.error('Name and program category is required...')
         }
+
     }
 
     return (
@@ -177,8 +267,8 @@ const CreatePrograms = () => {
                                 border: 'none'
                             }} />
                         </div>
-                        <div onClick={(() => { navigate('/dashboard/programs/single-program/2') })}>
-                            <Button children={'Create'} styles={{
+                        <div>
+                            <Button onClick={handleSubmit} children={'Create'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -360,14 +450,14 @@ const CreatePrograms = () => {
 
                                         {/* Select Coaches Content */}
                                         <Activity mode={tabs.coaches ? 'visible' : 'hidden'}>
-                                            <SelectCoaches selectedPrograms={selectedPrograms} setSelectedPrograms={setSelectedPrograms} allcoach={allcoach} />
+                                            <SelectCoaches setcoachIds={setcoachIds} selectedPrograms={selectedPrograms} setSelectedPrograms={setSelectedPrograms} allcoach={allcoach} />
                                         </Activity>
 
 
                                         {/* Coach Commission Content */}
 
                                         <Activity mode={tabs.commission ? 'visible' : 'hidden'}>
-                                            <CoachCommission handleChange={handleChange} staticdata={staticdata} data={data} />
+                                            <CoachCommission commissionTab={commissionTab} setcommissionTab={setcommissionTab} handleChange={handleChange} staticdata={staticdata} data={data} />
                                         </Activity>
 
 
