@@ -113,7 +113,7 @@ const CmsEditArticles = () => {
                 share_linkedin: singleArticle?.share_linkedin && 'true' || 'false',
             })
 
-            const mappedSections = singleArticle?.sections?.length > 0 && singleArticle?.sections?.map((section, index) => ({
+            const mappedSections = singleArticle?.sections?.length > 0 ? singleArticle?.sections?.map((section, index) => ({
                 id: section.id || Date.now() + index,
                 heading: section?.heading || null,
                 uploadImage: section?.image || null,
@@ -121,7 +121,7 @@ const CmsEditArticles = () => {
                 description: section?.description || null,
                 buttonName: section?.button || null,
                 buttonUrl: section?.button_url || null
-            }))
+            })) : []
             setfacebookCheck(singleArticle?.share_facebook && true || false)
             settwitterCheck(singleArticle?.share_twitter && true || false)
             setlinkedinCheck(singleArticle?.share_linkedin && true || false)
@@ -173,8 +173,8 @@ const CmsEditArticles = () => {
                     }
                     formData.append(`sections[${index}][sort_order]`, index)
                 });
-            }else{
-                console.log('Array is empty')
+            } else {
+                formData.append(`sections`, '[]')
             }
             const res = await editAllCmsData('/admin/article/article', formData, id);
             setarticlesErrors(res)
