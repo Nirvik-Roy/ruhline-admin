@@ -8,9 +8,7 @@ const SelectCoaches = () => {
                 <div className='selected_coaches_Wrapper'>
                     <p>Bidisha Bhowmick <img src={crossIcon} /></p>
                     <p>Bidisha Bhowmick <img src={crossIcon} /></p>
-
                     <p>Bidisha Bhowmick <img src={crossIcon} /></p>
-
                 </div>
             </div>
         </>
