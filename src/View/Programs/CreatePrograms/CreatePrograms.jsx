@@ -1,4 +1,4 @@
-import React, { Activity, useState } from 'react'
+import React, { Activity, useEffect, useState } from 'react'
 import './CreatePrograms.css'
 import Button from '../../../Components/Button'
 import { useNavigate } from 'react-router-dom'
@@ -13,9 +13,40 @@ import PricingContent from './PricingContent.jsx'
 import SelectCoaches from './SelectCoaches.jsx'
 import CoachCommission from './CoachCommission.jsx'
 import TagContent from './TagContent.jsx'
+import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
+import { getAllCoaches } from '../../../utils/coach'
+import Loaders from '../../../Components/Loaders/Loaders.jsx'
+import { getGlobalComission } from '../../../utils/Program.js'
 const CreatePrograms = () => {
     const navigate = useNavigate()
     const [index, setIndex] = useState(1)
+    const [loading, setloading] = useState(false);
+    const [allcoach, setallCoach] = useState([])
+    const [data, setdata] = useState()
+    const fetchCommisionValue = async () => {
+        setloading(true)
+        const res = await getGlobalComission()
+        setdata(res?.data)
+        setloading(false)
+    }
+    useEffect(() => {
+        fetchCommisionValue()
+    }, [])
+    const fetchCoach = async () => {
+        setloading(true)
+        try {
+            const res = await getAllCoaches();
+            setallCoach(res?.data);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchCoach()
+    }, []);
     const [tabs, setTabs] = useState({
         occurenceType: true,
         pricing: false,
@@ -40,10 +71,7 @@ const CreatePrograms = () => {
                 programWorks: i === 3 ? true : false,
             })
         }
-
     }
-
-
     const tabsFunction = (i) => {
         setTabs({
             occurenceType: i === 1 ? true : false,
@@ -55,6 +83,7 @@ const CreatePrograms = () => {
     }
     return (
         <>
+            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -83,7 +112,13 @@ const CreatePrograms = () => {
                         <h4>Basic Details</h4>
                         <div className='create_program_form_wrapper'>
                             <Input label={'Program Name'} required={true} defaultValue={'Yoga Program 1'} />
-                            <div className='create_input_grid_wrapper'>
+                            <div className='input_form'>
+                                <label>Program Category <span>*</span></label>
+                                <select>
+                                    <option>Life Coaching</option>
+                                </select>
+                            </div>
+                            {/* <div className='create_input_grid_wrapper'>
                                 <div className='input_form'>
                                     <label>Program Category <span>*</span></label>
                                     <select>
@@ -97,8 +132,11 @@ const CreatePrograms = () => {
                                         <option>Program Sub-Category 1</option>
                                     </select>
                                 </div>
+                            </div> */}
+                            <div>
+
+                                <CustomTextEditor label={'Description'} required={true} />
                             </div>
-                            <Textarea label={'Description'} required={true} />
                             <div className='input_form'>
                                 <label style={{
                                     fontSize: '15px',
@@ -180,14 +218,14 @@ const CreatePrograms = () => {
 
                                         {/* Select Coaches Content */}
                                         <Activity mode={tabs.coaches ? 'visible' : 'hidden'}>
-                                            <SelectCoaches />
+                                            <SelectCoaches allcoach={allcoach} />
                                         </Activity>
 
 
                                         {/* Coach Commission Content */}
 
                                         <Activity mode={tabs.commission ? 'visible' : 'hidden'}>
-                                            <CoachCommission />
+                                            <CoachCommission data={data} />
                                         </Activity>
 
 

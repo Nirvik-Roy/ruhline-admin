@@ -760,7 +760,7 @@ export const postValuesIntermediate = async (data) => {
                 }
             },);
             if (res.data.success == true) {
-                toast.success(res.data?.message || 'Mistakes added Success..');
+                toast.success(res.data?.message || 'Values added Success..');
                 return res.data
             }
         } catch (err) {
@@ -784,6 +784,48 @@ export const getValuesIntermediate = async () => {
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getGlobalComission = async () => {
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach/global-commission-rate`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postGlobalCommission = async (data) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/coach/global-commission-rate`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Commission added Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            console.log(err)
             return err.response.data.errors
         }
     }

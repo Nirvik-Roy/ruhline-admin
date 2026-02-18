@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import Input from '../../../Components/Input'
 
-const CoachCommission = () => {
+const CoachCommission = ({ data }) => {
     const [radioValue, setradioValue] = useState('Global Commission')
-
+    
     return (
         <>
+        
             <div className='occurence_radio_wrapper'>
                 <div className='occurence_radio'>
                     <input value={'Global Commission'} onClick={(() => setradioValue('Global Commission'))} checked={radioValue === 'Global Commission'} type='radio' />
@@ -22,18 +24,11 @@ const CoachCommission = () => {
                 color: 'var(--text-color)',
                 margin: '20px 0',
                 fontSize: '15px'
-            }}>Commission % : 30 </p>}
+            }}>Commission % : {data?.global_commission_rate} </p>}
 
             {radioValue === 'Custom' &&
                 <div className='occurence_form_wrapper'>
-                    <div className='input_form'>
-                        <label style={{
-                            fontSize: '13px'
-                        }}>Select Commission (%)<span>*</span></label>
-                        <select>
-                            <option>30</option>
-                        </select>
-                    </div>
+                   <Input label={'Commission rate'} required={true} placeholder={'Enter commission rate'}/>
                 </div>}
         </>
     )
