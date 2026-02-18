@@ -19,7 +19,8 @@ import Loaders from '../../../Components/Loaders/Loaders.jsx'
 import { getAllPrograms, getGlobalComission } from '../../../utils/Program.js'
 const CreatePrograms = () => {
     const navigate = useNavigate()
-    const [index, setIndex] = useState(1)
+    const [index, setIndex] = useState(1);
+    const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [loading, setloading] = useState(false);
     const [allcoach, setallCoach] = useState([])
     const [data, setdata] = useState()
@@ -46,6 +47,7 @@ const CreatePrograms = () => {
         customcommisionRate: '',
         tag: ''
     })
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setstaticdata({
@@ -61,7 +63,7 @@ const CreatePrograms = () => {
     }
 
     const handleGalleryImages = (e) => {
-        const mappedData = [...e.target.files]?.map((e,index) => (
+        const mappedData = [...e.target.files]?.map((e, index) => (
             {
                 id: Date.now() + index,
                 img: e
@@ -144,7 +146,18 @@ const CreatePrograms = () => {
         })
     }
 
-    console.log(staticdata)
+    const handleSubmit = async () => {
+        try {
+            setloading(true)
+            const formData = new FormData()
+            
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
     return (
         <>
             {loading && <Loaders />}
@@ -347,7 +360,7 @@ const CreatePrograms = () => {
 
                                         {/* Select Coaches Content */}
                                         <Activity mode={tabs.coaches ? 'visible' : 'hidden'}>
-                                            <SelectCoaches allcoach={allcoach} />
+                                            <SelectCoaches selectedPrograms={selectedPrograms} setSelectedPrograms={setSelectedPrograms} allcoach={allcoach} />
                                         </Activity>
 
 

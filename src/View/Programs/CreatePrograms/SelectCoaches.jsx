@@ -1,8 +1,7 @@
 
 import { useState } from 'react';
 import Select from 'react-select/base';
-const SelectCoaches = ({ allcoach }) => {
-    const [selectedPrograms, setSelectedPrograms] = useState([]);
+const SelectCoaches = ({ allcoach, setSelectedPrograms, selectedPrograms }) => {
     const [inputValue, setInputValue] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const options = allcoach?.map(item => ({
