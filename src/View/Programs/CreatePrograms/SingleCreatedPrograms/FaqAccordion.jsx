@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import down from '../../../../assets/Chevron.svg'
 import right from '../../../../assets/Chevron Right.svg'
 
-const FaqAccordion = () => {
+const FaqAccordion = ({ singleData }) => {
     const [faqIndex, setfaqIndex] = useState([]);
 
     const setIndex = (i) => {
@@ -38,7 +38,7 @@ const FaqAccordion = () => {
             title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit?',
             details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue."
         },
-          {
+        {
             id: 5,
             title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit?',
             details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue."
@@ -47,10 +47,10 @@ const FaqAccordion = () => {
     return (
         <>
             <div className='faq_accordion_wrapper'>
-                {faqData.map((e, i) => (
-                    <div className='faq_accordion' onClick={(() => { setIndex(e.id) })}>
+                {singleData?.faqs?.length > 0 && singleData?.faqs?.map((e, i) => (
+                    <div className='faq_accordion' key={i} onClick={(() => { setIndex(e.id) })}>
                         <div className='faq_head_wrapper'>
-                            <h3>{e.title}</h3>
+                            <h3>{e.heading}</h3>
                             {faqIndex.includes(e.id) && <div className='down_img56'>
                                 <img src={down} />
                             </div>}
@@ -59,7 +59,7 @@ const FaqAccordion = () => {
                                 <img src={right} />
                             </div>}
                         </div>
-                        {faqIndex.includes(e.id) && <p>{e.details}</p>}
+                        {faqIndex.includes(e.id) && <p>{e.description}</p>}
                     </div>
                 ))}
             </div>

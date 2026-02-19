@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import ProgramFaq from './ProgramFaq'
+import Howitworks from './Howitworks'
+import Benefits from './Benefits'
 
-const ProgramTabs = () => {
+const ProgramTabs = ({ singleData }) => {
     const [toggle, setToggle] = useState({
         toggle1: false,
         toggle2: false,
@@ -20,7 +22,7 @@ const ProgramTabs = () => {
             <div className='service_tabs_wrapper'>
                 <p className={toggle.toggle1 && 'service_active'} onClick={(() => {
                     toggleFunc(1)
-                })}>What to Expect</p>
+                })}>Benefits</p>
                 <p className={toggle.toggle2 && 'service_active'} onClick={(() => {
                     toggleFunc(2)
                 })}>How it works</p>
@@ -28,7 +30,9 @@ const ProgramTabs = () => {
                     toggleFunc(3)
                 })}>FAQs</p>
             </div>
-            {toggle.toggle3 && <ProgramFaq />}
+            {toggle.toggle3 && <ProgramFaq singleData={singleData} />}
+            {toggle.toggle2 && <Howitworks singleData={singleData} />}
+            {toggle.toggle1 && <Benefits singleData={singleData} />}
         </>
     )
 }

@@ -15,8 +15,6 @@ const ProgramModule = () => {
                 <AddProgramModule setmodalIsOpen={setmodalIsOpen} />
             </Activity>
 
-
-
             <div className='program_modules_wrapper'>
                 <div className='program_module_head_wrapper'>
                     <h2>Modules</h2>

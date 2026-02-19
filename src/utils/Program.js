@@ -1,5 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+// Here you may have a small confusion regarding the functions name of the programs .. Few of them are of program categories... But I named the functions as simple Program.. So plz check the urls .. The endpoints of program category will be program-category//
 export const getAllPrograms = async () => {
     const Token = localStorage.getItem('token');
     if (Token) {
@@ -843,6 +844,64 @@ export const createProgram = async (data) => {
             },);
             if (res.data.success == true) {
                 toast.success(res.data?.message || 'Progam Created Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const getPrograms = async () =>{
+    const Token = localStorage.getItem('token');
+    if (Token) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/project`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const getprogramById = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/project/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const editProgramsById = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/project/${id}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Quote edited succesfully');
                 return res.data
             }
         } catch (err) {

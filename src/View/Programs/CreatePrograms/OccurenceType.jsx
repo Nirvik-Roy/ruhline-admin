@@ -25,7 +25,7 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                 marginTop: '20px'
             }}>
                 <label>Session Duration <span>*</span></label>
-                <select name='oneTimeSession' onChange={handleChange}>
+                <select name='oneTimeSession' value={staticdata.oneTimeSession} onChange={handleChange}>
                     <option value={''}>--Select-duration--</option>
                     {[30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240]?.map((e, i) => (
                         <option key={i} value={e}>{e} mins</option>
@@ -84,7 +84,7 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                         <label style={{
                             fontSize: '13px'
                         }}>Session Duration<span>*</span></label>
-                        <select onChange={handleChange} name='recurringSession'>
+                        <select value={staticdata.recurringSession} onChange={handleChange} name='recurringSession'>
                             <option value={''}>--select-duration--</option>
                             {[30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240]?.map((e, i) => (
                                 <option key={i} value={e}>{e} mins</option>

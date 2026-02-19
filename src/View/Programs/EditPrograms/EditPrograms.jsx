@@ -1,23 +1,22 @@
 import React, { Activity, useEffect, useState } from 'react'
-import './CreatePrograms.css'
+import '../CreatePrograms/CreatePrograms.css'
 import Button from '../../../Components/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Input from '../../../Components/Input'
-import Textarea from '../../../Components/Textarea.jsx'
 import upload from '../../../assets/Vector (8).svg'
-import ProgramsFaqContent from './ProgramsFaqContent.jsx'
-import CreateProgramsBenefits from './CreateProgramsBenefits.jsx'
-import CreateProgramsHowWorks from './CreateProgramsHowWorks.jsx'
-import OccurenceType from './OccurenceType.jsx'
-import PricingContent from './PricingContent.jsx'
-import SelectCoaches from './SelectCoaches.jsx'
-import CoachCommission from './CoachCommission.jsx'
-import TagContent from './TagContent.jsx'
+import ProgramsFaqContent from '../CreatePrograms/ProgramsFaqContent.jsx'
+import CreateProgramsBenefits from '../CreatePrograms/CreateProgramsBenefits.jsx'
+import CreateProgramsHowWorks from '../CreatePrograms/CreateProgramsHowWorks.jsx'
+import OccurenceType from '../CreatePrograms/OccurenceType.jsx'
+import PricingContent from '../CreatePrograms/PricingContent.jsx'
+import SelectCoaches from '../CreatePrograms/SelectCoaches.jsx'
+import CoachCommission from '../CreatePrograms/CoachCommission.jsx'
+import TagContent from '../CreatePrograms/TagContent.jsx'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import { getAllCoaches } from '../../../utils/coach'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
-import { createProgram, getAllPrograms, getGlobalComission } from '../../../utils/Program.js'
-const CreatePrograms = () => {
+import { createProgram, editProgramsById, getAllPrograms, getGlobalComission, getprogramById } from '../../../utils/Program.js'
+const EditPrograms = () => {
     const navigate = useNavigate()
     const [index, setIndex] = useState(1);
     const [selectedPrograms, setSelectedPrograms] = useState([]);
@@ -37,7 +36,8 @@ const CreatePrograms = () => {
     const [occurenceType, setoccurenceType] = useState('One Time')
     const [galleryImage, setgalleryImage] = useState([]);
     const [commissionTab, setcommissionTab] = useState('Global Commission');
-    const [programErrors, setprogramErrors] = useState()
+    const [programErrors, setprogramErrors] = useState();
+    const [singleData, setsingleData] = useState([])
     const [staticdata, setstaticdata] = useState({
         name: '',
         oneTimeSession: '',
@@ -49,6 +49,7 @@ const CreatePrograms = () => {
         customcommisionRate: '',
         tag: ''
     })
+    const { id } = useParams()
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -147,7 +148,7 @@ const CreatePrograms = () => {
             tag: i === 5 ? true : false
         })
     }
-
+    console.log(galleryImage)
     const handleSubmit = async () => {
 
         try {
@@ -161,7 +162,7 @@ const CreatePrograms = () => {
             }
             if (galleryImage?.length > 0) {
                 galleryImage.forEach((element) => {
-                    formData.append('gallery_images[]', element.img);
+                    { element.img instanceof File && formData.append('gallery_images[]', element.img); }
                 });
             } else {
                 formData.append('gallery_images', []);
@@ -240,7 +241,7 @@ const CreatePrograms = () => {
             } else {
                 formData.append('coach_ids', '[]')
             }
-            const res = await createProgram(formData);
+            const res = await editProgramsById(formData, id);
             setprogramErrors(res)
         } catch (err) {
             console.log(err)
@@ -248,6 +249,71 @@ const CreatePrograms = () => {
             setloading(false)
         }
     }
+
+    const fetchSingleProgram = async () => {
+        try {
+            setloading(true)
+            const res = await getprogramById(id);
+            setsingleData(res?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (id) {
+            fetchSingleProgram()
+        }
+    }, [])
+
+    useEffect(() => {
+        setstaticdata({
+            name: singleData?.name || '',
+
+            oneTimeSession: singleData?.occurrence_type == 'one_time' ? singleData?.session_duration_minutes : '',
+
+            tenureWeeks: singleData?.tenure_weeks || '',
+
+            noofSessions: singleData?.occurrence_type == 'recurring' ? singleData?.sessions_per_week : '',
+
+            recurringSession: singleData?.occurrence_type == 'recurring' ? singleData?.session_duration_minutes : '',
+
+            originalPrice: singleData?.
+                original_price
+                || '',
+            salePrice: singleData?.sale_price || '',
+            customcommisionRate: singleData?.coach_commission_type == 'custom' ? singleData?.custom_commission_rate : '',
+            tag: singleData?.tag || ''
+        })
+
+        setprogramDescription(singleData?.description || '')
+        setmainImage(singleData?.main_image)
+        setprogramCategoryId(singleData?.program_category?.id || '')
+        const mappedSections = singleData?.gallery_images
+            ?.length > 0 ? singleData?.gallery_images
+                ?.map((element, index) => ({
+                    id: element.id || Date.now() + index,
+                    img: element?.image_path || ''
+                })) : []
+        setgalleryImage(mappedSections)
+        setdynamicFaq(singleData?.faqs || [])
+        setdynamicBenefits(singleData?.benefits || [])
+        setfaqImage(singleData?.faqs_section_image)
+        setbenefitImage(singleData?.benefits_section_image)
+        setdynamicHowItWorks(singleData?.how_it_works || [])
+        setHowItWorksImage(singleData?.how_it_works_section_image)
+
+        const coachesMapped = singleData?.coaches
+            ?.length > 0 ? singleData?.coaches
+                ?.map((element, index) => ({
+                    value: element.id || Date.now() + index,
+                    label: element?.user?.name
+                })) : []
+        setSelectedPrograms(coachesMapped)
+    }, [singleData])
+    console.log(singleData)
 
     return (
         <>
@@ -289,7 +355,7 @@ const CreatePrograms = () => {
                             </div>
                             <div className='input_form'>
                                 <label>Program Category <span>*</span></label>
-                                <select onChange={((e) => setprogramCategoryId(e.target.value))}>
+                                <select value={programCategoryId} onChange={((e) => setprogramCategoryId(e.target.value))}>
                                     <option value={''}>--select-program-category--</option>
                                     {allProgramsCategory?.length > 0 && allProgramsCategory?.map((e, i) => (
                                         <option value={e?.id} key={i}>{e?.name}</option>
@@ -545,4 +611,4 @@ const CreatePrograms = () => {
     )
 }
 
-export default CreatePrograms
+export default EditPrograms

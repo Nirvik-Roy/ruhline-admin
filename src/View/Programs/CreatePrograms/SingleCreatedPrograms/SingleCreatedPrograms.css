@@ -33,14 +33,10 @@
     object-fit: cover;
 }
 
-.service_small_img_wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
-}
 
 .service_small_img {
     height: 82px;
+    width: 95% !important;
     border-radius: 10px;
     overflow: hidden;
 }

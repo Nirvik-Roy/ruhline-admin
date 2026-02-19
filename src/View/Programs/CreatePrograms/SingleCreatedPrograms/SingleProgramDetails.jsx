@@ -1,43 +1,63 @@
+import Slider from 'react-slick'
 import bigImg from '../../../../assets/Rectangle 445.png'
 import smallImg from '../../../../assets/Rectangle 6614.png'
 import smallImg1 from '../../../../assets/Rectangle 6615.png'
-import { useNavigate } from 'react-router-dom'
-const SingleProgramDetails = () => {
-        const navigate = useNavigate()
-  return (
-    <>
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useState } from 'react';
+const SingleProgramDetails = ({ singleData }) => {
+    var settings = {
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1
+    };
+    const [imageSrc, setimageSrc] = useState('')
+    return (
+        <>
+
             <div className='one_time_service_details_wrapper'>
                 <div className='left_one_time_service'>
                     <div className='service_big_img'>
-                        <img src={bigImg} />
+                        {(singleData?.main_image && !imageSrc) && <img src={singleData?.main_image} />}
+                        {imageSrc && <img src={imageSrc} />}
                     </div>
                     <div className='service_small_img_wrapper'>
-                        {[smallImg, smallImg1, smallImg, smallImg1].map((e, i) => (
-                            <div key={i} className='service_small_img'>
-                                <img src={e} />
-                            </div>
-                        ))}
+                        <Slider {...settings}>
+                            {singleData?.gallery_images?.length > 0 && singleData?.gallery_images?.map((e, i) => (
+                                <div key={i} className='service_small_img'>
+                                    <img onClick={(() => setimageSrc(e.image_path))} src={e.image_path
+                                    } />
+                                </div>
+                            ))}
+                        </Slider>
+
 
                     </div>
                 </div>
                 <div className='right_one_time_service_details'>
-                    <small>Best Selling</small>
+                    {singleData?.tag && <small>{singleData?.tag}</small>}
                     <div>
-                        <del>SAR97</del>
-                        <h1>SAR67</h1>
+                        {singleData?.original_price
+                            && <del>SAR{singleData?.original_price}</del>}
+                        {singleData?.
+                            sale_price
+                            && <h1>SAR{singleData?.
+                                sale_price}</h1>}
                     </div>
-                    <span><strong>Categories: </strong>Yoga, Yoga Sub-Category 1</span>
-                    <span><strong>Occurrence: </strong>Recurring</span>
+                    <span><strong>Categories: </strong>{singleData?.program_category
+                        ?.name}</span>
+                    <span><strong>Occurrence: </strong>{singleData?.occurrence_type}</span>
                     <span><strong>Duration: </strong>32 weeks</span>
 
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. <br /> <br />
-                        Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam.Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam.Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam.
-                    </p>
+                    {singleData?.description && <p>{singleData?.description}
+                    </p>}
 
                 </div>
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default SingleProgramDetails

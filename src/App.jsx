@@ -57,6 +57,7 @@ import PrivateRoute from './PrivateRoute/PrivateRoute.jsx'
 import CmsEditArticles from './View/CMS/CmsArticles/CmsEditArticles.jsx'
 import TheYMethod from './View/Programs/IntermediateSteps/TheYMethod.jsx'
 import GoalSettingsPage from './View/Programs/IntermediateSteps/GoalSettingsPage.jsx'
+import EditPrograms from './View/Programs/EditPrograms/EditPrograms.jsx'
 function App() {
   return (
     <>
@@ -110,6 +111,7 @@ function App() {
               <Route path='programs/intermediate/goal-settings' element={<GoalSettingsPage />} />
               <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes />} />
               <Route path='programs/create-program' element={<CreatePrograms />} />
+              <Route path='programs/edit-program/:id' element={<EditPrograms/>}/>
               <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
               <Route path='programs/single-program/:id/values' element={<ValuesModule />} />
               <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
