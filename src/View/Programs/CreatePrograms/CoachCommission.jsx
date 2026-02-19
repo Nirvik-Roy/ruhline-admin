@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Input from '../../../Components/Input'
 
-const CoachCommission = ({ data, handleChange, staticdata, setcommissionTab, commissionTab }) => {
+const CoachCommission = ({ data, handleChange, staticdata, setcommissionTab, commissionTab, programErrors }) => {
     return (
         <>
 
@@ -17,6 +17,12 @@ const CoachCommission = ({ data, handleChange, staticdata, setcommissionTab, com
                 </div>
             </div>
 
+            {programErrors?.coach_commission_type && <small style={{
+                color: 'red',
+                fontSize: '12px',
+                marginTop: '-10px'
+            }}>*{programErrors?.coach_commission_type[0]}</small>}
+
             {commissionTab === 'Global Commission' && <p style={{
                 fontWeight: '500',
                 color: 'var(--text-color)',
@@ -27,6 +33,11 @@ const CoachCommission = ({ data, handleChange, staticdata, setcommissionTab, com
             {commissionTab === 'Custom' &&
                 <div className='occurence_form_wrapper'>
                     <Input onChange={handleChange} value={staticdata.customcommisionRate} name={'customcommisionRate'} label={'Commission rate'} required={true} placeholder={'Enter commission rate'} />
+                    {programErrors?.custom_commission_rate && <small style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        marginTop: '-10px'
+                    }}>*{programErrors?.custom_commission_rate[0]}</small>}
                 </div>}
         </>
     )

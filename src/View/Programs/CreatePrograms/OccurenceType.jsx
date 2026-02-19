@@ -1,7 +1,7 @@
 
 import Input from '../../../Components/Input'
 
-const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticdata }) => {
+const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticdata, programErrors }) => {
     return (
         <>
 
@@ -16,7 +16,11 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                     <label>Recurring</label>
                 </div>
             </div>
-
+            {programErrors?.occurrence_type && <small style={{
+                color: 'red',
+                fontSize: '12px',
+                
+            }}>*{programErrors?.occurrence_type[0]}</small>}
             {occurenceType === 'One Time' && <div className='input_form' style={{
                 marginTop: '20px'
             }}>
@@ -27,6 +31,11 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                         <option key={i} value={e}>{e} mins</option>
                     ))}
                 </select>
+                {programErrors?.session_duration_minutes && <small style={{
+                    color: 'red',
+                    fontSize: '12px',
+                    
+                }}>*{programErrors?.session_duration_minutes[0]}</small>}
             </div>}
 
             {occurenceType === 'recurring' &&
@@ -43,6 +52,12 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                                 fontSize: '10px'
                             }}>(weeks)</small> <span>*</span></label>
                             <Input value={staticdata.tenureWeeks} onChange={handleChange} name={'tenureWeeks'} placeholder={'Enter tenure'} />
+
+                            {programErrors?.tenure_weeks && <small style={{
+                                color: 'red',
+                                fontSize: '12px',
+                                
+                            }}>*{programErrors?.tenure_weeks[0]}</small>}
                         </div>
 
                         <div className='input_form' style={{
@@ -56,6 +71,12 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                                 fontSize: '10px'
                             }}>per week</small> <span>*</span></label>
                             <Input name={'noofSessions'} onChange={handleChange} value={staticdata.noofSessions} placeholder={'Enter sessions'} />
+
+                            {programErrors?.sessions_per_week && <small style={{
+                                color: 'red',
+                                fontSize: '12px',
+                                
+                            }}>*{programErrors?.sessions_per_week[0]}</small>}
                         </div>
                     </div>
 
@@ -64,11 +85,17 @@ const OccurenceType = ({ setoccurenceType, occurenceType, handleChange, staticda
                             fontSize: '13px'
                         }}>Session Duration<span>*</span></label>
                         <select onChange={handleChange} name='recurringSession'>
-                        <option value={''}>--select-duration--</option>
+                            <option value={''}>--select-duration--</option>
                             {[30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240]?.map((e, i) => (
                                 <option key={i} value={e}>{e} mins</option>
                             ))}
                         </select>
+
+                        {programErrors?.session_duration_minutes && <small style={{
+                            color: 'red',
+                            fontSize: '12px',
+                            
+                        }}>*{programErrors?.session_duration_minutes[0]}</small>}
                     </div>
                 </div>}
         </>

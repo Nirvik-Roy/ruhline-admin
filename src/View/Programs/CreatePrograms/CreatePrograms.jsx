@@ -38,8 +38,7 @@ const CreatePrograms = () => {
     const [occurenceType, setoccurenceType] = useState('One Time')
     const [galleryImage, setgalleryImage] = useState([]);
     const [commissionTab, setcommissionTab] = useState('Global Commission');
-    const [coachIds, setcoachIds] = useState([])
-
+    const [programErrors, setprogramErrors] = useState()
     const [staticdata, setstaticdata] = useState({
         name: '',
         oneTimeSession: '',
@@ -151,113 +150,107 @@ const CreatePrograms = () => {
     }
 
     const handleSubmit = async () => {
-        if (staticdata.name != '' && programCategoryId != '') {
-            try {
-                setloading(true)
-                const formData = new FormData()
-                formData.append('name', staticdata.name)
-                formData.append('program_category_id', programCategoryId)
-                formData.append('description', programDescription || "")
-                if (mainImage instanceof File) {
-                    formData.append('main_image', mainImage)
-                }
-                if (galleryImage?.length > 0) {
-                    galleryImage.forEach((element) => {
-                        formData.append('gallery_images[]', element.img);
-                    });
-                } else {
-                    formData.append('gallery_images', []);
-                }
 
-                if (faqImage instanceof File) {
-                    formData.append('faqs_section_image', faqImage)
-                }
-
-                if (dynamicFaq?.length > 0) {
-                    dynamicFaq.forEach((element, index) => {
-                        formData.append(`faqs[${index}][heading]`, element.heading || "")
-                        formData.append(`faqs[${index}][description]`, element.description || "")
-                        formData.append(`faqs[${index}][sort_order]`, index)
-                    })
-                }
-                else {
-                    formData.append(`faqs`, '[]')
-                }
-
-                if (benefitImage instanceof File) {
-                    formData.append('benefits_section_image', benefitImage)
-                }
-
-
-                if (dynamicBenefits?.length > 0) {
-                    dynamicBenefits.forEach((element, index) => {
-                        formData.append(`benefits[${index}][description]`, element.description)
-                        formData.append(`benefits[${index}][sort_order]`, index)
-                    })
-                } else {
-                    formData.append(`benefits`, '[]')
-                }
-
-                if (HowItWorksImage instanceof File) {
-                    formData.append('how_it_works_section_image', HowItWorksImage)
-                }
-
-
-                if (dynamicHowItWorks?.length > 0) {
-                    dynamicHowItWorks.forEach((element, index) => {
-                        formData.append(`how_it_works[${index}][description]`, element.description)
-                        formData.append(`how_it_works[${index}][sort_order]`, index)
-                    })
-                } else {
-                    formData.append(`how_it_works`, '[]')
-                }
-
-
-                if (occurenceType == 'One Time') {
-                    if (staticdata.oneTimeSession) {
-                        formData.append('session_duration_minutes', Number(staticdata.oneTimeSession))
-                        formData.append('occurrence_type', 'one_time')
-                    }
-                } else {
-                    formData.append('occurrence_type', 'recurring')
-                    formData.append('tenure_weeks', Number(staticdata.tenureWeeks) || "")
-                    formData.append('sessions_per_week', staticdata.noofSessions || "")
-                    formData.append('session_duration_minutes', Number(staticdata.recurringSession))
-                }
-
-                formData.append('sale_price', Number(staticdata.salePrice) || 0)
-                formData.append('original_price', Number(staticdata.originalPrice) || 0)
-                if (commissionTab == 'Global Commission') {
-                    formData.append('coach_commission_type', 'global')
-                } else {
-                    formData.append('coach_commission_type', 'custom')
-                    formData.append('custom_commission_rate', staticdata.customcommisionRate || 0)
-                }
-                formData.append('tag', staticdata.tag || "")
-
-                if (selectedPrograms?.length > 0) {
-                    selectedPrograms.forEach((element) => (
-                        formData.append('coach_ids[]', element.value)
-                    ))
-                } else {
-                    formData.append('coach_ids', '[]')
-                }
-                const res = await createProgram(formData);
-                console.log(res)
-
-            } catch (err) {
-                console.log(err)
-            } finally {
-                setloading(false)
+        try {
+            setloading(true)
+            const formData = new FormData()
+            formData.append('name', staticdata.name)
+            formData.append('program_category_id', programCategoryId)
+            formData.append('description', programDescription || "")
+            if (mainImage instanceof File) {
+                formData.append('main_image', mainImage)
             }
-        } else {
-            toast.error('Name and program category is required...')
-        }
+            if (galleryImage?.length > 0) {
+                galleryImage.forEach((element) => {
+                    formData.append('gallery_images[]', element.img);
+                });
+            } else {
+                formData.append('gallery_images', []);
+            }
 
+            if (faqImage instanceof File) {
+                formData.append('faqs_section_image', faqImage)
+            }
+
+            if (dynamicFaq?.length > 0) {
+                dynamicFaq.forEach((element, index) => {
+                    formData.append(`faqs[${index}][heading]`, element.heading || "")
+                    formData.append(`faqs[${index}][description]`, element.description || "")
+                    formData.append(`faqs[${index}][sort_order]`, index)
+                })
+            }
+            else {
+                formData.append(`faqs`, '[]')
+            }
+
+            if (benefitImage instanceof File) {
+                formData.append('benefits_section_image', benefitImage)
+            }
+
+
+            if (dynamicBenefits?.length > 0) {
+                dynamicBenefits.forEach((element, index) => {
+                    formData.append(`benefits[${index}][description]`, element.description)
+                    formData.append(`benefits[${index}][sort_order]`, index)
+                })
+            } else {
+                formData.append(`benefits`, '[]')
+            }
+
+            if (HowItWorksImage instanceof File) {
+                formData.append('how_it_works_section_image', HowItWorksImage)
+            }
+
+
+            if (dynamicHowItWorks?.length > 0) {
+                dynamicHowItWorks.forEach((element, index) => {
+                    formData.append(`how_it_works[${index}][description]`, element.description)
+                    formData.append(`how_it_works[${index}][sort_order]`, index)
+                })
+            } else {
+                formData.append(`how_it_works`, '[]')
+            }
+
+
+            if (occurenceType == 'One Time') {
+                if (staticdata.oneTimeSession) {
+                    formData.append('session_duration_minutes', Number(staticdata.oneTimeSession))
+                    formData.append('occurrence_type', 'one_time')
+                }
+            } else {
+                formData.append('occurrence_type', 'recurring')
+                formData.append('tenure_weeks', Number(staticdata.tenureWeeks) || "")
+                formData.append('sessions_per_week', staticdata.noofSessions || "")
+                formData.append('session_duration_minutes', Number(staticdata.recurringSession))
+            }
+
+            formData.append('sale_price', Number(staticdata.salePrice) || 0)
+            formData.append('original_price', Number(staticdata.originalPrice) || 0)
+            if (commissionTab == 'Global Commission') {
+                formData.append('coach_commission_type', 'global')
+            } else {
+                formData.append('coach_commission_type', 'custom')
+                formData.append('custom_commission_rate', staticdata.customcommisionRate || 0)
+            }
+            formData.append('tag', staticdata.tag || "")
+
+            if (selectedPrograms?.length > 0) {
+                selectedPrograms.forEach((element) => (
+                    formData.append('coach_ids[]', element.value)
+                ))
+            } else {
+                formData.append('coach_ids', '[]')
+            }
+            const res = await createProgram(formData);
+            setprogramErrors(res)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
     }
 
-    console.log(staticdata
-        .noofSessions
+    console.log(programErrors
     )
     return (
         <>
@@ -291,6 +284,11 @@ const CreatePrograms = () => {
                         <div className='create_program_form_wrapper'>
                             <div>
                                 <Input onChange={handleChange} name={'name'} value={staticdata?.name} label={'Program Name'} required={true} placeholder={'Enter program name'} />
+                                {programErrors?.name && <small style={{
+                                    color:'red',
+                                    fontSize:'12px',
+                                    marginTop:'-10px'
+                                }}>*{programErrors?.name[0]}</small>}
                             </div>
                             <div className='input_form'>
                                 <label>Program Category <span>*</span></label>
@@ -300,6 +298,12 @@ const CreatePrograms = () => {
                                         <option value={e?.id} key={i}>{e?.name}</option>
                                     ))}
                                 </select>
+
+                                {programErrors?.program_category_id && <small style={{
+                                    color: 'red',
+                                    fontSize: '12px',
+                                    marginTop: '-10px'
+                                }}>*{programErrors?.program_category_id[0]}</small>}
                             </div>
                             {/* <div className='create_input_grid_wrapper'>
                                 <div className='input_form'>
@@ -318,6 +322,12 @@ const CreatePrograms = () => {
                             </div> */}
                             <div>
                                 <CustomTextEditor defaultValue={programDescription} onChange={((data) => setprogramDescription(data))} label={'Description'} required={true} />
+
+                                {programErrors?.description && <small style={{
+                                    color: 'red',
+                                    fontSize: '12px',
+                                    marginTop: '-10px'
+                                }}>*{programErrors?.description[0]}</small>}
                             </div>
                             <div className='input_form'>
                                 <label style={{
@@ -353,6 +363,12 @@ const CreatePrograms = () => {
                                     )}
                                     <input onChange={((e) => setmainImage(e.target.files[0]))} type='file' />
                                 </div>
+
+                                {programErrors?.main_image && <small style={{
+                                    color: 'red',
+                                    fontSize: '12px',
+                                    marginTop: '-10px'
+                                }}>*{programErrors?.main_image[0]}</small>}
                             </div>
 
                             <div className='input_form'>
@@ -404,7 +420,11 @@ const CreatePrograms = () => {
 
                                     ))}
                                 </div>
-
+                                {programErrors?.gallery_images && <small style={{
+                                    color: 'red',
+                                    fontSize: '12px',
+                                    marginTop: '-10px'
+                                }}>*{programErrors?.gallery_images[0]}</small>}
                             </div>
 
                             <div className='other_details_wrapper'>
@@ -453,22 +473,22 @@ const CreatePrograms = () => {
                                         {/* Occurence Type content */}
 
                                         <Activity mode={tabs.occurenceType ? 'visible' : 'hidden'}>
-                                            <OccurenceType staticdata={staticdata} handleChange={handleChange} occurenceType={occurenceType} setoccurenceType={setoccurenceType} />
+                                            <OccurenceType programErrors={programErrors} staticdata={staticdata} handleChange={handleChange} occurenceType={occurenceType} setoccurenceType={setoccurenceType} />
                                         </Activity>
                                         <Activity mode={tabs.pricing ? 'visible' : 'hidden'}>
-                                            <PricingContent handleChange={handleChange} staticdata={staticdata} />
+                                            <PricingContent programErrors={programErrors} handleChange={handleChange} staticdata={staticdata} />
                                         </Activity>
 
                                         {/* Select Coaches Content */}
                                         <Activity mode={tabs.coaches ? 'visible' : 'hidden'}>
-                                            <SelectCoaches setcoachIds={setcoachIds} selectedPrograms={selectedPrograms} setSelectedPrograms={setSelectedPrograms} allcoach={allcoach} />
+                                            <SelectCoaches selectedPrograms={selectedPrograms} setSelectedPrograms={setSelectedPrograms} allcoach={allcoach} />
                                         </Activity>
 
 
                                         {/* Coach Commission Content */}
 
                                         <Activity mode={tabs.commission ? 'visible' : 'hidden'}>
-                                            <CoachCommission commissionTab={commissionTab} setcommissionTab={setcommissionTab} handleChange={handleChange} staticdata={staticdata} data={data} />
+                                            <CoachCommission programErrors={programErrors} commissionTab={commissionTab} setcommissionTab={setcommissionTab} handleChange={handleChange} staticdata={staticdata} data={data} />
                                         </Activity>
 
 

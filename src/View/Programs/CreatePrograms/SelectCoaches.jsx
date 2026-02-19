@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import Select from 'react-select/base';
-const SelectCoaches = ({ allcoach, setSelectedPrograms, selectedPrograms, setcoachIds }) => {
+const SelectCoaches = ({ allcoach, setSelectedPrograms, selectedPrograms, }) => {
     const [inputValue, setInputValue] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const options = allcoach?.map(item => ({
@@ -10,9 +10,7 @@ const SelectCoaches = ({ allcoach, setSelectedPrograms, selectedPrograms, setcoa
     })) || [];
 
     const handleSelect = (selected) => {
-        setSelectedPrograms(selected || []);
-        const newCoachIds = (selected || []).map(el => el.value);
-        setcoachIds(newCoachIds)
+        setSelectedPrograms(selected || [])
     };
 
     return (
