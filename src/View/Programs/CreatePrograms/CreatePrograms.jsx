@@ -39,6 +39,7 @@ const CreatePrograms = () => {
     const [galleryImage, setgalleryImage] = useState([]);
     const [commissionTab, setcommissionTab] = useState('Global Commission');
     const [coachIds, setcoachIds] = useState([])
+
     const [staticdata, setstaticdata] = useState({
         name: '',
         oneTimeSession: '',
@@ -165,7 +166,7 @@ const CreatePrograms = () => {
                         formData.append('gallery_images[]', element.img);
                     });
                 } else {
-                    formData.append('gallery_images[]', null);
+                    formData.append('gallery_images', []);
                 }
 
                 if (faqImage instanceof File) {
@@ -184,7 +185,7 @@ const CreatePrograms = () => {
                 }
 
                 if (benefitImage instanceof File) {
-                    formData.append('benefits_section_image ', benefitImage)
+                    formData.append('benefits_section_image', benefitImage)
                 }
 
 
@@ -211,17 +212,17 @@ const CreatePrograms = () => {
                     formData.append(`how_it_works`, '[]')
                 }
 
-               
+
                 if (occurenceType == 'One Time') {
                     if (staticdata.oneTimeSession) {
                         formData.append('session_duration_minutes', Number(staticdata.oneTimeSession))
                         formData.append('occurrence_type', 'one_time')
-                    } else {
-                        formData.append('occurrence_type', 'recurring')
-                        formData.append('tenure_weeks', Number(staticdata.tenureWeeks) || "")
-                        formData.append('sessions_per_week   ', Number(staticdata.noofSessions) || "")
-                        formData.append('session_duration_minutes', Number(staticdata.recurringSession))
                     }
+                } else {
+                    formData.append('occurrence_type', 'recurring')
+                    formData.append('tenure_weeks', Number(staticdata.tenureWeeks) || "")
+                    formData.append('sessions_per_week', staticdata.noofSessions || "")
+                    formData.append('session_duration_minutes', Number(staticdata.recurringSession))
                 }
 
                 formData.append('sale_price', Number(staticdata.salePrice) || 0)
@@ -233,7 +234,14 @@ const CreatePrograms = () => {
                     formData.append('custom_commission_rate', staticdata.customcommisionRate || 0)
                 }
                 formData.append('tag', staticdata.tag || "")
-                formData.append('coach_ids', coachIds || [])
+
+                if (selectedPrograms?.length > 0) {
+                    selectedPrograms.forEach((element) => (
+                        formData.append('coach_ids[]', element.value)
+                    ))
+                } else {
+                    formData.append('coach_ids', '[]')
+                }
                 const res = await createProgram(formData);
                 console.log(res)
 
@@ -248,6 +256,9 @@ const CreatePrograms = () => {
 
     }
 
+    console.log(staticdata
+        .noofSessions
+    )
     return (
         <>
             {loading && <Loaders />}
