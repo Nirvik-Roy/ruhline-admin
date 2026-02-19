@@ -7,10 +7,11 @@ import Pagination from '../../Components/Pagination/Pagination'
 import AddCoachModal from '../Modal/AddCoachModal'
 import EditCoachModal from '../Modal/EditCoachModal'
 import { useNavigate } from 'react-router-dom'
-import { addNewCoach, deleteCoach, getAllCoaches, updateCoach } from '../../utils/coach'
+import { addNewCoach, deleteCoach, getAllCoaches, updateCoach, verifyCoach } from '../../utils/coach'
 import Loaders from '../../Components/Loaders/Loaders'
 import { getSingleCoach } from '../../utils/coach'
 import DeleteModal from '../../Components/DeleteModal/DeleteModal'
+import VerifyModal from '../../Components/VerifyModal/VerifyModal'
 const Coaches = () => {
     const [index, setIndex] = useState([]);
     const [dropdown, setdropdown] = useState(null);
@@ -19,7 +20,9 @@ const Coaches = () => {
     const [coachData, setcoachData] = useState([]);
     const [deletedloading, setDeletedLoading] = useState(false)
     const [isLoading, setisLoading] = useState(false);
-    const [deletedId,setdeletedId] = useState()
+    const [deletedId, setdeletedId] = useState()
+    const [coachId, setcoachId] = useState('')
+    const [coachVerifyModal, setcoachVerifyModal] = useState(false)
     const [updateErrors, setupdateErrors] = useState()
     const [updateLoading, setUpdateLoading] = useState(false);
     const [addCoachError, setaddCoachError] = useState();
@@ -80,18 +83,18 @@ const Coaches = () => {
                 const result = await deleteCoach(deletedId);
                 getAllCoachesFunc()
                 console.log(result)
-                if(result.success){
+                if (result.success) {
                     setdeleteModal(false)
                 }
             } catch (err) {
                 console.log(err)
-            }finally{
+            } finally {
                 setDeletedLoading(false)
             }
         }
-    } 
+    }
 
-    const handleDelete = (id) =>{
+    const handleDelete = (id) => {
         setdeleteModal(true)
         setdeletedId(id)
     }
@@ -150,11 +153,33 @@ const Coaches = () => {
         };
     }, []);
 
+    const handleCoach = (id) => {
+        setcoachId(id)
+        setcoachVerifyModal(true)
+    }
+
+    const handleCoachVerification = async () => {
+        try {
+            setisLoading(true)
+            const res = await verifyCoach(coachId);
+            console.log(res)
+            if (res.success) {
+                setcoachVerifyModal(false)
+                getAllCoachesFunc()
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setisLoading(false)
+        }
+    }
+
     return (
         <>
-            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal}  onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
+            {coachVerifyModal && <VerifyModal setverifymodal={setcoachVerifyModal} onClick={handleCoachVerification} title={'Coach Verification'} details={'Do you want to verify this coach?'} />}
+            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
             {(updateLoading || deletedloading) && <Loaders />}
-            
+
             {coachModal && <AddCoachModal addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
             {ediCoachModal && <EditCoachModal updateErrors={updateErrors} editNewCoachfunc={editNewCoachfunc} singleCoachdata={singleCoachdata} singleCoachLoading={singleCoachLoading} seteditCoachModal={seteditCoachModal} />}
             <div className='dashboard_container'>
@@ -193,6 +218,7 @@ const Coaches = () => {
                                 <th>Coach Type</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -222,12 +248,21 @@ const Coaches = () => {
                                     <td>{e?.profile?.coach_type}</td>
                                     <td>{e?.user?.email}</td>
                                     <td>+{e?.profile?.phone_country_code.phone_code} {e?.profile?.phone}</td>
+                                    <td>{e?.user?.email_verified_at ? <p style={{
+                                        color: 'rgba(36, 159, 50, 1)'
+                                    }}>Verified</p> : <p style={{
+                                        color: 'red'
+                                    }}>Not Verified</p>}</td>
                                     <td ref={dropdownRef}>
                                         <img onClick={((e) => {
                                             e.stopPropagation()
                                             indexFunction(i)
                                         })} src={ellipse} />
-                                        {index.includes(i) && <div className='actions_wrapper'>
+                                        {index.includes(i) && <div className='actions_wrapper' style={!e?.user?.email_verified_at ? {
+                                            top: '50px',
+                                            height: 'fit-content'
+                                        } : {}}>
+                                            {!e?.user?.email_verified_at && <p onClick={(() => handleCoach(e?.id))}>Verify Coach</p>}
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/coaches/single-coache/${e?.id}`)
                                             })}>View</p>

@@ -143,3 +143,24 @@ export const getCoachAssignedPrograms = async (coachId) => {
     }
     return []
 }
+
+
+export const verifyCoach = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/coach/${id}/verify`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Coach verified success');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}

@@ -837,7 +837,7 @@ export const createProgram = async (data) => {
     const Token = localStorage.getItem('token');
     if (Token && data) {
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/project`, data, {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program`, data, {
                 headers: {
                     'Authorization': `Bearer ${Token}`
                 }
@@ -857,7 +857,7 @@ export const getPrograms = async () =>{
     const Token = localStorage.getItem('token');
     if (Token) {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/project`, {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program`, {
                 headers: {
                     'Authorization': `Bearer ${Token}`
                 }
@@ -876,7 +876,7 @@ export const getprogramById = async (id) => {
     const Token = localStorage.getItem('token');
     if (Token && id) {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/project/${id}`, {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${Token}`
                 }
@@ -895,7 +895,7 @@ export const editProgramsById = async (data, id) => {
     const Token = localStorage.getItem('token');
     if (Token && data && id) {
         try {
-            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/project/${id}`, data, {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}`, data, {
                 headers: {
                     'Authorization': `Bearer ${Token}`
                 }
