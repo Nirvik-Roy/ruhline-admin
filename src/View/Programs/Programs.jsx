@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Components/Button';
 import Pagination from '../../Components/Pagination/Pagination';
 import ellipse from '../../assets/_MoreIcon_.svg'
 import { getPrograms } from '../../utils/Program';
+import DeleteModal from '../../Components/DeleteModal/DeleteModal';
+import Loaders from '../../Components/Loaders/Loaders.jsx'
+import { commonDelelteApi } from '../../utils/common';
 const Programs = () => {
     const [index, setIndex] = useState([]);
+    const dropdownRef = useRef(null);
+
     const navigate = useNavigate()
     const [dropdown, setdropdown] = useState(false);
     const [loading, setloading] = useState();
+    const [deleteId, setdeleteId] = useState('')
+    const [deletedModal, setdeletedModal] = useState(false)
     const [programData, setprogramData] = useState([])
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -32,9 +39,47 @@ const Programs = () => {
     useEffect(() => {
         fetchPrograms()
     }, [])
-    console.log(programData)
+
+    const handleDelete = (id) => {
+        setdeleteId(id)
+        setdeletedModal(true)
+    }
+
+    const deleteFunc = async () => {
+        try {
+            setloading(true)
+            const res = await commonDelelteApi('/admin/project', deleteId);
+            if (res.success) {
+                setdeletedModal(false)
+                fetchPrograms()
+                setIndex([])
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
     return (
         <>
+            {loading
+                && <Loaders />}
+            {deletedModal && <DeleteModal setdeleteModal={setdeletedModal} onClick={deleteFunc} title={'Delete program'} details={'Do you really want to delete this program?'} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Programs</h2>
@@ -113,12 +158,12 @@ const Programs = () => {
                                     <td>{e?.program_category?.name}</td>
                                     <td>{e?.occurrence_type}</td>
                                     <td>SAR{e?.sale_price}</td>
-                                    <td>
+                                    <td ref={dropdownRef} onClick={((e)=>e.stopPropagation())}>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => navigate(`/dashboard/programs/single-program/${e?.id}`))}>View</p>
                                             <p onClick={(() => navigate(`/dashboard/programs/edit-program/${e?.id}`))}>Edit</p>
-                                            <p>Delete</p>
+                                            <p onClick={(() => handleDelete(e?.id))}>Delete</p>
                                         </div>}
                                     </td>
                                 </tr>

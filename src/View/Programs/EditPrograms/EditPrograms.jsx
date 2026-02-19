@@ -148,7 +148,6 @@ const EditPrograms = () => {
             tag: i === 5 ? true : false
         })
     }
-    console.log(galleryImage)
     const handleSubmit = async () => {
 
         try {
