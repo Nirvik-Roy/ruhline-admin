@@ -248,7 +248,7 @@ const Coaches = () => {
                                     <td>{e?.profile?.coach_type}</td>
                                     <td>{e?.user?.email}</td>
                                     <td>+{e?.profile?.phone_country_code.phone_code} {e?.profile?.phone}</td>
-                                    <td>{e?.user?.email_verified_at ? <p style={{
+                                    <td>{e?.is_admin_verified ? <p style={{
                                         color: 'rgba(36, 159, 50, 1)'
                                     }}>Verified</p> : <p style={{
                                         color: 'red'
@@ -258,11 +258,11 @@ const Coaches = () => {
                                             e.stopPropagation()
                                             indexFunction(i)
                                         })} src={ellipse} />
-                                        {index.includes(i) && <div className='actions_wrapper' style={!e?.user?.email_verified_at ? {
+                                        {index.includes(i) && <div className='actions_wrapper' style={!e?.is_admin_verified ? {
                                             top: '50px',
                                             height: 'fit-content'
                                         } : {}}>
-                                            {!e?.user?.email_verified_at && <p onClick={(() => handleCoach(e?.id))}>Verify Coach</p>}
+                                            {!e?.is_admin_verified && <p onClick={(() => handleCoach(e?.id))}>Verify Coach</p>}
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/coaches/single-coache/${e?.id}`)
                                             })}>View</p>
