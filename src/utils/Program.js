@@ -953,9 +953,9 @@ export const getProgramModuleById = async (id) => {
 }
 
 
-export const postValuesQuestion = async (data, structureId,id) => {
+export const postValuesQuestion = async (data, structureId, id) => {
     const Token = localStorage.getItem('token');
-    if (Token && data && structureId,id) {
+    if (Token && data && structureId, id) {
         try {
             const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/values/questions`, data, {
                 headers: {
@@ -964,6 +964,25 @@ export const postValuesQuestion = async (data, structureId,id) => {
             },);
             if (res.data.success == true) {
                 toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const getValuesQuestion = async (id, structureId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/values/questions`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
                 return res.data
             }
         } catch (err) {

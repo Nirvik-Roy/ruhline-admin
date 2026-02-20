@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../../../../Components/Button'
 import menu from '../../../../../assets/menu.svg'
 import edit from '../../../../../assets/Pencil.svg'
@@ -10,11 +10,13 @@ import SingleChoiceModal from '../../../../Modal/SingleChoiceModal'
 import DropdownModal from '../../../../Modal/DropdownModal'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
-import { postValuesQuestion } from '../../../../../utils/Program'
+import { getValuesQuestion, postValuesQuestion } from '../../../../../utils/Program'
+import EditMultiChoiceModal from '../../../../Modal/EditMultiChoiceModal.jsx'
 const ValuesModule = () => {
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
-    const { id } = useParams();
+    const { id, moduleId } = useParams();
+    const [allQuestions, setallQuestions] = useState([]);
     const [dynamicOptions, setdynamicOptions] = useState([
         {
             id: 1,
@@ -43,14 +45,22 @@ const ValuesModule = () => {
         descriptive: false,
         multiChoice: false,
         singleChoice: false,
-        dropdown: false
+        dropdown: false,
+        editdescriptive: false,
+        editmultiChoice: false,
+        editsingleChoice: false,
+        editropdown: false
     })
     const tabsFunction = (i) => {
         setTabs({
             descriptive: i === 1 ? true : false,
             multiChoice: i === 2 ? true : false,
             singleChoice: i === 3 ? true : false,
-            dropdown: i === 4 ? true : false
+            dropdown: i === 4 ? true : false,
+            editdescriptive: i === 5 ? true : false,
+            editmultiChoice: i === 6 ? true : false,
+            editsingleChoice: i === 7 ? true : false,
+            editropdown: i === 8 ? true : false
         })
     }
 
@@ -125,29 +135,31 @@ const ValuesModule = () => {
                 })
                 const res = await postValuesQuestion(formData, structureId, id);
                 if (res?.success) {
-                    setTabs(0)
-                    setdynamicOptions([{
-                        id: 1,
-                        type: 'descriptive',
-                        question_text: '',
-                        options: null,
-                    }, {
-                        id: 2,
-                        type: 'multi_choice',
-                        question_text: '',
-                        options: []
-                    }, {
-                        id: 3,
-                        type: 'single_choice',
-                        question_text: '',
-                        options: []
-                    },
-                    {
-                        id: 4,
-                        type: 'dropdown',
-                        question_text: '',
-                        options: []
-                    }
+                    setTabs(0);
+                    fetchAllQuestions()
+                    setdynamicOptions([
+                        {
+                            id: 1,
+                            type: 'descriptive',
+                            question_text: '',
+                            options: null,
+                        }, {
+                            id: 2,
+                            type: 'multi_choice',
+                            question_text: '',
+                            options: []
+                        }, {
+                            id: 3,
+                            type: 'single_choice',
+                            question_text: '',
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            type: 'dropdown',
+                            question_text: '',
+                            options: []
+                        }
                     ])
                 }
             } catch (err) {
@@ -157,7 +169,57 @@ const ValuesModule = () => {
             }
         }
     }
-    console.log(dynamicOptions)
+
+    useEffect(() => {
+        if (!tabs.descriptive && !tabs.dropdown && !tabs.editdescriptive && !tabs.editmultiChoice && !tabs.editropdown && !tabs.editsingleChoice && !tabs.multiChoice && !tabs.singleChoice) {
+            setdynamicOptions([
+                {
+                    id: 1,
+                    type: 'descriptive',
+                    question_text: '',
+                    options: null,
+                }, {
+                    id: 2,
+                    type: 'multi_choice',
+                    question_text: '',
+                    options: []
+                }, {
+                    id: 3,
+                    type: 'single_choice',
+                    question_text: '',
+                    options: []
+                },
+                {
+                    id: 4,
+                    type: 'dropdown',
+                    question_text: '',
+                    options: []
+                }
+            ])
+        }
+    }, [tabs.descriptive, tabs.dropdown, tabs.editdescriptive, tabs.editmultiChoice, tabs.editropdown, tabs.editsingleChoice, tabs.singleChoice, tabs.multiChoice])
+    const fetchAllQuestions = async () => {
+        try {
+            setloading(true)
+            const res = await getValuesQuestion(id, moduleId)
+            console.log(res)
+            if (res?.success) {
+                setallQuestions(res?.data?.data)
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (id && moduleId) {
+            fetchAllQuestions()
+        }
+    }, [id, moduleId])
+
+
     return (
         <>
             {tabs.descriptive && <DescriptiveModal updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
@@ -166,6 +228,9 @@ const ValuesModule = () => {
             {tabs.singleChoice && <SingleChoiceModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
             {tabs.dropdown && <DropdownModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+
+
+            {tabs.editmultiChoice && <EditMultiChoiceModal />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
@@ -245,62 +310,23 @@ const ValuesModule = () => {
                 </div>
 
                 <div className='questions_list_wrapper4562'>
-                    <div className='added_modules_wrapper'>
-                        <div className='add_modules_enu_wrapper'>
-                            <img src={menu} />
-                            <p>Question 1 <small style={{
-                                fontSize: '10px',
-                                marginLeft: '5px'
-                            }}>Single Choice</small></p>
+                    {allQuestions?.length > 0 && allQuestions?.map((element, index) => (
+                        <div className='added_modules_wrapper' key={index}>
+                            <div className='add_modules_enu_wrapper'>
+                                <img src={menu} />
+                                <p>{element?.question_text} <small style={{
+                                    fontSize: '10px',
+                                    marginLeft: '5px'
+                                }}>{element?.type}</small></p>
+                            </div>
+                            <div className='edit_modules_wrapper'>
+                                <img src={edit} />
+                                <img src={deleteicon} />
+                            </div>
                         </div>
-                        <div className='edit_modules_wrapper'>
-                            <img src={edit} />
-                            <img src={deleteicon} />
-                        </div>
-                    </div>
-
-                    <div className='added_modules_wrapper'>
-                        <div className='add_modules_enu_wrapper'>
-                            <img src={menu} />
-                            <p>Question 2 <small style={{
-                                fontSize: '10px',
-                                marginLeft: '5px'
-                            }}>Multiple Choice</small></p>
-                        </div>
-                        <div className='edit_modules_wrapper'>
-                            <img src={edit} />
-                            <img src={deleteicon} />
-                        </div>
-                    </div>
+                    ))}
 
 
-                    <div className='added_modules_wrapper'>
-                        <div className='add_modules_enu_wrapper'>
-                            <img src={menu} />
-                            <p>Question 3 <small style={{
-                                fontSize: '10px',
-                                marginLeft: '5px'
-                            }}>Descriptive</small></p>
-                        </div>
-                        <div className='edit_modules_wrapper'>
-                            <img src={edit} />
-                            <img src={deleteicon} />
-                        </div>
-                    </div>
-
-                    <div className='added_modules_wrapper'>
-                        <div className='add_modules_enu_wrapper'>
-                            <img src={menu} />
-                            <p>Question 4 <small style={{
-                                fontSize: '10px',
-                                marginLeft: '5px'
-                            }}>Dropdown</small></p>
-                        </div>
-                        <div className='edit_modules_wrapper'>
-                            <img src={edit} />
-                            <img src={deleteicon} />
-                        </div>
-                    </div>
                 </div>
             </div>
         </>
