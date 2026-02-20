@@ -12,19 +12,36 @@ const DescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQ
                 <h4>Descriptive</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>
                 {
-                    dynamicOptions?.length > 0 && dynamicOptions.map((e) => (
+                    dynamicOptions?.length > 0 &&
+                    dynamicOptions.map((e, qIndex) => (
                         e.type === "descriptive" ? (
-                            <div style={{
-                                margin: '20px 0 0 0'
-                            }}>
-                                <Textarea onChange={((event) => updateQuestionText(e?.id, event.target.value))} styles={{
-                                    height: '70px'
-                                }} label={'Question'} value={e.question_text} required={true} placeholder={'Enter question '} />
-                                <div className='change_cancel_wrapper' style={{
-                                    margin: '20px 0 0 0'
-                                }}>
-                                    <button onClick={(() => tabsFunction(0))}>Cancel</button>
-                                    <Button onClick={(() => postQuestions(moduleId))} children={'Add'} />
+                            <div
+                                key={qIndex}
+                                style={{ margin: '20px 0 0 0' }}
+                            >
+                                <Textarea
+                                    onChange={(event) =>
+                                        updateQuestionText(qIndex, event.target.value)
+                                    }
+                                    styles={{ height: '70px' }}
+                                    label="Question"
+                                    value={e.question_text}
+                                    required={true}
+                                    placeholder="Enter question"
+                                />
+
+                                <div
+                                    className='change_cancel_wrapper'
+                                    style={{ margin: '20px 0 0 0' }}
+                                >
+                                    <button onClick={() => tabsFunction(0)}>
+                                        Cancel
+                                    </button>
+
+                                    <Button
+                                        onClick={() => postQuestions(moduleId)}
+                                        children="Add"
+                                    />
                                 </div>
                             </div>
                         ) : null

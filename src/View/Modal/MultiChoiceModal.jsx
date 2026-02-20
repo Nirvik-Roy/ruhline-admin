@@ -14,22 +14,27 @@ const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQu
                 <h4>Multi Choice</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>
                 {
-                    dynamicOptions?.length > 0 && dynamicOptions.map((e) => (
+                    dynamicOptions?.length > 0 &&
+                    dynamicOptions.map((e, qIndex) => (
                         e.type === "multi_choice" ? (
-                            <div key={e.id} style={{ margin: "20px 0" }}>
+                            <div key={qIndex} style={{ margin: "20px 0" }}>
+
                                 {/* Question Textarea */}
                                 <Textarea
                                     styles={{ height: "70px" }}
                                     label="Question"
                                     required={true}
                                     value={e.question_text}
-                                    onChange={((event) => updateQuestionText(e?.id, event.target.value))}
+                                    onChange={(event) =>
+                                        updateQuestionText(qIndex, event.target.value)
+                                    }
                                 />
+
                                 {/* Options Header + Add Button */}
                                 <div className="options_wrapper466885">
                                     <h3>Options</h3>
                                     <Button
-                                        onClick={() => addEmptyOption(e.id)}
+                                        onClick={() => addEmptyOption(qIndex)}
                                         children="Add Option"
                                         styles={{
                                             backgroundColor: "transparent",
@@ -46,17 +51,21 @@ const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQu
                                     {e.options.map((opt, optIndex) => (
                                         <div
                                             className="options_1_wrapper456"
-                                            key={`${e.id}-opt-${optIndex}`}
+                                            key={`${qIndex}-opt-${optIndex}`}
                                         >
                                             <div className="option_left_wrapper">
                                                 <Textarea
                                                     label={`Option ${optIndex + 1}`}
                                                     required={true}
                                                     styles={{ height: "70px" }}
-                                                    value={opt.value}
+                                                    value={opt}
                                                     placeholder="Enter option"
-                                                    onChange={event =>
-                                                        updateOptionText(e.id, opt.id, event.target.value)
+                                                    onChange={(event) =>
+                                                        updateOptionText(
+                                                            qIndex,
+                                                            optIndex,
+                                                            event.target.value
+                                                        )
                                                     }
                                                 />
                                             </div>
@@ -65,19 +74,24 @@ const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQu
                                                 <img
                                                     src={crossIcon}
                                                     alt="remove"
-                                                    onClick={() => removeOption(e.id, opt.id)}
+                                                    onClick={() =>
+                                                        removeOption(qIndex, optIndex)
+                                                    }
                                                     style={{ cursor: "pointer" }}
                                                 />
                                             </div>
                                         </div>
                                     ))}
 
-                                    {/* Submit / Add Final Button */}
+                                    {/* Submit Button */}
                                     <div
                                         className="change_cancel_wrapper"
                                         style={{ margin: "20px 0 0 0" }}
                                     >
-                                        <Button onClick={(() => postQuestions(moduleId))} children="Add" />
+                                        <Button
+                                            onClick={() => postQuestions(moduleId)}
+                                            children="Add"
+                                        />
                                     </div>
                                 </div>
 

@@ -54,51 +54,51 @@ const ValuesModule = () => {
         })
     }
 
-    const addEmptyOption = id => {
+    const addEmptyOption = (questionIndex) => {
         setdynamicOptions(prev =>
-            prev.map(item =>
-                item.id === id
+            prev.map((item, qIndex) =>
+                qIndex === questionIndex
                     ? {
-                        ...item, options: [...item.options, {
-                            id: Date.now(),
-                            value: ''
-                        }]
+                        ...item,
+                        options: [...item.options, '']
                     }
                     : item
             )
         );
     };
 
-    const removeOption = (questionId, optionId) => {
+    const removeOption = (questionIndex, optionIndex) => {
         setdynamicOptions(prev =>
-            prev.map(item =>
-                item.id === questionId
+            prev.map((item, qIndex) =>
+                qIndex === questionIndex
                     ? {
                         ...item,
-                        options: item.options.filter(opt => opt.id !== optionId),
+                        options: item.options.filter((_, oIndex) => oIndex !== optionIndex)
                     }
                     : item
             )
         );
     };
 
-    const updateQuestionText = (id, text) => {
+    const updateQuestionText = (questionIndex, text) => {
         setdynamicOptions(prev =>
-            prev.map(item =>
-                item.id === id ? { ...item, question_text: text } : item
+            prev.map((item, qIndex) =>
+                qIndex === questionIndex
+                    ? { ...item, question_text: text }
+                    : item
             )
         );
     };
 
-    const updateOptionText = (questionId, optionId, newValue) => {
+    const updateOptionText = (questionIndex, optionIndex, newValue) => {
         setdynamicOptions(prev =>
-            prev.map(item =>
-                item.id === questionId
+            prev.map((item, qIndex) =>
+                qIndex === questionIndex
                     ? {
                         ...item,
-                        options: item.options.map(opt =>
-                            opt.id === optionId ? { ...opt, value: newValue } : opt
-                        ),
+                        options: item.options.map((opt, oIndex) =>
+                            oIndex === optionIndex ? newValue : opt
+                        )
                     }
                     : item
             )
@@ -157,7 +157,7 @@ const ValuesModule = () => {
             }
         }
     }
-
+    console.log(dynamicOptions)
     return (
         <>
             {tabs.descriptive && <DescriptiveModal updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
