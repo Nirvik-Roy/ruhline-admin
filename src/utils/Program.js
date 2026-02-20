@@ -853,7 +853,7 @@ export const createProgram = async (data) => {
     }
 }
 
-export const getPrograms = async () =>{
+export const getPrograms = async () => {
     const Token = localStorage.getItem('token');
     if (Token) {
         try {
@@ -902,6 +902,68 @@ export const editProgramsById = async (data, id) => {
             },);
             if (res.data.success == true) {
                 toast.success(res.data?.message || 'Quote edited succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postProgramModule = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Progam Created Success..');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getProgramModuleById = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postValuesQuestion = async (data, structureId,id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId,id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/values/questions`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
                 return res.data
             }
         } catch (err) {

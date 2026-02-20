@@ -8,9 +8,37 @@ import DescriptiveModal from '../../../../Modal/DescriptiveModal'
 import MultiChoiceModal from '../../../../Modal/MultiChoiceModal'
 import SingleChoiceModal from '../../../../Modal/SingleChoiceModal'
 import DropdownModal from '../../../../Modal/DropdownModal'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
+import { postValuesQuestion } from '../../../../../utils/Program'
 const ValuesModule = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [loading, setloading] = useState(false);
+    const { id } = useParams();
+    const [dynamicOptions, setdynamicOptions] = useState([
+        {
+            id: 1,
+            type: 'descriptive',
+            question_text: '',
+            options: null,
+        }, {
+            id: 2,
+            type: 'multi_choice',
+            question_text: '',
+            options: []
+        }, {
+            id: 3,
+            type: 'single_choice',
+            question_text: '',
+            options: []
+        },
+        {
+            id: 4,
+            type: 'dropdown',
+            question_text: '',
+            options: []
+        }
+    ])
     const [tabs, setTabs] = useState({
         descriptive: false,
         multiChoice: false,
@@ -25,17 +53,125 @@ const ValuesModule = () => {
             dropdown: i === 4 ? true : false
         })
     }
+
+    const addEmptyOption = id => {
+        setdynamicOptions(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? {
+                        ...item, options: [...item.options, {
+                            id: Date.now(),
+                            value: ''
+                        }]
+                    }
+                    : item
+            )
+        );
+    };
+
+    const removeOption = (questionId, optionId) => {
+        setdynamicOptions(prev =>
+            prev.map(item =>
+                item.id === questionId
+                    ? {
+                        ...item,
+                        options: item.options.filter(opt => opt.id !== optionId),
+                    }
+                    : item
+            )
+        );
+    };
+
+    const updateQuestionText = (id, text) => {
+        setdynamicOptions(prev =>
+            prev.map(item =>
+                item.id === id ? { ...item, question_text: text } : item
+            )
+        );
+    };
+
+    const updateOptionText = (questionId, optionId, newValue) => {
+        setdynamicOptions(prev =>
+            prev.map(item =>
+                item.id === questionId
+                    ? {
+                        ...item,
+                        options: item.options.map(opt =>
+                            opt.id === optionId ? { ...opt, value: newValue } : opt
+                        ),
+                    }
+                    : item
+            )
+        );
+    };
+
+    const postQuestions = async (structureId) => {
+        if (structureId && id) {
+            try {
+                setloading(true);
+                const formData = new FormData()
+                dynamicOptions.forEach((element) => {
+                    if (element.type && element.question_text) {
+                        formData.append(`type`, element.type)
+                        formData.append('question_text', element.question_text)
+                        if (element.options?.length > 0) {
+                            element.options?.forEach(option => {
+                                formData.append('options[]', option.value);
+                            });
+                        } else {
+                            formData.append('options', [])
+                        }
+                    }
+                })
+                const res = await postValuesQuestion(formData, structureId, id);
+                if (res?.success) {
+                    setTabs(0)
+                    setdynamicOptions([{
+                        id: 1,
+                        type: 'descriptive',
+                        question_text: '',
+                        options: null,
+                    }, {
+                        id: 2,
+                        type: 'multi_choice',
+                        question_text: '',
+                        options: []
+                    }, {
+                        id: 3,
+                        type: 'single_choice',
+                        question_text: '',
+                        options: []
+                    },
+                    {
+                        id: 4,
+                        type: 'dropdown',
+                        question_text: '',
+                        options: []
+                    }
+                    ])
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        }
+    }
+
     return (
         <>
-            {tabs.descriptive && <DescriptiveModal tabsFunction={tabsFunction} />}
-            {tabs.multiChoice && <MultiChoiceModal tabsFunction={tabsFunction} />}
-            {tabs.singleChoice && <SingleChoiceModal tabsFunction={tabsFunction} />}
-            {tabs.dropdown && <DropdownModal tabsFunction={tabsFunction} />}
+            {tabs.descriptive && <DescriptiveModal updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.multiChoice && <MultiChoiceModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+
+            {tabs.singleChoice && <SingleChoiceModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+
+            {tabs.dropdown && <DropdownModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Values</h2>
-                        <small><span onClick={(()=>navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(()=>navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(()=>navigate('/dashboard/programs/single-program/2/values'))}>Values</span></small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2/values'))}>Values</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>

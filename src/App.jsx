@@ -113,12 +113,12 @@ function App() {
               <Route path='programs/create-program' element={<CreatePrograms />} />
               <Route path='programs/edit-program/:id' element={<EditPrograms/>}/>
               <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
-              <Route path='programs/single-program/:id/values' element={<ValuesModule />} />
+              <Route path='programs/single-program/:id/values/:moduleId' element={<ValuesModule />} />
               <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
               <Route path='programs/card-game/:id/questions' element={<CardGameQuestions />} />
               <Route path='programs/single-program/:id/wheeloflife' element={<WheelOfLifeModule />} />
               <Route path='programs/single-program/:id/life-element' element={<SinglelifeElement />} />
-              <Route path='programs/single-program/:id/motivation' element={<MotivationModule />} />
+              <Route path='programs/single-program/:id/motivation/:moduleId' element={<MotivationModule />} />
               <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
               <Route path='payouts' element={<Payouts />} />
               <Route path='payouts/payment-list' element={<PaymentList />} />

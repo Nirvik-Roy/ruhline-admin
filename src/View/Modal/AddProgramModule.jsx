@@ -3,11 +3,15 @@ import Button from '../../Components/Button'
 import AddQuoteModuleModal from './AddQuoteModuleModal'
 import UploadDocumentsModal from './UploadDocumentsModal'
 import { useNavigate, useParams } from 'react-router-dom'
+import Loaders from '../../Components/Loaders/Loaders'
+import toast from 'react-hot-toast'
+import { postProgramModule } from '../../utils/Program'
 const AddProgramModule = ({ setmodalIsOpen }) => {
     const [quoteModal, setquoteModal] = useState(false);
     const [uploadModal, setuploadModal] = useState(false);
     const [path, setPath] = useState('');
-    const [radioValue, setradioValue] = useState()
+    const [radioValue, setradioValue] = useState();
+    const [loading, setloading] = useState(false)
     const { id } = useParams()
     const navigate = useNavigate();
 
@@ -23,12 +27,30 @@ const AddProgramModule = ({ setmodalIsOpen }) => {
     }
     const handleChange = (e) => {
         setradioValue(e.target.value)
-        setPath(data[e.target.value])
+        // setPath(data[e.target.value])
+    }
+
+    const postProgramModuleFunc = async () => {
+        if (id && radioValue) {
+            try {
+                setloading(true)
+                const res = await postProgramModule({
+                    module_type: radioValue
+                }, id)
+                console.log(res)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        } else {
+            toast.error("Required data not found...")
+        }
     }
 
     return (
         <>
-
+            {loading && <Loaders />}
             <Activity mode={quoteModal ? 'visible' : 'hidden'}>
                 <AddQuoteModuleModal />
             </Activity>
@@ -52,7 +74,7 @@ const AddProgramModule = ({ setmodalIsOpen }) => {
                         <input type='radio' onChange={handleChange} name='values' value={'values'} checked={radioValue === 'values'} />
                         <p>Values</p>
                     </div>
-                    <div className='modal_radio_wrapper'>
+                    {/* <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='card' value={'card'} checked={radioValue === 'card'} />
                         <p>Card Game</p>
                     </div>
@@ -69,14 +91,14 @@ const AddProgramModule = ({ setmodalIsOpen }) => {
                     <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='goal' value={'goal'} checked={radioValue === 'goal'} />
                         <p>Goal Settings  </p>
-                    </div>
+                    </div> */}
 
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='motivation' value={'motivation'} checked={radioValue === 'motivation'} />
+                        <input type='radio' onChange={handleChange} name='find_your_motivation' value={'find_your_motivation'} checked={radioValue === 'find_your_motivation'} />
                         <p>Find your Motivation  </p>
                     </div>
 
-                    <div className='modal_radio_wrapper'>
+                    {/* <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='habit' value={'habit'} checked={radioValue === 'habit'} />
                         <p>Habit Tracker  </p>
                     </div>
@@ -94,22 +116,24 @@ const AddProgramModule = ({ setmodalIsOpen }) => {
                     <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='who' value={'who'} checked={radioValue === 'who'} />
                         <p>Who am I? </p>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className='change_cancel_wrapper'>
                     <button onClick={(() => setmodalIsOpen(0))}>Cancel</button>
-                    <div onClick={(() => {
+                    <div
+                    // onClick={(() => {
 
-                        navigate(path != '' && `${path}`)
-                        if (radioValue === 'quotes') {
-                            setquoteModal(true);
-                        }
-                        if (radioValue === 'documents') {
-                            setuploadModal(true)
-                        }
-                    })}>
-                        <Button children={'Add'} />
+                    //     navigate(path != '' && `${path}`)
+                    //     if (radioValue === 'quotes') {
+                    //         setquoteModal(true);
+                    //     }
+                    //     if (radioValue === 'documents') {
+                    //         setuploadModal(true)
+                    //     }
+                    // })}
+                    >
+                        <Button onClick={postProgramModuleFunc} children={'Add'} />
                     </div>
                 </div>
             </div>
