@@ -7,14 +7,19 @@ import deleteicon from '../../../../assets/delete.svg'
 import './ProgramModule.css'
 import AddProgramModule from '../../../Modal/AddProgramModule'
 import Loaders from '../../../../Components/Loaders/Loaders'
-import { getProgramModuleById } from '../../../../utils/Program'
+import { getProgramModuleById, deleteProgramModule, reorderProgramModule } from '../../../../utils/Program'
 import { useNavigate, useParams } from 'react-router-dom'
+import DeleteModal from '../../../../Components/DeleteModal/DeleteModal'
 const ProgramModule = () => {
     const [modalIsOpen, setmodalIsOpen] = useState(false);
     const [moduleData, setmoduleData] = useState([]);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [deleteId, setdeleteId] = useState()
+    const [deletedModal, setdeletedModal] = useState(false)
     const [loading, setloading] = useState(false);
-    const { id } = useParams()
+    const { id } = useParams();
+    const [moduleOrder, setModuleOrder] = useState([]);
+    const [modulePositionChange, setmodulePositionChange] = useState(false)
     const fetchModules = async () => {
         try {
             setloading(true);
@@ -43,11 +48,76 @@ const ProgramModule = () => {
         who: `/dashboard/programs/single-program/${id}/whoami`,
     }
 
+    const handleDelete = (id) => {
+        setdeleteId(id)
+        setdeletedModal(true)
+    }
+
+    const deleteFunc = async () => {
+        try {
+            setloading(true);
+            const res = await deleteProgramModule(deleteId, id)
+            if (res?.success) {
+                setdeletedModal(false)
+                fetchModules()
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        setModuleOrder(moduleData?.map((e) => e.id) || [])
+    }, [moduleData])
+
+
+    let dragStartIndex;
+
+    const dragStart = (index) => {
+        dragStartIndex = index;
+    };
+
+    const dragEnter = (index) => {
+        const newOrder = [...moduleOrder];
+        const item = newOrder.splice(dragStartIndex, 1)[0];
+        newOrder.splice(index, 0, item);
+        setModuleOrder(newOrder);
+        setmodulePositionChange(true)
+    };
+    const sendReorderDetails = async () => {
+        try {
+            setloading(true)
+            const formData = new FormData()
+            if (moduleOrder?.length > 0) {
+                moduleOrder.forEach((element) => {
+                    formData.append('order[]', element)
+                })
+            }
+            const res = await reorderProgramModule(formData, id)
+            if (res?.success) {
+                fetchModules()
+                setmodulePositionChange(false)
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (modulePositionChange) {
+            sendReorderDetails(moduleOrder)
+        }
+    }, [modulePositionChange, moduleOrder])
     return (
         <>
             {loading && <Loaders />}
+            {deletedModal && <DeleteModal onClick={deleteFunc} title={'Delete Module'} details={'Do you really want to remove this module?'} setdeleteModal={setdeletedModal} />}
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
-                <AddProgramModule setmodalIsOpen={setmodalIsOpen} />
+                <AddProgramModule fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
 
             <div className='program_modules_wrapper'>
@@ -80,7 +150,14 @@ const ProgramModule = () => {
                     </div>
                 </div>}
                 {moduleData?.length > 0 && moduleData?.map((e, index) => (
-                    <div className='added_modules_wrapper' key={index}>
+                    <div className='added_modules_wrapper' key={index}
+                        draggable
+                        onDragStart={() => dragStart(index)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => {
+                            dragEnter(index)
+                        }}
+                    >
                         <div className='add_modules_enu_wrapper'>
                             <img src={menu} />
                             <p>{e?.title} <span style={{
@@ -101,7 +178,7 @@ const ProgramModule = () => {
                                     navigate(`/dashboard/programs/single-program/${id}/values/${e?.id}`)
                                 }
                             })} src={edit} />
-                            <img src={deleteicon} />
+                            <img onClick={(() => handleDelete(e?.id))} src={deleteicon} />
                         </div>
                     </div>
                 ))}

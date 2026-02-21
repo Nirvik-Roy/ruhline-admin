@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../Components/Loaders/Loaders'
 import toast from 'react-hot-toast'
 import { postProgramModule } from '../../utils/Program'
-const AddProgramModule = ({ setmodalIsOpen }) => {
+const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
     const [quoteModal, setquoteModal] = useState(false);
     const [uploadModal, setuploadModal] = useState(false);
     const [path, setPath] = useState('');
@@ -37,7 +37,10 @@ const AddProgramModule = ({ setmodalIsOpen }) => {
                 const res = await postProgramModule({
                     module_type: radioValue
                 }, id)
-                console.log(res)
+                if (res?.success) {
+                    fetchModules()
+                    setmodalIsOpen(false)
+                }
             } catch (err) {
                 console.log(err)
             } finally {

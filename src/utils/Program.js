@@ -953,9 +953,49 @@ export const getProgramModuleById = async (id) => {
 }
 
 
+export const deleteProgramModule = async (structureId, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && structureId && id) {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const reorderProgramModule = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id && data) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/reorder`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
 export const postValuesQuestion = async (data, structureId, id) => {
     const Token = localStorage.getItem('token');
-    if (Token && data && structureId, id) {
+    if (Token && data && structureId && id) {
         try {
             const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/values/questions`, data, {
                 headers: {
@@ -983,6 +1023,130 @@ export const getValuesQuestion = async (id, structureId) => {
                 }
             },);
             if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const editValuesQuestion = async (data, structureId, id, questionId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/values/questions/${questionId}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const deleteValuesQuestion = async (structureId, id, questionId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && structureId && id && questionId) {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/values/questions/${questionId}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const postMotivationWord = async (data, structureId, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/words`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getMotivationWord = async (id, structureId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/words`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const updateMotivationWord = async (data, structureId, id, wordId) => {
+    const Token = localStorage.getItem('token');
+    console.log(wordId)
+    if (Token && data && structureId && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/words/${wordId}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const deleteMotivationWord = async (structureId, id, wordId) => {
+    const Token = localStorage.getItem('token');
+    console.log(wordId)
+    if (Token && structureId && id) {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/words/${wordId}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
                 return res.data
             }
         } catch (err) {

@@ -10,13 +10,21 @@ import SingleChoiceModal from '../../../../Modal/SingleChoiceModal'
 import DropdownModal from '../../../../Modal/DropdownModal'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
-import { getValuesQuestion, postValuesQuestion } from '../../../../../utils/Program'
+import { deleteValuesQuestion, editValuesQuestion, getValuesQuestion, postValuesQuestion } from '../../../../../utils/Program'
 import EditMultiChoiceModal from '../../../../Modal/EditMultiChoiceModal.jsx'
+import DeleteModal from '../../../../../Components/DeleteModal/DeleteModal.jsx'
+import toast from 'react-hot-toast'
+import EditDropdownModal from '../../../../Modal/EditDropdownModal.jsx'
+import EditSingleChoiceModal from '../../../../Modal/EditSingleChoiceModal.jsx'
+import EditDescriptiveModal from '../../../../Modal/EditDescriptiveModal.jsx'
 const ValuesModule = () => {
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
     const { id, moduleId } = useParams();
     const [allQuestions, setallQuestions] = useState([]);
+    const [deleteId, setdeleteId] = useState('')
+    const [deleteModal, setdeleteModal] = useState(false)
+    const [singleData, setsingleData] = useState()
     const [dynamicOptions, setdynamicOptions] = useState([
         {
             id: 1,
@@ -77,6 +85,29 @@ const ValuesModule = () => {
         );
     };
 
+
+    const editAddEmptyOption = () => {
+        setsingleData(prev => ({
+            ...prev,
+            options: [...(prev.options || []), '']
+        }));
+    };
+
+    const editdeleteOption = (indexToDelete) => {
+        setsingleData(prev => ({
+            ...prev,
+            options: prev.options.filter((_, index) => index !== indexToDelete)
+        }));
+    };
+
+    const editOptionValue = (indexToUpdate, newValue) => {
+        setsingleData(prev => ({
+            ...prev,
+            options: prev.options.map((opt, idx) =>
+                idx === indexToUpdate ? newValue : opt
+            )
+        }));
+    };
     const removeOption = (questionIndex, optionIndex) => {
         setdynamicOptions(prev =>
             prev.map((item, qIndex) =>
@@ -89,6 +120,14 @@ const ValuesModule = () => {
             )
         );
     };
+
+    const editQuestionText = (e) => {
+        const { name, value } = e.target;
+        setsingleData({
+            ...singleData,
+            [name]: value
+        })
+    }
 
     const updateQuestionText = (questionIndex, text) => {
         setdynamicOptions(prev =>
@@ -115,8 +154,9 @@ const ValuesModule = () => {
         );
     };
 
-    const postQuestions = async (structureId) => {
-        if (structureId && id) {
+
+    const postQuestions = async () => {
+        if (id) {
             try {
                 setloading(true);
                 const formData = new FormData()
@@ -126,14 +166,14 @@ const ValuesModule = () => {
                         formData.append('question_text', element.question_text)
                         if (element.options?.length > 0) {
                             element.options?.forEach(option => {
-                                formData.append('options[]', option.value);
+                                formData.append('options[]', option);
                             });
                         } else {
                             formData.append('options', [])
                         }
                     }
                 })
-                const res = await postValuesQuestion(formData, structureId, id);
+                const res = await postValuesQuestion(formData, moduleId, id);
                 if (res?.success) {
                     setTabs(0);
                     fetchAllQuestions()
@@ -161,6 +201,34 @@ const ValuesModule = () => {
                             options: []
                         }
                     ])
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        }
+    }
+
+
+    const editQuestions = async (questionId) => {
+        if (id && questionId) {
+            try {
+                setloading(true);
+                const formData = new FormData()
+                formData.append(`type`, singleData.type)
+                formData.append('question_text', singleData.question_text)
+                if (singleData.options?.length > 0) {
+                    singleData.options?.forEach(option => {
+                        formData.append('options[]', option);
+                    });
+                } else {
+                    formData.append('options', [])
+                }
+                const res = await editValuesQuestion(formData, moduleId, id, questionId);
+                if (res?.success) {
+                    setTabs(0);
+                    fetchAllQuestions()
                 }
             } catch (err) {
                 console.log(err)
@@ -220,8 +288,38 @@ const ValuesModule = () => {
     }, [id, moduleId])
 
 
+    const getSingleData = (index) => {
+        setsingleData(allQuestions[index])
+    }
+
+    const deleteQuestions = async () => {
+        if (deleteId) {
+            try {
+                setloading(true)
+                const res = await deleteValuesQuestion(moduleId, id, deleteId);
+                if (res?.success) {
+                    setdeleteModal(false)
+                    fetchAllQuestions()
+                    setTabs(0)
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        } else {
+            toast.error('Reuired data not found!')
+        }
+    }
+
+    const handleChange = (id) => {
+        setdeleteId(id)
+        setdeleteModal(true)
+    }
+
     return (
         <>
+            {deleteModal && <DeleteModal onClick={deleteQuestions} title={'Delete Questions'} details={'Do you really want to delete this question?'} setdeleteModal={setdeleteModal} />}
             {tabs.descriptive && <DescriptiveModal updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
             {tabs.multiChoice && <MultiChoiceModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
@@ -230,7 +328,13 @@ const ValuesModule = () => {
             {tabs.dropdown && <DropdownModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
 
-            {tabs.editmultiChoice && <EditMultiChoiceModal />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+
+            {tabs.editropdown && <EditDropdownModal editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+
+            {tabs.editsingleChoice && <EditSingleChoiceModal editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+
+            {tabs.editdescriptive && <EditDescriptiveModal singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
@@ -240,7 +344,7 @@ const ValuesModule = () => {
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div>
+                        {/* <div>
                             <Button children={'Cancel'} styles={{
                                 color: 'var(--text-color)',
                                 border: 'none',
@@ -248,9 +352,8 @@ const ValuesModule = () => {
                                 background: 'transparent',
                                 fontSize: '13px'
                             }} />
-                        </div>
-
-                        <div>
+                        </div> */}
+                        <div onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>
                             <Button children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
@@ -310,6 +413,11 @@ const ValuesModule = () => {
                 </div>
 
                 <div className='questions_list_wrapper4562'>
+                    {allQuestions?.length <= 0 && <p style={{
+                        textAlign: 'center',
+                        fontWeight:'600',
+                        color:'var(--primary-color)'
+                    }}>No questions found...</p>}
                     {allQuestions?.length > 0 && allQuestions?.map((element, index) => (
                         <div className='added_modules_wrapper' key={index}>
                             <div className='add_modules_enu_wrapper'>
@@ -320,8 +428,23 @@ const ValuesModule = () => {
                                 }}>{element?.type}</small></p>
                             </div>
                             <div className='edit_modules_wrapper'>
-                                <img src={edit} />
-                                <img src={deleteicon} />
+                                <img onClick={(() => {
+                                    getSingleData(index)
+                                    if (element?.type === 'descriptive') {
+                                        tabsFunction(5)
+                                    }
+                                    if (element?.type == 'multi_choice') {
+                                        tabsFunction(6)
+                                    }
+                                    if (element?.type === 'single_choice') {
+                                        tabsFunction(7)
+                                    }
+
+                                    if (element?.type === 'dropdown') {
+                                        tabsFunction(8)
+                                    }
+                                })} src={edit} />
+                                <img onClick={(() => handleChange(element?.id))} src={deleteicon} />
                             </div>
                         </div>
                     ))}
