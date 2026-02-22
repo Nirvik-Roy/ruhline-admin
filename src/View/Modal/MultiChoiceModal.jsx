@@ -4,9 +4,8 @@ import Button from '../../Components/Button'
 import crossIcon from '../../assets/Frame 1984078314.svg'
 import Input from '../../Components/Input'
 import { useParams } from 'react-router-dom'
-const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuestionText, updateOptionText, dynamicOptions,postQuestions }) => {
+const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuestionText, updateOptionText, dynamicOptions, postQuestions, errors }) => {
     const { moduleId } = useParams()
-
     return (
         <>
             <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
@@ -29,6 +28,9 @@ const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQu
                                         updateQuestionText(qIndex, event.target.value)
                                     }
                                 />
+                                {errors?.question_text && <small style={{
+                                    color:'red',
+                                }}>*{errors?.question_text[0]}</small>}
 
                                 {/* Options Header + Add Button */}
                                 <div className="options_wrapper466885">
@@ -82,6 +84,10 @@ const MultiChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQu
                                             </div>
                                         </div>
                                     ))}
+
+                                    {errors?.options && <small style={{
+                                        color: 'red',
+                                    }}>*{errors?.options[0]}</small>}
 
                                     {/* Submit Button */}
                                     <div

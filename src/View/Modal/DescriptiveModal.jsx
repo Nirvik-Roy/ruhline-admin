@@ -3,7 +3,7 @@ import Input from '../../Components/Input'
 import Textarea from '../../Components/Textarea'
 import Button from '../../Components/Button'
 import { useParams } from 'react-router-dom'
-const DescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQuestionText }) => {
+const DescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQuestionText, errors }) => {
     const { moduleId } = useParams()
     return (
         <>
@@ -29,7 +29,9 @@ const DescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQ
                                     required={true}
                                     placeholder="Enter question"
                                 />
-
+                                {errors?.question_text && <small style={{
+                                    color: 'red',
+                                }}>*{errors?.question_text[0]}</small>}
                                 <div
                                     className='change_cancel_wrapper'
                                     style={{ margin: '20px 0 0 0' }}

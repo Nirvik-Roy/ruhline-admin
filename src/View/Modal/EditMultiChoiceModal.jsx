@@ -3,7 +3,7 @@ import crossIcon from '../../assets/Frame 1984078314.svg'
 import Textarea from '../../Components/Textarea'
 import Button from '../../Components/Button'
 
-const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, editdeleteOption, editOptionValue, editQuestionText, editQuestions }) => {
+const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, editdeleteOption, editOptionValue, editQuestionText, editQuestions, editErrors }) => {
   return (
     <>
       <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
@@ -24,7 +24,9 @@ const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, ed
             required={true}
             value={singleData?.question_text || ''}
           />
-
+          {editErrors?.question_text && <small style={{
+            color: 'red',
+          }}>*{editErrors?.question_text[0]}</small>}
           {/* Options Header + Add Button */}
           <div className="options_wrapper466885">
             <h3>Options</h3>
@@ -55,7 +57,7 @@ const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, ed
                     styles={{ height: "70px" }}
                     value={opt}
                     placeholder="Enter option"
-                    onChange={((e) => editOptionValue(optIndex,e.target.value))}
+                    onChange={((e) => editOptionValue(optIndex, e.target.value))}
                   />
                 </div>
 
@@ -69,7 +71,9 @@ const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, ed
                 </div>
               </div>
             ))}
-
+            {editErrors?.options && <small style={{
+              color: 'red',
+            }}>*{editErrors?.options[0]}</small>}
             {/* Submit Button */}
             <div
               className="change_cancel_wrapper"

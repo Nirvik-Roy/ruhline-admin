@@ -2,7 +2,7 @@ import React from 'react'
 import Textarea from '../../Components/Textarea'
 import Button from '../../Components/Button'
 
-const EditDescriptiveModal = ({ tabsFunction, singleData, editQuestionText, editQuestions }) => {
+const EditDescriptiveModal = ({ tabsFunction, singleData, editQuestionText, editQuestions, editErrors }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
@@ -24,7 +24,9 @@ const EditDescriptiveModal = ({ tabsFunction, singleData, editQuestionText, edit
                         value={singleData?.question_text || ''}
                     />
 
-
+                    {editErrors?.question_text && <small style={{
+                        color: 'red',
+                    }}>*{editErrors?.question_text[0]}</small>}
 
                     <div
                         className="change_cancel_wrapper"

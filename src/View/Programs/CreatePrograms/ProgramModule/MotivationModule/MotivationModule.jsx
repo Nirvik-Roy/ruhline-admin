@@ -4,7 +4,7 @@ import laptopImg from '../../../../../assets/Group (2).svg'
 import { useNavigate, useParams } from 'react-router-dom';
 import AddWordModal from '../../../../Modal/AddWordModal.jsx';
 import EditwordModal from '../../../../Modal/EditwordModal.jsx';
-import { deleteMotivationWord, getMotivationWord, postMotivationWord, updateMotivationWord } from '../../../../../utils/Program.js';
+import { deleteMotivationWord, getMotivationWord, getprogramById, postMotivationWord, updateMotivationWord } from '../../../../../utils/Program.js';
 import toast from 'react-hot-toast';
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx';
 import DeleteModal from '../../../../../Components/DeleteModal/DeleteModal.jsx';
@@ -20,7 +20,24 @@ const MotivationModule = () => {
     const [loading, setloading] = useState(false);
     const [singleData, setsingleData] = useState()
     const { id, moduleId } = useParams()
+    const [singleProgramData, setsingleProgramData] = useState([])
+    const fetchSingleProgram = async () => {
+        try {
+            setloading(true)
+            const res = await getprogramById(id);
+            setsingleProgramData(res?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
 
+    useEffect(() => {
+        if (id) {
+            fetchSingleProgram()
+        }
+    }, [])
     const dropdownFunction = (i) => {
         if (dropdown === i) {
             setdropdown(null)
@@ -157,7 +174,7 @@ const MotivationModule = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Find your Motivation</h2>
-                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span>  / <span onClick={(() => navigate('/dashboard/programs/single-program/2/motivation'))}>Find your Motivation</span></small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>{singleProgramData?.name}</span>  / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}/motivation/${moduleId}`))}>Find your Motivation</span></small>
 
 
                     </div>

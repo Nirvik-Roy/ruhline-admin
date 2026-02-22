@@ -5,7 +5,7 @@ import crossIcon from '../../assets/Frame 1984078314.svg'
 import Input from '../../Components/Input'
 import { useParams } from 'react-router-dom'
 
-const DropdownModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuestionText, updateOptionText, dynamicOptions, postQuestions }) => {
+const DropdownModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuestionText, updateOptionText, dynamicOptions, postQuestions, errors }) => {
     const { moduleId } = useParams()
 
     return (
@@ -30,7 +30,9 @@ const DropdownModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuest
                                         updateQuestionText(qIndex, event.target.value)
                                     }
                                 />
-
+                                {errors?.question_text && <small style={{
+                                    color: 'red',
+                                }}>*{errors?.question_text[0]}</small>}
                                 {/* Options Header + Add Button */}
                                 <div className="options_wrapper466885">
                                     <h3>Options</h3>
@@ -83,7 +85,9 @@ const DropdownModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuest
                                             </div>
                                         </div>
                                     ))}
-
+                                    {errors?.options && <small style={{
+                                        color: 'red',
+                                    }}>*{errors?.options[0]}</small>}
                                     {/* Submit Button */}
                                     <div
                                         className="change_cancel_wrapper"

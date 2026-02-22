@@ -10,7 +10,7 @@ import SingleChoiceModal from '../../../../Modal/SingleChoiceModal'
 import DropdownModal from '../../../../Modal/DropdownModal'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
-import { deleteValuesQuestion, editValuesQuestion, getValuesQuestion, postValuesQuestion } from '../../../../../utils/Program'
+import { deleteValuesQuestion, editValuesQuestion, getprogramById, getValuesQuestion, postValuesQuestion } from '../../../../../utils/Program'
 import EditMultiChoiceModal from '../../../../Modal/EditMultiChoiceModal.jsx'
 import DeleteModal from '../../../../../Components/DeleteModal/DeleteModal.jsx'
 import toast from 'react-hot-toast'
@@ -24,7 +24,9 @@ const ValuesModule = () => {
     const [allQuestions, setallQuestions] = useState([]);
     const [deleteId, setdeleteId] = useState('')
     const [deleteModal, setdeleteModal] = useState(false)
-    const [singleData, setsingleData] = useState()
+    const [singleData, setsingleData] = useState();
+    const [errors, setErrors] = useState()
+    const [editErrors, seteditErrors] = useState()
     const [dynamicOptions, setdynamicOptions] = useState([
         {
             id: 1,
@@ -177,6 +179,7 @@ const ValuesModule = () => {
                 if (res?.success) {
                     setTabs(0);
                     fetchAllQuestions()
+
                     setdynamicOptions([
                         {
                             id: 1,
@@ -202,6 +205,7 @@ const ValuesModule = () => {
                         }
                     ])
                 }
+                setErrors(res)
             } catch (err) {
                 console.log(err)
             } finally {
@@ -229,7 +233,9 @@ const ValuesModule = () => {
                 if (res?.success) {
                     setTabs(0);
                     fetchAllQuestions()
+
                 }
+                seteditErrors(res)
             } catch (err) {
                 console.log(err)
             } finally {
@@ -237,9 +243,28 @@ const ValuesModule = () => {
             }
         }
     }
+    const [singleProgramData, setsingleProgramData] = useState([])
+    const fetchSingleProgram = async () => {
+        try {
+            setloading(true)
+            const res = await getprogramById(id);
+            setsingleProgramData(res?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
 
     useEffect(() => {
+        if (id) {
+            fetchSingleProgram()
+        }
+    }, [])
+    useEffect(() => {
         if (!tabs.descriptive && !tabs.dropdown && !tabs.editdescriptive && !tabs.editmultiChoice && !tabs.editropdown && !tabs.editsingleChoice && !tabs.multiChoice && !tabs.singleChoice) {
+            setErrors('')
+            seteditErrors('')
             setdynamicOptions([
                 {
                     id: 1,
@@ -320,27 +345,27 @@ const ValuesModule = () => {
     return (
         <>
             {deleteModal && <DeleteModal onClick={deleteQuestions} title={'Delete Questions'} details={'Do you really want to delete this question?'} setdeleteModal={setdeleteModal} />}
-            {tabs.descriptive && <DescriptiveModal updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
-            {tabs.multiChoice && <MultiChoiceModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.descriptive && <DescriptiveModal errors={errors} updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.multiChoice && <MultiChoiceModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.singleChoice && <SingleChoiceModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.singleChoice && <SingleChoiceModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.dropdown && <DropdownModal updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.dropdown && <DropdownModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
 
-            {tabs.editmultiChoice && <EditMultiChoiceModal editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editropdown && <EditDropdownModal editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editropdown && <EditDropdownModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editsingleChoice && <EditSingleChoiceModal editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editsingleChoice && <EditSingleChoiceModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editdescriptive && <EditDescriptiveModal singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editdescriptive && <EditDescriptiveModal editErrors={editErrors} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Values</h2>
-                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2/values'))}>Values</span></small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>{singleProgramData?.name}</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}/values/${moduleId}`))}>Values</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -415,8 +440,8 @@ const ValuesModule = () => {
                 <div className='questions_list_wrapper4562'>
                     {allQuestions?.length <= 0 && <p style={{
                         textAlign: 'center',
-                        fontWeight:'600',
-                        color:'var(--primary-color)'
+                        fontWeight: '600',
+                        color: 'var(--primary-color)'
                     }}>No questions found...</p>}
                     {allQuestions?.length > 0 && allQuestions?.map((element, index) => (
                         <div className='added_modules_wrapper' key={index}>
