@@ -51,7 +51,7 @@ const SingleCreatedPrograms = () => {
                             }} />
                         </div>
 
-                        <div>
+                        <div onClick={(() => navigate('/dashboard/programs'))}>
                             <Button children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />

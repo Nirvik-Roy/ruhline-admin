@@ -51,8 +51,14 @@ const SingleProgramDetails = ({ singleData }) => {
                     <span><strong>Occurrence: </strong>{singleData?.occurrence_type}</span>
                     <span><strong>Duration: </strong>32 weeks</span>
 
-                    {singleData?.description && <p>{singleData?.description}
-                    </p>}
+                    {/* {singleData?.description && <p>{singleData?.description}
+                    </p>} */}
+
+                    <p dangerouslySetInnerHTML={{
+                        __html: singleData?.description
+                    }}>
+
+                    </p>
 
                 </div>
             </div>

@@ -59,7 +59,9 @@ const FaqAccordion = ({ singleData }) => {
                                 <img src={right} />
                             </div>}
                         </div>
-                        {faqIndex.includes(e.id) && <p>{e.description}</p>}
+                        {faqIndex.includes(e.id) && <p dangerouslySetInnerHTML={{
+                            __html: e?.description
+                        }}></p>}
                     </div>
                 ))}
             </div>

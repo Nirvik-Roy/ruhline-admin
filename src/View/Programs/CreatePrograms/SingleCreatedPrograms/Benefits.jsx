@@ -15,7 +15,9 @@ const Benefits = ({ singleData }) => {
                                 ?.map((e, i) => (
                                     <div className='faq_accordion' key={i} >
                                         <div className='faq_head_wrapper'>
-                                            <h3>{e.description}</h3>
+                                            <h3 dangerouslySetInnerHTML={{
+                                                __html: e?.description || ""
+                                            }}></h3>
                                         </div>
                                     </div>
                                 ))}
