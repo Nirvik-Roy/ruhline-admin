@@ -206,7 +206,9 @@ const MotivationModule = () => {
                             padding: " 30px 0px",
                             background: 'rgba(144, 155, 109, 0.15)',
                             border: 'none'
-                        }} onClick={(() => dropdownFunction(i))}>
+                        }} onClick={((e) =>{ 
+                            e.stopPropagation()
+                            dropdownFunction(i)})}>
                             <img style={{
                                 width: '55px'
                             }} src={laptopImg} />
