@@ -116,8 +116,8 @@ function App() {
               <Route path='programs/single-program/:id/values/:moduleId' element={<ValuesModule />} />
               <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
               <Route path='programs/card-game/:id/questions' element={<CardGameQuestions />} />
-              <Route path='programs/single-program/:id/wheeloflife' element={<WheelOfLifeModule />} />
-              <Route path='programs/single-program/:id/life-element' element={<SinglelifeElement />} />
+              <Route path='programs/single-program/:id/wheeloflife/:moduleId' element={<WheelOfLifeModule />} />
+              <Route path='programs/single-program/:id/life-element/:moduleId/:elementId' element={<SinglelifeElement />} />
               <Route path='programs/single-program/:id/motivation/:moduleId' element={<MotivationModule />} />
               <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
               <Route path='payouts' element={<Payouts />} />

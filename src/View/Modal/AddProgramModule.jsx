@@ -77,14 +77,16 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
                         <input type='radio' onChange={handleChange} name='values' value={'values'} checked={radioValue === 'values'} />
                         <p>Values</p>
                     </div>
+
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='wheel_of_life' value={'wheel_of_life'} checked={radioValue === 'wheel_of_life'} />
+                        <p>Wheel of Life </p>
+                    </div>
                     {/* <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='card' value={'card'} checked={radioValue === 'card'} />
                         <p>Card Game</p>
                     </div>
-                    <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='wheel' value={'wheel'} checked={radioValue === 'wheel'} />
-                        <p>Wheel of Life </p>
-                    </div>
+                   
 
                     <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='notes' value={'notes'} checked={radioValue === 'notes'} />

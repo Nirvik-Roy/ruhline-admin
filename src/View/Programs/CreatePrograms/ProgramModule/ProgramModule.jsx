@@ -40,7 +40,7 @@ const ProgramModule = () => {
     const data = {
         'Values': `/dashboard/programs/single-program/${id}/values`,
         card: `/dashboard/programs/single-program/${id} /card-game`,
-        wheel: `/dashboard/programs/single-program/${id}/wheeloflife`,
+        'Wheel of Life': `/dashboard/programs/single-program/${id}/wheeloflife`,
         notes: '',
         goal: '',
         documents: '',
@@ -176,6 +176,10 @@ const ProgramModule = () => {
                                 }
                                 if (e?.title == 'Values') {
                                     navigate(`/dashboard/programs/single-program/${id}/values/${e?.id}`)
+                                }
+
+                                if(e?.title == 'Wheel of Life'){
+                                    navigate(`/dashboard/programs/single-program/${id}/wheeloflife/${e?.id}`)
                                 }
                             })} src={edit} />
                             <img onClick={(() => handleDelete(e?.id))} src={deleteicon} />
