@@ -59,7 +59,7 @@ const SingleCreatedPrograms = () => {
                 </div>
                 <SingleProgramDetails singleData={singleData} />
                 <ProgramTabs singleData={singleData}/>
-                <ProgramModule />
+                <ProgramModule/>
             </div>
         </>
     )

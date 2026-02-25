@@ -10,8 +10,10 @@ import Loaders from '../../../../Components/Loaders/Loaders'
 import { getProgramModuleById, deleteProgramModule, reorderProgramModule } from '../../../../utils/Program'
 import { useNavigate, useParams } from 'react-router-dom'
 import DeleteModal from '../../../../Components/DeleteModal/DeleteModal'
+import ProgramSettingsModal from '../../../Modal/ProgramSettingsModal'
 const ProgramModule = () => {
     const [modalIsOpen, setmodalIsOpen] = useState(false);
+    const [programSettingsModal, setprogramSettingModal] = useState(false)
     const [moduleData, setmoduleData] = useState([]);
     const navigate = useNavigate();
     const [deleteId, setdeleteId] = useState()
@@ -119,6 +121,9 @@ const ProgramModule = () => {
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
                 <AddProgramModule fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
+            <Activity mode={programSettingsModal ? 'visible' : 'hidden'}>
+                <ProgramSettingsModal setprogramSettingModal={setprogramSettingModal} setloading={setloading} />
+            </Activity>
 
             <div className='program_modules_wrapper'>
                 <div className='program_module_head_wrapper'>
@@ -134,7 +139,10 @@ const ProgramModule = () => {
                             background: 'transparent',
                             padding: '9px 15px'
                         }} />
-                        <img src={settings} />
+                        <img onClick={((e) => {
+                            e.stopPropagation()
+                            setprogramSettingModal(true)
+                        })} src={settings} />
                     </div>
 
 
