@@ -1137,7 +1137,6 @@ export const updateMotivationWord = async (data, structureId, id, wordId) => {
 
 export const deleteMotivationWord = async (structureId, id, wordId) => {
     const Token = localStorage.getItem('token');
-    console.log(wordId)
     if (Token && structureId && id) {
         try {
             const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/words/${wordId}`, {
@@ -1304,6 +1303,111 @@ export const deleteWheelofLifelement = async (structureId, id, elementId) => {
     if (Token && structureId && id && elementId) {
         try {
             const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/wheel-of-life/elements/${elementId}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const getWhoAmiQuestions = async (id, structureId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/who-am-i/questions`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postWhoAmiQuestions = async (data, structureId, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/who-am-i/questions`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+
+export const editWhoAmiQuestions = async (data, structureId, id, questionId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id && questionId) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/who-am-i/questions/${questionId}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const deleteWhoAmiQuestions = async (structureId, id, questionId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && structureId && id && questionId) {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/who-am-i/questions/${questionId}`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const deleteGalleryImageApi = async (id, imageId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/gallery/${imageId}`, {
                 headers: {
                     'Authorization': `Bearer ${Token}`
                 }

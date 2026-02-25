@@ -103,6 +103,11 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
                         <p>Find your Motivation  </p>
                     </div>
 
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='who_am_i' value={'who_am_i'} checked={radioValue === 'who_am_i'} />
+                        <p>Who am I?</p>
+                    </div>
+
                     {/* <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='habit' value={'habit'} checked={radioValue === 'habit'} />
                         <p>Habit Tracker  </p>
@@ -118,10 +123,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
                         <p>Quotes  </p>
                     </div>
 
-                    <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='who' value={'who'} checked={radioValue === 'who'} />
-                        <p>Who am I? </p>
-                    </div> */}
+                   */}
                 </div>
 
                 <div className='change_cancel_wrapper'>

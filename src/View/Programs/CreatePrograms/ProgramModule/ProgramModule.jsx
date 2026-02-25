@@ -178,9 +178,14 @@ const ProgramModule = () => {
                                     navigate(`/dashboard/programs/single-program/${id}/values/${e?.id}`)
                                 }
 
-                                if(e?.title == 'Wheel of Life'){
+                                if (e?.title == 'Wheel of Life') {
                                     navigate(`/dashboard/programs/single-program/${id}/wheeloflife/${e?.id}`)
                                 }
+
+                                if (e?.title == 'Who am I') {
+                                    navigate(`/dashboard/programs/single-program/${id}/whoami/${e?.id}`)
+                                }
+
                             })} src={edit} />
                             <img onClick={(() => handleDelete(e?.id))} src={deleteicon} />
                         </div>

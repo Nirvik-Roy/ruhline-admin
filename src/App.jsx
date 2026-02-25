@@ -119,7 +119,7 @@ function App() {
               <Route path='programs/single-program/:id/wheeloflife/:moduleId' element={<WheelOfLifeModule />} />
               <Route path='programs/single-program/:id/life-element/:moduleId/:elementId' element={<SinglelifeElement />} />
               <Route path='programs/single-program/:id/motivation/:moduleId' element={<MotivationModule />} />
-              <Route path='programs/single-program/:id/whoami' element={<Whoamimodule />} />
+              <Route path='programs/single-program/:id/whoami/:moduleId' element={<Whoamimodule />} />
               <Route path='payouts' element={<Payouts />} />
               <Route path='payouts/payment-list' element={<PaymentList />} />
             </Route>

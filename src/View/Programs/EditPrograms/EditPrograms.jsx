@@ -15,7 +15,8 @@ import TagContent from '../CreatePrograms/TagContent.jsx'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import { getAllCoaches } from '../../../utils/coach'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
-import { createProgram, editProgramsById, getAllPrograms, getGlobalComission, getprogramById } from '../../../utils/Program.js'
+import { createProgram, editProgramsById, getAllPrograms, getGlobalComission, getprogramById, deleteGalleryImageApi } from '../../../utils/Program.js'
+import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
 const EditPrograms = () => {
     const navigate = useNavigate()
     const [index, setIndex] = useState(1);
@@ -38,6 +39,8 @@ const EditPrograms = () => {
     const [commissionTab, setcommissionTab] = useState('Global Commission');
     const [programErrors, setprogramErrors] = useState();
     const [singleData, setsingleData] = useState([])
+    const [galleryImageId, setgalleryImageId] = useState()
+    const [galleryImageDeleteModal, setgalleryImageDeleteModal] = useState(false)
     const [staticdata, setstaticdata] = useState({
         name: '',
         oneTimeSession: '',
@@ -78,11 +81,11 @@ const EditPrograms = () => {
         ])
     }
 
-    const handleGalleryImageDelete = (id) => {
-        const dummyData = [...galleryImage]
-        const filteredData = dummyData.filter((e) => e.id != id)
-        setgalleryImage(filteredData)
-    }
+    // const handleGalleryImageDelete = (id) => {
+    //     const dummyData = [...galleryImage]
+    //     const filteredData = dummyData.filter((e) => e.id != id)
+    //     setgalleryImage(filteredData)
+    // }
 
     useEffect(() => {
         fetchCommisionValue()
@@ -312,11 +315,30 @@ const EditPrograms = () => {
                 })) : []
         setSelectedPrograms(coachesMapped)
     }, [singleData])
-    console.log(singleData)
 
+    const deleteGalleryImage = async () => {
+        try {
+            setloading(true)
+            const res = await deleteGalleryImageApi(id, galleryImageId)
+            if(res?.success){
+                setgalleryImageDeleteModal(false)
+                fetchSingleProgram()
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    const handleDelelte = (imageId) => {
+        setgalleryImageId(imageId)
+        setgalleryImageDeleteModal(true)
+    }
     return (
         <>
             {loading && <Loaders />}
+            {galleryImageDeleteModal && <DeleteModal setdeleteModal={setgalleryImageDeleteModal} onClick={deleteGalleryImage} title={'Remove gallery image'} details={'Do you really want to remove this gallery image?'} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -459,7 +481,7 @@ const EditPrograms = () => {
                                             borderRadius: '10px',
                                             position: 'relative'
                                         }}>
-                                            <i onClick={(() => handleGalleryImageDelete(e?.id))} style={{
+                                            <i onClick={(() => handleDelelte(e?.id))} style={{
                                                 position: 'absolute',
                                                 top: '-10px',
                                                 right: '-20px',

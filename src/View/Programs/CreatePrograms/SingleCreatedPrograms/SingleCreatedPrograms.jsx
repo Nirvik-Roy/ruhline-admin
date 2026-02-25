@@ -29,7 +29,6 @@ const SingleCreatedPrograms = () => {
             fetchSingleProgram()
         }
     }, [])
-    console.log(singleData)
     return (
         <>
             {loading && <Loaders />}
