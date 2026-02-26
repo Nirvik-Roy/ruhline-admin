@@ -145,13 +145,19 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                     //     }
                     // })}
                     >
-                        <Button onClick={(() => {
-                            if (radioValue == 'card_game' && programSettingsData?.card_category_id != null) {
-                                postProgramModuleFunc()
-                            } else {
-                                toast.error('Plz select card category from program settings..')
-                            }
-                        })} children={'Add'} />
+                        <Button
+                            onClick={() => {
+                                // Check if card game is selected but no category
+                                if (radioValue === 'card_game' && !programSettingsData?.card_category_id) {
+                                    toast.error('Please select card category from program settings.');
+                                    return; // Exit early
+                                }
+
+                                // If we get here, it's safe to proceed
+                                postProgramModuleFunc();
+                            }}
+                            children={'Add'}
+                        />
                     </div>
                 </div>
             </div>

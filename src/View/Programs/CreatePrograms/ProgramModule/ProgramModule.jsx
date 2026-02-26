@@ -64,6 +64,11 @@ const ProgramModule = () => {
     }, [])
 
     useEffect(() => {
+        if (programSettingsModal) {
+            fetchProgramSettings()
+        }
+    }, [programSettingsModal])
+    useEffect(() => {
         setcardCategoryId(programSettingsData?.card_category_id || '')
     }, [programSettingsData])
 
@@ -149,9 +154,8 @@ const ProgramModule = () => {
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
                 <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
-            <Activity mode={programSettingsModal ? 'visible' : 'hidden'}>
-                <ProgramSettingsModal cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />
-            </Activity>
+
+            {programSettingsModal && <ProgramSettingsModal fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
 
             <div className='program_modules_wrapper'>
                 <div className='program_module_head_wrapper'>

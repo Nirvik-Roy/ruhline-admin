@@ -4,7 +4,7 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { useParams } from 'react-router-dom'
 import Button from '../../Components/Button'
 
-const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId }) => {
+const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings }) => {
     const [allQuotesCategory, setallQuotesCategory] = useState([])
     const [allCardsCategory, setallCardsCategory] = useState([]);
     const { id } = useParams()
@@ -50,6 +50,9 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
             const res = await postProgramSettings({
                 card_category_id: cardCategoryId ? cardCategoryId : null
             }, id)
+            if(res?.success){
+                fetchProgramSettings()
+            }
         } catch (err) {
             console.log(err)
         } finally {
@@ -61,7 +64,9 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
             <div className='modal_div'>
                 <h4>Program Settings</h4>
-                <i class="fa-solid fa-xmark" onClick={(() => setprogramSettingModal(false))}></i>
+                <i class="fa-solid fa-xmark" onClick={(() =>{ setprogramSettingModal(false)
+                    setcardCategoryId('')
+                })}></i>
                 <form className='modal_form'>
                     <div className='input_form'>
                         <label>Select Quotes Category<span>*</span></label>
@@ -77,7 +82,7 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
                     <div className='input_form'>
                         <label>Select Cards Category<span>*</span></label>
                         <select value={cardCategoryId} onChange={((e) => setcardCategoryId(e.target.value))}>
-                            <option>--select-cards-category--</option>
+                            <option value={''}>--select-cards-category--</option>
                             {allCardsCategory?.length > 0 && allCardsCategory?.map((element) => (
                                 <option value={element.id}>{element.name}</option>
                             ))}
