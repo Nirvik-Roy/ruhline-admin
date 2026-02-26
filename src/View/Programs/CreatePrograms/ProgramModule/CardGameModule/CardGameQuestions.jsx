@@ -9,7 +9,7 @@ import menu from '../../../../../assets/menu.svg'
 import edit from '../../../../../assets/Pencil.svg'
 import deleteicon from '../../../../../assets/delete.svg'
 import { useNavigate, useParams } from 'react-router-dom'
-import { editQuestionsInsideQuestionSet, getCardGameQuestionSets, postQuestionsInsideQuestionSet } from '../../../../../utils/Program'
+import { editCardGameQuestionSet, editQuestionsInsideQuestionSet, getCardGameQuestionSets, postQuestionsInsideQuestionSet } from '../../../../../utils/Program'
 import Loaders from '../../../../../Components/Loaders/Loaders'
 import CardGameDescriptiveModal from '../../../../Modal/CardGameDescriptiveModal'
 import CardGameMultichoiceModal from '../../../../Modal/CardGameMultichoiceModal'
@@ -19,6 +19,8 @@ import EditMultiChoiceModal from '../../../../Modal/EditMultiChoiceModal'
 import EditDropdownModal from '../../../../Modal/EditDropdownModal'
 import EditSingleChoiceModal from '../../../../Modal/EditSingleChoiceModal'
 import EditDescriptiveModal from '../../../../Modal/EditDescriptiveModal'
+import EditQuestionTitleModal from '../../../../Modal/EditQuestionTitleModal'
+import toast from 'react-hot-toast'
 const CardGameQuestions = () => {
     const navigate = useNavigate();
     const [allQuestionSets, setallQuestionSets] = useState([]);
@@ -668,10 +670,39 @@ const CardGameQuestions = () => {
             ])
         }
     }, [tabs.descriptive, tabs.dropdown, tabs.editdescriptive, tabs.editmultiChoice, tabs.editropdown, tabs.editsingleChoice, tabs.singleChoice, tabs.multiChoice])
+    const [editTitletModal, seteditTitleModal] = useState(false);
+    const [singleSet, setsingleSet] = useState({})
+    const editQuestionSet = async (data) => {
+        if(data){
+            try {
+                setloading(true)
+                const res = await editCardGameQuestionSet({
+                    title: data
+                }, moduleId, id, questionId)
+
+                if (res?.success) {
+                    seteditTitleModal(false)
+                    getQuestionSets()
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        }else{
+            toast.error('Plz enter the field...')
+        }
+        
+    }
+
+    const singleQuestionSet = (id) => {
+        setsingleSet(allQuestionSets?.filter((e) => e?.id == id))
+    }
     return (
         <>
             {loading && <Loaders />}
-            {tabs.editmultiChoice && <EditMultiChoiceModal  editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {editTitletModal && <EditQuestionTitleModal singleSet={singleSet} seteditTitleModal={seteditTitleModal} editQuestionSet={editQuestionSet} />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
             {tabs.editropdown && <EditDropdownModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
@@ -696,119 +727,132 @@ const CardGameQuestions = () => {
 
                 <div className='card_game_questions_list_wrapper'>
                     {allQuestionSets?.length > 0 && allQuestionSets?.map((e, i) => (
-                        <div className='card_game_questions_wrapper' key={e?.id}>
-                            <div className='question_set_heading'>
-                                <h2>{e?.title}</h2>
-                                <hr />
-                            </div>
-                            <div className='questions_buttons_wrapper466'>
-                                <h4>Questions</h4>
-                                <div className='question_button'>
-                                    <div onClick={(() => {
-                                        setselectedIndex(i)
-                                        tabsFunction(1)
-                                        setquestionId(e?.id)
-                                    })}>
-                                        <Button styles={{
-                                            border: '1px solid var(--primary-color)',
-                                            borderRadius: '8px',
-                                            backgroundColor: 'transparent',
-                                            color: 'var(--text-color)',
-                                            padding: '10px',
-                                            fontSize: '13px'
-                                        }} children={'Add Descriptive'} />
-                                    </div>
+                        <>
 
-                                    <div onClick={(() => {
-                                        setselectedIndex(i)
-                                        tabsFunction(2)
-                                        setquestionId(e?.id)
+                            <div className='card_game_questions_wrapper' key={e?.id}>
+                                <i onClick={(() => {
+                                    seteditTitleModal(true)
+                                    setquestionId(e?.id)
+                                    singleQuestionSet(e?.id)
+                                })} style={{
+                                    marginLeft: 'auto',
+                                    color: 'var(--primary-color)',
+                                    cursor: 'pointer'
+                                }} className="fa-solid fa-pen-to-square"></i>
+                                <div className='question_set_heading'>
+                                    <h2>{e?.title}</h2>
+                                    <hr />
+                                </div>
+                                <div className='questions_buttons_wrapper466'>
+                                    <h4>Questions</h4>
+                                    <div className='question_button'>
+                                        <div onClick={(() => {
+                                            setselectedIndex(i)
+                                            tabsFunction(1)
+                                            setquestionId(e?.id)
+                                        })}>
+                                            <Button styles={{
+                                                border: '1px solid var(--primary-color)',
+                                                borderRadius: '8px',
+                                                backgroundColor: 'transparent',
+                                                color: 'var(--text-color)',
+                                                padding: '10px',
+                                                fontSize: '13px'
+                                            }} children={'Add Descriptive'} />
+                                        </div>
 
-                                    })}>
-                                        <Button styles={{
-                                            border: '1px solid var(--primary-color)',
-                                            borderRadius: '8px',
-                                            backgroundColor: 'transparent',
-                                            color: 'var(--text-color)',
-                                            padding: '10px',
-                                            fontSize: '13px'
-                                        }} children={'Add Multi Choice'} />
-                                    </div>
+                                        <div onClick={(() => {
+                                            setselectedIndex(i)
+                                            tabsFunction(2)
+                                            setquestionId(e?.id)
+
+                                        })}>
+                                            <Button styles={{
+                                                border: '1px solid var(--primary-color)',
+                                                borderRadius: '8px',
+                                                backgroundColor: 'transparent',
+                                                color: 'var(--text-color)',
+                                                padding: '10px',
+                                                fontSize: '13px'
+                                            }} children={'Add Multi Choice'} />
+                                        </div>
 
 
-                                    <div onClick={(() => {
-                                        setselectedIndex(i)
-                                        tabsFunction(3)
-                                        setquestionId(e?.id)
+                                        <div onClick={(() => {
+                                            setselectedIndex(i)
+                                            tabsFunction(3)
+                                            setquestionId(e?.id)
 
-                                    })}>
-                                        <Button styles={{
-                                            border: '1px solid var(--primary-color)',
-                                            borderRadius: '8px',
-                                            backgroundColor: 'transparent',
-                                            color: 'var(--text-color)',
-                                            padding: '10px',
-                                            fontSize: '13px'
-                                        }} children={'Add Single Choice'} />
-                                    </div>
+                                        })}>
+                                            <Button styles={{
+                                                border: '1px solid var(--primary-color)',
+                                                borderRadius: '8px',
+                                                backgroundColor: 'transparent',
+                                                color: 'var(--text-color)',
+                                                padding: '10px',
+                                                fontSize: '13px'
+                                            }} children={'Add Single Choice'} />
+                                        </div>
 
-                                    <div onClick={(() => {
-                                        setselectedIndex(i)
-                                        tabsFunction(4)
-                                        setquestionId(e?.id)
+                                        <div onClick={(() => {
+                                            setselectedIndex(i)
+                                            tabsFunction(4)
+                                            setquestionId(e?.id)
 
-                                    })}>
-                                        <Button styles={{
-                                            border: '1px solid var(--primary-color)',
-                                            borderRadius: '8px',
-                                            backgroundColor: 'transparent',
-                                            color: 'var(--text-color)',
-                                            padding: '10px',
-                                            fontSize: '13px'
-                                        }} children={'Add Dropdown'} />
+                                        })}>
+                                            <Button styles={{
+                                                border: '1px solid var(--primary-color)',
+                                                borderRadius: '8px',
+                                                backgroundColor: 'transparent',
+                                                color: 'var(--text-color)',
+                                                padding: '10px',
+                                                fontSize: '13px'
+                                            }} children={'Add Dropdown'} />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className='questions_list_wrapper4562'>
-                                {e?.questions?.map((element, index) => {
-                                    return (
-                                        <>
-                                            <div className='added_modules_wrapper'>
-                                                <div className='add_modules_enu_wrapper'>
-                                                    <img src={menu} />
-                                                    <p>Question {index + 1} <small style={{
-                                                        fontSize: '10px',
-                                                        marginLeft: '5px'
-                                                    }}>{element?.type}</small></p>
-                                                </div>
-                                                <div className='edit_modules_wrapper'>
-                                                    <img onClick={(() => {
-                                                        seteditQuestionId(e?.id)
-                                                        setsingleQuestionId(element?.id)
-                                                        addSingleQuestion(e?.id, element?.id)
-                                                        if (element?.type === 'descriptive') {
-                                                            tabsFunction(5)
-                                                        }
-                                                        if (element?.type == 'multi_choice') {
-                                                            tabsFunction(6)
-                                                        }
-                                                        if (element?.type === 'single_choice') {
-                                                            tabsFunction(7)
-                                                        }
+                                <div className='questions_list_wrapper4562'>
+                                    {e?.questions?.map((element, index) => {
+                                        return (
+                                            <>
+                                                <div className='added_modules_wrapper'>
+                                                    <div className='add_modules_enu_wrapper'>
+                                                        <img src={menu} />
+                                                        <p>Question {index + 1} <small style={{
+                                                            fontSize: '10px',
+                                                            marginLeft: '5px'
+                                                        }}>{element?.type}</small></p>
+                                                    </div>
+                                                    <div className='edit_modules_wrapper'>
+                                                        <img onClick={(() => {
+                                                            seteditQuestionId(e?.id)
+                                                            setsingleQuestionId(element?.id)
+                                                            addSingleQuestion(e?.id, element?.id)
+                                                            if (element?.type === 'descriptive') {
+                                                                tabsFunction(5)
+                                                            }
+                                                            if (element?.type == 'multi_choice') {
+                                                                tabsFunction(6)
+                                                            }
+                                                            if (element?.type === 'single_choice') {
+                                                                tabsFunction(7)
+                                                            }
 
-                                                        if (element?.type === 'dropdown') {
-                                                            tabsFunction(8)
-                                                        }
-                                                    })} src={edit} />
-                                                    <img src={deleteicon} />
+                                                            if (element?.type === 'dropdown') {
+                                                                tabsFunction(8)
+                                                            }
+                                                        })} src={edit} />
+                                                        <img src={deleteicon} />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </>
-                                    )
-                                })}
+                                            </>
+                                        )
+                                    })}
 
+                                </div>
                             </div>
-                        </div>
+
+                        </>
                     ))}
 
                 </div>

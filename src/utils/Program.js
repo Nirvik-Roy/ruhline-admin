@@ -1481,6 +1481,26 @@ export const getCardGameQuestionSets = async (id, structureId) => {
     }
 }
 
+export const editCardGameQuestionSet = async (data, structureId, id, setId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id && setId) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/card-game/question-sets/${setId}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
 
 export const postQuestionsInsideQuestionSet = async (data, structureId, id, setId) => {
     const Token = localStorage.getItem('token');
