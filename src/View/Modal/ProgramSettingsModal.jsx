@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { getAllCardCategory, getAllquoteCategory } from '../../utils/Program'
+import { getAllCardCategory, getAllquoteCategory, getProgramSettings, postProgramSettings } from '../../utils/Program'
 import Loaders from '../../Components/Loaders/Loaders'
+import { useParams } from 'react-router-dom'
+import Button from '../../Components/Button'
 
-const ProgramSettingsModal = ({ setloading, setprogramSettingModal }) => {
+const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId }) => {
     const [allQuotesCategory, setallQuotesCategory] = useState([])
-    const [allCardsCategory,setallCardsCategory] = useState([])
+    const [allCardsCategory, setallCardsCategory] = useState([]);
+    const { id } = useParams()
     const fetchQuotesCategory = async () => {
         try {
             setloading(true)
@@ -23,7 +26,6 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal }) => {
         fetchQuotesCategory()
     }, [])
 
-
     const fetchCardsCategory = async () => {
         try {
             setloading(true)
@@ -41,6 +43,19 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal }) => {
     useEffect(() => {
         fetchCardsCategory()
     }, [])
+
+    const sendProgramSettings = async () => {
+        try {
+            setloading(true)
+            const res = await postProgramSettings({
+                card_category_id: cardCategoryId ? cardCategoryId : null
+            }, id)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
@@ -52,7 +67,7 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal }) => {
                         <label>Select Quotes Category<span>*</span></label>
                         <select>
                             <option>--select-quotes-category--</option>
-                            {allQuotesCategory?.length > 0 && allQuotesCategory?.map((element)=>(
+                            {allQuotesCategory?.length > 0 && allQuotesCategory?.map((element) => (
                                 <option value={element.id}>{element.name}</option>
                             ))}
                         </select>
@@ -61,7 +76,7 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal }) => {
 
                     <div className='input_form'>
                         <label>Select Cards Category<span>*</span></label>
-                        <select>
+                        <select value={cardCategoryId} onChange={((e) => setcardCategoryId(e.target.value))}>
                             <option>--select-cards-category--</option>
                             {allCardsCategory?.length > 0 && allCardsCategory?.map((element) => (
                                 <option value={element.id}>{element.name}</option>
@@ -108,6 +123,12 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal }) => {
                                 <p>Who am I</p>
                             </div>
                         </div>
+                    </div>
+
+                    <div style={{
+                        marginLeft: 'auto'
+                    }}>
+                        <Button onClick={sendProgramSettings} children={'Save'} />
                     </div>
                 </form>
             </div>

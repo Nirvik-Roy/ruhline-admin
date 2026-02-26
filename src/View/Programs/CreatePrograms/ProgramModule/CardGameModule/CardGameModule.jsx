@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../../Components/Button'
 import ellipse from '../../../../../assets/_MoreIcon_.svg'
 import Pagination from '../../../../../Components/Pagination/Pagination';
@@ -7,6 +7,7 @@ import CardViewModal from '../../../../Modal/CardViewModal';
 
 const CardGameModule = () => {
     const [index, setIndex] = useState([]);
+    const { id, moduleId } = useParams()
     const [modal, setModal] = useState({
         viewCard: false,
         editCard: false
@@ -39,7 +40,7 @@ const CardGameModule = () => {
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div onClick={(()=>navigate('/dashboard/programs/card-game/2/questions'))}>
+                        <div onClick={(() => navigate(`/dashboard/programs/card-game/${id}/questions/${moduleId}`))}>
                             <Button children={'Questions'} styles={{
                                 fontSize: '13px'
                             }} />

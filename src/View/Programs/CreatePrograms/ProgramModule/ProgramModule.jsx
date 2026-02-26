@@ -7,7 +7,7 @@ import deleteicon from '../../../../assets/delete.svg'
 import './ProgramModule.css'
 import AddProgramModule from '../../../Modal/AddProgramModule'
 import Loaders from '../../../../Components/Loaders/Loaders'
-import { getProgramModuleById, deleteProgramModule, reorderProgramModule } from '../../../../utils/Program'
+import { getProgramModuleById, deleteProgramModule, reorderProgramModule, getProgramSettings } from '../../../../utils/Program'
 import { useNavigate, useParams } from 'react-router-dom'
 import DeleteModal from '../../../../Components/DeleteModal/DeleteModal'
 import ProgramSettingsModal from '../../../Modal/ProgramSettingsModal'
@@ -16,12 +16,15 @@ const ProgramModule = () => {
     const [programSettingsModal, setprogramSettingModal] = useState(false)
     const [moduleData, setmoduleData] = useState([]);
     const navigate = useNavigate();
+    const [cardCategoryId, setcardCategoryId] = useState('')
+
     const [deleteId, setdeleteId] = useState()
     const [deletedModal, setdeletedModal] = useState(false)
     const [loading, setloading] = useState(false);
     const { id } = useParams();
     const [moduleOrder, setModuleOrder] = useState([]);
     const [modulePositionChange, setmodulePositionChange] = useState(false)
+    const [programSettingsData, setprogramSettingsData] = useState([])
     const fetchModules = async () => {
         try {
             setloading(true);
@@ -38,6 +41,31 @@ const ProgramModule = () => {
             fetchModules()
         }
     }, [id])
+
+
+
+
+    const fetchProgramSettings = async () => {
+        try {
+            setloading(true)
+            const res = await getProgramSettings(id)
+            if (res?.success) {
+                setprogramSettingsData(res?.data)
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchProgramSettings()
+    }, [])
+
+    useEffect(() => {
+        setcardCategoryId(programSettingsData?.card_category_id || '')
+    }, [programSettingsData])
 
     const data = {
         'Values': `/dashboard/programs/single-program/${id}/values`,
@@ -119,10 +147,10 @@ const ProgramModule = () => {
             {loading && <Loaders />}
             {deletedModal && <DeleteModal onClick={deleteFunc} title={'Delete Module'} details={'Do you really want to remove this module?'} setdeleteModal={setdeletedModal} />}
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
-                <AddProgramModule fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
+                <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
             <Activity mode={programSettingsModal ? 'visible' : 'hidden'}>
-                <ProgramSettingsModal setprogramSettingModal={setprogramSettingModal} setloading={setloading} />
+                <ProgramSettingsModal cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />
             </Activity>
 
             <div className='program_modules_wrapper'>
@@ -192,6 +220,10 @@ const ProgramModule = () => {
 
                                 if (e?.title == 'Who am I') {
                                     navigate(`/dashboard/programs/single-program/${id}/whoami/${e?.id}`)
+                                }
+
+                                if (e?.title == 'Card Game') {
+                                    navigate(`/dashboard/programs/single-program/${id}/card-game/${e?.id}`)
                                 }
 
                             })} src={edit} />

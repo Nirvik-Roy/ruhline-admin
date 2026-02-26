@@ -114,8 +114,8 @@ function App() {
               <Route path='programs/edit-program/:id' element={<EditPrograms/>}/>
               <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
               <Route path='programs/single-program/:id/values/:moduleId' element={<ValuesModule />} />
-              <Route path='programs/single-program/:id /card-game' element={<CardGameModule />} />
-              <Route path='programs/card-game/:id/questions' element={<CardGameQuestions />} />
+              <Route path='programs/single-program/:id/card-game/:moduleId' element={<CardGameModule />} />
+              <Route path='programs/card-game/:id/questions/:moduleId' element={<CardGameQuestions />} />
               <Route path='programs/single-program/:id/wheeloflife/:moduleId' element={<WheelOfLifeModule />} />
               <Route path='programs/single-program/:id/life-element/:moduleId/:elementId' element={<SinglelifeElement />} />
               <Route path='programs/single-program/:id/motivation/:moduleId' element={<MotivationModule />} />

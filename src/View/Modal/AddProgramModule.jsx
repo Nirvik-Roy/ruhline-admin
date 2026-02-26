@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../Components/Loaders/Loaders'
 import toast from 'react-hot-toast'
 import { postProgramModule } from '../../utils/Program'
-const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
+const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, programSettingsData }) => {
     const [quoteModal, setquoteModal] = useState(false);
     const [uploadModal, setuploadModal] = useState(false);
     const [path, setPath] = useState('');
@@ -82,6 +82,11 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
                         <input type='radio' onChange={handleChange} name='wheel_of_life' value={'wheel_of_life'} checked={radioValue === 'wheel_of_life'} />
                         <p>Wheel of Life </p>
                     </div>
+
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='card_game' value={'card_game'} checked={radioValue === 'card_game'} />
+                        <p>Card Game</p>
+                    </div>
                     {/* <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='card' value={'card'} checked={radioValue === 'card'} />
                         <p>Card Game</p>
@@ -140,7 +145,13 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules }) => {
                     //     }
                     // })}
                     >
-                        <Button onClick={postProgramModuleFunc} children={'Add'} />
+                        <Button onClick={(() => {
+                            if (radioValue == 'card_game' && programSettingsData?.card_category_id != null) {
+                                postProgramModuleFunc()
+                            } else {
+                                toast.error('Plz select card category from program settings..')
+                            }
+                        })} children={'Add'} />
                     </div>
                 </div>
             </div>

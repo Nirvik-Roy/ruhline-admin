@@ -1422,3 +1422,82 @@ export const deleteGalleryImageApi = async (id, imageId) => {
         }
     }
 }
+
+
+export const getProgramSettings = async (id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/settings`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+export const postProgramSettings = async (data, id) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/settings`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+export const getCardGameQuestionSets = async (id, structureId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && id && structureId) {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/card-game/question-sets`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
+
+
+export const postQuestionsInsideQuestionSet = async (data, structureId, id, setId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/card-game/question-sets/${setId}/questions`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
