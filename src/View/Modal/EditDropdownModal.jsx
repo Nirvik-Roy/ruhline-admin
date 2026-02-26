@@ -82,7 +82,7 @@ const EditDropdownModal = ({ tabsFunction, singleData, editAddEmptyOption, editd
                         >
                             <Button
                                 onClick={(() => editQuestions(singleData?.id))}
-                                children="Add"
+                                children="Update"
                             />
                         </div>
                     </div>

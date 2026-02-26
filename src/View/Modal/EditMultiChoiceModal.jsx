@@ -4,6 +4,7 @@ import Textarea from '../../Components/Textarea'
 import Button from '../../Components/Button'
 
 const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, editdeleteOption, editOptionValue, editQuestionText, editQuestions, editErrors }) => {
+
   return (
     <>
       <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
@@ -45,7 +46,7 @@ const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, ed
 
           {/* Render Each Option */}
           <div className="options_list_wrapper46656">
-            {singleData.options.map((opt, optIndex) => (
+            {singleData?.options.map((opt, optIndex) => (
               <div
                 className="options_1_wrapper456"
                 key={optIndex}
@@ -81,7 +82,7 @@ const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, ed
             >
               <Button
                 onClick={(() => editQuestions(singleData?.id))}
-                children="Add"
+                children="Update"
               />
             </div>
           </div>

@@ -81,7 +81,7 @@ const EditSingleChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, e
                         >
                             <Button
                                 onClick={(() => editQuestions(singleData?.id))}
-                                children="Add"
+                                children="Update"
                             />
                         </div>
                     </div>

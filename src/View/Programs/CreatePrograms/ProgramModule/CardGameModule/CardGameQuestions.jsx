@@ -9,17 +9,28 @@ import menu from '../../../../../assets/menu.svg'
 import edit from '../../../../../assets/Pencil.svg'
 import deleteicon from '../../../../../assets/delete.svg'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCardGameQuestionSets, postQuestionsInsideQuestionSet } from '../../../../../utils/Program'
+import { editQuestionsInsideQuestionSet, getCardGameQuestionSets, postQuestionsInsideQuestionSet } from '../../../../../utils/Program'
 import Loaders from '../../../../../Components/Loaders/Loaders'
 import CardGameDescriptiveModal from '../../../../Modal/CardGameDescriptiveModal'
 import CardGameMultichoiceModal from '../../../../Modal/CardGameMultichoiceModal'
 import CardGameSingleChoiceModal from '../../../../Modal/CardGameSingleChoiceModal'
 import CardGameDropdownModal from '../../../../Modal/CardGameDropdownModal'
+import EditMultiChoiceModal from '../../../../Modal/EditMultiChoiceModal'
+import EditDropdownModal from '../../../../Modal/EditDropdownModal'
+import EditSingleChoiceModal from '../../../../Modal/EditSingleChoiceModal'
+import EditDescriptiveModal from '../../../../Modal/EditDescriptiveModal'
 const CardGameQuestions = () => {
     const navigate = useNavigate();
     const [allQuestionSets, setallQuestionSets] = useState([]);
+    const [singleQuestion, setsingleQuestion] = useState({})
     const [selectedIndex, setselectedIndex] = useState(null);
     const [questionId, setquestionId] = useState()
+    const [errors, setErrors] = useState()
+    const [editErrors, seteditErrors] = useState()
+    const [deleteId, setdeleteId] = useState('')
+    const [deleteModal, setdeleteModal] = useState(false);
+    const [singleQuestionId, setsingleQuestionId] = useState('')
+    const [editQuestionId, seteditQuestionId] = useState('')
     const [dynamicOptions, setdynamicOptions] = useState(
         [
             {
@@ -171,14 +182,22 @@ const CardGameQuestions = () => {
         descriptive: false,
         multiChoice: false,
         singleChoice: false,
-        dropdown: false
+        dropdown: false,
+        editdescriptive: false,
+        editmultiChoice: false,
+        editsingleChoice: false,
+        editropdown: false
     })
     const tabsFunction = (i) => {
         setTabs({
             descriptive: i === 1 ? true : false,
             multiChoice: i === 2 ? true : false,
             singleChoice: i === 3 ? true : false,
-            dropdown: i === 4 ? true : false
+            dropdown: i === 4 ? true : false,
+            editdescriptive: i === 5 ? true : false,
+            editmultiChoice: i === 6 ? true : false,
+            editsingleChoice: i === 7 ? true : false,
+            editropdown: i === 8 ? true : false
         })
     }
 
@@ -186,7 +205,6 @@ const CardGameQuestions = () => {
         try {
             setloading(true)
             const res = await getCardGameQuestionSets(id, moduleId)
-            console.log(res)
             if (res?.success) {
                 setallQuestionSets(res?.data?.data)
             }
@@ -274,6 +292,8 @@ const CardGameQuestions = () => {
                 if (res?.success) {
                     setTabs(0);
                     getQuestionSets()
+                    setselectedIndex('')
+                    setquestionId('')
                     setdynamicOptions([
                         {
                             id: 1,
@@ -417,6 +437,10 @@ const CardGameQuestions = () => {
                             ]
                         }
                     ])
+                    setErrors('')
+                } else {
+                    setErrors(res)
+                    console.log('error')
                 }
 
             } catch (err) {
@@ -426,15 +450,242 @@ const CardGameQuestions = () => {
             }
         }
     }
+
+    const editQuestions = async () => {
+        if (id && editQuestionId && singleQuestionId) {
+            try {
+                setloading(true);
+                const formData = new FormData()
+                formData.append(`type`, singleQuestion.type)
+                formData.append('question_text', singleQuestion.question_text)
+                if (singleQuestion.options?.length > 0) {
+                    singleQuestion.options?.forEach(option => {
+                        formData.append('options[]', option);
+                    });
+                } else {
+                    formData.append('options', [])
+                }
+                const res = await editQuestionsInsideQuestionSet(formData, moduleId, id, singleQuestionId, editQuestionId);
+                if (res?.success) {
+                    setTabs(0);
+                    getQuestionSets()
+                    seteditQuestionId('')
+                    setsingleQuestionId('')
+                    seteditErrors('')
+                } else {
+                    seteditErrors(res)
+                }
+
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setloading(false)
+            }
+        }
+    }
+
+    const addSingleQuestion = (id, questionId) => {
+        const filteredData = allQuestionSets?.filter((e) => e.id == id)
+        const questionsFiltered = filteredData[0].questions?.filter((e) => e.id == questionId)
+        setsingleQuestion(...questionsFiltered)
+    }
+    const editQuestionText = (e) => {
+        const { name, value } = e.target;
+        setsingleQuestion({
+            ...singleQuestion,
+            [name]: value
+        })
+    }
+    const editAddEmptyOption = () => {
+        setsingleQuestion(prev => ({
+            ...prev,
+            options: [...(prev.options || []), '']
+        }));
+    };
+
+    const editdeleteOption = (indexToDelete) => {
+        setsingleQuestion(prev => ({
+            ...prev,
+            options: prev.options.filter((_, index) => index !== indexToDelete)
+        }));
+    };
+
+    const editOptionValue = (indexToUpdate, newValue) => {
+        setsingleQuestion(prev => ({
+            ...prev,
+            options: prev.options.map((opt, idx) =>
+                idx === indexToUpdate ? newValue : opt
+            )
+        }));
+    };
+
+    useEffect(() => {
+        if (!tabs.descriptive && !tabs.dropdown && !tabs.editdescriptive && !tabs.editmultiChoice && !tabs.editropdown && !tabs.editsingleChoice && !tabs.multiChoice && !tabs.singleChoice) {
+            setErrors('')
+            seteditErrors('')
+            setdynamicOptions([
+                {
+                    id: 1,
+                    title: 'Question 1',
+                    questions: [
+                        {
+                            id: 1,
+                            type: 'descriptive',
+                            question_text: '',
+                            options: null,
+                        }, {
+                            id: 2,
+                            type: 'multi_choice',
+                            question_text: '',
+                            options: []
+                        }, {
+                            id: 3,
+                            type: 'single_choice',
+                            question_text: '',
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            type: 'dropdown',
+                            question_text: '',
+                            options: []
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: 'Question 1',
+                    questions: [
+                        {
+                            id: 1,
+                            type: 'descriptive',
+                            question_text: '',
+                            options: null,
+                        }, {
+                            id: 2,
+                            type: 'multi_choice',
+                            question_text: '',
+                            options: []
+                        }, {
+                            id: 3,
+                            type: 'single_choice',
+                            question_text: '',
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            type: 'dropdown',
+                            question_text: '',
+                            options: []
+                        }
+                    ]
+                },
+
+                {
+                    id: 3,
+                    title: 'Question 1',
+                    questions: [
+                        {
+                            id: 1,
+                            type: 'descriptive',
+                            question_text: '',
+                            options: null,
+                        }, {
+                            id: 2,
+                            type: 'multi_choice',
+                            question_text: '',
+                            options: []
+                        }, {
+                            id: 3,
+                            type: 'single_choice',
+                            question_text: '',
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            type: 'dropdown',
+                            question_text: '',
+                            options: []
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: 'Question 1',
+                    questions: [
+                        {
+                            id: 1,
+                            type: 'descriptive',
+                            question_text: '',
+                            options: null,
+                        }, {
+                            id: 2,
+                            type: 'multi_choice',
+                            question_text: '',
+                            options: []
+                        }, {
+                            id: 3,
+                            type: 'single_choice',
+                            question_text: '',
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            type: 'dropdown',
+                            question_text: '',
+                            options: []
+                        }
+                    ]
+                },
+                {
+                    id: 5,
+                    title: 'Question 1',
+                    questions: [
+                        {
+                            id: 1,
+                            type: 'descriptive',
+                            question_text: '',
+                            options: null,
+                        }, {
+                            id: 2,
+                            type: 'multi_choice',
+                            question_text: '',
+                            options: []
+                        }, {
+                            id: 3,
+                            type: 'single_choice',
+                            question_text: '',
+                            options: []
+                        },
+                        {
+                            id: 4,
+                            type: 'dropdown',
+                            question_text: '',
+                            options: []
+                        }
+                    ]
+                }
+            ])
+        }
+    }, [tabs.descriptive, tabs.dropdown, tabs.editdescriptive, tabs.editmultiChoice, tabs.editropdown, tabs.editsingleChoice, tabs.singleChoice, tabs.multiChoice])
     return (
         <>
             {loading && <Loaders />}
-            {tabs.descriptive && <CardGameDescriptiveModal postQuestions={postQuestions} selectedIndex={selectedIndex} updateQuestionText={updateQuestionText} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
-            {tabs.multiChoice && <CardGameMultichoiceModal postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal  editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.singleChoice && <CardGameSingleChoiceModal postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+            {tabs.editropdown && <EditDropdownModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.dropdown && <CardGameDropdownModal postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+            {tabs.editsingleChoice && <EditSingleChoiceModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+
+            {tabs.editdescriptive && <EditDescriptiveModal editQuestions={editQuestions} editErrors={editErrors} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+
+            {tabs.descriptive && <CardGameDescriptiveModal errors={errors} postQuestions={postQuestions} selectedIndex={selectedIndex} updateQuestionText={updateQuestionText} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+
+            {tabs.multiChoice && <CardGameMultichoiceModal errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+
+            {tabs.singleChoice && <CardGameSingleChoiceModal errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+
+            {tabs.dropdown && <CardGameDropdownModal errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -519,26 +770,43 @@ const CardGameQuestions = () => {
                                 </div>
                             </div>
                             <div className='questions_list_wrapper4562'>
-                                {e?.questions?.map((element,index)=>{
+                                {e?.questions?.map((element, index) => {
                                     return (
                                         <>
                                             <div className='added_modules_wrapper'>
                                                 <div className='add_modules_enu_wrapper'>
                                                     <img src={menu} />
-                                                    <p>Question {index+1} <small style={{
+                                                    <p>Question {index + 1} <small style={{
                                                         fontSize: '10px',
                                                         marginLeft: '5px'
                                                     }}>{element?.type}</small></p>
                                                 </div>
                                                 <div className='edit_modules_wrapper'>
-                                                    <img src={edit} />
+                                                    <img onClick={(() => {
+                                                        seteditQuestionId(e?.id)
+                                                        setsingleQuestionId(element?.id)
+                                                        addSingleQuestion(e?.id, element?.id)
+                                                        if (element?.type === 'descriptive') {
+                                                            tabsFunction(5)
+                                                        }
+                                                        if (element?.type == 'multi_choice') {
+                                                            tabsFunction(6)
+                                                        }
+                                                        if (element?.type === 'single_choice') {
+                                                            tabsFunction(7)
+                                                        }
+
+                                                        if (element?.type === 'dropdown') {
+                                                            tabsFunction(8)
+                                                        }
+                                                    })} src={edit} />
                                                     <img src={deleteicon} />
                                                 </div>
                                             </div>
                                         </>
                                     )
                                 })}
-                             
+
                             </div>
                         </div>
                     ))}

@@ -9,9 +9,6 @@ const EditDescriptiveModal = ({ tabsFunction, singleData, editQuestionText, edit
             <div className='modal_div'>
                 <h4>Edit Descriptive</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>
-
-
-
                 <div style={{ margin: "20px 0" }}>
 
                     {/* Question Textarea */}
@@ -34,14 +31,10 @@ const EditDescriptiveModal = ({ tabsFunction, singleData, editQuestionText, edit
                     >
                         <Button
                             onClick={(() => editQuestions(singleData?.id))}
-                            children="Add"
+                            children="Update"
                         />
                     </div>
                 </div>
-
-
-
-
             </div>
         </>
     )

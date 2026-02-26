@@ -5,6 +5,7 @@ import Button from '../../Components/Button'
 import { useParams } from 'react-router-dom'
 const CardGameDescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQuestionText, errors, selectedIndex }) => {
     const { moduleId } = useParams()
+    console.log(errors)
     return (
         <>
             <div className='modal_wrapper'></div>

@@ -1501,3 +1501,24 @@ export const postQuestionsInsideQuestionSet = async (data, structureId, id, setI
         }
     }
 }
+
+
+export const editQuestionsInsideQuestionSet = async (data, structureId, id, questionId, setId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && structureId && id && setId && questionId) {
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/card-game/question-sets/${setId}/questions/${questionId}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Values Questions added succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}
