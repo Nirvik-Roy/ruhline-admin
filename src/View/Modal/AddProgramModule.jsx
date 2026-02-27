@@ -113,6 +113,11 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         <p>Who am I?</p>
                     </div>
 
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='quote' value={'quote'} checked={radioValue === 'quote'} />
+                        <p>Quotes  </p>
+                    </div>
+
                     {/* <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='habit' value={'habit'} checked={radioValue === 'habit'} />
                         <p>Habit Tracker  </p>
@@ -123,10 +128,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         <p>Upload Documents  </p>
                     </div>
 
-                    <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='quotes' value={'quotes'} checked={radioValue === 'quotes'} />
-                        <p>Quotes  </p>
-                    </div>
+              
 
                    */}
                 </div>
@@ -148,9 +150,19 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         <Button
                             onClick={() => {
                                 // Check if card game is selected but no category
-                                if (radioValue === 'card_game' && !programSettingsData?.card_category_id) {
-                                    toast.error('Please select card category from program settings.');
-                                    return; // Exit early
+                                if ((radioValue === 'card_game' && !programSettingsData?.card_category_id) || (radioValue == 'quote' && !programSettingsData?.quote_category_id)) {
+                                    if (radioValue === 'card_game') {
+                                        toast.error('Please select card category from program settings.');
+
+                                        return;
+                                    }
+
+                                    if (radioValue === 'quote') {
+                                        toast.error('Please select quote category from program settings.');
+
+                                        return;
+                                    }
+
                                 }
 
                                 // If we get here, it's safe to proceed

@@ -9,7 +9,7 @@ import menu from '../../../../../assets/menu.svg'
 import edit from '../../../../../assets/Pencil.svg'
 import deleteicon from '../../../../../assets/delete.svg'
 import { useNavigate, useParams } from 'react-router-dom'
-import { editCardGameQuestionSet, editQuestionsInsideQuestionSet, getCardGameQuestionSets, postQuestionsInsideQuestionSet } from '../../../../../utils/Program'
+import { deleteQuestionsInsideSet, editCardGameQuestionSet, editQuestionsInsideQuestionSet, getCardGameQuestionSets, getprogramById, postQuestionsInsideQuestionSet } from '../../../../../utils/Program'
 import Loaders from '../../../../../Components/Loaders/Loaders'
 import CardGameDescriptiveModal from '../../../../Modal/CardGameDescriptiveModal'
 import CardGameMultichoiceModal from '../../../../Modal/CardGameMultichoiceModal'
@@ -20,6 +20,7 @@ import EditDropdownModal from '../../../../Modal/EditDropdownModal'
 import EditSingleChoiceModal from '../../../../Modal/EditSingleChoiceModal'
 import EditDescriptiveModal from '../../../../Modal/EditDescriptiveModal'
 import EditQuestionTitleModal from '../../../../Modal/EditQuestionTitleModal'
+import DeleteModal from '../../../../../Components/DeleteModal/DeleteModal.jsx'
 import toast from 'react-hot-toast'
 const CardGameQuestions = () => {
     const navigate = useNavigate();
@@ -177,7 +178,6 @@ const CardGameQuestions = () => {
                 ]
             }
         ])
-    console.log(dynamicOptions)
     const [loading, setloading] = useState(false);
     const { id, moduleId } = useParams();
     const [tabs, setTabs] = useState({
@@ -673,7 +673,7 @@ const CardGameQuestions = () => {
     const [editTitletModal, seteditTitleModal] = useState(false);
     const [singleSet, setsingleSet] = useState({})
     const editQuestionSet = async (data) => {
-        if(data){
+        if (data) {
             try {
                 setloading(true)
                 const res = await editCardGameQuestionSet({
@@ -689,18 +689,60 @@ const CardGameQuestions = () => {
             } finally {
                 setloading(false)
             }
-        }else{
+        } else {
             toast.error('Plz enter the field...')
         }
-        
+
     }
 
     const singleQuestionSet = (id) => {
         setsingleSet(allQuestionSets?.filter((e) => e?.id == id))
     }
+
+    const handleDelete = (id, questionId) => {
+        setdeleteId(id)
+        setdeleteModal(true)
+        setquestionId(questionId)
+    }
+
+    const deleteFunc = async () => {
+        try {
+            setloading(true)
+            const res = await deleteQuestionsInsideSet(moduleId, id, deleteId, questionId)
+            console.log(res)
+            if (res?.success) {
+                setdeleteModal(false)
+                getQuestionSets()
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    const [singleProgramData, setsingleProgramData] = useState([])
+    const fetchSingleProgram = async () => {
+        try {
+            setloading(true)
+            const res = await getprogramById(id);
+            setsingleProgramData(res?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (id) {
+            fetchSingleProgram()
+        }
+    }, [])
     return (
         <>
             {loading && <Loaders />}
+            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deleteFunc} title={'Delete question?'} details={'Do you really want to delete this question?'} />}
             {editTitletModal && <EditQuestionTitleModal singleSet={singleSet} seteditTitleModal={seteditTitleModal} editQuestionSet={editQuestionSet} />}
             {tabs.editmultiChoice && <EditMultiChoiceModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
@@ -721,7 +763,7 @@ const CardGameQuestions = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Questions</h2>
-                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2'))}>Yoga Program 1</span> / <span onClick={(() => navigate('/dashboard/programs/single-program/2/card-game'))}>Card Game</span> / <span onClick={(() => navigate('/dashboard/programs/card-game/2/questions'))}>Questions</span></small>
+                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>{singleProgramData?.name}</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}/card-game/${moduleId}`))}>Card Game</span> / <span onClick={(() => navigate(`/dashboard/programs/card-game/${id}/questions/${moduleId}`))}>Questions</span></small>
                     </div>
                 </div>
 
@@ -812,6 +854,12 @@ const CardGameQuestions = () => {
                                     </div>
                                 </div>
                                 <div className='questions_list_wrapper4562'>
+                                    {e?.questions?.length <= 0 && <p style={{
+                                        fontWeight: '600',
+                                        fontSize: '16px',
+                                        marginTop: '-10px',
+                                        color: 'var(--primary-color)'
+                                    }}>No questions added...</p>}
                                     {e?.questions?.map((element, index) => {
                                         return (
                                             <>
@@ -842,7 +890,9 @@ const CardGameQuestions = () => {
                                                                 tabsFunction(8)
                                                             }
                                                         })} src={edit} />
-                                                        <img src={deleteicon} />
+                                                        <img onClick={(() => {
+                                                            handleDelete(element?.id, e?.id)
+                                                        })} src={deleteicon} />
                                                     </div>
                                                 </div>
                                             </>

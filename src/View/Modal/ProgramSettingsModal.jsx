@@ -4,7 +4,7 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { useParams } from 'react-router-dom'
 import Button from '../../Components/Button'
 
-const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings }) => {
+const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings, quoteCategoryId, setquoteCategoryId }) => {
     const [allQuotesCategory, setallQuotesCategory] = useState([])
     const [allCardsCategory, setallCardsCategory] = useState([]);
     const { id } = useParams()
@@ -48,10 +48,12 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
         try {
             setloading(true)
             const res = await postProgramSettings({
-                card_category_id: cardCategoryId ? cardCategoryId : null
+                card_category_id: cardCategoryId ? cardCategoryId : null,
+                quote_category_id: quoteCategoryId ? quoteCategoryId : null
             }, id)
-            if(res?.success){
+            if (res?.success) {
                 fetchProgramSettings()
+                setprogramSettingModal(false)
             }
         } catch (err) {
             console.log(err)
@@ -64,14 +66,15 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
             <div className='modal_div'>
                 <h4>Program Settings</h4>
-                <i class="fa-solid fa-xmark" onClick={(() =>{ setprogramSettingModal(false)
+                <i class="fa-solid fa-xmark" onClick={(() => {
+                    setprogramSettingModal(false)
                     setcardCategoryId('')
                 })}></i>
                 <form className='modal_form'>
                     <div className='input_form'>
                         <label>Select Quotes Category<span>*</span></label>
-                        <select>
-                            <option>--select-quotes-category--</option>
+                        <select value={quoteCategoryId} onChange={((e) => setquoteCategoryId(e?.target.value))}>
+                            <option value={''}>--select-quotes-category--</option>
                             {allQuotesCategory?.length > 0 && allQuotesCategory?.map((element) => (
                                 <option value={element.id}>{element.name}</option>
                             ))}

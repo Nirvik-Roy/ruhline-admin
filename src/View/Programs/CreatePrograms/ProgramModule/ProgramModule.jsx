@@ -17,7 +17,7 @@ const ProgramModule = () => {
     const [moduleData, setmoduleData] = useState([]);
     const navigate = useNavigate();
     const [cardCategoryId, setcardCategoryId] = useState('')
-
+    const [quoteCategoryId, setquoteCategoryId] = useState('')
     const [deleteId, setdeleteId] = useState()
     const [deletedModal, setdeletedModal] = useState(false)
     const [loading, setloading] = useState(false);
@@ -71,6 +71,11 @@ const ProgramModule = () => {
     useEffect(() => {
         setcardCategoryId(programSettingsData?.card_category_id || '')
     }, [programSettingsData])
+
+    useEffect(() => {
+        setquoteCategoryId(programSettingsData?.quote_category_id || '')
+    }, [programSettingsData])
+
 
     const data = {
         'Values': `/dashboard/programs/single-program/${id}/values`,
@@ -155,7 +160,7 @@ const ProgramModule = () => {
                 <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
 
-            {programSettingsModal && <ProgramSettingsModal fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
+            {programSettingsModal && <ProgramSettingsModal quoteCategoryId={quoteCategoryId} setquoteCategoryId={setquoteCategoryId} fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
 
             <div className='program_modules_wrapper'>
                 <div className='program_module_head_wrapper'>
@@ -228,6 +233,10 @@ const ProgramModule = () => {
 
                                 if (e?.title == 'Card Game') {
                                     navigate(`/dashboard/programs/single-program/${id}/card-game/${e?.id}`)
+                                }
+
+                                if(e?.title == 'Quote'){
+                                    navigate('/dashboard/programs/quote-categories')
                                 }
 
                             })} src={edit} />

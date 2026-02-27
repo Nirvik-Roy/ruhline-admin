@@ -58,7 +58,7 @@ const EditCardModal = ({ setisEditModal, fetchCards, cardId }) => {
             {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setisEditModal(false))}></div>
             <div className='modal_div'>
-                <h4>Edit Quote</h4>
+                <h4>Edit Card</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setisEditModal(false))}></i>
                 <div style={{
                     margin: '25px 0'
