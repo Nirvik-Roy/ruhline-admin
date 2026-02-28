@@ -860,13 +860,13 @@ const CardGameQuestions = () => {
                                         marginTop: '-10px',
                                         color: 'var(--primary-color)'
                                     }}>No questions added...</p>}
-                                    {e?.questions?.map((element, index) => {
+                                    {e?.questions?.map((element,index) => {
                                         return (
                                             <>
-                                                <div className='added_modules_wrapper'>
+                                                <div key={index} className='added_modules_wrapper'>
                                                     <div className='add_modules_enu_wrapper'>
                                                         <img src={menu} />
-                                                        <p>Question {index + 1} <small style={{
+                                                        <p>{element?.question_text} <small style={{
                                                             fontSize: '10px',
                                                             marginLeft: '5px'
                                                         }}>{element?.type}</small></p>
