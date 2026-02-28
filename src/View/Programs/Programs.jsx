@@ -48,7 +48,7 @@ const Programs = () => {
     const deleteFunc = async () => {
         try {
             setloading(true)
-            const res = await commonDelelteApi('/admin/project', deleteId);
+            const res = await commonDelelteApi('/admin/program', deleteId);
             if (res.success) {
                 setdeletedModal(false)
                 fetchPrograms()
@@ -142,6 +142,9 @@ const Programs = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {programData?.length <= 0 && <td style={{
+                                color:'var(--primary-color)'
+                            }} colSpan={12}>No programs added...</td>}
                             {programData?.length > 0 && programData?.map((e, i) => (
                                 <tr>
                                     <td>
