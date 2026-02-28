@@ -178,7 +178,7 @@ const Coaches = () => {
         <>
             {coachVerifyModal && <VerifyModal setverifymodal={setcoachVerifyModal} onClick={handleCoachVerification} title={'Coach Verification'} details={'Do you want to verify this coach?'} />}
             {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
-            {(updateLoading || deletedloading) && <Loaders />}
+            {(updateLoading || deletedloading || isLoading) && <Loaders />}
 
             {coachModal && <AddCoachModal addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
             {ediCoachModal && <EditCoachModal updateErrors={updateErrors} editNewCoachfunc={editNewCoachfunc} singleCoachdata={singleCoachdata} singleCoachLoading={singleCoachLoading} seteditCoachModal={seteditCoachModal} />}
