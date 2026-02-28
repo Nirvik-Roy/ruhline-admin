@@ -241,6 +241,10 @@ const CreatePrograms = () => {
                 formData.append('coach_ids', '[]')
             }
             const res = await createProgram(formData);
+            if (res?.success) {
+                console.log(res)
+                navigate(`/dashboard/programs/single-program${res?.data?.id}`)
+            }
             setprogramErrors(res)
         } catch (err) {
             console.log(err)
