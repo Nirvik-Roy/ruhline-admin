@@ -243,7 +243,7 @@ const CreatePrograms = () => {
             const res = await createProgram(formData);
             if (res?.success) {
                 console.log(res)
-                navigate(`/dashboard/programs/single-program${res?.data?.id}`)
+                navigate(`/dashboard/programs/single-program/${res?.data?.id}`)
             }
             setprogramErrors(res)
         } catch (err) {
