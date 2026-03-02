@@ -19,6 +19,14 @@
     border-radius: 10px;
 }
 
+.editor ol{
+    padding-left: 20px;
+}
+
+.editor ul{
+    padding-left: 20px;
+}
+
 .toolbar button:hover {
     background: #eee;
 }

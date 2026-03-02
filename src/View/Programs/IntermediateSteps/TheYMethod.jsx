@@ -108,14 +108,14 @@ const TheYMethod = () => {
                     </div>
                     <div className='coaches_button_wapper'>
 
-                        <div>
+                        {/* <div>
                             <Button children={'Cancel'} styles={{
                                 fontSize: '13px',
                                 color: 'var(--text-color)',
                                 background: 'transparent',
                                 border: 'none'
                             }} />
-                        </div>
+                        </div> */}
                         <div>
                             <Button onClick={handleSubmit} children={'Save'} styles={{
                                 fontSize: '13px'
