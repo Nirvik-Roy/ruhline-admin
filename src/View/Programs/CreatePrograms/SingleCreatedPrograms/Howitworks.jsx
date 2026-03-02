@@ -3,7 +3,12 @@ import img from '../../../../assets/Rectangle 6716.png'
 const Howitworks = ({ singleData }) => {
     return (
         <>
-            <div className='service_expect_wrapper'>
+            {singleData?.how_it_works?.length <= 0 && <p style={{
+                color: 'var(--primary-color)',
+                fontWeight: '600',
+                fontSize: '16px'
+            }}>No info added...</p>}
+            {singleData?.how_it_works?.length > 0 && <div className='service_expect_wrapper'>
                 <div className='service_expert_left'>
                     <h3 style={{
                         fontSize: '25px',
@@ -26,7 +31,7 @@ const Howitworks = ({ singleData }) => {
                 <div className='service_expert_right service_long_img'>
                     <img src={singleData?.how_it_works_section_image || img} />
                 </div>
-            </div>
+            </div>}
         </>
     )
 }
