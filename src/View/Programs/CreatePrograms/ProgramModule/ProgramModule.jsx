@@ -11,10 +11,13 @@ import { getProgramModuleById, deleteProgramModule, reorderProgramModule, getPro
 import { useNavigate, useParams } from 'react-router-dom'
 import DeleteModal from '../../../../Components/DeleteModal/DeleteModal'
 import ProgramSettingsModal from '../../../Modal/ProgramSettingsModal'
+import UploadDocumentsModal from '../../../Modal/UploadDocumentsModal.jsx'
 const ProgramModule = () => {
     const [modalIsOpen, setmodalIsOpen] = useState(false);
-    const [programSettingsModal, setprogramSettingModal] = useState(false)
+    const [programSettingsModal, setprogramSettingModal] = useState(false);
+    const [documentModuleId, setdocumentModuleId] = useState()
     const [moduleData, setmoduleData] = useState([]);
+    const [uploadModal, setuploadModal] = useState(false)
     const navigate = useNavigate();
     const [cardCategoryId, setcardCategoryId] = useState('')
     const [quoteCategoryId, setquoteCategoryId] = useState('')
@@ -162,6 +165,9 @@ const ProgramModule = () => {
 
             {programSettingsModal && <ProgramSettingsModal quoteCategoryId={quoteCategoryId} setquoteCategoryId={setquoteCategoryId} fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
 
+
+            {uploadModal && <UploadDocumentsModal documentModuleId={documentModuleId} uploadModal={uploadModal} setuploadModal={setuploadModal} />}
+
             <div className='program_modules_wrapper'>
                 <div className='program_module_head_wrapper'>
                     <h2>Program Structure</h2>
@@ -215,7 +221,9 @@ const ProgramModule = () => {
                             }}>Modules</span></p>
                         </div>
                         <div className='edit_modules_wrapper'>
-                            <img onClick={(() => {
+                            <img style={e?.title == 'Habit Tracker' || e?.title == 'Goal Settings' ?{
+                                display:'none'
+                            }:{}} onClick={(() => {
                                 if (e?.title == 'Find your Motivation') {
                                     navigate(`/dashboard/programs/single-program/${id}/motivation/${e?.id}`)
                                 }
@@ -235,8 +243,13 @@ const ProgramModule = () => {
                                     navigate(`/dashboard/programs/single-program/${id}/card-game/${e?.id}`)
                                 }
 
-                                if(e?.title == 'Quote'){
+                                if (e?.title == 'Quote') {
                                     navigate('/dashboard/programs/quote-categories')
+                                }
+
+                                if (e?.title == 'Upload Documents') {
+                                    setuploadModal(true)
+                                    setdocumentModuleId(e?.id)
                                 }
 
                             })} src={edit} />

@@ -37,7 +37,7 @@
   align-items: center;
   gap: 10px;
 }
-.checkbox_7953 p{
+.checkbox_7953 p {
   font-weight: 500;
   font-size: 0.9rem;
 }
@@ -407,4 +407,37 @@
 }
 .codeName_input input {
   text-transform: uppercase;
+}
+.react-pdf__Page__textContent {
+  height: fit-content !important;
+}
+.react-pdf__Page__annotations {
+  height: fit-content !important;
+}
+.pdf_overlay {
+  background-color: rgba(0, 0, 0, 0.208);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  opacity: 0;
+  transition: 0.2s linear all;
+}
+.hover_options {
+  z-index: 999;
+  opacity: 0;
+  transition: 0.2s linear all;
+}
+.pdf_view_div {
+  overflow: hidden;
+}
+.pdf_view_div:hover > .pdf_overlay {
+  opacity: 1;
+  transition: 0.2s linear all;
+}
+.pdf_view_div:hover > .hover_options {
+  opacity: 1;
+  transition: 0.2s linear all;
 }

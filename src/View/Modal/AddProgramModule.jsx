@@ -1,14 +1,12 @@
 import React, { useState, Activity, useEffect } from 'react'
 import Button from '../../Components/Button'
 import AddQuoteModuleModal from './AddQuoteModuleModal'
-import UploadDocumentsModal from './UploadDocumentsModal'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../Components/Loaders/Loaders'
 import toast from 'react-hot-toast'
 import { postProgramModule } from '../../utils/Program'
 const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, programSettingsData }) => {
     const [quoteModal, setquoteModal] = useState(false);
-    const [uploadModal, setuploadModal] = useState(false);
     const [path, setPath] = useState('');
     const [radioValue, setradioValue] = useState();
     const [loading, setloading] = useState(false)
@@ -58,9 +56,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                 <AddQuoteModuleModal />
             </Activity>
 
-            <Activity mode={uploadModal ? 'visible' : 'hidden'}>
-                <UploadDocumentsModal />
-            </Activity>
+           
             <div className='modal_wrapper' onClick={(() => setmodalIsOpen(false))}></div>
             <div className='modal_div'>
                 <h4>Add Module</h4>
@@ -98,11 +94,11 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         <p>Notes  </p>
                     </div>
 
+                    */}
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='goal' value={'goal'} checked={radioValue === 'goal'} />
+                        <input type='radio' onChange={handleChange} name='goal_settings' value={'goal_settings'} checked={radioValue === 'goal_settings'} />
                         <p>Goal Settings  </p>
-                    </div> */}
-
+                    </div>
                     <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='find_your_motivation' value={'find_your_motivation'} checked={radioValue === 'find_your_motivation'} />
                         <p>Find your Motivation  </p>
@@ -118,15 +114,19 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         <p>Quotes  </p>
                     </div>
 
-                    {/* <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='habit' value={'habit'} checked={radioValue === 'habit'} />
-                        <p>Habit Tracker  </p>
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='upload_documents' value={'upload_documents'} checked={radioValue === 'upload_documents'} />
+                        <p>Upload Documents  </p>
                     </div>
 
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='documents' value={'documents'} checked={radioValue === 'documents'} />
-                        <p>Upload Documents  </p>
+                        <input type='radio' onChange={handleChange} name='habit_tracker' value={'habit_tracker'} checked={radioValue === 'habit_tracker'} />
+                        <p>Habit Tracker  </p>
                     </div>
+
+                    {/*
+
+                    
 
               
 
@@ -164,6 +164,8 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                                     }
 
                                 }
+
+        
 
                                 // If we get here, it's safe to proceed
                                 postProgramModuleFunc();
