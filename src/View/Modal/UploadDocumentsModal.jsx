@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import Button from '../../Components/Button'
 import { Document, Page, pdfjs } from "react-pdf";
 import upload from '../../assets/Vector (8).svg'
