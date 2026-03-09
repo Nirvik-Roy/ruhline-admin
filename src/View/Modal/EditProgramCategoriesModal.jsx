@@ -57,7 +57,10 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
             setLoading(true)
             const formDataNew = new FormData();
             formDataNew.append('name', formData.name);
-            formDataNew.append('parent_id', formData.parent_id)
+            if (formData.parent_id != '') {
+                formDataNew.append('parent_id', formData.parent_id)
+            }
+
             const result = await dispatch(Editprogram({
                 id: editId,
                 formData: formDataNew,
@@ -92,7 +95,7 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
                     <div className='input_form'>
                         <label>Select Parent Category</label>
                         <select onChange={handleChange} name='parent_id' value={formData.parent_id}>
-                            <option>--select-parent-category--</option>
+                            <option value={''}>--select-parent-category--</option>
                             {allPrograms?.map((e, i) => (
                                 e?.parent_id == null && <option value={e.id} key={i}>{e?.name}</option>
                             ))}

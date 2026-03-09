@@ -16,7 +16,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
         setLoading(true)
         try {
             const res = await getAllPrograms();
-            if(res.success){
+            if (res.success) {
                 setallPrograms(res.data?.data);
             }
         } catch (err) {
@@ -39,14 +39,16 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
 
     const handleSubmit = async () => {
         const { name, parent_id } = formData;
-        if (name != '' ) {
+        if (name != '') {
             try {
                 setLoading(true)
                 const formDatanew = new FormData();
                 formDatanew.append('name', name);
-                { parent_id != '' && formDatanew.append('parent_id', parent_id) }
+                if (parent_id != '') {
+                    formDatanew.append('parent_id', parent_id)
+                }
                 const res = await postPrograms(formDatanew);
-                if(res.success){
+                if (res.success) {
                     fetchPrograms();
                     setisModal(false)
                 }
@@ -59,6 +61,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
             toast.error('Plz enter all fields...')
         }
     }
+
     return (
         <>
             {loading && <Loaders />}
@@ -76,7 +79,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
                     <div className='input_form'>
                         <label>Select Parent Category</label>
                         <select onChange={handleChange} name='parent_id' value={formData.parent_id}>
-                            <option>--select-parent-category--</option>
+                            <option value="">--select-parent-category--</option>
                             {allPrograms?.map((e, i) => (
                                 e?.parent_id == null && <option value={e.id} key={i}>{e?.name}</option>
                             ))}

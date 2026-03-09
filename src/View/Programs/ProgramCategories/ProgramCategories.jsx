@@ -76,7 +76,6 @@ const ProgramCategories = () => {
             setLoading(false)
         }
     }
-
     return (
         <>
             {loading && <Loaders />}
@@ -111,7 +110,7 @@ const ProgramCategories = () => {
                         <thead>
                             <tr>
                                 <th>Program Category Name</th>
-                                <th>No. of programs present</th>
+                                {/* <th>No. of programs present</th> */}
 
                                 <th style={{
                                     textAlign: 'center'
@@ -130,7 +129,7 @@ const ProgramCategories = () => {
                                             <td>
                                                 {e?.name}
                                             </td>
-                                            <td>12</td>
+                                            {/* <td>12</td> */}
                                             <td style={{
                                                 height:'fit-content'
                                             }}>
