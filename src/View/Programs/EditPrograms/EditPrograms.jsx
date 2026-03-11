@@ -356,7 +356,7 @@ const EditPrograms = () => {
                             }} />
                         </div>
                         <div>
-                            <Button onClick={handleSubmit} children={'Create'} styles={{
+                            <Button onClick={handleSubmit} children={'Edit'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
