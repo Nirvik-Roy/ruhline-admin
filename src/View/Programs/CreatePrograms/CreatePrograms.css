@@ -184,15 +184,15 @@
   font-weight: 600;
 }
 .multi_coach_select .css-13cymwt-control {
-  height: 50px !important;
+  /* height: 50px !important;
   min-height: 50px !important;
-  max-height: 50px !important;
+  max-height: 50px !important; */
   background-color: transparent;
 }
 .multi_coach_select .css-t3ipsp-control {
-  height: 50px !important;
+  /* height: 50px !important;
   min-height: 50px !important;
-  max-height: 50px !important;
+  max-height: 50px !important; */
   background-color: transparent;
   border: 2px solid var(--primary-color);
   box-shadow: none;

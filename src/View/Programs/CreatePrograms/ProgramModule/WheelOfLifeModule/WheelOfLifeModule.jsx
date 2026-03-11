@@ -207,8 +207,8 @@ const WheelOfLifeModule = () => {
                             padding: " 30px 0px",
                             background: 'rgba(144, 155, 109, 0.15)',
                             border: 'none'
-                        }} onClick={((e) => {
-                            e.stopPropagation()
+                        }} onClick={((event) => {
+                            event.stopPropagation()
                             dropdownFunction(i)
                         })}>
                             <img style={{
