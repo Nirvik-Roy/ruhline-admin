@@ -1,28 +1,17 @@
 import React, { useState, Activity, useEffect } from 'react'
 import Button from '../../Components/Button'
 import AddQuoteModuleModal from './AddQuoteModuleModal'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Loaders from '../../Components/Loaders/Loaders'
 import toast from 'react-hot-toast'
 import { postProgramModule } from '../../utils/Program'
 const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, programSettingsData }) => {
     const [quoteModal, setquoteModal] = useState(false);
-    const [path, setPath] = useState('');
     const [radioValue, setradioValue] = useState();
+    const [radioTitle, setradioTitle] = useState('modules')
     const [loading, setloading] = useState(false)
     const { id } = useParams()
-    const navigate = useNavigate();
 
-    const data = {
-        values: `/dashboard/programs/single-program/${id}/values`,
-        card: `/dashboard/programs/single-program/${id} /card-game`,
-        wheel: `/dashboard/programs/single-program/${id}/wheeloflife`,
-        notes: '',
-        goal: '',
-        documents: '',
-        motivation: `/dashboard/programs/single-program/${id}/motivation`,
-        who: `/dashboard/programs/single-program/${id}/whoami`,
-    }
     const handleChange = (e) => {
         setradioValue(e.target.value)
         // setPath(data[e.target.value])
@@ -49,6 +38,9 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
         }
     }
 
+    useEffect(() => {
+        setradioValue('')
+    }, [radioTitle])
     return (
         <>
             {loading && <Loaders />}
@@ -56,19 +48,34 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                 <AddQuoteModuleModal />
             </Activity>
 
-           
+
             <div className='modal_wrapper' onClick={(() => setmodalIsOpen(false))}></div>
             <div className='modal_div'>
-                <h4>Add Module</h4>
+                <h4>Add</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setmodalIsOpen(false))}></i>
 
-                <div className='modal_radio_btn_wrapper' style={{
+                <div className='modules_itermediate_steps_wrapperr'>
+                    <div className='modules_radio_wrapper'>
+                        <input checked={radioTitle === 'modules'} value={'modules'} onChange={((e) => setradioTitle(e.target.value))} type='radio' />
+                        <p>Modules</p>
+                    </div>
+                    <div className='modules_radio_wrapper'>
+                        <input checked={radioTitle === 'intermediatesteps'} value={'intermediatesteps'} onChange={((e) => setradioTitle(e.target.value))} type='radio' />
+                        <p>Intermediate Steps</p>
+                    </div>
+                </div>
+                {radioTitle === 'modules' && <div className='modal_radio_btn_wrapper' style={{
                     margin: '25px 0',
                     display: 'flex',
                     flexDirection: 'column',
                     rowGap: '20px',
                     paddingLeft: '14px'
                 }}>
+                    <h3 style={{
+                        color: 'rgba(70, 35, 7, 1)',
+                        fontSize: '20px',
+                        fontWeight: '600'
+                    }}>Modules</h3>
                     <div className='modal_radio_wrapper'>
                         <input type='radio' onChange={handleChange} name='values' value={'values'} checked={radioValue === 'values'} />
                         <p>Values</p>
@@ -131,23 +138,48 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
               
 
                    */}
-                </div>
+                </div>}
+
+
+                {radioTitle === 'intermediatesteps' && <div className='modal_radio_btn_wrapper' style={{
+                    margin: '25px 0',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    rowGap: '20px',
+                    paddingLeft: '14px'
+                }}>
+                    <h3 style={{
+                        color: 'rgba(70, 35, 7, 1)',
+                        fontSize: '20px',
+                        fontWeight: '600'
+                    }}>Intermediate Steps</h3>
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='Values Intermediate Page' value={'Values Intermediate Page'} checked={radioValue === 'Values Intermediate Page'} />
+                        <p>Values Intermediate Page</p>
+                    </div>
+
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='Goal Settings Intermediate Page' value={'Goal Settings Intermediate Page'} checked={radioValue === 'Goal Settings Intermediate Page'} />
+                        <p>Goal Settings Intermediate Page</p>
+                    </div>
+
+
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='Eight most common mistakes Intermediate Page' value={'Eight most common mistakes Intermediate Page'} checked={radioValue === 'Eight most common mistakes Intermediate Page'} />
+                        <p>Eight most common mistakes Intermediate Page</p>
+                    </div>
+
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='Questions for each goal - why? Intermediate Page' value={'Questions for each goal - why? Intermediate Page'} checked={radioValue === 'Questions for each goal - why? Intermediate Page'} />
+                        <p>Questions for each goal - why? Intermediate Page</p>
+                    </div>
+                </div>}
 
                 <div className='change_cancel_wrapper'>
                     <button onClick={(() => setmodalIsOpen(0))}>Cancel</button>
                     <div
-                    // onClick={(() => {
-
-                    //     navigate(path != '' && `${path}`)
-                    //     if (radioValue === 'quotes') {
-                    //         setquoteModal(true);
-                    //     }
-                    //     if (radioValue === 'documents') {
-                    //         setuploadModal(true)
-                    //     }
-                    // })}
                     >
-                        <Button
+                        {radioTitle === 'modules' && <Button
                             onClick={() => {
                                 // Check if card game is selected but no category
                                 if ((radioValue === 'card_game' && !programSettingsData?.card_category_id) || (radioValue == 'quote' && !programSettingsData?.quote_category_id)) {
@@ -165,13 +197,15 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
 
                                 }
 
-        
+
 
                                 // If we get here, it's safe to proceed
                                 postProgramModuleFunc();
                             }}
                             children={'Add'}
-                        />
+                        />}
+
+                        {radioTitle === 'intermediatesteps' && <Button children={'Add'} />}
                     </div>
                 </div>
             </div>

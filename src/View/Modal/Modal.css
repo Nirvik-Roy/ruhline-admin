@@ -441,3 +441,29 @@
   opacity: 1;
   transition: 0.2s linear all;
 }
+.modules_itermediate_steps_wrapperr{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+    margin-top: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-left: 15px;
+}
+.modules_radio_wrapper{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+
+}
+.modules_radio_wrapper p{
+  color: var(--text-color);
+  font-size: 15px;
+}
+.modules_radio_wrapper input{
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-color);
+}
