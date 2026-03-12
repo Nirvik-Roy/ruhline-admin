@@ -58,6 +58,8 @@ import CmsEditArticles from './View/CMS/CmsArticles/CmsEditArticles.jsx'
 import TheYMethod from './View/Programs/IntermediateSteps/TheYMethod.jsx'
 import GoalSettingsPage from './View/Programs/IntermediateSteps/GoalSettingsPage.jsx'
 import EditPrograms from './View/Programs/EditPrograms/EditPrograms.jsx'
+import SingleValuesIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleValuesIntermediate.jsx'
+import SingleGoalSettingsIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleGoalSettingsIntermediate.jsx'
 function App() {
   return (
     <>
@@ -111,7 +113,7 @@ function App() {
               <Route path='programs/intermediate/goal-settings' element={<GoalSettingsPage />} />
               <Route path='programs/intermediate/common-mistakes' element={<CommonMistakes />} />
               <Route path='programs/create-program' element={<CreatePrograms />} />
-              <Route path='programs/edit-program/:id' element={<EditPrograms/>}/>
+              <Route path='programs/edit-program/:id' element={<EditPrograms />} />
               <Route path='programs/single-program/:id' element={<SingleCreatedPrograms />} />
               <Route path='programs/single-program/:id/values/:moduleId' element={<ValuesModule />} />
               <Route path='programs/single-program/:id/card-game/:moduleId' element={<CardGameModule />} />
@@ -120,6 +122,8 @@ function App() {
               <Route path='programs/single-program/:id/life-element/:moduleId/:elementId' element={<SinglelifeElement />} />
               <Route path='programs/single-program/:id/motivation/:moduleId' element={<MotivationModule />} />
               <Route path='programs/single-program/:id/whoami/:moduleId' element={<Whoamimodule />} />
+              <Route path='programs/single-program/:id/values-intermediate/:moduleId' element={<SingleValuesIntermediate />} />
+              <Route path='programs/single-program/:id/goal-intermediate/:moduleId' element={<SingleGoalSettingsIntermediate />} />
               <Route path='payouts' element={<Payouts />} />
               <Route path='payouts/payment-list' element={<PaymentList />} />
             </Route>

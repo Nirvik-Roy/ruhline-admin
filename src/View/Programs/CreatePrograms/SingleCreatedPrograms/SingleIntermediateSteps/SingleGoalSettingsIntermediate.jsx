@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Button from '../../../Components/Button'
-import crossIcon from '../../../assets/content.svg'
-import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
-import Input from '../../../Components/Input'
-import Loaders from '../../../Components/Loaders/Loaders'
-import { getGoalSettings, postGoalSettings } from '../../../utils/Program'
+import Button from '../../../../../Components/Button.jsx'
+import crossIcon from '../../../../../assets/content.svg'
+import CustomTextEditor from '../../../../../Components/CustomTextEditor/CustomTextEditor.jsx'
+import Input from '../../../../../Components/Input.jsx'
+import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
 import toast from 'react-hot-toast'
-const GoalSettingsPage = () => {
+const SingleGoalSettingsIntermediate = () => {
     const navigate = useNavigate();
     const [description2, setdescription2] = useState("");
-    const [goalSettingsData,setgoalSettingsData] = useState({})
+    const [goalSettingsData, setgoalSettingsData] = useState({})
     const [loading, setloading] = useState(false)
     const [goalData, setgoalData] = useState({
         headline: "",
@@ -60,7 +59,7 @@ const GoalSettingsPage = () => {
     }
 
     const handleSubmit = async () => {
-        if(goalData?.headline != '' && goalData?.quote !='' && goalData?.sub_heading_1 && goalData?.sub_heading_2){
+        if (goalData?.headline != '' && goalData?.quote != '' && goalData?.sub_heading_1 && goalData?.sub_heading_2) {
             try {
                 setloading(true)
                 const formData = new FormData()
@@ -75,23 +74,23 @@ const GoalSettingsPage = () => {
                         formData.append(`options[${index}][sort_order]`, index)
                     })
                 }
-                const res = await postGoalSettings(formData)
+                // const res = await postGoalSettings(formData)
             } catch (err) {
                 console.log(err)
             } finally {
                 setloading(false)
             }
-        }else{
+        } else {
             toast.error("Plz enter all the required fileds")
         }
-       
+
     }
 
     const fetchData = async () => {
         try {
             setloading(true);
-            const res = await getGoalSettings()
-            setgoalSettingsData(res?.data)
+            // const res = await getGoalSettings()
+            // setgoalSettingsData(res?.data)
         } catch (err) {
             console.log(err)
         } finally {
@@ -102,20 +101,20 @@ const GoalSettingsPage = () => {
         fetchData()
     }, [])
 
-    useEffect(()=>{
-     setgoalData({
-         headline: goalSettingsData?.headline || "",
-         quote: goalSettingsData?.quote || "",
-         sub_heading_1: goalSettingsData?.sub_heading_1 || "",
-         sub_heading_2: goalSettingsData?.sub_heading_2 || ""
-     })
+    useEffect(() => {
+        setgoalData({
+            headline: goalSettingsData?.headline || "",
+            quote: goalSettingsData?.quote || "",
+            sub_heading_1: goalSettingsData?.sub_heading_1 || "",
+            sub_heading_2: goalSettingsData?.sub_heading_2 || ""
+        })
 
         setdescription2(goalSettingsData?.description_2 || "")
         setoptionsData(goalSettingsData?.options || [{
-            id:0+1,
-            description:""
+            id: 0 + 1,
+            description: ""
         }])
-    },[goalSettingsData])
+    }, [goalSettingsData])
     return (
         <>
             {loading && <Loaders />}
@@ -195,4 +194,4 @@ const GoalSettingsPage = () => {
     )
 }
 
-export default GoalSettingsPage
+export default SingleGoalSettingsIntermediate
