@@ -14,6 +14,7 @@ const SingleProgramDetails = ({ singleData }) => {
         slidesToScroll: 1
     };
     const [imageSrc, setimageSrc] = useState('')
+    console.log(singleData)
     return (
         <>
 
@@ -49,7 +50,9 @@ const SingleProgramDetails = ({ singleData }) => {
                     <span><strong>Categories: </strong>{singleData?.program_category
                         ?.name}</span>
                     <span><strong>Occurrence: </strong>{singleData?.occurrence_type}</span>
-                    <span><strong>Duration: </strong>32 weeks</span>
+                    {singleData?.session_duration_minutes && <span><strong>Session Duration: </strong>{singleData?.session_duration_minutes} mins</span>}
+                    {singleData?.sessions_per_week && <span><strong>Session Per Week: </strong>{singleData?.sessions_per_week}</span>}
+                    {singleData?.tenure_weeks && <span><strong>Tenure: </strong>{singleData?.tenure_weeks} weeks</span>}
 
                     {/* {singleData?.description && <p>{singleData?.description}
                     </p>} */}

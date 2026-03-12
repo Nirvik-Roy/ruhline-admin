@@ -36,7 +36,7 @@ const SingleCreatedPrograms = () => {
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>{singleData?.name}</h2>
-                        <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>{singleData?.name}</span></small>
+                        <small> <span onClick={(() => navigate('/dashboard/programs'))}>Program</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>{singleData?.name}</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
