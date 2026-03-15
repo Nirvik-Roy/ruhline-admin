@@ -41,6 +41,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
     useEffect(() => {
         setradioValue('')
     }, [radioTitle])
+    
     return (
         <>
             {loading && <Loaders />}
@@ -154,23 +155,23 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         fontWeight: '600'
                     }}>Intermediate Steps</h3>
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='Values Intermediate Page' value={'Values Intermediate Page'} checked={radioValue === 'Values Intermediate Page'} />
+                        <input type='radio' onChange={handleChange} name='intermediate_values' value={'intermediate_values'} checked={radioValue === 'intermediate_values'} />
                         <p>Values Intermediate Page</p>
                     </div>
 
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='Goal Settings Intermediate Page' value={'Goal Settings Intermediate Page'} checked={radioValue === 'Goal Settings Intermediate Page'} />
+                        <input type='radio' onChange={handleChange} name='intermediate_goal_settings' value={'intermediate_goal_settings'} checked={radioValue === 'intermediate_goal_settings'} />
                         <p>Goal Settings Intermediate Page</p>
                     </div>
 
 
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='Eight most common mistakes Intermediate Page' value={'Eight most common mistakes Intermediate Page'} checked={radioValue === 'Eight most common mistakes Intermediate Page'} />
+                        <input type='radio' onChange={handleChange} name='intermediate_eight_common_mistakes' value={'intermediate_eight_common_mistakes'} checked={radioValue === 'intermediate_eight_common_mistakes'} />
                         <p>Eight most common mistakes Intermediate Page</p>
                     </div>
 
                     <div className='modal_radio_wrapper'>
-                        <input type='radio' onChange={handleChange} name='Questions for each goal - why? Intermediate Page' value={'Questions for each goal - why? Intermediate Page'} checked={radioValue === 'Questions for each goal - why? Intermediate Page'} />
+                        <input type='radio' onChange={handleChange} name='intermediate_questions_goal_why' value={'intermediate_questions_goal_why'} checked={radioValue === 'intermediate_questions_goal_why'} />
                         <p>Questions for each goal - why? Intermediate Page</p>
                     </div>
                 </div>}
@@ -205,7 +206,10 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                             children={'Add'}
                         />}
 
-                        {radioTitle === 'intermediatesteps' && <Button children={'Add'} />}
+                        {radioTitle === 'intermediatesteps' && <Button onClick={(() => {
+                            postProgramModuleFunc();
+
+                        })} children={'Add'} />}
                     </div>
                 </div>
             </div>

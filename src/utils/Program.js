@@ -1724,3 +1724,24 @@ export const deleteDocuments = async (id, structureId, documentId) => {
         }
     }
 }
+
+
+export const postcompleteSetup = async (data, id, structureId) => {
+    const Token = localStorage.getItem('token');
+    if (Token && data && id) {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/program/${id}/structure/${structureId}/intermediate-steps/complete-setup`, data, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Setup completed succesfully');
+                return res.data
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
+            return err.response.data.errors
+        }
+    }
+}

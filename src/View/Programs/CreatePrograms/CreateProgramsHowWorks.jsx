@@ -43,7 +43,6 @@ const CreateProgramsHowWorks = ({ setHowItWorksImage, HowItWorksImage, dynamicHo
                             color: 'red'
                         }}>*{programErrors[`how_it_works.${index}.description`][0]}</small>}
                     </div>
-
                 ))}
 
                 <Button onClick={addDynamicHowItWorks} children={'Add Another Option'} styles={{

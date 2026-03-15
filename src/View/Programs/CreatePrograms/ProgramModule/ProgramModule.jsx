@@ -12,8 +12,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import DeleteModal from '../../../../Components/DeleteModal/DeleteModal'
 import ProgramSettingsModal from '../../../Modal/ProgramSettingsModal'
 import UploadDocumentsModal from '../../../Modal/UploadDocumentsModal.jsx'
+import CompleteSetupModal from '../../../Modal/CompleteSetupModal.jsx'
 const ProgramModule = () => {
     const [modalIsOpen, setmodalIsOpen] = useState(false);
+    const [intermediateId, setintermediateId] = useState()
     const [programSettingsModal, setprogramSettingModal] = useState(false);
     const [documentModuleId, setdocumentModuleId] = useState()
     const [moduleData, setmoduleData] = useState([]);
@@ -22,7 +24,8 @@ const ProgramModule = () => {
     const [cardCategoryId, setcardCategoryId] = useState('')
     const [quoteCategoryId, setquoteCategoryId] = useState('')
     const [deleteId, setdeleteId] = useState()
-    const [deletedModal, setdeletedModal] = useState(false)
+    const [deletedModal, setdeletedModal] = useState(false);
+    const [setupModal, setsetupModal] = useState(false)
     const [loading, setloading] = useState(false);
     const { id } = useParams();
     const [moduleOrder, setModuleOrder] = useState([]);
@@ -155,9 +158,11 @@ const ProgramModule = () => {
             sendReorderDetails(moduleOrder)
         }
     }, [modulePositionChange, moduleOrder])
+
     return (
         <>
             {loading && <Loaders />}
+            {setupModal && <CompleteSetupModal intermediateId={intermediateId} setsetupModal={setsetupModal} />}
             {deletedModal && <DeleteModal onClick={deleteFunc} title={'Delete Module'} details={'Do you really want to remove this module?'} setdeleteModal={setdeletedModal} />}
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
                 <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
@@ -221,9 +226,9 @@ const ProgramModule = () => {
                             }}>Modules</span></p>
                         </div>
                         <div className='edit_modules_wrapper'>
-                            <img style={e?.title == 'Habit Tracker' || e?.title == 'Goal Settings' ?{
-                                display:'none'
-                            }:{}} onClick={(() => {
+                            {!e?.module_type?.startsWith('intermediate') && <img style={e?.title == 'Habit Tracker' || e?.title == 'Goal Settings' ? {
+                                display: 'none'
+                            } : {}} onClick={(() => {
                                 if (e?.title == 'Find your Motivation') {
                                     navigate(`/dashboard/programs/single-program/${id}/motivation/${e?.id}`)
                                 }
@@ -252,7 +257,20 @@ const ProgramModule = () => {
                                     setdocumentModuleId(e?.id)
                                 }
 
-                            })} src={edit} />
+                            })} src={edit} />}
+
+                            {(e?.module_type?.startsWith('intermediate') && e?.intermediate_steps_mode) && <img src={edit} />}
+
+                            {(e?.module_type?.startsWith('intermediate') && !e?.intermediate_steps_mode) && <p onClick={(() => {
+                                setsetupModal(true)
+                                setintermediateId(e?.id)
+                            })} style={{
+                                color: '#307a23',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                textDecoration: 'underline',
+                                cursor: 'pointer'
+                            }}>Complete Setup</p>}
                             <img onClick={(() => handleDelete(e?.id))} src={deleteicon} />
                         </div>
                     </div>

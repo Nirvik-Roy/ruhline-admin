@@ -60,6 +60,8 @@ import GoalSettingsPage from './View/Programs/IntermediateSteps/GoalSettingsPage
 import EditPrograms from './View/Programs/EditPrograms/EditPrograms.jsx'
 import SingleValuesIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleValuesIntermediate.jsx'
 import SingleGoalSettingsIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleGoalSettingsIntermediate.jsx'
+import SingleMistakesIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleMistakesIntermediate.jsx'
+import SingleEachGoalIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleEachGoalIntermediate.jsx'
 function App() {
   return (
     <>
@@ -124,6 +126,8 @@ function App() {
               <Route path='programs/single-program/:id/whoami/:moduleId' element={<Whoamimodule />} />
               <Route path='programs/single-program/:id/values-intermediate/:moduleId' element={<SingleValuesIntermediate />} />
               <Route path='programs/single-program/:id/goal-intermediate/:moduleId' element={<SingleGoalSettingsIntermediate />} />
+              <Route path='programs/single-program/:id/common-mistakes/:moduleId' element={<SingleMistakesIntermediate />}/>
+              <Route path='programs/single-program/:id/each-goal/:moudleId' element={<SingleEachGoalIntermediate/>}/>
               <Route path='payouts' element={<Payouts />} />
               <Route path='payouts/payment-list' element={<PaymentList />} />
             </Route>
