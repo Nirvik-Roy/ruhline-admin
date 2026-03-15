@@ -6,7 +6,7 @@ import Button from '../../../Components/Button'
 import upload from '../../../assets/Vector (8).svg'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 
-const CreateProgramsBenefits = ({ dynamicBenefits, setdynamicBenefits, benefitImage, setbenefitImage }) => {
+const CreateProgramsBenefits = ({ dynamicBenefits, setdynamicBenefits, benefitImage, setbenefitImage, programErrors }) => {
     const addDynamicBenefits = () => {
         setdynamicBenefits([
             ...dynamicBenefits,
@@ -38,6 +38,9 @@ const CreateProgramsBenefits = ({ dynamicBenefits, setdynamicBenefits, benefitIm
                             <img onClick={(() => handleDelelte(element?.id))} src={crossIcon} />
                         </div>
                         <CustomTextEditor onChange={((data) => ontextChange(element?.id, data))} defaultValue={element?.description} label={'Description'} />
+                        {programErrors?.[`benefits.${index}.description`] && <small style={{
+                            color:'red'
+                        }}>*{programErrors[`benefits.${index}.description`][0]}</small>}
                     </div>
                 ))}
 
@@ -80,7 +83,7 @@ const CreateProgramsBenefits = ({ dynamicBenefits, setdynamicBenefits, benefitIm
                                 alt="Preview"
                             />
                         )}
-                        <input onChange={((e)=>setbenefitImage(e.target.files[0]))} type='file' />
+                        <input onChange={((e) => setbenefitImage(e.target.files[0]))} type='file' />
                     </div>
                 </div>
             </div>

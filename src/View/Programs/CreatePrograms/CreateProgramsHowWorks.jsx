@@ -6,7 +6,7 @@ import Button from '../../../Components/Button'
 import upload from '../../../assets/Vector (8).svg'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
 
-const CreateProgramsHowWorks = ({ setHowItWorksImage, HowItWorksImage, dynamicHowItWorks, setdynamicHowItWorks }) => {
+const CreateProgramsHowWorks = ({ setHowItWorksImage, HowItWorksImage, dynamicHowItWorks, setdynamicHowItWorks ,programErrors}) => {
 
     const addDynamicHowItWorks = () => {
         setdynamicHowItWorks([
@@ -39,6 +39,9 @@ const CreateProgramsHowWorks = ({ setHowItWorksImage, HowItWorksImage, dynamicHo
                             <img onClick={(() => handleDelelte(element?.id))} src={crossIcon} />
                         </div>
                         <CustomTextEditor onChange={((data) => ontextChange(element?.id, data))} defaultValue={element?.description} label={'Description'} />
+                        {programErrors?.[`how_it_works.${index}.description`] && <small style={{
+                            color: 'red'
+                        }}>*{programErrors[`how_it_works.${index}.description`][0]}</small>}
                     </div>
 
                 ))}

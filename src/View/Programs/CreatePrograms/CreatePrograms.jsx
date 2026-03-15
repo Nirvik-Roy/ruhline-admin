@@ -513,7 +513,7 @@ const CreatePrograms = () => {
                                     <i class="fa-solid fa-angle-down" style={toggle.programFaq ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>
                             </div>
-                            {toggle.programFaq && <ProgramsFaqContent faqImage={faqImage} setfaqImage={setfaqImage} dynamicFaq={dynamicFaq} setdynamicFaq={setdynamicFaq} />}
+                            {toggle.programFaq && <ProgramsFaqContent programErrors={programErrors} faqImage={faqImage} setfaqImage={setfaqImage} dynamicFaq={dynamicFaq} setdynamicFaq={setdynamicFaq} />}
                         </div>
 
 
@@ -527,6 +527,7 @@ const CreatePrograms = () => {
                             {toggle.programBenefit && <CreateProgramsBenefits
                                 benefitImage={benefitImage}
                                 setbenefitImage={setbenefitImage}
+                                programErrors={programErrors}
                                 setdynamicBenefits={setdynamicBenefits} dynamicBenefits={dynamicBenefits} />}
                         </div>
 
@@ -539,7 +540,9 @@ const CreatePrograms = () => {
                                     <i class="fa-solid fa-angle-down" style={toggle.programWorks ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>
                             </div>
-                            {toggle.programWorks && <CreateProgramsHowWorks setHowItWorksImage={setHowItWorksImage} HowItWorksImage={HowItWorksImage} dynamicHowItWorks={dynamicHowItWorks} setdynamicHowItWorks={setdynamicHowItWorks} />}
+                            {toggle.programWorks && <CreateProgramsHowWorks 
+                            programErrors={programErrors}
+                            setHowItWorksImage={setHowItWorksImage} HowItWorksImage={HowItWorksImage} dynamicHowItWorks={dynamicHowItWorks} setdynamicHowItWorks={setdynamicHowItWorks} />}
                         </div>
 
                     </div>

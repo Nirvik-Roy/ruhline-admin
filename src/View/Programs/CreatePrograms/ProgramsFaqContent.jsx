@@ -5,7 +5,7 @@ import crossIcon from '../../../assets/content.svg'
 import Button from '../../../Components/Button'
 import upload from '../../../assets/Vector (8).svg'
 import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
-const ProgramsFaqContent = ({ dynamicFaq, setdynamicFaq, faqImage, setfaqImage }) => {
+const ProgramsFaqContent = ({ dynamicFaq, setdynamicFaq, faqImage, setfaqImage, programErrors }) => {
     const addDynamicFaq = () => {
         setdynamicFaq([
             ...dynamicFaq,
@@ -48,7 +48,20 @@ const ProgramsFaqContent = ({ dynamicFaq, setdynamicFaq, faqImage, setfaqImage }
                             <img onClick={(() => handleDelelte(element?.id))} src={crossIcon} />
                         </div>
                         <Input onChange={((e) => handleChange(element?.id, e))} name={'heading'} label={'Heading'} value={element?.heading} placeholder={'Enter heading'} />
+
+                        {programErrors?.[`faqs.${i}.heading`] && (
+                            <small style={{
+                                color: 'red'
+
+                            }}>*{programErrors[`faqs.${i}.heading`][0]}</small>
+                        )}
                         <CustomTextEditor onChange={((data) => ontextChange(element?.id, data))} name={'description'} defaultValue={element?.description} label={'Description'} />
+
+                        {programErrors?.[`faqs.${i}.description`] && (
+                            <small style={{
+                                color: 'red'
+                            }}>*{programErrors[`faqs.${i}.description`][0]}</small>
+                        )}
                     </div>
                 ))}
 
