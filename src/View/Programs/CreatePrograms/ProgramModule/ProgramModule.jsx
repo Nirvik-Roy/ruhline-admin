@@ -223,7 +223,7 @@ const ProgramModule = () => {
                                 background: 'rgba(224, 173, 34, 1)',
                                 marginLeft: '10px',
                                 fontSize: '10px'
-                            }}>Modules</span></p>
+                            }}>{e?.module_type?.startsWith('intermediate') ? 'Intermediate Steps' :'Modules'}</span></p>
                         </div>
                         <div className='edit_modules_wrapper'>
                             {!e?.module_type?.startsWith('intermediate') && <img style={e?.title == 'Habit Tracker' || e?.title == 'Goal Settings' ? {
