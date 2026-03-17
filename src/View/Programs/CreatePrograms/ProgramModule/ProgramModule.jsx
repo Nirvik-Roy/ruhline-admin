@@ -159,10 +159,12 @@ const ProgramModule = () => {
         }
     }, [modulePositionChange, moduleOrder])
 
+    
+
     return (
         <>
             {loading && <Loaders />}
-            {setupModal && <CompleteSetupModal intermediateId={intermediateId} setsetupModal={setsetupModal} />}
+            {setupModal && <CompleteSetupModal fetchModules={fetchModules} intermediateId={intermediateId} setsetupModal={setsetupModal} />}
             {deletedModal && <DeleteModal onClick={deleteFunc} title={'Delete Module'} details={'Do you really want to remove this module?'} setdeleteModal={setdeletedModal} />}
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
                 <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
@@ -223,7 +225,7 @@ const ProgramModule = () => {
                                 background: 'rgba(224, 173, 34, 1)',
                                 marginLeft: '10px',
                                 fontSize: '10px'
-                            }}>{e?.module_type?.startsWith('intermediate') ? 'Intermediate Steps' :'Modules'}</span></p>
+                            }}>{e?.module_type?.startsWith('intermediate') ? 'Intermediate Steps' : 'Modules'}</span></p>
                         </div>
                         <div className='edit_modules_wrapper'>
                             {!e?.module_type?.startsWith('intermediate') && <img style={e?.title == 'Habit Tracker' || e?.title == 'Goal Settings' ? {
@@ -259,7 +261,40 @@ const ProgramModule = () => {
 
                             })} src={edit} />}
 
-                            {(e?.module_type?.startsWith('intermediate') && e?.intermediate_steps_mode) && <img src={edit} />}
+                            {(e?.module_type?.startsWith('intermediate') && e?.intermediate_steps_mode) && <img
+                                onClick={(() => {
+                                    if (e?.module_type === "intermediate_values") {
+                                        if (e?.intermediate_steps_mode === 'specific') {
+                                            navigate(`/dashboard/programs/single-program/${id}/values-intermediate/${e?.id}`)
+                                        } else {
+                                            navigate('/dashboard/programs/intermediate/values-intermediate')
+                                        }
+                                    }
+                                    else if (e?.module_type === "intermediate_goal_settings") {
+                                        if (e?.intermediate_steps_mode === 'specific') {
+                                            navigate(`/dashboard/programs/single-program/${id}/goal-intermediate/${e?.id}`)
+                                        } else {
+                                            navigate('/dashboard/programs/intermediate/goal-settings')
+                                        }
+                                    }
+
+                                    else if (e?.module_type === "intermediate_eight_common_mistakes") {
+                                        if (e?.intermediate_steps_mode === 'specific') {
+                                            navigate(`/dashboard/programs/single-program/${id}/common-mistakes/${e?.id}`)
+                                        } else {
+                                            navigate('/dashboard/programs/intermediate/common-mistakes')
+                                        }
+                                    }
+
+                                    else if (e?.module_type === "intermediate_questions_goal_why") {
+                                        if (e?.intermediate_steps_mode === 'specific') {
+                                            navigate(`/dashboard/programs/single-program/${id}/each-goal/${e?.id}`)
+                                        } else {
+                                            navigate('/dashboard/programs/intermediate/each-goal')
+                                        }
+                                    }
+                                })}
+                                src={edit} />}
 
                             {(e?.module_type?.startsWith('intermediate') && !e?.intermediate_steps_mode) && <p onClick={(() => {
                                 setsetupModal(true)

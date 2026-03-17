@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { getAllCardCategory, getAllquoteCategory, getProgramSettings, postProgramSettings } from '../../utils/Program'
+import { getAllCardCategory, getAllquoteCategory, postProgramSettings } from '../../utils/Program'
 import Loaders from '../../Components/Loaders/Loaders'
 import { useParams } from 'react-router-dom'
 import Button from '../../Components/Button'
+import toast from 'react-hot-toast'
 
 const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings, quoteCategoryId, setquoteCategoryId }) => {
     const [allQuotesCategory, setallQuotesCategory] = useState([])
     const [allCardsCategory, setallCardsCategory] = useState([]);
+    const [coachEditModules, setcoachEditModules] = useState([]);
+    const [coachCanEdit, setcoachCanEdit] = useState(false)
     const { id } = useParams()
     const fetchQuotesCategory = async () => {
         try {
@@ -47,10 +50,23 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
     const sendProgramSettings = async () => {
         try {
             setloading(true)
-            const res = await postProgramSettings({
-                card_category_id: cardCategoryId ? cardCategoryId : null,
-                quote_category_id: quoteCategoryId ? quoteCategoryId : null
-            }, id)
+            const formData = new FormData()
+            formData.append('card_category_id', cardCategoryId || null,)
+            formData.append('quote_category_id', quoteCategoryId || null)
+            if (coachCanEdit) {
+                formData.append('coach_can_edit_modules', "1")
+                if (coachEditModules?.length <= 0) {
+                    toast.error('Plz select atleast one module..')
+                    return false;
+                }
+                coachEditModules?.forEach((item) => {
+                    formData.append(`coach_editable_module_types[]`, item)
+                })
+            } else {
+                formData.append('coach_can_edit_modules', "0")
+                formData.append('coach_editable_module_types', [])
+            }
+            const res = await postProgramSettings(formData, id)
             if (res?.success) {
                 fetchProgramSettings()
                 setprogramSettingModal(false)
@@ -61,6 +77,23 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
             setloading(false)
         }
     }
+
+    const handleChange = (e) => {
+        if (coachEditModules?.includes(e.target.value)) {
+            setcoachEditModules((prev) =>
+                prev.filter((item) => item !== e.target.value)
+            )
+        } else {
+            setcoachEditModules([...coachEditModules, e.target.value])
+        }
+    }
+
+    useEffect(() => {
+        if (!coachCanEdit) {
+            setcoachEditModules([])
+        }
+    }, [coachCanEdit])
+    console.log(coachCanEdit)
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
@@ -92,46 +125,57 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
                         </select>
                     </div>
 
-                    <div className='input_form'>
-                        <label>Coach can edit modules<span>*</span></label>
-                        <select>
-                            <option>--select-options--</option>
-                        </select>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        marginLeft: '10px'
+                    }}>
+                        <input checked={coachCanEdit} onChange={(() => setcoachCanEdit(!coachCanEdit))} style={{
+                            width: '18px',
+                            height: '18px',
+                            marginTop: '1px',
+                            accentColor: 'var(--primary-color)'
+                        }} type='checkbox' />
+                        <p style={{
+                            color: 'var(--text-color)',
+                            fontSize: '15px'
+                        }}>Coach can edit modules?</p>
                     </div>
 
-                    <div className='input_form'>
+                    {coachCanEdit && <div className='input_form'>
                         <label style={{
                             fontWeight: '500'
                         }}>Select modules</label>
 
                         <div className='checkbox_wrapper46623'>
                             <div className='checkbox_7953'>
-                                <input type='checkbox' />
+                                <input type='checkbox' checked={coachEditModules?.includes('values')} onChange={handleChange} value={'values'} />
                                 <p>Values</p>
                             </div>
 
                             <div className='checkbox_7953'>
-                                <input type='checkbox' />
+                                <input type='checkbox' checked={coachEditModules?.includes('wheel_of_life')} onChange={handleChange} value={'wheel_of_life'} />
                                 <p>Wheel of life</p>
                             </div>
 
                             <div className='checkbox_7953'>
-                                <input type='checkbox' />
+                                <input type='checkbox' checked={coachEditModules?.includes('find_your_motivation')} onChange={handleChange} value={'find_your_motivation'} />
                                 <p>Find your motivation</p>
                             </div>
 
 
                             <div className='checkbox_7953'>
-                                <input type='checkbox' />
+                                <input type='checkbox' checked={coachEditModules?.includes('upload_documents')} onChange={handleChange} value={'upload_documents'} />
                                 <p>Upload Documents</p>
                             </div>
 
                             <div className='checkbox_7953'>
-                                <input type='checkbox' />
+                                <input type='checkbox' checked={coachEditModules?.includes('who_am_i')} onChange={handleChange} value={'who_am_i'} />
                                 <p>Who am I</p>
                             </div>
                         </div>
-                    </div>
+                    </div>}
 
                     <div style={{
                         marginLeft: 'auto'

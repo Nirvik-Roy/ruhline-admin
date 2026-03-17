@@ -4,11 +4,13 @@ import '../../../IntermediateSteps/IntermediateSteps.css'
 import Input from '../../../../../Components/Input.jsx'
 import crossIcon from '../../../../../assets/content.svg'
 import CustomTextEditor from '../../../../../Components/CustomTextEditor/CustomTextEditor.jsx'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
 import toast from 'react-hot-toast'
+import { getSpecificmistakesIntermediate, putSpecificmistakesIntermediate } from '../../../../../utils/Program.js'
 const SingleMistakesIntermediate = () => {
     const navigate = useNavigate();
+    const { id, moduleId } = useParams()
     const [allMistakesData, setallMistakesData] = useState({})
     const [headline, setheadline] = useState("");
     const [loading, setloading] = useState(false)
@@ -57,7 +59,7 @@ const SingleMistakesIntermediate = () => {
                         formData.append(`mistakes[${index}][sort_order] `, index)
                     })
                 }
-                // const res = await postCommonMistakes(formData)
+                await putSpecificmistakesIntermediate(formData, id, moduleId)
             } catch (err) {
                 console.log(err)
             } finally {
@@ -72,8 +74,8 @@ const SingleMistakesIntermediate = () => {
     const fetchData = async () => {
         try {
             setloading(true);
-            // const res = await getCommonMistakes()
-            // setallMistakesData(res?.data)
+            const res = await getSpecificmistakesIntermediate(id, moduleId)
+            setallMistakesData(res?.data)
         } catch (err) {
             console.log(err)
         } finally {
@@ -81,7 +83,10 @@ const SingleMistakesIntermediate = () => {
         }
     }
     useEffect(() => {
-        fetchData()
+        if (id && moduleId) {
+            fetchData()
+        }
+
     }, [])
 
     useEffect(() => {

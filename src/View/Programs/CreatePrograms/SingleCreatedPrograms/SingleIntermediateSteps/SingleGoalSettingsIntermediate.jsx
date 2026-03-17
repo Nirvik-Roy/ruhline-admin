@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Button from '../../../../../Components/Button.jsx'
 import crossIcon from '../../../../../assets/content.svg'
 import CustomTextEditor from '../../../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import Input from '../../../../../Components/Input.jsx'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
 import toast from 'react-hot-toast'
+import { getSpecificgoalSettingIntermediate, putSpecificgoalSettingIntermediate } from '../../../../../utils/Program.js'
 const SingleGoalSettingsIntermediate = () => {
     const navigate = useNavigate();
+    const { id, moduleId } = useParams()
     const [description2, setdescription2] = useState("");
     const [goalSettingsData, setgoalSettingsData] = useState({})
     const [loading, setloading] = useState(false)
@@ -74,7 +76,7 @@ const SingleGoalSettingsIntermediate = () => {
                         formData.append(`options[${index}][sort_order]`, index)
                     })
                 }
-                // const res = await postGoalSettings(formData)
+                await putSpecificgoalSettingIntermediate(formData, id, moduleId)
             } catch (err) {
                 console.log(err)
             } finally {
@@ -89,8 +91,8 @@ const SingleGoalSettingsIntermediate = () => {
     const fetchData = async () => {
         try {
             setloading(true);
-            // const res = await getGoalSettings()
-            // setgoalSettingsData(res?.data)
+            const res = await getSpecificgoalSettingIntermediate(id, moduleId)
+            setgoalSettingsData(res?.data)
         } catch (err) {
             console.log(err)
         } finally {
@@ -98,7 +100,9 @@ const SingleGoalSettingsIntermediate = () => {
         }
     }
     useEffect(() => {
-        fetchData()
+        if (id && moduleId) {
+            fetchData()
+        }
     }, [])
 
     useEffect(() => {

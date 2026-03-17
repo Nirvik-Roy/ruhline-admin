@@ -3,13 +3,15 @@ import Button from '../../../../../Components/Button.jsx'
 import '../../../IntermediateSteps/IntermediateSteps.css'
 import Input from '../../../../../Components/Input.jsx'
 import crossIcon from '../../../../../assets/content.svg'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import CustomTextEditor from '../../../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import toast from 'react-hot-toast'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
+import { getSpecificValuesIntermediate, putSpecificValuesIntermediate } from '../../../../../utils/Program.js'
 const SingleValuesIntermediate = () => {
     const navigate = useNavigate()
     const [headline, setheadLine] = useState('');
+    const { id, moduleId } = useParams()
     const [valuesData, setvaluesData] = useState({})
     const [loading, setloading] = useState(false)
     const [pointsData, setpointsData] = useState([
@@ -56,7 +58,7 @@ const SingleValuesIntermediate = () => {
                         formData.append(`points[${index}][sort_order] `, index)
                     })
                 }
-                // const res = await postValuesIntermediate(formData)
+                await putSpecificValuesIntermediate(formData, id, moduleId)
             } catch (err) {
                 console.log(err)
             } finally {
@@ -71,8 +73,8 @@ const SingleValuesIntermediate = () => {
     const fetchData = async () => {
         try {
             setloading(true);
-            // const res = await getValuesIntermediate()
-            // setvaluesData(res?.data)
+            const res = await getSpecificValuesIntermediate(id, moduleId)
+            setvaluesData(res?.data)
         } catch (err) {
             console.log(err)
         } finally {
@@ -80,7 +82,10 @@ const SingleValuesIntermediate = () => {
         }
     }
     useEffect(() => {
-        fetchData()
+        if (id, moduleId) {
+            fetchData()
+        }
+
     }, [])
 
 

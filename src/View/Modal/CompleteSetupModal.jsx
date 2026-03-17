@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { postcompleteSetup } from '../../utils/Program'
 import Loaders from '../../Components/Loaders/Loaders'
 
-const CompleteSetupModal = ({ setsetupModal, intermediateId }) => {
+const CompleteSetupModal = ({ setsetupModal, intermediateId, fetchModules }) => {
     const { id } = useParams()
     const [radioTitle, setradioTitle] = useState('global');
     const [loading, setloading] = useState(false)
@@ -15,7 +15,10 @@ const CompleteSetupModal = ({ setsetupModal, intermediateId }) => {
             const res = await postcompleteSetup({
                 mode: radioTitle
             }, id, intermediateId)
-            console.log(res)
+            if(res?.success){
+                fetchModules()
+                setsetupModal(false)
+            }
         } catch (err) {
             console.log(err)
         } finally {

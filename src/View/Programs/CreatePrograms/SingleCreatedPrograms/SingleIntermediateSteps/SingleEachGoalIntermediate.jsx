@@ -4,11 +4,13 @@ import '../../../IntermediateSteps/IntermediateSteps.jsx'
 import Input from '../../../../../Components/Input.jsx'
 import Textarea from '../../../../../Components/Textarea.jsx'
 import CustomTextEditor from '../../../../../Components/CustomTextEditor/CustomTextEditor.jsx'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
 import toast from 'react-hot-toast'
+import { getSpecificeachGoalIntermediate, putSpecificeachGoalIntermediate } from '../../../../../utils/Program.js'
 const SingleEachGoalIntermediate = () => {
     const navigate = useNavigate();
+    const { id, moduleId } = useParams()
     const [eachGoalData, seteachGoalData] = useState({})
     const [questionHeading1, setquestionHeading1] = useState("")
     const [questionHeading2, setquestionHeading2] = useState("")
@@ -51,8 +53,8 @@ const SingleEachGoalIntermediate = () => {
                 formData.append("question_heading_3", questionHeading3 || "")
                 formData.append("question_description_3", description3 || "");
                 formData.append("quote", staticData.quote || "")
-                // const res = await postEachGoal(formData);
-                // console.log(res)
+                await putSpecificeachGoalIntermediate(formData, id, moduleId);
+
             } catch (err) {
                 console.log(err)
             } finally {
@@ -67,8 +69,8 @@ const SingleEachGoalIntermediate = () => {
     const fetchData = async () => {
         try {
             setloading(true)
-            // const res = await getEachGoal();
-            // seteachGoalData(res?.data)
+            const res = await getSpecificeachGoalIntermediate(id, moduleId);
+            seteachGoalData(res?.data)
         } catch (err) {
             console.log(err)
         } finally {
@@ -77,9 +79,10 @@ const SingleEachGoalIntermediate = () => {
     }
 
     useEffect(() => {
-        fetchData()
+        if (id && moduleId) {
+            fetchData()
+        }
     }, [])
-
     useEffect(() => {
         setStaticData({
             headline_1: eachGoalData?.headline_1 || "",
