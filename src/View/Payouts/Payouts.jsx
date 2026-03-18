@@ -57,7 +57,7 @@ const Payouts = () => {
                                 cursor: 'pointer'
                             }}>
                                 <p>
-                                    Add Global Commission
+                                     Global Commission
                                 </p>
                             </div>
                         </div>
