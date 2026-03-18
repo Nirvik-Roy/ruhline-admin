@@ -39,6 +39,10 @@ const SingleProgramDetails = ({ singleData }) => {
                 </div>
                 <div className='right_one_time_service_details'>
                     {singleData?.tag && <small>{singleData?.tag}</small>}
+                    <h1 style={{
+                        textTransform:'capitalize',
+                        color:'var(--text-color)'
+                    }}>{singleData?.name}</h1>
                     <div>
                         {singleData?.original_price
                             && <del>SAR{singleData?.original_price}</del>}
