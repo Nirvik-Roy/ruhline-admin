@@ -19,6 +19,8 @@ const ProgramModule = () => {
     const [programSettingsModal, setprogramSettingModal] = useState(false);
     const [documentModuleId, setdocumentModuleId] = useState()
     const [moduleData, setmoduleData] = useState([]);
+    const [coachCanEditModule, setcatchCanEditModule] = useState(false);
+    const [coacheEditedModules, setcoachEditedModules] = useState([])
     const [uploadModal, setuploadModal] = useState(false)
     const navigate = useNavigate();
     const [cardCategoryId, setcardCategoryId] = useState('')
@@ -76,10 +78,9 @@ const ProgramModule = () => {
     }, [programSettingsModal])
     useEffect(() => {
         setcardCategoryId(programSettingsData?.card_category_id || '')
-    }, [programSettingsData])
-
-    useEffect(() => {
         setquoteCategoryId(programSettingsData?.quote_category_id || '')
+        setcatchCanEditModule(programSettingsData?.coach_can_edit_modules)
+        setcoachEditedModules(programSettingsData?.coach_editable_module_types || [])
     }, [programSettingsData])
 
 
@@ -159,7 +160,7 @@ const ProgramModule = () => {
         }
     }, [modulePositionChange, moduleOrder])
 
-    
+
 
     return (
         <>
@@ -170,7 +171,7 @@ const ProgramModule = () => {
                 <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
 
-            {programSettingsModal && <ProgramSettingsModal quoteCategoryId={quoteCategoryId} setquoteCategoryId={setquoteCategoryId} fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
+            {programSettingsModal && <ProgramSettingsModal coacheEditedModules={coacheEditedModules} coachCanEditModule={coachCanEditModule} quoteCategoryId={quoteCategoryId} setquoteCategoryId={setquoteCategoryId} fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
 
 
             {uploadModal && <UploadDocumentsModal documentModuleId={documentModuleId} uploadModal={uploadModal} setuploadModal={setuploadModal} />}

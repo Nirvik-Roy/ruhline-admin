@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import Button from '../../Components/Button'
 import toast from 'react-hot-toast'
 
-const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings, quoteCategoryId, setquoteCategoryId }) => {
+const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings, quoteCategoryId, setquoteCategoryId, coachCanEditModule, coacheEditedModules }) => {
     const [allQuotesCategory, setallQuotesCategory] = useState([])
     const [allCardsCategory, setallCardsCategory] = useState([]);
     const [coachEditModules, setcoachEditModules] = useState([]);
@@ -47,6 +47,11 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
         fetchCardsCategory()
     }, [])
 
+
+    useEffect(() => {
+        setcoachCanEdit(coachCanEditModule)
+        setcoachEditModules(coacheEditedModules)
+    }, [coachCanEditModule, coacheEditedModules])
     const sendProgramSettings = async () => {
         try {
             setloading(true)
@@ -88,12 +93,11 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
         }
     }
 
-    useEffect(() => {
-        if (!coachCanEdit) {
-            setcoachEditModules([])
-        }
-    }, [coachCanEdit])
-    console.log(coachCanEdit)
+    // useEffect(() => {
+    //     if (!coachCanEdit) {
+    //         setcoachEditModules([])
+    //     }
+    // }, [coachCanEdit])
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
