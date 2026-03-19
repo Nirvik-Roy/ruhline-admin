@@ -76,6 +76,14 @@ const ProgramCategories = () => {
             setLoading(false)
         }
     }
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = allPrograms?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(allPrograms?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {loading && <Loaders />}
@@ -119,10 +127,10 @@ const ProgramCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allPrograms?.length <= 0 && <td colSpan={12} style={{
+                            {currentItems?.length <= 0 && <td colSpan={12} style={{
                                 textAlign: 'center'
                             }}>No program categories available...</td>}
-                            {allPrograms?.length > 0 && allPrograms?.map((e, i) => (
+                            {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <>
                                     {e?.parent_id == null ? <>
                                         <tr className='parent_row'>
@@ -131,7 +139,7 @@ const ProgramCategories = () => {
                                             </td>
                                             {/* <td>12</td> */}
                                             <td style={{
-                                                height:'fit-content'
+                                                height: 'fit-content'
                                             }}>
                                                 <img onClick={((e) => {
                                                     e.stopPropagation()
@@ -139,9 +147,9 @@ const ProgramCategories = () => {
                                                 })} src={ellipse} />
                                                 {index.includes(i) && <div className='actions_wrapper' style={{
                                                     width: '50%',
-                                                    left:'0%',
-                                                    top:'40px',
-                                                    height:'fit-content'
+                                                    left: '0%',
+                                                    top: '40px',
+                                                    height: 'fit-content'
                                                 }}>
                                                     <p onClick={(() => {
                                                         setEditIndex(e?.id);
@@ -186,7 +194,9 @@ const ProgramCategories = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

@@ -101,7 +101,14 @@ const SingleQutoesCategories = () => {
         setdeleId(id)
         setdeleteModal(true)
     }
-
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = allQuotesData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(allQuotesData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {isModal && <AddQuoteModal addQuoteFunc={addQuoteFunc} quoteName={quoteName} setquoteName={setquoteName} setisModal={setisModal} />}
@@ -142,20 +149,21 @@ const SingleQutoesCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allQuotesData.length <= 0 && <td colSpan={12}>No quotes available</td>}
-                            {allQuotesData.length > 0 && allQuotesData?.map((e, i) => (
+                            {currentItems.length <= 0 && <td colSpan={12}>No quotes available</td>}
+                            {currentItems.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>{e?.quote}</td>
                                     <td ref={dropdownRef} style={{
                                         position: 'relative'
                                     }}>
-                                        <img onClick={((event) =>{ 
+                                        <img onClick={((event) => {
                                             event.stopPropagation()
-                                            indexFunction(i)})} src={ellipse} />
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             width: 'fit-content',
                                             right: '-50px',
-                                            left:'0px',
+                                            left: '0px',
                                             bottom: '-80px'
                                         }}>
                                             <p onClick={(() => {
@@ -170,7 +178,9 @@ const SingleQutoesCategories = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

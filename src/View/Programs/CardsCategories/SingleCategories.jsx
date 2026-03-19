@@ -106,6 +106,15 @@ const SingleCategories = () => {
         setdeleId(id)
         setdeleteModal(true)
     }
+
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = allCardsdata?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(allCardsdata?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {loading && <Loaders />}
@@ -149,8 +158,8 @@ const SingleCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allCardsdata?.length <= 0 && <td colSpan={12}>No cards found...</td>}
-                            {allCardsdata?.length > 0 && allCardsdata?.map((e, i) => (
+                            {currentItems?.length <= 0 && <td colSpan={12}>No cards found...</td>}
+                            {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -190,7 +199,9 @@ const SingleCategories = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

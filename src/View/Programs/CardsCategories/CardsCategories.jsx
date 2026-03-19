@@ -84,21 +84,30 @@ const CardsCategories = () => {
     }, []);
 
 
-        const deleteFunc = async () => {
-            setloading(true)
-            const res = await commonDelelteApi('/admin/card-category', deleteId);
-            if (res?.success) {
-                setloading(false)
-                setdeleteModal(false)
-                fetchCards();
-                setIndex([])
-            }
+    const deleteFunc = async () => {
+        setloading(true)
+        const res = await commonDelelteApi('/admin/card-category', deleteId);
+        if (res?.success) {
+            setloading(false)
+            setdeleteModal(false)
+            fetchCards();
+            setIndex([])
         }
-    
-        const handleDelete = (id) => {
-            setdeleId(id)
-            setdeleteModal(true)
-        }
+    }
+
+    const handleDelete = (id) => {
+        setdeleId(id)
+        setdeleteModal(true)
+    }
+
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = cardCategoryData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(cardCategoryData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
 
     return (
         <>
@@ -143,8 +152,8 @@ const CardsCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cardCategoryData.length <= 0 && <td colSpan={12}>No card categories available...</td>}
-                            {cardCategoryData.length > 0 && cardCategoryData?.map((e, i) => (
+                            {currentItems.length <= 0 && <td colSpan={12}>No card categories available...</td>}
+                            {currentItems.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         {e?.name}
@@ -174,8 +183,9 @@ const CardsCategories = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
-            </div>
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />            </div>
         </>
     )
 }

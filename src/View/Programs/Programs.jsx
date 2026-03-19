@@ -75,6 +75,15 @@ const Programs = () => {
         };
     }, []);
 
+
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = programData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(programData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {loading
@@ -142,10 +151,10 @@ const Programs = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {programData?.length <= 0 && <td style={{
-                                color:'var(--primary-color)'
+                            {currentItems?.length <= 0 && <td style={{
+                                color: 'var(--primary-color)'
                             }} colSpan={12}>No programs added...</td>}
-                            {programData?.length > 0 && programData?.map((e, i) => (
+                            {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -161,7 +170,7 @@ const Programs = () => {
                                     <td>{e?.program_category?.name}</td>
                                     <td>{e?.occurrence_type}</td>
                                     <td>SAR{e?.sale_price}</td>
-                                    <td ref={dropdownRef} onClick={((e)=>e.stopPropagation())}>
+                                    <td ref={dropdownRef} onClick={((e) => e.stopPropagation())}>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => navigate(`/dashboard/programs/single-program/${e?.id}`))}>View</p>
@@ -174,7 +183,9 @@ const Programs = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

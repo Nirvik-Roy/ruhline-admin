@@ -15,6 +15,7 @@ import VerifyModal from '../../Components/VerifyModal/VerifyModal'
 const Coaches = () => {
     const [index, setIndex] = useState([]);
     const [dropdown, setdropdown] = useState(null);
+    const navigate = useNavigate()
     const dropdownRef = useRef(null);
     const [deleteModal, setdeleteModal] = useState(false)
     const [coachData, setcoachData] = useState([]);
@@ -27,8 +28,19 @@ const Coaches = () => {
     const [updateLoading, setUpdateLoading] = useState(false);
     const [addCoachError, setaddCoachError] = useState();
     const [singleCoachdata, setsingleCoachData] = useState({});
-    const [singleCoachLoading, setsingleCoachLoading] = useState(false)
-    const navigate = useNavigate()
+    const [singleCoachLoading, setsingleCoachLoading] = useState(false);
+
+
+    // Pagination logic...
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = coachData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(coachData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
+
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -36,6 +48,7 @@ const Coaches = () => {
             setIndex([...index, i])
         }
     }
+
     const [coachModal, setCoachModal] = useState(false);
     const [ediCoachModal, seteditCoachModal] = useState(false);
 
@@ -46,7 +59,7 @@ const Coaches = () => {
         try {
             const res = await getAllCoaches()
             if (res) {
-                setcoachData(res.data)
+                setcoachData(res?.data)
             }
         } catch (err) {
             console.log(err)
@@ -63,8 +76,7 @@ const Coaches = () => {
                 const result = await addNewCoach(data, file);
                 setaddCoachError(result)
                 await getAllCoachesFunc();
-                console.log(result)
-                if (result.success) {
+                if (result?.success) {
                     setCoachModal(false)
                 }
             } catch (err) {
@@ -83,7 +95,7 @@ const Coaches = () => {
                 const result = await deleteCoach(deletedId);
                 getAllCoachesFunc()
                 console.log(result)
-                if (result.success) {
+                if (result?.success) {
                     setdeleteModal(false)
                 }
             } catch (err) {
@@ -128,7 +140,7 @@ const Coaches = () => {
                 const result = await updateCoach(id, data);
                 setupdateErrors(result)
                 await getAllCoachesFunc()
-                if (result.success) {
+                if (result?.success) {
                     seteditCoachModal(false)
                 }
             } catch (err) {
@@ -163,7 +175,7 @@ const Coaches = () => {
             setisLoading(true)
             const res = await verifyCoach(coachId);
             console.log(res)
-            if (res.success) {
+            if (res?.success) {
                 setcoachVerifyModal(false)
                 getAllCoachesFunc()
             }
@@ -223,14 +235,14 @@ const Coaches = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {(coachData?.length <= 0 && !isLoading) && <td colSpan={12} style={{
+                            {(currentItems?.length <= 0 && !isLoading) && <td colSpan={12} style={{
                                 textAlign: 'center',
                                 fontWeight: '600',
                                 color: '#ce7355',
                                 fontSize: '15px'
 
                             }}>No data found!...</td>}
-                            {coachData?.length > 0 && coachData?.map((e, i) => (
+                            {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -278,7 +290,9 @@ const Coaches = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

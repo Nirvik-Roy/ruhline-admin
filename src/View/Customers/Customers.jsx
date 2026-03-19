@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Customers.css'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
@@ -14,10 +14,10 @@ import DeleteModal from '../../Components/DeleteModal/DeleteModal'
 const Customers = () => {
     const [index, setIndex] = useState([]);
     const dropdownRef = useRef(null);
-    const [deletedId,setdeletedId] = useState()
+    const [deletedId, setdeletedId] = useState()
     const [customerData, setcustomerData] = useState([]);
     const { isEdited } = useSelector(state => state.editCustomer)
-    const [deleteModal,setdeleteModal]=useState(false)
+    const [deleteModal, setdeleteModal] = useState(false)
     const [customerId, setCustomerId] = useState()
     const [loading, setIsloading] = useState(false)
     const navigate = useNavigate()
@@ -28,6 +28,15 @@ const Customers = () => {
             setIndex([...index, i])
         }
     }
+    // Pagination Logic
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = customerData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(customerData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     const [addCustomer, setaddCustomer] = useState(false);
     const [editCustomer, seteditCustomer] = useState(false);
 
@@ -64,28 +73,28 @@ const Customers = () => {
         }
     }
 
-    const handleDelete = (id) =>{
-     setdeletedId(id)
+    const handleDelete = (id) => {
+        setdeletedId(id)
         setdeleteModal(true)
     }
 
 
-     const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIndex([]);
-            }
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
         };
-    
-    
-        useEffect(() => {
-            document.addEventListener("click", handleClickOutside);
-            return () => {
-                document.removeEventListener("click", handleClickOutside);
-            };
-        }, []);
+    }, []);
     return (
         <>
-            {deleteModal && <DeleteModal onClick={deleteCustomerFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'}/>}
+            {deleteModal && <DeleteModal onClick={deleteCustomerFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'} />}
             {loading && <Loaders />}
             {addCustomer && <AddCustomerModal fetchCustomer={fetchCustomer} setaddCustomer={setaddCustomer} />}
             {editCustomer && <EditCustomerModal customerId={customerId} seteditCustomer={seteditCustomer} />}
@@ -119,8 +128,8 @@ const Customers = () => {
 
                             </tr>
                         </thead>
-                        {customerData.length > 0 ? <tbody>
-                            {customerData?.map((e, i) => (
+                        {currentItems?.length > 0 ? <tbody>
+                            {currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -135,9 +144,10 @@ const Customers = () => {
                                     <td>{e?.user?.email}</td>
                                     <td>+{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone}</td>
                                     <td ref={dropdownRef}>
-                                        <img onClick={((e) =>{ 
+                                        <img onClick={((e) => {
                                             e.stopPropagation()
-                                            indexFunction(i)})} src={ellipse} />
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper'>
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/customers/single-customer/${e?.id}`)
@@ -154,11 +164,15 @@ const Customers = () => {
                                 </tr>
                             ))}
                         </tbody> : <td colSpan={12} style={{
-                            textAlign: 'center'
-                        }}>No Customer data found</td>}
+                            textAlign: 'center',
+                            color:'var(--primary-color)',
+                            fontWeight:'700'
+                        }}>No Customer data found...</td>}
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

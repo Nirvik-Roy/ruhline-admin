@@ -72,7 +72,14 @@ const Coupons = () => {
             setLoading(false)
         }
     }
-
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = allCoupondata?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(allCoupondata?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
 
     return (
         <>
@@ -113,10 +120,10 @@ const Coupons = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allCoupondata.length <= 0 && <td colSpan={12} style={{
+                            {currentItems.length <= 0 && <td colSpan={12} style={{
                                 textAlign: 'center'
                             }}>No coupons available</td>}
-                            {allCoupondata.length > 0 && allCoupondata?.map((e, i) => (
+                            {currentItems.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         {e?.name}
@@ -156,7 +163,9 @@ const Coupons = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

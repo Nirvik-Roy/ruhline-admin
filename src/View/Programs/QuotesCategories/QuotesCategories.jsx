@@ -95,6 +95,15 @@ const QuotesCategories = () => {
         setdeleId(id)
         setdeleteModal(true)
     }
+
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = quoteCategoryData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(quoteCategoryData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {loading && <Loaders />}
@@ -139,8 +148,8 @@ const QuotesCategories = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {quoteCategoryData?.length <= 0 && <td colSpan={12}>No quotes categories available...</td>}
-                            {quoteCategoryData?.length > 0 && quoteCategoryData?.map((e, i) => (
+                            {currentItems?.length <= 0 && <td colSpan={12}>No quotes categories available...</td>}
+                            {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         {e?.name}
@@ -168,7 +177,9 @@ const QuotesCategories = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

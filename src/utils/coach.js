@@ -3,19 +3,24 @@ import toast from "react-hot-toast"
 
 export const getAllCoaches = async () => {
     const Token = localStorage.getItem('token')
-    try {
-        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach`, {
-            headers: {
-                'Authorization': `Bearer ${Token}`
+    if(Token){
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach?page=1`, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
+                }
+            });
+            if (res.data.success == true) {
+                // toast.success(res.data?.message || 'Password Update Successfully');
+                return res.data.data
             }
-        });
-        if (res.data.success == true) {
-            // toast.success(res.data?.message || 'Password Update Successfully');
-            return res.data.data
+        } catch (err) {
+            toast.error(err.response?.data?.message)
         }
-    } catch (err) {
-        toast.error(err.response?.data?.message)
+    }else{
+        toast.error('Token not found...')
     }
+   
 }
 
 
