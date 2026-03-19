@@ -158,6 +158,15 @@ const CardGameModule = () => {
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
+
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = allQuestions?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(allQuestions?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {deleteModal && <DeleteModal onClick={deleteFunc} title={'Delete Card'} details={'Do you really want to delete this card?'} setdeleteModal={setdeleteModal} />}
@@ -200,10 +209,10 @@ const CardGameModule = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allQuestions?.length <= 0 && <td style={{
+                            {currentItems?.length <= 0 && <td style={{
                                 color: 'var(--primary-color)'
                             }} colSpan={12}>No cards found...</td>}
-                            {allQuestions?.length > 0 && allQuestions?.map((e, i) => (
+                            {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -221,9 +230,10 @@ const CardGameModule = () => {
                                         <div style={{
                                             position: 'relative'
                                         }}>
-                                            <img onClick={((e) =>{ 
+                                            <img onClick={((e) => {
                                                 e.stopPropagation()
-                                                indexFunction(i)})} src={ellipse} />
+                                                indexFunction(i)
+                                            })} src={ellipse} />
                                             {index.includes(i) && <div className='actions_wrapper' style={{
                                                 top: '20px'
                                             }}>
@@ -251,7 +261,9 @@ const CardGameModule = () => {
                     </table>
                 </div>
 
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )
