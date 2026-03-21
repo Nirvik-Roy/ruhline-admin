@@ -6,7 +6,11 @@
     flex-direction: column;
     row-gap: 10px;
     overflow-y: auto;
-    border-right: 1px solid rgba(217, 217, 217, 1)
+    border-right: 1px solid rgba(217, 217, 217, 1);
+    background-color: var(--body-color);
+    position: fixed;
+    height: 100vh;
+    
 }
 .sidebar_Wrapper::-webkit-scrollbar{
     display: none;

@@ -1,6 +1,7 @@
 .dashboard_container {
     width: calc(100% - 270px);
     padding: 20px 40px 20px 20px;
+    margin-left: auto;
 }
 
 .dashboard_container h2 {
