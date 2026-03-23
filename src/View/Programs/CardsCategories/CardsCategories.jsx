@@ -100,11 +100,23 @@ const CardsCategories = () => {
         setdeleteModal(true)
     }
 
+    // Pagination logic & Search Logic...
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm);
+        }, 500); // 500ms delay
+        return () => clearTimeout(timer); // cleanup
+    }, [searchTerm]);
+    const filteredData = cardCategoryData?.filter((item) =>
+        item?.name?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(0);
     const offset = currentPage * itemsPerPage;
-    const currentItems = cardCategoryData?.slice(offset, offset + itemsPerPage);
-    const pageCount = Math.ceil(cardCategoryData?.length / itemsPerPage);
+    const currentItems = filteredData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(filteredData?.length / itemsPerPage);
     const handlePageChange = (selectedItem) => {
         setCurrentPage(selectedItem.selected);
     };
@@ -132,7 +144,7 @@ const CardsCategories = () => {
                         </div>
 
                         <div className='coaches_search_wrapper'>
-                            <input placeholder='Search' />
+                            <input onChange={((e) => setSearchTerm(e?.target.value))} placeholder='Search' />
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>

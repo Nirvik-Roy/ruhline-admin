@@ -72,11 +72,23 @@ const Coupons = () => {
             setLoading(false)
         }
     }
+    // Pagination logic & Search Logic...
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm);
+        }, 500); // 500ms delay
+        return () => clearTimeout(timer); // cleanup
+    }, [searchTerm]);
+    const filteredData = allCoupondata?.filter((item) =>
+        item?.name?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(0);
     const offset = currentPage * itemsPerPage;
-    const currentItems = allCoupondata?.slice(offset, offset + itemsPerPage);
-    const pageCount = Math.ceil(allCoupondata?.length / itemsPerPage);
+    const currentItems = filteredData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(filteredData?.length / itemsPerPage);
     const handlePageChange = (selectedItem) => {
         setCurrentPage(selectedItem.selected);
     };
@@ -98,7 +110,7 @@ const Coupons = () => {
                             }} />
                         </div>
                         <div className='coaches_search_wrapper'>
-                            <input placeholder='Search' />
+                            <input onChange={((e) => setSearchTerm(e?.target?.value))} placeholder='Search' />
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>

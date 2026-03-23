@@ -28,12 +28,23 @@ const Customers = () => {
             setIndex([...index, i])
         }
     }
-    // Pagination Logic
+    // Pagination logic & Search Logic...
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm);
+        }, 500); // 500ms delay
+        return () => clearTimeout(timer); // cleanup
+    }, [searchTerm]);
+    const filteredData = customerData?.filter((item) =>
+        item?.user?.name?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(0);
     const offset = currentPage * itemsPerPage;
-    const currentItems = customerData?.slice(offset, offset + itemsPerPage);
-    const pageCount = Math.ceil(customerData?.length / itemsPerPage);
+    const currentItems = filteredData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(filteredData?.length / itemsPerPage);
     const handlePageChange = (selectedItem) => {
         setCurrentPage(selectedItem.selected);
     };
@@ -109,7 +120,7 @@ const Customers = () => {
                         </div>
 
                         <div className='coaches_search_wrapper'>
-                            <input placeholder='Search' />
+                            <input onChange={((e) => setSearchTerm(e?.target?.value))} placeholder='Search' />
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>
@@ -165,8 +176,8 @@ const Customers = () => {
                             ))}
                         </tbody> : <td colSpan={12} style={{
                             textAlign: 'center',
-                            color:'var(--primary-color)',
-                            fontWeight:'700'
+                            color: 'var(--primary-color)',
+                            fontWeight: '700'
                         }}>No Customer data found...</td>}
                     </table>
                 </div>
