@@ -1,0 +1,55 @@
+.rllearn55_shell {
+  background-color: #fffdf9;
+  padding: 56px 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+.rllearn55_grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.6fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.rllearn55_title {
+  margin: 0 0 24px;
+  font-size: 35px;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.rllearn55_list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rllearn55_list_item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.rllearn55_list_item img{
+    margin-top: 8px;
+}
+.rllearn55_tick {
+  color: #95a06f;
+  font-size: 18px;
+  margin-top: 6px;
+}
+
+.rllearn55_list_item p {
+  margin: 0;
+  color: var(--text-color);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.rllearn55_img_wrap {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.rllearn55_img {
+  width: 100%;
+  display: block;
+}

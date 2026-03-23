@@ -1,0 +1,75 @@
+.rlwdo77_shell {
+  background-color: #fffdf9;
+  padding: 34px 0 60px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.rlwdo77_inner {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.rlwdo77_title {
+  text-align: center;
+  margin: 0 0 26px;
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.rlwdo77_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.rlwdo77_card {
+  border: 1px solid #e6d9cb;
+  border-radius: 20px;
+  padding: 22px 18px;
+}
+
+.rlwdo77_card_header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.rlwdo77_card_header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.rlwdo77_card_header span {
+  flex: 1;
+  height: 1px;
+  background-color: #e6d9cb;
+}
+
+.rlwdo77_card p {
+  margin: 0;
+  color: var(--text-color);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.rlwdo77_dots {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rlwdo77_dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #dcdcdc;
+}
+
+.rlwdo77_dot_active {
+  background-color: #d97b57;
+}

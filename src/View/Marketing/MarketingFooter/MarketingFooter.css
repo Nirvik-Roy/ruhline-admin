@@ -1,0 +1,63 @@
+.rlftrx10_shell {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.rlftrx10_top_banner {
+  background-size: cover;
+  background-position: center;
+  min-height: 380px;
+  position: relative;
+}
+
+.rlftrx10_overlay {
+  min-height: 380px;
+  background-color: rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  text-align: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+}
+
+.rlftrx10_title {
+  margin: 0 0 18px;
+  font-size: 64px;
+}
+
+.rlftrx10_text {
+  max-width: 1240px;
+  margin: 0 auto 26px;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.rlftrx10_btn {
+  background-color: #ffffff;
+  color: #d97b57;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rlftrx10_bottom_bar {
+  background-color: #d47a57;
+  color: #ffffff;
+  padding: 5px 0;
+}
+
+.rlftrx10_bottom_inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.rlftrx10_logo {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.rlftrx10_copy {
+  font-size: 14px;
+}

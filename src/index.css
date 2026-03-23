@@ -1,46 +1,51 @@
 :root {
-    --primary-color: rgba(206, 115, 86, 1);
-    --body-color: #faf9f5;
-    --text-color: rgba(70, 35, 7, 1)
+  --primary-color: rgba(206, 115, 86, 1);
+  --body-color: #faf9f5;
+  --text-color: rgba(70, 35, 7, 1);
 }
 
 .all_heading {
-    letter-spacing: 10px;
-    color: var(--primary-color);
-    font-weight: 400;
-    font-size: 20px;
-    text-transform: uppercase;
+  letter-spacing: 10px;
+  color: var(--primary-color);
+  font-weight: 400;
+  font-size: 20px;
+  text-transform: uppercase;
 }
 
+.universal_container {
+  width: 90%;
+  max-width: 90%;
+  min-width: 90%;
+  margin-inline: auto;
+}
 .all_heading2 {
-    letter-spacing: 3px;
+  letter-spacing: 3px;
 
-    font-size: 30px;
-    color: var(--text-color);
+  font-size: 30px;
+  color: var(--text-color);
 }
-.table_container{
-    min-height: 70vh;
+.table_container {
+  min-height: 70vh;
 }
-th{
-   text-wrap: nowrap;
-   font-size: 14px !important;
+th {
+  text-wrap: nowrap;
+  font-size: 14px !important;
 }
-td{
-    vertical-align: center;
-    word-wrap: break-word;
+td {
+  vertical-align: center;
+  word-wrap: break-word;
+}
+.total_table_order_wrapper th:last-child {
+  min-width: 160px;
+  width: 160px;
+}
 
-}
-.total_table_order_wrapper th:last-child{
-    min-width: 160px;
-    width: 160px;
-}
+@media (max-width: 480px) {
+  .all_heading {
+    font-size: 17px;
+  }
 
-@media(max-width:480px) {
-    .all_heading {
-        font-size: 17px
-    }
-
-    .all_heading2 {
-        font-size: 20px;
-    }
+  .all_heading2 {
+    font-size: 20px;
+  }
 }

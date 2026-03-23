@@ -1,0 +1,20 @@
+.rlsess44_shell {
+  background-color: #fffdf9;
+  padding: 30px 0 50px;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+}
+.rlsess44_title {
+  margin: 0 0 14px;
+  font-size: 35px;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.rlsess44_text {
+  margin: 0 auto;
+  color: var(--text-color);
+  line-height: 1.5;
+  font-size: 16px;
+  max-width: 1240px;
+}

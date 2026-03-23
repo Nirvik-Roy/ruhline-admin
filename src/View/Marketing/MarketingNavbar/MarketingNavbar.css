@@ -1,0 +1,46 @@
+.rlnavx11_navbar_shell {
+  width: 100%;
+  background-color: #fffdf9;
+  padding: 18px 0 10px 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.rlnavx11_navbar_inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rlnavx11_logo_wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rlnavx11_logo_icon {
+  color: var(--primary-color);
+  font-size: 28px;
+}
+
+.rlnavx11_logo_text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #231815;
+}
+
+.rlnavx11_nav_links {
+  display: flex;
+  gap: 34px;
+}
+
+.rlnavx11_nav_link {
+  text-decoration: none;
+  color: rgba(57, 57, 57, 1);
+  font-size: 15px;
+  padding-bottom: 4px;
+}
+
+.rlnavx11_nav_link_active {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
