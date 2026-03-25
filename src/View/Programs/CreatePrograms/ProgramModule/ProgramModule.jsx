@@ -294,6 +294,15 @@ const ProgramModule = () => {
                                             navigate('/dashboard/programs/intermediate/each-goal')
                                         }
                                     }
+
+                                    else if (e?.module_type === "intermediate_y_method") {
+                                        if (e?.intermediate_steps_mode === 'specific') {
+                                            navigate(`/dashboard/programs/single-program/${id}/y-method/${e?.id}`)
+                                        } else {
+                                            navigate('/dashboard/programs/intermediate/y-method')
+                                        }
+                                    }
+
                                 })}
                                 src={edit} />}
 

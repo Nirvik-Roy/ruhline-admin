@@ -64,6 +64,7 @@ import SingleMistakesIntermediate from './View/Programs/CreatePrograms/SingleCre
 import SingleEachGoalIntermediate from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleEachGoalIntermediate.jsx'
 import { useEffect } from 'react'
 import MarketingHomePage from './View/Marketing/MarketingHomePage/MarketingHomePage.jsx'
+import SingleYMethod from './View/Programs/CreatePrograms/SingleCreatedPrograms/SingleIntermediateSteps/SingleYMethod.jsx'
 function App() {
   const location = useLocation()
   useEffect(() => {
@@ -137,9 +138,10 @@ function App() {
               <Route path='programs/single-program/:id/goal-intermediate/:moduleId' element={<SingleGoalSettingsIntermediate />} />
               <Route path='programs/single-program/:id/common-mistakes/:moduleId' element={<SingleMistakesIntermediate />} />
               <Route path='programs/single-program/:id/each-goal/:moduleId' element={<SingleEachGoalIntermediate />} />
+              <Route path='programs/single-program/:id/y-method/:moduleId' element={<SingleYMethod />} />
               <Route path='payouts' element={<Payouts />} />
               <Route path='payouts/payment-list' element={<PaymentList />} />
-             
+
             </Route>
             <Route path='/marketing' element={<MarketingHomePage />} />
           </Route>

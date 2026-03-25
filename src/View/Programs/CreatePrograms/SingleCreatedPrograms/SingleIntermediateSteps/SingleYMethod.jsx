@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import Button from '../../../Components/Button'
-import './IntermediateSteps.css'
-import Input from '../../../Components/Input'
-import crossIcon from '../../../assets/content.svg'
-import { useNavigate } from 'react-router-dom'
-import CustomTextEditor from '../../../Components/CustomTextEditor/CustomTextEditor'
+import Button from '../../../../../Components/Button.jsx'
+import '../../../IntermediateSteps/IntermediateSteps.css'
+import Input from '../../../../../Components/Input.jsx'
+import crossIcon from '../../../../../assets/content.svg'
+import { useNavigate, useParams } from 'react-router-dom'
+import CustomTextEditor from '../../../../../Components/CustomTextEditor/CustomTextEditor.jsx'
 import toast from 'react-hot-toast'
-import { getYMethod, postYMethod } from '../../../utils/Program'
-import Loaders from '../../../Components/Loaders/Loaders'
-
-const TheYMethod = () => {
+import { getSpecificYmethod, putSpecificYmethod } from '../../../../../utils/Program'
+import Loaders from '../../../../../Components/Loaders/Loaders.jsx'
+const SingleYMethod = () => {
     const navigate = useNavigate();
+    const { id, moduleId } = useParams()
     const [headline, setheadLine] = useState('');
-    const [ymethodData,setymethodData] = useState({})
+    const [ymethodData, setymethodData] = useState({})
     const [loading, setloading] = useState(false)
     const [stepOptions, setstepOptions] = useState([
         {
@@ -59,7 +59,7 @@ const TheYMethod = () => {
                         formData.append(`steps[${index}][sort_order]`, index)
                     })
                 }
-                const res = await postYMethod(formData);
+                const res = await putSpecificYmethod(formData,id,moduleId);
                 console.log(res)
             } catch (err) {
                 console.log(err)
@@ -75,7 +75,7 @@ const TheYMethod = () => {
     const fetchData = async () => {
         try {
             setloading(true)
-            const res = await getYMethod();
+            const res = await getSpecificYmethod(id, moduleId);
             setymethodData(res?.data)
         } catch (err) {
             console.log(err)
@@ -85,17 +85,19 @@ const TheYMethod = () => {
     }
 
     useEffect(() => {
-        fetchData()
+        if (id && moduleId) {
+            fetchData()
+        }
     }, [])
 
-    useEffect(()=>{
-      setheadLine(ymethodData?.headline || "")
+    useEffect(() => {
+        setheadLine(ymethodData?.headline || "")
         setstepOptions(ymethodData?.steps || [{
-            id:0+1,
-            title:"",
-            description:""
+            id: 0 + 1,
+            title: "",
+            description: ""
         }])
-    },[ymethodData])
+    }, [ymethodData])
 
     return (
         <>
@@ -160,4 +162,4 @@ const TheYMethod = () => {
     )
 }
 
-export default TheYMethod
+export default SingleYMethod
