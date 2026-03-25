@@ -174,6 +174,11 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                         <input type='radio' onChange={handleChange} name='intermediate_questions_goal_why' value={'intermediate_questions_goal_why'} checked={radioValue === 'intermediate_questions_goal_why'} />
                         <p>Questions for each goal - why? Intermediate Page</p>
                     </div>
+
+                    <div className='modal_radio_wrapper'>
+                        <input type='radio' onChange={handleChange} name='intermediate_y_method' value={'intermediate_y_method'} checked={radioValue === 'intermediate_y_method'} />
+                        <p>The Y method</p>
+                    </div>
                 </div>}
 
                 <div className='change_cancel_wrapper'>
