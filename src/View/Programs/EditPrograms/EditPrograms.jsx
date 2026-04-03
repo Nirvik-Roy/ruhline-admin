@@ -33,6 +33,9 @@ const EditPrograms = () => {
     const [allProgramsCategory, setallProgramsCategory] = useState([]);
     const [mainImage, setmainImage] = useState();
     const [programCategoryId, setprogramCategoryId] = useState();
+    const [childCategoryId, setchildCategoryId] = useState('')
+    const [parentCategory, setParentCategory] = useState([]);
+    const [programSubCategory, setprogramSubCategory] = useState([])
     const [programDescription, setprogramDescription] = useState();
     const [occurenceType, setoccurenceType] = useState('One Time')
     const [galleryImage, setgalleryImage] = useState([]);
@@ -105,13 +108,24 @@ const EditPrograms = () => {
         setloading(true)
         try {
             const res = await getAllPrograms();
-            setallProgramsCategory(res?.data?.data);
+            setallProgramsCategory(res?.data?.data)
+            setParentCategory(res?.data?.data?.filter((e) => {
+                if (e.parent_id == null) {
+                    return e
+                }
+            }));
         } catch (err) {
             console.log(err)
         } finally {
             setloading(false)
         }
     }
+
+    useEffect(() => {
+        const dummyData = [...allProgramsCategory]
+        setprogramSubCategory(dummyData.filter((e) => e?.parent_id == programCategoryId))
+    }, [programCategoryId, singleData, allProgramsCategory])
+
 
     useEffect(() => {
         fetchCoach()
@@ -157,7 +171,11 @@ const EditPrograms = () => {
             setloading(true)
             const formData = new FormData()
             formData.append('name', staticdata.name)
-            formData.append('program_category_id', programCategoryId)
+            if (childCategoryId == '') {
+                formData.append('program_category_id', programCategoryId)
+            } else {
+                formData.append('program_category_id', childCategoryId)
+            }
             formData.append('description', programDescription || "")
             if (mainImage instanceof File) {
                 formData.append('main_image', mainImage)
@@ -292,7 +310,12 @@ const EditPrograms = () => {
 
         setprogramDescription(singleData?.description || '')
         setmainImage(singleData?.main_image)
-        setprogramCategoryId(singleData?.program_category?.id || '')
+        if (singleData?.program_category?.parent_id != null) {
+            setchildCategoryId(singleData?.program_category?.id || '')
+            setprogramCategoryId(singleData?.program_category?.parent_id || '')
+        } else {
+            setprogramCategoryId(singleData?.program_category?.id || '')
+        }
         const mappedSections = singleData?.gallery_images
             ?.length > 0 ? singleData?.gallery_images
                 ?.map((element, index) => ({
@@ -320,7 +343,7 @@ const EditPrograms = () => {
         try {
             setloading(true)
             const res = await deleteGalleryImageApi(id, galleryImageId)
-            if(res?.success){
+            if (res?.success) {
                 setgalleryImageDeleteModal(false)
                 fetchSingleProgram()
             }
@@ -342,8 +365,8 @@ const EditPrograms = () => {
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
-                        <h2>Create Program</h2>
-                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Program Creation</span> / <span onClick={(() => navigate('/dashboard/programs/create-program'))}>Create Program</span></small>
+                        <h2>Edit Program</h2>
+                        <small><span onClick={(() => navigate('/dashboard/programs'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/edit-program/${id}`))}>Edit Program</span></small>
                     </div>
                     <div className='coaches_button_wapper'>
 
@@ -374,21 +397,42 @@ const EditPrograms = () => {
                                     marginTop: '-10px'
                                 }}>*{programErrors?.name[0]}</small>}
                             </div>
-                            <div className='input_form'>
-                                <label>Program Category <span>*</span></label>
-                                <select value={programCategoryId} onChange={((e) => setprogramCategoryId(e.target.value))}>
-                                    <option value={''}>--select-program-category--</option>
-                                    {allProgramsCategory?.length > 0 && allProgramsCategory?.map((e, i) => (
-                                        <option value={e?.id} key={i}>{e?.name}</option>
-                                    ))}
-                                </select>
 
-                                {programErrors?.program_category_id && <small style={{
-                                    color: 'red',
-                                    fontSize: '12px',
-                                    marginTop: '-10px'
-                                }}>*{programErrors?.program_category_id[0]}</small>}
+                            <div className='create_input_grid_wrapper'>
+                                <div className='input_form'>
+                                    <label>Program Category <span>*</span></label>
+                                    <select value={programCategoryId} onChange={((e) => setprogramCategoryId(e.target.value))}>
+                                        <option value={''}>--select-program-category--</option>
+                                        {parentCategory?.length > 0 && parentCategory?.map((e, i) => (
+                                            <option value={e?.id} key={i}>{e?.name}</option>
+                                        ))}
+                                    </select>
+
+                                    {programErrors?.program_category_id && <small style={{
+                                        color: 'red',
+                                        fontSize: '12px',
+                                        marginTop: '-10px'
+                                    }}>*{programErrors?.program_category_id[0]}</small>}
+                                </div>
+
+
+                                <div className='input_form'>
+                                    <label>Program Sub Category <span>*</span></label>
+                                    <select value={childCategoryId} onChange={((e) => setchildCategoryId(e.target.value))}>
+                                        <option value={''}>--select-program-category--</option>
+                                        {programSubCategory?.length > 0 && programSubCategory?.map((e, i) => (
+                                            <option value={e?.id} key={i}>{e?.name}</option>
+                                        ))}
+                                    </select>
+
+                                    {programErrors?.program_category_id && <small style={{
+                                        color: 'red',
+                                        fontSize: '12px',
+                                        marginTop: '-10px'
+                                    }}>*{programErrors?.program_category_id[0]}</small>}
+                                </div>
                             </div>
+
                             {/* <div className='create_input_grid_wrapper'>
                                 <div className='input_form'>
                                     <label>Program Category <span>*</span></label>

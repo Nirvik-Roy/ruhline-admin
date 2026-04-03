@@ -30,9 +30,12 @@ const CreatePrograms = () => {
     const [benefitImage, setbenefitImage] = useState()
     const [dynamicHowItWorks, setdynamicHowItWorks] = useState([])
     const [HowItWorksImage, setHowItWorksImage] = useState();
-    const [allProgramsCategory, setallProgramsCategory] = useState([]);
+    const [parentCategory, setParentCategory] = useState([]);
+    const [allProgramCategory, setallProgramCategory] = useState([])
     const [mainImage, setmainImage] = useState();
     const [programCategoryId, setprogramCategoryId] = useState();
+    const [childCategoryId, setchildCategoryId] = useState('')
+    const [programSubCategory, setprogramSubCategory] = useState([])
     const [programDescription, setprogramDescription] = useState();
     const [occurenceType, setoccurenceType] = useState('One Time')
     const [galleryImage, setgalleryImage] = useState([]);
@@ -49,6 +52,12 @@ const CreatePrograms = () => {
         customcommisionRate: '',
         tag: ''
     })
+
+
+    useEffect(() => {
+        const dummyData = [...allProgramCategory]
+        setprogramSubCategory(dummyData.filter((e) => e?.parent_id == programCategoryId))
+    }, [programCategoryId])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -101,7 +110,12 @@ const CreatePrograms = () => {
         setloading(true)
         try {
             const res = await getAllPrograms();
-            setallProgramsCategory(res?.data?.data);
+            setallProgramCategory(res?.data?.data)
+            setParentCategory(res?.data?.data?.filter((e) => {
+                if (e.parent_id == null) {
+                    return e
+                }
+            }));
         } catch (err) {
             console.log(err)
         } finally {
@@ -147,6 +161,7 @@ const CreatePrograms = () => {
             tag: i === 5 ? true : false
         })
     }
+    
 
     const handleSubmit = async () => {
 
@@ -154,7 +169,12 @@ const CreatePrograms = () => {
             setloading(true)
             const formData = new FormData()
             formData.append('name', staticdata.name)
-            formData.append('program_category_id', programCategoryId)
+            if (childCategoryId === '') {
+                formData.append('program_category_id', programCategoryId)
+            } else {
+                formData.append('program_category_id', childCategoryId)
+            }
+
             formData.append('description', programDescription || "")
             if (mainImage instanceof File) {
                 formData.append('main_image', mainImage)
@@ -291,21 +311,41 @@ const CreatePrograms = () => {
                                     marginTop: '-10px'
                                 }}>*{programErrors?.name[0]}</small>}
                             </div>
-                            <div className='input_form'>
-                                <label>Program Category <span>*</span></label>
-                                <select onChange={((e) => setprogramCategoryId(e.target.value))}>
-                                    <option value={''}>--select-program-category--</option>
-                                    {allProgramsCategory?.length > 0 && allProgramsCategory?.map((e, i) => (
-                                        <option value={e?.id} key={i}>{e?.name}</option>
-                                    ))}
-                                </select>
+                            <div className='create_input_grid_wrapper'>
+                                <div className='input_form'>
+                                    <label>Program Category <span>*</span></label>
+                                    <select onChange={((e) => setprogramCategoryId(e.target.value))}>
+                                        <option value={''}>--select-program-category--</option>
+                                        {parentCategory?.length > 0 && parentCategory?.map((e, i) => (
+                                            <option value={e?.id} key={i}>{e?.name}</option>
+                                        ))}
+                                    </select>
 
-                                {programErrors?.program_category_id && <small style={{
-                                    color: 'red',
-                                    fontSize: '12px',
-                                    marginTop: '-10px'
-                                }}>*{programErrors?.program_category_id[0]}</small>}
+                                    {programErrors?.program_category_id && <small style={{
+                                        color: 'red',
+                                        fontSize: '12px',
+                                        marginTop: '-10px'
+                                    }}>*{programErrors?.program_category_id[0]}</small>}
+                                </div>
+
+
+                                <div className='input_form'>
+                                    <label>Program Sub Category <span>*</span></label>
+                                    <select onChange={((e) => setchildCategoryId(e.target.value))}>
+                                        <option value={''}>--select-program-category--</option>
+                                        {programSubCategory?.length > 0 && programSubCategory?.map((e, i) => (
+                                            <option value={e?.id} key={i}>{e?.parent_id && '-'}{e?.name}</option>
+                                        ))}
+                                    </select>
+
+                                    {programErrors?.program_category_id && <small style={{
+                                        color: 'red',
+                                        fontSize: '12px',
+                                        marginTop: '-10px'
+                                    }}>*{programErrors?.program_category_id[0]}</small>}
+                                </div>
                             </div>
+
                             {/* <div className='create_input_grid_wrapper'>
                                 <div className='input_form'>
                                     <label>Program Category <span>*</span></label>
@@ -540,9 +580,9 @@ const CreatePrograms = () => {
                                     <i class="fa-solid fa-angle-down" style={toggle.programWorks ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>
                             </div>
-                            {toggle.programWorks && <CreateProgramsHowWorks 
-                            programErrors={programErrors}
-                            setHowItWorksImage={setHowItWorksImage} HowItWorksImage={HowItWorksImage} dynamicHowItWorks={dynamicHowItWorks} setdynamicHowItWorks={setdynamicHowItWorks} />}
+                            {toggle.programWorks && <CreateProgramsHowWorks
+                                programErrors={programErrors}
+                                setHowItWorksImage={setHowItWorksImage} HowItWorksImage={HowItWorksImage} dynamicHowItWorks={dynamicHowItWorks} setdynamicHowItWorks={setdynamicHowItWorks} />}
                         </div>
 
                     </div>
