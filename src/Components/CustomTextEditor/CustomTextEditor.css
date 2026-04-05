@@ -1,60 +1,100 @@
 .editor-container {
-    width: 100%;
-    border: 1px solid rgba(217, 217, 217, 1);
-    border-radius: 10px;
+  width: 100%;
+  border: 1px solid rgba(217, 217, 217, 1);
+  border-radius: 10px;
 }
 
 .toolbar {
-    display: flex;
-    padding: 6px;
+  display: flex;
+  padding: 6px;
 }
 
 .toolbar button {
-    font-size: 18px;
-    padding: 6px 10px;
-    margin-right: 6px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    border-radius: 10px;
+  font-size: 18px;
+  padding: 6px 10px;
+  margin-right: 6px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
 }
 
-.editor ol{
-    padding-left: 20px;
+.editor ol {
+  padding-left: 20px;
 }
 
-.editor ul{
-    padding-left: 20px;
+.editor ul {
+  padding-left: 20px;
 }
 
 .toolbar button:hover {
-    background: #eee;
+  background: #eee;
 }
 
 .editor {
-    min-height: 120px;
-    padding: 10px;
-    outline: none;
-    font-size: 16px;
+  min-height: 120px;
+  padding: 10px;
+  outline: none;
+  font-size: 16px;
 }
-.toolbar button:last-child{
-    text-decoration: underline;
+.editor p {
+  background-color: transparent !important;
+}
+
+.editor span {
+  background-color: transparent !important;
+}
+.editor h1 {
+  background-color: transparent !important;
+}
+.editor h2 {
+  background-color: transparent !important;
+}
+.editor h3 {
+  background-color: transparent !important;
+}
+.editor h4 {
+  background-color: transparent !important;
+}
+.editor h5 {
+  background-color: transparent !important;
+}
+.editor h6 {
+  background-color: transparent !important;
+}
+.editor ul {
+  background-color: transparent !important;
+}
+.editor ol {
+  background-color: transparent !important;
+}
+.editor li {
+  background-color: transparent !important;
+}
+.editor strong {
+  background-color: transparent !important;
+}
+.editor small {
+  background-color: transparent !important;
+}
+.toolbar button:last-child {
+  text-decoration: underline;
 }
 /* Add this to prevent empty content issues */
 .editor:empty::before {
-    content: attr(placeholder);
-    color: #999;
-    pointer-events: none;
+  content: attr(placeholder);
+  color: #999;
+  pointer-events: none;
 }
 
 .editor:not(:focus):empty::after {
-    content: '';
-    display: inline-block;
+  content: "";
+  display: inline-block;
 }
 
 /* Style for read-only mode */
 .editor-readonly {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    border-color: #ddd;
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  border-color: #ddd;
 }
