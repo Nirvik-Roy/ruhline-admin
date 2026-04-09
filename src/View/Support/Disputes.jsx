@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Disputes.css'
-import { useNavigate } from 'react-router-dom'
-import Button from '../../Components/Button'
-import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
 import ellipse from '../../assets/_MoreIcon_.svg'
+import Loaders from '../../Components/Loaders/Loaders.jsx'
 import Pagination from '../../Components/Pagination/Pagination.jsx'
 import DisputeViewModal from '../Modal/DisputeViewModal.jsx'
+import { getAllDisputes, getSingleDisputes, markDisputeStatus } from '../../utils/dispute.js'
 const Disputes = () => {
     const [index, setIndex] = useState([]);
-    const [disputes, setdisputes] = useState(false)
-    const navigate = useNavigate()
+    const [disputes, setdisputes] = useState(false);
+    const dropdownRef = useRef()
+    const [loading, setloading] = useState(false)
+    const [disputesData, setdisputesData] = useState([])
+    const [singleDisputeData, setsingleDisputeData] = useState([])
+    const [disputeId, setdisputeId] = useState()
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -17,9 +20,72 @@ const Disputes = () => {
             setIndex([...index, i])
         }
     }
+
+    const callDisputeFunc = async () => {
+        try {
+            setloading(true)
+            const res = await getAllDisputes();
+            setdisputesData(res?.data?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    const callSingleDispute = async (i) => {
+        try {
+            setloading(true)
+            const res = await getSingleDisputes(i)
+            setsingleDisputeData(res?.data)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        callDisputeFunc()
+    }, [])
+
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIndex([]);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
+
+    const changeDisputeStatus = async () => {
+        try {
+            setloading(true)
+            const res = await markDisputeStatus( {
+                status: "closed"
+            }, disputeId
+            )
+            if (res?.success) {
+                callDisputeFunc()
+                setdisputes(false)
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setloading(false)
+        }
+    }
+
     return (
         <>
-            {disputes && <DisputeViewModal setdisputes={setdisputes} />}
+            {loading && <Loaders />}
+            {disputes && <DisputeViewModal changeDisputeStatus={changeDisputeStatus} singleDisputeData={singleDisputeData} setdisputes={setdisputes} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Disputes</h2>
@@ -37,8 +103,7 @@ const Disputes = () => {
                             <tr>
                                 <th>Dispute ID</th>
                                 <th>Raised by</th>
-                                <th>Date</th>
-                                <th>Time</th>
+                                <th>Date & Time</th>
                                 <th>Status</th>
                                 <th style={{
                                     textAlign: 'center'
@@ -46,37 +111,53 @@ const Disputes = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {[1, 2, 3, 4, 5, 6].map((e, i) => (
+                            {disputesData?.map((e, i) => (
                                 <tr>
-                                    <td>#ST456666</td>
+                                    <td>#{e.ticket_number}</td>
                                     <td>
                                         <div className='customer_wrapper' style={{
                                             justifyContent: 'flex-start'
                                         }}>
                                             <div className='customer_details_wrapper'>
-                                                <p>Bidisha Bhowmick</p>
-                                                <p>#ST456666</p>
+                                                <p>{e?.customer?.name}</p>
+                                                <p>#{e?.customer?.id}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>27/10/2025</td>
-                                    <td>10:07 AM</td>
-                                    <td><p style={{
+                                    <td>{new Date(e?.created_at)
+                                        .toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</td>
+                                    <td><p style={e?.status == 'open' ? {
                                         fontSize: '11px',
                                         color: '#fff',
                                         width: 'fit-content',
                                         background: 'rgba(231, 62, 69, 1)',
                                         padding: '5px',
-
+                                        textTransform: 'capitalize',
                                         borderRadius: '5px',
                                         fontWeight: '600'
-                                    }}>Open</p></td>
-                                    <td>
-                                        <img onClick={(() => indexFunction(i))} src={ellipse} />
+                                    } : {
+                                        fontSize: '11px',
+                                        color: '#fff',
+                                        width: 'fit-content',
+                                        background: 'green',
+                                        padding: '5px',
+                                        borderRadius: '5px',
+                                        fontWeight: '600',
+                                        textTransform: 'capitalize'
+                                    }}>{e?.status}</p></td>
+                                    <td ref={dropdownRef}>
+                                        <img onClick={((e) => {
+                                            e.stopPropagation()
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-30px'
                                         }}>
-                                            <p onClick={(() => setdisputes(true))}>View</p>
+                                            <p onClick={(() => {
+                                                callSingleDispute(e?.id)
+                                                setdisputes(true)
+                                                setdisputeId(e?.id)
+                                            })}>View</p>
                                         </div>}
                                     </td>
                                 </tr>
