@@ -91,7 +91,7 @@ const Disputes = () => {
         return () => clearTimeout(timer); // cleanup
     }, [searchTerm]);
     const filteredData = disputesData?.filter((item) =>
-        item?.user?.name?.toLowerCase().includes(debouncedSearch.toLowerCase())
+        item?.ticket_number.toLowerCase().includes(debouncedSearch.toLowerCase())
     );
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(0);
