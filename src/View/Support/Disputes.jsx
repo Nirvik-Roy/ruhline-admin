@@ -67,7 +67,7 @@ const Disputes = () => {
     const changeDisputeStatus = async () => {
         try {
             setloading(true)
-            const res = await markDisputeStatus( {
+            const res = await markDisputeStatus({
                 status: "closed"
             }, disputeId
             )
@@ -81,7 +81,26 @@ const Disputes = () => {
             setloading(false)
         }
     }
-
+    // Pagination logic & Search Logic...
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm);
+        }, 500); // 500ms delay
+        return () => clearTimeout(timer); // cleanup
+    }, [searchTerm]);
+    const filteredData = disputesData?.filter((item) =>
+        item?.user?.name?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
+    const itemsPerPage = 10;
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = filteredData?.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(filteredData?.length / itemsPerPage);
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
     return (
         <>
             {loading && <Loaders />}
@@ -91,7 +110,7 @@ const Disputes = () => {
                     <h2>Disputes</h2>
                     <div className='coaches_button_wapper'>
                         <div className='coaches_search_wrapper'>
-                            <input placeholder='Search' />
+                            <input onChange={((e) => setSearchTerm(e?.target?.value))} placeholder='Search' />
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>
@@ -111,7 +130,16 @@ const Disputes = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {disputesData?.map((e, i) => (
+                            {(currentItems?.length <= 0 && !loading) && <td style={{
+                                color: 'var(--primary-color)',
+                                fontWeight: '600'
+                            }} colSpan={12}>No disputes found...</td>}
+
+                            {(currentItems?.length <= 0 && loading) && <td style={{
+                                color: 'var(--primary-color)',
+                                fontWeight: '600'
+                            }} colSpan={12}>Searching...</td>}
+                            {currentItems?.map((e, i) => (
                                 <tr>
                                     <td>#{e.ticket_number}</td>
                                     <td>
@@ -166,7 +194,9 @@ const Disputes = () => {
                     </table>
                 </div>
 
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )
