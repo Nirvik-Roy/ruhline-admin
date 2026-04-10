@@ -177,7 +177,6 @@ const Payouts = () => {
                                 }}>Month: January, 2026</td>
                             </tr> */}
 
-
                         </tbody>
                     </table>
                 </div>
