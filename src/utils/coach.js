@@ -5,7 +5,7 @@ export const getAllCoaches = async () => {
     const Token = localStorage.getItem('token')
     if(Token){
         try {
-            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach?page=1`, {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach`, {
                 headers: {
                     'Authorization': `Bearer ${Token}`
                 }

@@ -467,3 +467,24 @@
   height: 18px;
   accent-color: var(--primary-color);
 }
+.or_text{
+  position: relative;
+}
+.or_text::before{
+  position: absolute;
+  content: '';
+  top: 50%;
+  left: 0;
+  width: 45%;
+  height: 1px;
+  background-color: #ccc;
+}
+.or_text::after{
+  position: absolute;
+  content: '';
+  top: 50%;
+  right: 0;
+  width: 45%;
+  height: 1px;
+  background-color: #ccc;
+}

@@ -140,7 +140,7 @@ function App() {
               <Route path='programs/single-program/:id/each-goal/:moduleId' element={<SingleEachGoalIntermediate />} />
               <Route path='programs/single-program/:id/y-method/:moduleId' element={<SingleYMethod />} />
               <Route path='payouts' element={<Payouts />} />
-              <Route path='payouts/payment-list' element={<PaymentList />} />
+              <Route path='payouts/payment-list/:id' element={<PaymentList />} />
 
             </Route>
             <Route path='/marketing' element={<MarketingHomePage />} />

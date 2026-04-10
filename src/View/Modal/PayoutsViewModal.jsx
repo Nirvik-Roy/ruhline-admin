@@ -1,29 +1,42 @@
 import React from 'react'
 
-const PayoutViewModal = ({setmodalIsOpen}) => {
+const PayoutViewModal = ({ paymentFunction, singlePayout, payoutFrequency }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setmodalIsOpen(false))}></div>
+            <div className='modal_wrapper' onClick={(() => paymentFunction(0))}></div>
             <div className='modal_div'>
-                <i class="fa-solid fa-xmark" onClick={(() => setmodalIsOpen(false))}></i>
+                <i class="fa-solid fa-xmark" onClick={(() => paymentFunction(0))}></i>
                 <div className='payout_content_wrapper'>
                     <ul>
-                        <li><strong>Coach Name:</strong>Bidisha Bhowmick</li>
-                        <li><strong>Coach ID:</strong>#Co456666</li>
-                        <li><strong>Program:</strong>Program 1</li>
-                        <li><strong>Commission %</strong>10</li>
-                        <li><strong>Payout Frequency:</strong>7 days</li>
+                        <li><strong>Coach Name:</strong>{singlePayout?.coach?.name}</li>
+                        <li><strong>Coach ID:</strong>#{singlePayout?.coach?.id}</li>
+                        <li><strong>Program:</strong>{singlePayout?.program?.name}</li>
+                        <li><strong>Commission %</strong>{singlePayout?.commission_rate}</li>
+                        <li style={{
+                            textTransform:'capitalize'
+                        }}><strong>Payout Frequency:</strong>{payoutFrequency}</li>
                         <li><strong>Paid Amount:</strong>SAR300</li>
                         <li><strong>Pending Payouts:</strong>SAR100</li>
-                        <li><strong>Status:</strong><span style={{
-                            background: 'rgba(224, 173, 34, 1)',
+                        <li><strong>Status:</strong><span style={singlePayout?.status == 'paid' ? {
+                            background: 'green',
                             padding: '4px',
                             borderRadius: '5px',
                             color: '#fff',
                             fontSize: '10px',
                             fontWeight: '400',
-                            width: 'fit-content'
-                        }}>Partially Paid</span></li>
+                            width: 'fit-content',
+                            textTransform: 'capitalize'
+                        } : {
+                            background: 'red',
+                            padding: '4px',
+                            borderRadius: '5px',
+                            color: '#fff',
+                            fontSize: '10px',
+                            fontWeight: '400',
+                            width: 'fit-content',
+                            textTransform: 'capitalize'
+                        }
+                        }>{singlePayout?.status}</span></li>
                     </ul>
                 </div>
             </div>
