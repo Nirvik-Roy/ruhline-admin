@@ -15,8 +15,8 @@ const SinglePayModal = ({ paymentFunction, checkOutId, getSinglePayoutFunc, upda
 
         e.target.value = null; // reset input (optional)
     };
-    useEffect(()=>{
-        if(update){
+    useEffect(() => {
+        if (update) {
             setFile(singlePayout?.payment_receipt_url)
             settransacationNumber(singlePayout?.transaction_number || '')
         }
@@ -42,7 +42,7 @@ const SinglePayModal = ({ paymentFunction, checkOutId, getSinglePayoutFunc, upda
         const formData = new FormData()
         formData.append('transaction_number', transactionNumber || '')
         formData.append('status', 'paid')
-        if(file instanceof File){
+        if (file instanceof File) {
             formData.append('payment_receipt', file)
         }
         const res = await updatePayoutStatus(checkOutId, formData)
@@ -88,11 +88,16 @@ const SinglePayModal = ({ paymentFunction, checkOutId, getSinglePayoutFunc, upda
                             }} />}
 
 
-                            {typeof file == String && <img src={file} style={{
-                                width: '100%',
-                                height: '95%',
-                                objectFit: 'contain'
-                            }} />}
+                            {typeof file === "string" && (
+                                <img
+                                    src={file}
+                                    style={{
+                                        width: '100%',
+                                        height: '95%',
+                                        objectFit: 'contain'
+                                    }}
+                                />
+                            )}
                             <input
                                 type="file"
                                 accept=".jpg,.jpeg,.png,.webp,.pdf"

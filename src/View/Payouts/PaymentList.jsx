@@ -163,7 +163,8 @@ const PaymentList = () => {
                             <tbody>
                                 <tr>
                                     <td>#{singlePayout?.checkout_order_id}</td>
-                                    <td>27/10/2025</td>
+                                    <td>{new Date(singlePayout?.created_at)
+                                        .toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</td>
                                     <td>
                                         {singlePayout?.program?.name}
                                     </td>

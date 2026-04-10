@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import './Payouts.css'
 import Pagination from '../../Components/Pagination/Pagination'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
@@ -17,7 +17,6 @@ const Payouts = () => {
     const [payoutList, setpayoutList] = useState([]);
     const navigate = useNavigate()
     const [payoutFrequency, setpayoutFrequency] = useState(false)
-
     const getFrequency = async () => {
         setloading(true)
         const res = await getPayoutFrequency()
@@ -31,14 +30,31 @@ const Payouts = () => {
     const callPayoutFunction = async () => {
         setloading(true)
         const res = await getPayoutList()
-        console.log(res)
-        setpayoutList(res)
+        if(res?.success){
+            setpayoutList(res?.data)
+        }
         setloading(false)
     }
+    
 
     useEffect(() => {
         callPayoutFunction()
     }, [])
+
+    // Pagination logic only
+
+    const itemsPerPage = 3;
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const offset = currentPage * itemsPerPage;
+
+    const currentItems = payoutList?.groups?.slice(offset, offset + itemsPerPage);
+
+    const pageCount = Math.ceil(payoutList ?.groups?.length / itemsPerPage);
+
+    const handlePageChange = (selectedItem) => {
+        setCurrentPage(selectedItem.selected);
+    };
 
     return (
         <>
@@ -97,8 +113,7 @@ const Payouts = () => {
                         <thead>
                             <tr>
                                 <th>Coach</th>
-                                <th>Pending Payouts</th>
-                                <th>Paid Amounts</th>
+                                <th>Coach Amounts</th>
                                 <th>Payment Status </th>
                                 <th style={{
                                     textAlign: 'center'
@@ -125,7 +140,6 @@ const Payouts = () => {
                                                     </div>
                                                 </td>
                                                 <td>{e?.currency} {e?.coach_earning_amount}</td>
-                                                <td>{e?.currency} 300</td>
                                                 <td>
                                                     <p style={e?.status == 'paid' ? {
                                                         background: 'green',
@@ -180,7 +194,9 @@ const Payouts = () => {
                         </tbody>
                     </table>
                 </div>
-                <Pagination />
+                <Pagination pageCount={pageCount}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange} />
             </div>
         </>
     )

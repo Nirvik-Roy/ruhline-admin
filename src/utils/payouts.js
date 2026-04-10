@@ -12,7 +12,7 @@ export const getPayoutList = async () => {
             });
             if (res.data.success == true) {
                 // toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data.data
+                return res.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)
