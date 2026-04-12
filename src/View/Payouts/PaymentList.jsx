@@ -144,7 +144,7 @@ const PaymentList = () => {
                         </div>
                     </div>
                     <div className='table_container'>
-                        <table className='total_table_order_wrapper'>
+                        <table className='total_table_order_wrapper coaches_table_wrapper'>
                             <thead>
                                 <tr>
                                     <th>Order ID</th>

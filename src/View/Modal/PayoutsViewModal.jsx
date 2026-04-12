@@ -15,8 +15,8 @@ const PayoutViewModal = ({ paymentFunction, singlePayout, payoutFrequency }) => 
                         <li style={{
                             textTransform:'capitalize'
                         }}><strong>Payout Frequency:</strong>{payoutFrequency}</li>
-                        <li><strong>Paid Amount:</strong>SAR300</li>
-                        <li><strong>Pending Payouts:</strong>SAR100</li>
+                        <li><strong>Total Amount:</strong>{singlePayout?.currency} {singlePayout?.order_total_amount}</li>
+                        <li><strong>Coach Amount:</strong>{singlePayout?.currency} {singlePayout?.coach_earning_amount}</li>
                         <li><strong>Status:</strong><span style={singlePayout?.status == 'paid' ? {
                             background: 'green',
                             padding: '4px',

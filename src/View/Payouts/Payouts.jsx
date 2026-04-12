@@ -15,6 +15,7 @@ const Payouts = () => {
     const [loading, setloading] = useState(false);
     const [modalIsOpen2, setmodalIsOpen2] = useState(false)
     const [payoutList, setpayoutList] = useState([]);
+    const [items, setitems] = useState([])
     const navigate = useNavigate()
     const [payoutFrequency, setpayoutFrequency] = useState(false)
     const getFrequency = async () => {
@@ -30,12 +31,13 @@ const Payouts = () => {
     const callPayoutFunction = async () => {
         setloading(true)
         const res = await getPayoutList()
-        if(res?.success){
+        if (res?.success) {
             setpayoutList(res?.data)
+            setitems(res?.data?.groups[0]?.items)
         }
         setloading(false)
     }
-    
+
 
     useEffect(() => {
         callPayoutFunction()
@@ -48,9 +50,9 @@ const Payouts = () => {
 
     const offset = currentPage * itemsPerPage;
 
-    const currentItems = payoutList?.groups?.slice(offset, offset + itemsPerPage);
+    const currentItems = items?.slice(offset, offset + itemsPerPage);
 
-    const pageCount = Math.ceil(payoutList ?.groups?.length / itemsPerPage);
+    const pageCount = Math.ceil(items?.length / itemsPerPage);
 
     const handlePageChange = (selectedItem) => {
         setCurrentPage(selectedItem.selected);
@@ -93,10 +95,10 @@ const Payouts = () => {
                     </div>
                 </div>
                 <div className='payouts_payments_summary_wrapper'>
-                    <div className='payouts_summary'>
+                    {/* <div className='payouts_summary'>
                         <h4>Total payments received</h4>
                         <h1>SAR {payoutList?.summary?.total_payment_received || 0}</h1>
-                    </div>
+                    </div> */}
 
                     <div className='payouts_summary'>
                         <h4>Total payments paid</h4>
@@ -121,64 +123,58 @@ const Payouts = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {payoutList?.groups?.map((element) => {
-                                return (
-                                    <>
-                                        {element?.items?.map((e) => (
-                                            <tr>
-                                                <td>
-                                                    <div className='customer_wrapper' style={{
-                                                        justifyContent: 'flex-start'
-                                                    }}>
-                                                        <div className='customer_img_div'>
-                                                            <img src={img} />
-                                                        </div>
-                                                        <div className='customer_details_wrapper'>
-                                                            <p>{e?.coach?.name}</p>
-                                                            <p>#{e?.coach?.id}</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{e?.currency} {e?.coach_earning_amount}</td>
-                                                <td>
-                                                    <p style={e?.status == 'paid' ? {
-                                                        background: 'green',
-                                                        padding: '4px',
-                                                        borderRadius: '5px',
-                                                        color: '#fff',
-                                                        fontSize: '11px',
-                                                        fontWeight: '600',
-                                                        width: 'fit-content',
-                                                        position: 'relative',
-                                                        zIndex: '-1',
-                                                        textTransform: 'capitalize',
-                                                    } : {
-                                                        background: 'red',
-                                                        padding: '4px',
-                                                        borderRadius: '5px',
-                                                        color: '#fff',
-                                                        fontSize: '11px',
-                                                        fontWeight: '600',
-                                                        width: 'fit-content',
-                                                        position: 'relative',
-                                                        zIndex: '-1',
-                                                        textTransform: 'capitalize'
-                                                    }}>{e?.status}</p>
-                                                </td>
-                                                <td>
-                                                    <img onClick={(() => {
-                                                        navigate(`/dashboard/payouts/payment-list/${e?.id}`)
-                                                    })} style={{
-                                                        position: 'relative',
-                                                        zIndex: '0'
-                                                    }} src={eye} />
-                                                </td>
-                                            </tr>
-                                        ))}
-
-                                    </>
-                                )
-                            })}
+                        {(currentItems?.length <=0 && !loading) && <td colSpan={12}>No payout details found..</td>}
+                            {currentItems.map((e) => (
+                                <tr>
+                                    <td>
+                                        <div className='customer_wrapper' style={{
+                                            justifyContent: 'flex-start'
+                                        }}>
+                                            <div className='customer_img_div'>
+                                                <img src={img} />
+                                            </div>
+                                            <div className='customer_details_wrapper'>
+                                                <p>{e?.coach?.name}</p>
+                                                <p>#{e?.coach?.id}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{e?.currency} {e?.coach_earning_amount}</td>
+                                    <td>
+                                        <p style={e?.status == 'paid' ? {
+                                            background: 'green',
+                                            padding: '4px',
+                                            borderRadius: '5px',
+                                            color: '#fff',
+                                            fontSize: '11px',
+                                            fontWeight: '600',
+                                            width: 'fit-content',
+                                            position: 'relative',
+                                            zIndex: '-1',
+                                            textTransform: 'capitalize',
+                                        } : {
+                                            background: 'red',
+                                            padding: '4px',
+                                            borderRadius: '5px',
+                                            color: '#fff',
+                                            fontSize: '11px',
+                                            fontWeight: '600',
+                                            width: 'fit-content',
+                                            position: 'relative',
+                                            zIndex: '-1',
+                                            textTransform: 'capitalize'
+                                        }}>{e?.status}</p>
+                                    </td>
+                                    <td>
+                                        <img onClick={(() => {
+                                            navigate(`/dashboard/payouts/payment-list/${e?.id}`)
+                                        })} style={{
+                                            position: 'relative',
+                                            zIndex: '0'
+                                        }} src={eye} />
+                                    </td>
+                                </tr>
+                            ))}
 
                             {/* <tr>
                                 <td colSpan={12} style={{
