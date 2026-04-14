@@ -7,18 +7,19 @@ import { useNavigate } from 'react-router-dom'
 const SingleBilling = () => {
     const [modal, setModal] = useState(false);
     const navigate = useNavigate()
+  
     return (
         <>
-            {modal && <EditInvoiceModal setModal={setModal}/>}
+            {modal && <EditInvoiceModal setModal={setModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>#3492</h2>
-                        <small><span onClick={(()=>navigate('/dashboard/billings'))}>Billings</span> / <span onClick={(()=>navigate('/dashboard/billings/single-bill/2'))}>#3492</span></small>
+                        <small><span onClick={(() => navigate('/dashboard/billings'))}>Billings</span> / <span onClick={(() => navigate('/dashboard/billings/single-bill/2'))}>#3492</span></small>
                     </div>
 
                     <div className='coaches_button_wapper'>
-                        <div onClick={(()=>setModal(true))}>
+                        <div onClick={(() => setModal(true))}>
                             <Button children={'Edit'} styles={{
                                 fontSize: '13px',
                                 height: '46px'
@@ -55,7 +56,8 @@ const SingleBilling = () => {
                     </div>
                     <div className='table_container' style={{
                         paddingBottom: '40px',
-                        borderBottom: '1px solid rgba(38, 43, 67, 0.12)'
+                        borderBottom: '1px solid rgba(38, 43, 67, 0.12)',
+                        minHeight:'auto'
                     }}>
                         <table className='total_table_order_wrapper coaches_table_wrapper'>
                             <thead>
