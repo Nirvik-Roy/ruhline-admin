@@ -80,7 +80,7 @@ const CmsArticles = () => {
                         </div>
                     </div>
                 </div>
-                {articleData.length <= 0 && <p style={{
+                {articleData?.length <= 0 && <p style={{
                     textAlign: 'center'
                 }}>No articles found!...</p>}
                 <div className='cms_articles_grid_wrapper'>
