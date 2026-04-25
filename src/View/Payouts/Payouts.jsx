@@ -62,6 +62,7 @@ const Payouts = () => {
             {commission && <AddCommisionModal setcommission={setcommission} />}
             {modalisOpen && <PayoutViewModal setmodalIsOpen={setmodalIsOpen} />}
             {modalIsOpen2 && <PayoutFrequencyModal payoutFrequency={payoutFrequency} callPayoutFunction={callPayoutFunction} setmodalIsOpen={setmodalIsOpen2} />}
+            {loading && <Loaders/>}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
