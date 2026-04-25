@@ -1,11 +1,16 @@
 import React from 'react'
 import Button from '../../Components/Button'
-const DisputeViewModal = ({ setdisputes, singleDisputeData, changeDisputeStatus }) => {
+import ModalLoader from '../../Components/Loaders/ModalLoader'
+const DisputeViewModal = ({ setdisputes, singleDisputeData, changeDisputeStatus, loading }) => {
 
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setdisputes(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'30vh'
+            }}>
+                {loading && <ModalLoader/>}
+               {!loading && <>
                 <h4>#{singleDisputeData?.ticket_number}</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setdisputes(false))}></i>
                 <div className='modal_disputes_details'>
@@ -35,6 +40,7 @@ const DisputeViewModal = ({ setdisputes, singleDisputeData, changeDisputeStatus 
                         backgroundColor:'green'
                     }} children={'Resolved'} />
                 </div>}
+                </>}
             </div>
         </>
     )

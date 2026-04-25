@@ -3,9 +3,8 @@ import Input from '../../Components/Input'
 import Textarea from '../../Components/Textarea'
 import Button from '../../Components/Button'
 import { useParams } from 'react-router-dom'
-const CardGameDescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQuestionText, errors, selectedIndex }) => {
+const CardGameDescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions, updateQuestionText, errors, selectedIndex, loading }) => {
     const { moduleId } = useParams()
-    console.log(errors)
     return (
         <>
             <div className='modal_wrapper'></div>
@@ -35,13 +34,15 @@ const CardGameDescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions,
                                     </small>
                                 }
                                 <div
-                                    className='change_cancel_wrapper'
-                                    style={{ margin: '20px 0 0 0' }}
+                                    className=''
+                                    style={{ margin: '20px 0 0 auto' }}
                                 >
                                     <button onClick={() => tabsFunction(0)}>
                                         Cancel
                                     </button>
                                     <Button
+                                        loading={loading}
+                                        loadingText='Adding...'
                                         onClick={() => postQuestions()}
                                         children="Add"
                                     />

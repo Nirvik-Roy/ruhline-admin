@@ -13,7 +13,8 @@ const SingleValuesIntermediate = () => {
     const [headline, setheadLine] = useState('');
     const { id, moduleId } = useParams()
     const [valuesData, setvaluesData] = useState({})
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false)
     const [pointsData, setpointsData] = useState([
         {
             id: 0 + 1,
@@ -49,7 +50,7 @@ const SingleValuesIntermediate = () => {
     const handleSubmit = async () => {
         if (headline != '') {
             try {
-                setloading(true);
+                setpostloading(true);
                 const formData = new FormData();
                 formData.append('headline', headline || "")
                 if (pointsData.length > 0) {
@@ -62,7 +63,7 @@ const SingleValuesIntermediate = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error('Plz enter the headline field')
@@ -118,43 +119,45 @@ const SingleValuesIntermediate = () => {
                             }} />
                         </div> */}
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
                     </div>
                 </div>
+                {!loading && <>
+                    <div className='values_inputs_wrapper462'>
+                        <Input onChange={((e) => setheadLine(e.target.value))} value={headline} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
+                    </div>
 
-                <div className='values_inputs_wrapper462'>
-                    <Input onChange={((e) => setheadLine(e.target.value))} value={headline} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
-                </div>
 
-
-                <div className='cms_faq_wrapper'>
-                    {pointsData?.length > 0 && pointsData?.map((e, i) => (
-                        <div className='cms_faq_list'>
-                            <p>Point {i + 1}</p>
-                            <div className='cms_faq_questions_wrapper'>
-                                <CustomTextEditor defaultValue={e?.description} onChange={((data) => handlePoints(data, e?.id))} label={'Description'} />
+                    <div className='cms_faq_wrapper'>
+                        {pointsData?.length > 0 && pointsData?.map((e, i) => (
+                            <div className='cms_faq_list'>
+                                <p>Point {i + 1}</p>
+                                <div className='cms_faq_questions_wrapper'>
+                                    <CustomTextEditor defaultValue={e?.description} onChange={((data) => handlePoints(data, e?.id))} label={'Description'} />
+                                </div>
+                                <img onClick={(() => deletePoints(e?.id))} style={i != 0 ? { visibility: 'visible' } : {
+                                    visibility: 'hidden'
+                                }} src={crossIcon} />
                             </div>
-                            <img onClick={(() => deletePoints(e?.id))} style={i != 0 ? { visibility: 'visible' } : {
-                                visibility: 'hidden'
-                            }} src={crossIcon} />
-                        </div>
-                    ))}
+                        ))}
 
-                </div>
+                    </div>
 
 
-                <div onClick={addPoints}>
-                    <Button children={'Add Point'} styles={{
-                        color: 'var(--text-color)',
-                        border: '1px solid var(--primary-color)',
-                        padding: '12px 15px',
-                        background: 'transparent',
-                        fontSize: '13px'
-                    }} />
-                </div>
+                    <div onClick={addPoints}>
+                        <Button children={'Add Point'} styles={{
+                            color: 'var(--text-color)',
+                            border: '1px solid var(--primary-color)',
+                            padding: '12px 15px',
+                            background: 'transparent',
+                            fontSize: '13px'
+                        }} />
+                    </div>
+                </>}
+
             </div>
         </>
     )

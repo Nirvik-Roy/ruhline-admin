@@ -8,11 +8,12 @@ import Loaders from '../../../Components/Loaders/Loaders'
 const CmsRefundPolicy = () => {
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false)
     const [contentErrors, setcontentErrors] = useState();
     const [content, setcontent] = useState('')
     const updatePrivacy = async () => {
         try {
-            setloading(true)
+            setpostloading(true)
             const res = await putAllCmsData('/admin/legal-page/refund-policy', {
                 content: `${content}`
             });
@@ -20,7 +21,7 @@ const CmsRefundPolicy = () => {
         } catch (err) {
             console.log(err);
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -41,7 +42,7 @@ const CmsRefundPolicy = () => {
     }, [])
     return (
         <>
-        {loading && <Loaders/>}
+            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
@@ -61,20 +62,20 @@ const CmsRefundPolicy = () => {
                             }} />
                         </div>
                         <div>
-                            <Button onClick={updatePrivacy} children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' onClick={updatePrivacy} children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
                         </div>
                     </div>
                 </div>
-                <div className='custom_editor_wrapper'>
+                {!loading && <div className='custom_editor_wrapper'>
                     <CustomTextEditor defaultValue={content} onChange={((data) => setcontent(data))} label={'Refund Policy Description'} required={true} />
                     {contentErrors?.content && <small style={{
                         color: 'red',
                         marginTop: '10px',
                         marginLeft: '15px',
                     }}>*{contentErrors?.content && contentErrors?.content[0]}</small>}
-                </div>
+                </div>}
 
             </div>
         </>

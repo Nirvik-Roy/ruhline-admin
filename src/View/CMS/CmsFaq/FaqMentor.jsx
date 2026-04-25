@@ -21,6 +21,8 @@ const FaqMentor = () => {
     const [addModal, setaddModal] = useState(false)
     const [editModal, setEditModal] = useState(false);
     const [deleteId, setdeleteId] = useState();
+    const [postloading, setpostloading] = useState(false)
+    const [deleteloading, setdeleteloading] = useState(false)
     const [actions, setactions] = useState(false)
     const [deleteModal, setdeleteModal] = useState(false)
     const fetchData = async () => {
@@ -42,7 +44,7 @@ const FaqMentor = () => {
     const mentorFaqAdd = async (data) => {
         if (data?.heading != '' && data?.description != '') {
             try {
-                setloading(true);
+                setpostloading(true);
                 const res = await postAllCmsData('/admin/faq', {
                     page_type: 'mentor',
                     heading: data?.heading,
@@ -55,7 +57,7 @@ const FaqMentor = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error('Plz fill the fields')
@@ -65,7 +67,7 @@ const FaqMentor = () => {
     const menteeFaqEdit = async (data) => {
         if (data?.heading != '' && data?.description != '' && faqId) {
             try {
-                setloading(true);
+                setpostloading(true);
                 const res = await editAllCmsData('/admin/faq', {
                     page_type: 'mentor',
                     heading: data?.heading,
@@ -78,7 +80,7 @@ const FaqMentor = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error('Plz fill the fields')
@@ -91,7 +93,7 @@ const FaqMentor = () => {
     }
 
     const deleteFAq = async () => {
-        setloading(true)
+        setdeleteloading(true)
         if (deleteId) {
             try {
                 const result = await deleteCmsData('/admin/faq', deleteId);
@@ -106,16 +108,16 @@ const FaqMentor = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setdeleteloading(false)
             }
         }
     }
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal onClick={deleteFAq} setdeleteModal={setdeleteModal} title={'Delete FAQ'} details={'Do you really want to delete this faq?'} />}
-            {editModal && <EditFaqModal faqId={faqId} seteditModal={setEditModal} editFunc={menteeFaqEdit} />}
-            {addModal && <AddFaqModal setaddModal={setaddModal} addFunction={mentorFaqAdd} />}
+            {deleteModal && <DeleteModal loading={deleteloading} onClick={deleteFAq} setdeleteModal={setdeleteModal} title={'Delete FAQ'} details={'Do you really want to delete this faq?'} />}
+            {editModal && <EditFaqModal faqloading={postloading} faqId={faqId} seteditModal={setEditModal} editFunc={menteeFaqEdit} />}
+            {addModal && <AddFaqModal faqloading={postloading} setaddModal={setaddModal} addFunction={mentorFaqAdd} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
@@ -143,52 +145,54 @@ const FaqMentor = () => {
                     </div> */}
                 </div>
 
-                <div className='cms_faq_wrapper'>
-                    {faqData?.length <= 0 && <p style={{
-                        textAlign: 'center',
-                        fontWeight: '600'
-                    }}>No faq data found...</p>}
-                    {
-                        faqData?.length > 0 && faqData?.map((e, i) => (
-                            <div className='cms_faq_list'>
-                                <p>FAQ {i + 1}</p>
-                                <div className='cms_faq_questions_wrapper'>
-                                    <Input label={'Heading'} readOnly={true} value={e?.heading} />
-                                    <CustomTextEditor2 readOnly={true} label={'Description'} defaultValue={e?.description} />
+                {!loading && <>
+                    <div className='cms_faq_wrapper'>
+                        {faqData?.length <= 0 && <p style={{
+                            textAlign: 'center',
+                            fontWeight: '600'
+                        }}>No faq data found...</p>}
+                        {
+                            faqData?.length > 0 && faqData?.map((e, i) => (
+                                <div className='cms_faq_list'>
+                                    <p>FAQ {i + 1}</p>
+                                    <div className='cms_faq_questions_wrapper'>
+                                        <Input label={'Heading'} readOnly={true} value={e?.heading} />
+                                        <CustomTextEditor2 readOnly={true} label={'Description'} defaultValue={e?.description} />
+                                    </div>
+                                    <i style={{
+                                        color: 'var(--primary-color)',
+                                        padding: '10px 20px',
+                                        background: '#eef4f7',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        borderRadius: '8px',
+                                        cursor: 'pointer'
+                                    }} onClick={(() => {
+
+                                        setEditModal(true)
+                                        setfaqId(e?.id)
+                                    })} class="fa-solid fa-pen-to-square"></i>
+                                    <img onClick={(() => handleDelete(e?.id))} style={{
+                                        cursor: 'pointer'
+                                    }} src={crossIcon} />
                                 </div>
-                                <i style={{
-                                    color: 'var(--primary-color)',
-                                    padding: '10px 20px',
-                                    background: '#eef4f7',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer'
-                                }} onClick={(() => {
+                            ))
+                        }
 
-                                    setEditModal(true)
-                                    setfaqId(e?.id)
-                                })} class="fa-solid fa-pen-to-square"></i>
-                                <img onClick={(() => handleDelete(e?.id))} style={{
-                                    cursor: 'pointer'
-                                }} src={crossIcon} />
-                            </div>
-                        ))
-                    }
-
-                </div>
+                    </div>
 
 
-                <div onClick={(() => setaddModal(true))}>
-                    <Button children={'Add FAQ'} styles={{
-                        color: 'var(--text-color)',
-                        border: '1px solid var(--primary-color)',
-                        padding: '12px 15px',
-                        background: 'transparent',
-                        fontSize: '13px'
-                    }} />
-                </div>
+                    <div onClick={(() => setaddModal(true))}>
+                        <Button children={'Add FAQ'} styles={{
+                            color: 'var(--text-color)',
+                            border: '1px solid var(--primary-color)',
+                            padding: '12px 15px',
+                            background: 'transparent',
+                            fontSize: '13px'
+                        }} />
+                    </div>
+                </>}
             </div>
         </>
     )

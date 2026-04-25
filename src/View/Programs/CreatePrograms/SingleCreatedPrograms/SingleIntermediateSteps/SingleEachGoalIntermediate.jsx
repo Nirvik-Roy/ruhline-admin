@@ -18,7 +18,9 @@ const SingleEachGoalIntermediate = () => {
     const [description1, setdescription1] = useState("")
     const [description2, setdescription2] = useState("")
     const [description3, setdescription3] = useState("")
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false)
+
     const [staticData, setStaticData] = useState({
         headline_1: "",
         headline_2: "",
@@ -39,7 +41,7 @@ const SingleEachGoalIntermediate = () => {
     const handleSubmit = async () => {
         if (staticData.headline_1 != '') {
             try {
-                setloading(true);
+                setpostloading(true);
                 const formData = new FormData();
                 formData.append("headline_1", staticData.headline_1 || "")
                 formData.append("headline_2", staticData.headline_2 || "")
@@ -58,7 +60,7 @@ const SingleEachGoalIntermediate = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error("Plz enter the headline field...")
@@ -102,7 +104,6 @@ const SingleEachGoalIntermediate = () => {
 
     }, [eachGoalData])
 
-    console.log(eachGoalData)
     return (
         <>
             {loading && <Loaders />}
@@ -123,76 +124,78 @@ const SingleEachGoalIntermediate = () => {
                             }} />
                         </div> */}
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
                     </div>
                 </div>
 
-                <div className='values_inputs_wrapper462'>
-                    <div>
+                {!loading && <>
+                    <div className='values_inputs_wrapper462'>
+                        <div>
 
-                        <Input onChange={handleChange} value={staticData.headline_1} name={'headline_1'} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
-                    </div>
+                            <Input onChange={handleChange} value={staticData.headline_1} name={'headline_1'} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
+                        </div>
 
-                    {/* <div>
+                        {/* <div>
                         <CustomTextEditor label={'Description'} />
                     </div> */}
 
-                    <div className='each_goal_grid_wrapper'>
-                        <div>
-                            <Input onChange={handleChange} value={staticData.headline_2} name={'headline_2'} label={'Headline 2'} placeholder={'Enter headline 2'} />
+                        <div className='each_goal_grid_wrapper'>
+                            <div>
+                                <Input onChange={handleChange} value={staticData.headline_2} name={'headline_2'} label={'Headline 2'} placeholder={'Enter headline 2'} />
+                            </div>
+
+                            <div>
+                                <Input onChange={handleChange} value={staticData.headline_3} name={'headline_3'} label={'Headline 3'} placeholder={'Enter Headline 3'} />
+                            </div>
+
+                            <div>
+                                <Input onChange={handleChange} value={staticData.headline_4} name={'headline_4'} label={'Headline 4'} placeholder={'Enter Headline 4'} />
+                            </div>
                         </div>
 
                         <div>
-                            <Input onChange={handleChange} value={staticData.headline_3} name={'headline_3'} label={'Headline 3'} placeholder={'Enter Headline 3'} />
-                        </div>
-
-                        <div>
-                            <Input onChange={handleChange} value={staticData.headline_4} name={'headline_4'} label={'Headline 4'} placeholder={'Enter Headline 4'} />
-                        </div>
-                    </div>
-
-                    <div>
-                        <Input onChange={handleChange} value={staticData.headline_5} name={'headline_5'} label={'Headline 5'} placeholder={'Enter Headline 5'} />
-                    </div>
-                </div>
-
-
-                <div className='cms_faq_wrapper'>
-                    <div className='cms_faq_list'>
-                        <p>Question 1</p>
-                        <div className='cms_faq_questions_wrapper'>
-                            <Input value={questionHeading1} onChange={((e) => setquestionHeading1(e.target.value))} label={'Heading'} placeholder={'Enter question Heading'} />
-                            <CustomTextEditor defaultValue={description1} onChange={((data) => setdescription1(data))} label={'Description'} />
+                            <Input onChange={handleChange} value={staticData.headline_5} name={'headline_5'} label={'Headline 5'} placeholder={'Enter Headline 5'} />
                         </div>
                     </div>
 
 
-                    <div className='cms_faq_list'>
-                        <p>Question 2</p>
-                        <div className='cms_faq_questions_wrapper'>
-                            <Input value={questionHeading2} onChange={((e) => setquestionHeading2(e.target.value))} label={'Heading'} placeholder={'Enter question Heading'} />
-                            <CustomTextEditor defaultValue={description2} onChange={((data) => setdescription2(data))} label={'Description'} />
+                    <div className='cms_faq_wrapper'>
+                        <div className='cms_faq_list'>
+                            <p>Question 1</p>
+                            <div className='cms_faq_questions_wrapper'>
+                                <Input value={questionHeading1} onChange={((e) => setquestionHeading1(e.target.value))} label={'Heading'} placeholder={'Enter question Heading'} />
+                                <CustomTextEditor defaultValue={description1} onChange={((data) => setdescription1(data))} label={'Description'} />
+                            </div>
+                        </div>
+
+
+                        <div className='cms_faq_list'>
+                            <p>Question 2</p>
+                            <div className='cms_faq_questions_wrapper'>
+                                <Input value={questionHeading2} onChange={((e) => setquestionHeading2(e.target.value))} label={'Heading'} placeholder={'Enter question Heading'} />
+                                <CustomTextEditor defaultValue={description2} onChange={((data) => setdescription2(data))} label={'Description'} />
+                            </div>
+                        </div>
+
+
+                        <div className='cms_faq_list'>
+                            <p>Question 3</p>
+                            <div className='cms_faq_questions_wrapper'>
+                                <Input value={questionHeading3} onChange={((e) => setquestionHeading3(e.target.value))} label={'Heading'} placeholder={'Enter question Heading'} />
+                                <CustomTextEditor defaultValue={description3} onChange={((data) => setdescription3(data))} label={'Description'} />
+                            </div>
                         </div>
                     </div>
 
+                    <div className='values_inputs_wrapper462'>
 
-                    <div className='cms_faq_list'>
-                        <p>Question 3</p>
-                        <div className='cms_faq_questions_wrapper'>
-                            <Input value={questionHeading3} onChange={((e) => setquestionHeading3(e.target.value))} label={'Heading'} placeholder={'Enter question Heading'} />
-                            <CustomTextEditor defaultValue={description3} onChange={((data) => setdescription3(data))} label={'Description'} />
-                        </div>
+                        <Input onChange={handleChange} value={staticData.quote} name={'quote'} label={'Quote'} placeholder={'Enter quote'} />
                     </div>
-                </div>
-
-                <div className='values_inputs_wrapper462'>
-
-                    <Input onChange={handleChange} value={staticData.quote} name={'quote'} label={'Quote'} placeholder={'Enter quote'} />
-                </div>
-            </div>
+                </>}
+            </div >
         </>
     )
 }

@@ -3,7 +3,7 @@ import Button from '../../Components/Button'
 import crossIcon from '../../assets/Frame 1984078314.svg'
 import { useParams } from 'react-router-dom'
 import Textarea from '../../Components/Textarea'
-const CardGameSingleChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuestionText, updateOptionText, dynamicOptions, postQuestions, errors, selectedIndex }) => {
+const CardGameSingleChoiceModal = ({ tabsFunction, addEmptyOption, removeOption, updateQuestionText, updateOptionText, dynamicOptions, postQuestions, errors, selectedIndex, loading }) => {
     const { moduleId } = useParams()
     return (
         <>
@@ -101,10 +101,12 @@ const CardGameSingleChoiceModal = ({ tabsFunction, addEmptyOption, removeOption,
 
                                     {/* Submit Button */}
                                     <div
-                                        className="change_cancel_wrapper"
-                                        style={{ margin: "20px 0 0 0" }}
+                                        className=""
+                                        style={{ margin: "20px 0 0 auto" }}
                                     >
                                         <Button
+                                            loading={loading}
+                                            loadingText='Adding...'
                                             onClick={() => postQuestions(moduleId)}
                                             children="Add"
                                         />

@@ -17,6 +17,8 @@ const WheelOfLifeModule = () => {
     const [deleteId, setdeletedId] = useState();
     const [deleteModal, setdeleteModal] = useState(false)
     const dropdownRef = useRef(null);
+    const [deleteloading, setdeleteLoading] = useState(false)
+    const [postloading, setpostLoading] = useState(false)
     const [singleData, setsingleData] = useState()
     const [lifeElements, setlifelements] = useState([])
     const dropdownFunction = (i) => {
@@ -70,7 +72,7 @@ const WheelOfLifeModule = () => {
     const addFunction = async (data, structureId, id) => {
         if (data && structureId && id) {
             try {
-                setloading(true)
+                setpostLoading(true)
                 const res = await postwheelofLifeElements({
                     name: data
                 }, structureId, id);
@@ -82,7 +84,7 @@ const WheelOfLifeModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         } else {
             toast.error('Required data not found!')
@@ -94,7 +96,7 @@ const WheelOfLifeModule = () => {
     const updateLifeElements = async (data, elementId) => {
         if (data && elementId) {
             try {
-                setloading(true)
+                setpostLoading(true)
                 const res = await updateWheelofLifeLifeElements({
                     name: data
                 }, moduleId, id, elementId);
@@ -106,7 +108,7 @@ const WheelOfLifeModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         } else {
             toast.error('Reuired data not found!')
@@ -143,7 +145,7 @@ const WheelOfLifeModule = () => {
     const deleteWord = async () => {
         if (deleteId) {
             try {
-                setloading(true)
+                setdeleteLoading(true)
                 const res = await deleteWheelofLifelement(moduleId, id, deleteId);
                 if (res?.success) {
                     setdeleteModal(false)
@@ -153,7 +155,7 @@ const WheelOfLifeModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setdeleteLoading(false)
             }
         } else {
             toast.error('Reuired data not found!')
@@ -168,9 +170,9 @@ const WheelOfLifeModule = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} title={'Delete element'} details={'Do you really want to delete this life element?'} onClick={deleteWord} />}
-            {isModal && <AddLifeElements setisModal={setisModal} addFunction={addFunction} />}
-            {editModal && <EditlifeelmentsModal updateLifeElements={updateLifeElements} handleChange={handleChange} setsingleData={setsingleData} singleData={singleData} seteditModal={seteditModal} />}
+            {deleteModal && <DeleteModal loading={deleteloading} setdeleteModal={setdeleteModal} title={'Delete element'} details={'Do you really want to delete this life element?'} onClick={deleteWord} />}
+            {isModal && <AddLifeElements loading={postloading} setisModal={setisModal} addFunction={addFunction} />}
+            {editModal && <EditlifeelmentsModal loading={postloading} updateLifeElements={updateLifeElements} handleChange={handleChange} setsingleData={setsingleData} singleData={singleData} seteditModal={seteditModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -190,50 +192,52 @@ const WheelOfLifeModule = () => {
                     </div>
                 </div>
 
-                <h3 style={{
-                    fontSize: '18px',
-                    color: 'var(--text-color)',
-                    margin: '20px 0',
-                    fontWeight: '600'
-                }}>Life Elements</h3>
-                {lifeElements?.length <= 0 && <p style={{
-                    textAlign: 'center'
-                }}>No elements found...</p>}
-                <div className='coaches_shift_card_wrapper' style={{
-                    gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr)'
-                }}>
-                    {lifeElements?.length > 0 && lifeElements?.map((e, i) => (
-                        <div ref={dropdownRef} key={i} className='coaches_shift_card' style={{
-                            padding: " 30px 0px",
-                            background: 'rgba(144, 155, 109, 0.15)',
-                            border: 'none'
-                        }} onClick={((event) => {
-                            event.stopPropagation()
-                            dropdownFunction(i)
-                        })}>
-                            <img style={{
-                                width: '55px'
-                            }} src={laptopImg} />
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                            <p>{e.name}</p>
+                {!loading && <>
+                    <h3 style={{
+                        fontSize: '18px',
+                        color: 'var(--text-color)',
+                        margin: '20px 0',
+                        fontWeight: '600'
+                    }}>Life Elements</h3>
+                    {lifeElements?.length <= 0 && <p style={{
+                        textAlign: 'center'
+                    }}>No elements found...</p>}
+                    <div className='coaches_shift_card_wrapper' style={{
+                        gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr)'
+                    }}>
+                        {lifeElements?.length > 0 && lifeElements?.map((e, i) => (
+                            <div ref={dropdownRef} key={i} className='coaches_shift_card' style={{
+                                padding: " 30px 0px",
+                                background: 'rgba(144, 155, 109, 0.15)',
+                                border: 'none'
+                            }} onClick={((event) => {
+                                event.stopPropagation()
+                                dropdownFunction(i)
+                            })}>
+                                <img style={{
+                                    width: '55px'
+                                }} src={laptopImg} />
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                <p>{e.name}</p>
 
-                            {dropdown == i && <div className='dropdown_wrapper662' style={{
-                                bottom: '0',
-                                top: '30px',
-                                right: '-30px',
-                                height: 'fit-content'
-                            }} onClick={((e) => e.stopPropagation())}>
-                                <small onClick={(() => navigate(`/dashboard/programs/single-program/${id}/life-element/${moduleId}/${e?.id}`))}>View</small>
-                                <small onClick={(() => {
-                                    getSingleData(i)
-                                    seteditModal(true)
-                                })}>Edit</small>
-                                <small onClick={(() => handleDelete(e?.id))}>Delete</small>
-                            </div>}
-                        </div>
+                                {dropdown == i && <div className='dropdown_wrapper662' style={{
+                                    bottom: '0',
+                                    top: '30px',
+                                    right: '-30px',
+                                    height: 'fit-content'
+                                }} onClick={((e) => e.stopPropagation())}>
+                                    <small onClick={(() => navigate(`/dashboard/programs/single-program/${id}/life-element/${moduleId}/${e?.id}`))}>View</small>
+                                    <small onClick={(() => {
+                                        getSingleData(i)
+                                        seteditModal(true)
+                                    })}>Edit</small>
+                                    <small onClick={(() => handleDelete(e?.id))}>Delete</small>
+                                </div>}
+                            </div>
 
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                </>}
             </div>
         </>
     )

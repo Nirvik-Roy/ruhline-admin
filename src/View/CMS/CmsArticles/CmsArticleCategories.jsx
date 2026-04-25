@@ -15,7 +15,8 @@ const CmsArticleCategories = () => {
     const [addArticle, setaddArticle] = useState(false);
     const [articleId, setarticleId] = useState()
     const [editArticle, seteditArticle] = useState(false);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [deleteloading,setdeleteloading] = useState(false)
     const [allArticles, setallArticles] = useState([]);
     const [deleteModal, setdeleteModal] = useState(false);
     const [deleteId, setdeleteId] = useState()
@@ -45,15 +46,17 @@ const CmsArticleCategories = () => {
 
     const deleteFunc = async () => {
         if (deleteId) {
-            setloading(true);
+            setdeleteloading(true);
             const res = await deleteCmsData('/admin/article/article-category', deleteId);
             if (res.success) {
-                setloading(false);
+                setdeleteloading(false);
                 setdeleteModal(false);
                 fetchArticleCmsData()
             } else {
-                setloading(false)
+                setdeleteloading(false)
             }
+        }else{
+            setdeleteloading(false)
         }
     }
 
@@ -78,7 +81,7 @@ const CmsArticleCategories = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} title={'Delete article categories'} details={'Do you really want to delete this category?'} onClick={deleteFunc} />}
+            {deleteModal && <DeleteModal loading={deleteloading} setdeleteModal={setdeleteModal} title={'Delete article categories'} details={'Do you really want to delete this category?'} onClick={deleteFunc} />}
             {addArticle && <AddArticleCategoriesModal fetchArticleCmsData={fetchArticleCmsData} addArticle={addArticle} setaddArticle={setaddArticle} />}
             {editArticle && <EditArticleModal articleId={articleId} editArticle={editArticle} fetchArticleCmsData={fetchArticleCmsData} seteditArticle={seteditArticle} />}
             <div className='dashboard_container'>
@@ -115,8 +118,8 @@ const CmsArticleCategories = () => {
                                 }}>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {addArticle?.length <= 0 && <td colSpan={12}>No article categories data found!.</td>}
+                    { !loading &&   <tbody>
+                            {allArticles?.length <= 0 && <td colSpan={12}>No article categories data found!.</td>}
                             {allArticles?.length > 0 && allArticles?.map((e, i) => (
                                 <tr>
                                     <td>
@@ -165,7 +168,7 @@ const CmsArticleCategories = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
 

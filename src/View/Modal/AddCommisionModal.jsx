@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 const AddCommisionModal = ({ setcommission }) => {
     const [commissionValue, setcommissionValue] = useState('');
     const [loading, setloading] = useState(false);
+    const [postloading,setpostloading] = useState(false)
     const [errors, seterrors] = useState()
     const [data, setdata] = useState()
     const fetchCommisionValue = async () => {
@@ -30,7 +31,7 @@ const AddCommisionModal = ({ setcommission }) => {
         }
 
         try {
-            setloading(true);
+            setpostloading(true);
 
             const res = await postGlobalCommission({
                 global_commission_rate: Number(commissionValue),
@@ -42,10 +43,9 @@ const AddCommisionModal = ({ setcommission }) => {
         } catch (error) {
             console.error(error);
         } finally {
-            setloading(false);
+            setpostloading(false);
         }
     };
-    console.log(errors)
     return (
         <>
             {loading && <Loaders />}
@@ -69,7 +69,7 @@ const AddCommisionModal = ({ setcommission }) => {
                     fontSize: '12px'
                 }}>*{errors?.global_commission_rate[0]}</small>}
                 <div >
-                    <Button onClick={handleSubmit} children={'Add'} styles={{
+                    <Button loading={postloading} loadingText='Adding...' onClick={handleSubmit} children={'Add'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import Textarea from '../../Components/Textarea'
-const AddCardModal = ({ setisModal, cardDescription, setcardDescription, cardName, setcardName, addCardFunc, addCardLoading }) => {
+const AddCardModal = ({ setisModal, cardDescription, setcardDescription, cardName, setcardName, addCardFunc, addCardLoading, postloading }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
@@ -21,7 +21,7 @@ const AddCardModal = ({ setisModal, cardDescription, setcardDescription, cardNam
                 </div>
                 <div onClick={addCardFunc}>
 
-                    <Button loading={addCardLoading} loadingText='Adding...' children={'Add'} styles={{
+                    <Button loading={addCardLoading || postloading} loadingText='Adding...' children={'Add'} styles={{
                     marginLeft: 'auto'
                 }} />
                 </div>

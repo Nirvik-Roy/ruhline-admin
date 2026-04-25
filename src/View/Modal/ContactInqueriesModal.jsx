@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Loaders from '../../Components/Loaders/Loaders';
 import { getSingleContactEnquires } from '../../utils/contactEnquires';
+import ModalLoader from '../../Components/Loaders/ModalLoader';
 
 const ContactInqueriesModal = ({ setisModal, contactId }) => {
   const [loading, setIsloading] = useState(false);
@@ -23,22 +24,27 @@ const ContactInqueriesModal = ({ setisModal, contactId }) => {
     }
   }, [contactId])
 
-  
+
   return (
     <>
-      {loading && <Loaders />}
       <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
-      <div className='modal_div'>
+      <div className='modal_div' style={{
+        minHeight:'30vh'
+      }}>
+        {loading && <ModalLoader />}
         <i class="fa-solid fa-xmark" onClick={(() => setisModal(false))}></i>
-        <div className='contact_modal_name_wrapper'>
-          <p>Name: <span>{singleContactData?.name}</span></p>
-          <p>Email: <span>{singleContactData?.email}</span></p>
-          <p>Phone: <span>+{singleContactData?.phone_country_code?.phone_code} {singleContactData?.phone}</span></p>
-        </div>
-        <div className='contact_message_wrapper'>
-          <p>Message: </p>
-          <span>{singleContactData?.message}</span>
-        </div>
+        {!loading && <>
+          <div className='contact_modal_name_wrapper'>
+            <p>Name: <span>{singleContactData?.name}</span></p>
+            <p>Email: <span>{singleContactData?.email}</span></p>
+            <p>Phone: <span>+{singleContactData?.phone_country_code?.phone_code} {singleContactData?.phone}</span></p>
+          </div>
+          <div className='contact_message_wrapper'>
+            <p>Message: </p>
+            <span>{singleContactData?.message}</span>
+          </div>
+        </>}
+
       </div>
     </>
   )

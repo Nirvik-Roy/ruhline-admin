@@ -4,7 +4,8 @@ import Input from '../../Components/Input'
 import CustomTextEditor from '../../Components/CustomTextEditor/CustomTextEditor'
 import { getAllSingleCmsData } from '../../utils/cms'
 import Loaders from '../../Components/Loaders/Loaders'
-const EditFaqModal = ({ editFunc, seteditModal, faqId }) => {
+import ModalLoader from '../../Components/Loaders/ModalLoader'
+const EditFaqModal = ({ editFunc, seteditModal, faqId, faqloading }) => {
     const [description, setdescription] = useState();
     const [heading, setheading] = useState('');
     const [loading, setloading] = useState(false)
@@ -13,8 +14,7 @@ const EditFaqModal = ({ editFunc, seteditModal, faqId }) => {
         try {
             setloading(true);
             const res = await getAllSingleCmsData('/admin/faq', faqId);
-            setSingleFaq(res?.data)
-            console.log(res?.data)
+            setSingleFaq(res?.data || {})
         } catch (err) {
             console.log(err)
         } finally {
@@ -34,12 +34,14 @@ const EditFaqModal = ({ editFunc, seteditModal, faqId }) => {
     }, [singleFaq])
     return (
         <>
-            {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => seteditModal(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'65vh'
+            }}>
+            {loading && <ModalLoader/>}
                 <h4>Update FAQ</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditModal(false))}></i>
-                <form className='modal_form'>
+                {!loading && <form className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
                         <div style={{
                             gridColumn: '1/-1'
@@ -57,10 +59,12 @@ const EditFaqModal = ({ editFunc, seteditModal, faqId }) => {
                     <div onClick={(() => editFunc({
                         description,
                         heading
-                    }))} className='change_cancel_wrapper' >
-                        <Button children={'Update'} />
+                    }))} className='' style={{
+                        marginLeft: 'auto'
+                    }} >
+                        <Button loading={faqloading} loadingText='Updating...' children={'Update'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

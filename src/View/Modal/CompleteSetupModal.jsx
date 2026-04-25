@@ -27,7 +27,6 @@ const CompleteSetupModal = ({ setsetupModal, intermediateId, fetchModules }) => 
     }
     return (
         <>
-            {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setsetupModal(false))}></div>
             <div className='modal_div'>
                 <h4>Complete Setup</h4>
@@ -45,7 +44,7 @@ const CompleteSetupModal = ({ setsetupModal, intermediateId, fetchModules }) => 
                     </div>
                 </div>
 
-                <Button onClick={handleSubmit} children={'Procced'} styles={{
+                <Button loading={loading} loadingText='Procceding...' onClick={handleSubmit} children={'Procced'} styles={{
                     marginLeft: 'auto',
                     marginTop: '30px'
                 }} />

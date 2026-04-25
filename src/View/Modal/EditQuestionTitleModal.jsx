@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Input from '../../Components/Input'
 import Button from '../../Components/Button'
 
-const EditQuestionTitleModal = ({ editQuestionSet, seteditTitleModal, singleSet }) => {
+const EditQuestionTitleModal = ({ editQuestionSet, seteditTitleModal, singleSet,loading }) => {
     console.log()
     const [title, settitle] = useState('')
     useEffect(() => {
@@ -17,9 +17,13 @@ const EditQuestionTitleModal = ({ editQuestionSet, seteditTitleModal, singleSet 
                 <i class="fa-solid fa-xmark" onClick={(() => seteditTitleModal(false))}></i>
                 <div style={{ margin: "20px 0" }}>
                     <Input label={'Question Title'} value={title} onChange={((e) => settitle(e.target.value))} placeholder={'Enter question title...'} />
-                    <div style={{ margin: "20px 0" }}>
-                        <Button onClick={(() => editQuestionSet(title))} children={'Update'} />
-                    </div>
+                  
+                        <Button loading={loading} loadingText='Updating...' styles={{
+                            marginLeft:'auto',
+                            marginTop:'20px',
+                            marginBottom:'20px'
+                        }} onClick={(() => editQuestionSet(title))} children={'Update'} />
+                   
 
                 </div>
 

@@ -5,6 +5,7 @@ import { getAllPrograms } from '../../utils/Program';
 import Loaders from '../../Components/Loaders/Loaders';
 import Select from 'react-select/base';
 import { postCoupons } from '../../utils/coupons';
+import ModalLoader from '../../Components/Loaders/ModalLoader';
 const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
     const [loading, setLoading] = useState(false);
     const [allPrograms, setallPrograms] = useState([]);
@@ -12,7 +13,8 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isActive, setisActive] = useState(false);
     const [applies, setapplies] = useState(false);
-    const [couponErrors, setcouponErrors] = useState()
+    const [couponErrors, setcouponErrors] = useState();
+    const [postloading, setpostloading] = useState(false)
     const [inputValue, setInputValue] = useState("");
     const [formData, setformData] = useState({
         code: '',
@@ -64,7 +66,7 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
 
     const handleSubmit = async () => {
         try {
-            setLoading(true)
+            setpostloading(true)
             const dummyData = { ...formData };
             dummyData.is_active = isActive ? 'true' : 'false',
                 dummyData.applies_to_all = applies ? 'true' : 'false';
@@ -73,7 +75,7 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
             }
             const res = await postCoupons(dummyData);
             setcouponErrors(res)
-            if(res.success){
+            if (res.success) {
                 fetchCoupons();
                 setCoupon(false)
             }
@@ -81,7 +83,7 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
         } catch (err) {
             console.log(err)
         } finally {
-            setLoading(false)
+            setpostloading(false)
         }
     }
     useEffect(() => {
@@ -91,12 +93,14 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
     }, [setCoupon])
     return (
         <>
-            {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setCoupon(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight: '90vh'
+            }}>
+                {loading && <ModalLoader />}
                 <h4>Add Coupon</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setCoupon(false))}></i>
-                <form className='modal_form'>
+                {!loading && <form className='modal_form'>
                     <div className='codeName_input'>
                         <Input name={'code'} onChange={handleChange} value={formData.code} label={'Coupon Code'} required={true} placeholder={'Enter coupon code'} />
 
@@ -221,10 +225,12 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
                                 }}>{couponErrors?.program_category_ids && couponErrors?.program_category_ids[0]}</small>}
                         </div>}
                     </div>
-                    <div className='change_cancel_wrapper' onClick={(() => handleSubmit())}>
-                        <Button children={'Add'} />
+                    <div className='' onClick={(() => handleSubmit())}>
+                        <Button loading={postloading} loadingText='Adding...' styles={{
+                            marginLeft: 'auto'
+                        }} children={'Add'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

@@ -14,6 +14,8 @@ const SingleMistakesIntermediate = () => {
     const [allMistakesData, setallMistakesData] = useState({})
     const [headline, setheadline] = useState("");
     const [loading, setloading] = useState(false)
+    const [postloading, setpostloading] = useState(false)
+
     const [mistakesData, setmistakesData] = useState([
         {
             id: 0 + 1,
@@ -50,7 +52,7 @@ const SingleMistakesIntermediate = () => {
     const handleSubmit = async () => {
         if (headline != '') {
             try {
-                setloading(true);
+                setpostloading(true);
                 const formData = new FormData();
                 formData.append('headline', headline || "")
                 if (mistakesData.length > 0) {
@@ -63,7 +65,7 @@ const SingleMistakesIntermediate = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error('Plz enter the headline field')
@@ -75,7 +77,7 @@ const SingleMistakesIntermediate = () => {
         try {
             setloading(true);
             const res = await getSpecificmistakesIntermediate(id, moduleId)
-            setallMistakesData(res?.data)
+            setallMistakesData(res?.data || {})
         } catch (err) {
             console.log(err)
         } finally {
@@ -118,45 +120,47 @@ const SingleMistakesIntermediate = () => {
                             }} />
                         </div> */}
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
                     </div>
                 </div>
+                {!loading && <>
+                    <div className='values_inputs_wrapper462'>
+                        <Input value={headline} onChange={((e) => setheadline(e.target.value))} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
+                    </div>
 
-                <div className='values_inputs_wrapper462'>
-                    <Input value={headline} onChange={((e) => setheadline(e.target.value))} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
-                </div>
 
-
-                <div className='cms_faq_wrapper'>
-                    {mistakesData?.length > 0 && mistakesData?.map((e, i) => (
-                        <div className='cms_faq_list'>
-                            <p>Mistake {i + 1}</p>
-                            <div className='cms_faq_questions_wrapper'>
-                                <CustomTextEditor defaultValue={e?.description} onChange={((data) => handleMistakes(data, e?.id))} label={'Description'} />
+                    <div className='cms_faq_wrapper'>
+                        {mistakesData?.length > 0 && mistakesData?.map((e, i) => (
+                            <div className='cms_faq_list'>
+                                <p>Mistake {i + 1}</p>
+                                <div className='cms_faq_questions_wrapper'>
+                                    <CustomTextEditor defaultValue={e?.description} onChange={((data) => handleMistakes(data, e?.id))} label={'Description'} />
+                                </div>
+                                <img onClick={(() => deleteOptions(e?.id))} style={i != 0 ? {
+                                    visibility: 'visible'
+                                } : {
+                                    visibility: 'hidden'
+                                }} src={crossIcon} />
                             </div>
-                            <img onClick={(() => deleteOptions(e?.id))} style={i != 0 ? {
-                                visibility: 'visible'
-                            } : {
-                                visibility: 'hidden'
-                            }} src={crossIcon} />
-                        </div>
-                    ))}
+                        ))}
 
-                </div>
+                    </div>
 
 
-                <div onClick={addMistakes}>
-                    <Button children={'Add Mistake'} styles={{
-                        color: 'var(--text-color)',
-                        border: '1px solid var(--primary-color)',
-                        padding: '12px 15px',
-                        background: 'transparent',
-                        fontSize: '13px'
-                    }} />
-                </div>
+                    <div onClick={addMistakes}>
+                        <Button children={'Add Mistake'} styles={{
+                            color: 'var(--text-color)',
+                            border: '1px solid var(--primary-color)',
+                            padding: '12px 15px',
+                            background: 'transparent',
+                            fontSize: '13px'
+                        }} />
+                    </div>
+                </>}
+
             </div>
         </>
     )

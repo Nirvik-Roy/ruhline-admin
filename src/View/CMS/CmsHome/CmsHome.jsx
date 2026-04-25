@@ -17,7 +17,8 @@ const CmsHome = () => {
             description: ''
         }
     ])
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [postloading,setpostloading] = useState(false)
     const [heroDescription, setherodescription] = useState('');
     const [aboutDescription, setaboutDescription] = useState('');
     const [heroSectionImage, setheroSectionImage] = useState();
@@ -79,7 +80,7 @@ const CmsHome = () => {
 
     const handleSubmit = async () => {
         try {
-            setloading(true);
+            setpostloading(true);
             const formData = new FormData();
             formData.append('section_01[hero_headline]', homepageFormData?.hero_headline || '');
 
@@ -163,7 +164,7 @@ const CmsHome = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -234,13 +235,13 @@ const CmsHome = () => {
                         </div>
 
                         <div onClick={(() => handleSubmit())}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
                         </div>
                     </div>
                 </div>
-                <div className='cms_home_sections_wrapper'>
+            { !loading &&   <div className='cms_home_sections_wrapper'>
                     <div className='section_dropdown_head'>
                         <h3>Section 1 (Hero Section)</h3>
                         <div className='brown_arrow_box'>
@@ -575,7 +576,7 @@ const CmsHome = () => {
                             <Input name={'articles_secondary_headline'} onChange={handleChange} value={homepageFormData.articles_secondary_headline} label={'Secondary Headline'} required={true} placeholder={'Enter article secondary headline'} />
                         </div>
                     </div>
-                </div>
+                </div>}
             </div>
         </>
     )

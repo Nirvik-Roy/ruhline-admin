@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getSingleBillingDetails } from '../../utils/billings'
 import Loaders from '../../Components/Loaders/Loaders'
+import ModalLoader from '../../Components/Loaders/ModalLoader'
 
 const ViewOrderModal = ({ id, setviewModal }) => {
     const [billingDetails, setbillingDetails] = useState([])
@@ -19,9 +20,12 @@ const ViewOrderModal = ({ id, setviewModal }) => {
     }, [])
     return (
         <>
-            {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setviewModal(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'30vh'
+            }}>
+            {loading && <ModalLoader/>}
+            <>
                 <h4>#{billingDetails?.id} <span style={billingDetails?.status == 'unpaid' ? {
                     fontSize: '11px',
                     fontWeight
@@ -153,6 +157,8 @@ const ViewOrderModal = ({ id, setviewModal }) => {
                     </p>
 
                 </div>
+
+            </>
             </div>
         </>
     )

@@ -9,7 +9,8 @@ const CmsAbout = () => {
     const [sectionAboutImage, setSectionAboutImage] = useState();
     const [sectionDescription, setsectionDescription] = useState()
     const [founderDescription, setfounderDescription] = useState();
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false)
     const [founderImage, setfounderImage] = useState();
     const [aboutData, setaboutData] = useState()
     const [missionData, setmissionData] = useState({
@@ -28,9 +29,8 @@ const CmsAbout = () => {
 
     const fetchData = async () => {
         try {
-            setloading(false)
+            setloading(true)
             const res = await getAllCmsData('/admin/about-page');
-            console.log(res?.data)
             setaboutData(res?.data)
         } catch (err) {
             console.log(err)
@@ -93,7 +93,7 @@ const CmsAbout = () => {
 
     const handleSubmit = async () => {
         try {
-            setloading(true)
+            setpostloading(true)
             const formData = new FormData()
             formData.append('section_one[headline]', missionData?.sectionHeadline || "")
             formData.append('section_one[secondary_headline]', missionData?.sectionSecondaryHeadline || "")
@@ -123,7 +123,7 @@ const CmsAbout = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
     return (
@@ -149,13 +149,13 @@ const CmsAbout = () => {
                         </div>
 
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
                         </div>
                     </div>
                 </div>
-                <CmsAboutSections onChange={onChange} missionData={missionData} founderImage={founderImage} setfounderImage={setfounderImage} setfounderDescription={setfounderDescription} founderDescription={founderDescription} sectionDescription={sectionDescription} setsectionDescription={setsectionDescription} sectionAboutImage={sectionAboutImage} setSectionAboutImage={setSectionAboutImage} setvalues={setvalues} values={values} />
+                {!loading && <CmsAboutSections onChange={onChange} missionData={missionData} founderImage={founderImage} setfounderImage={setfounderImage} setfounderDescription={setfounderDescription} founderDescription={founderDescription} sectionDescription={sectionDescription} setsectionDescription={setsectionDescription} sectionAboutImage={sectionAboutImage} setSectionAboutImage={setSectionAboutImage} setvalues={setvalues} values={values} />}
             </div>
         </>
     )

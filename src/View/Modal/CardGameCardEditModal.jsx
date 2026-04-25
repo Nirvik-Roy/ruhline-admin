@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import Textarea from '../../Components/Textarea'
-const CardGameCardEditModal = ({ modalFunc, cardDescription, setcardDescription, cardName, setcardName, updateCardFunc, singleData }) => {
+const CardGameCardEditModal = ({ modalFunc, cardDescription, setcardDescription, cardName, setcardName, updateCardFunc, singleData, postloading }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => modalFunc(0))}></div>
@@ -23,7 +23,7 @@ const CardGameCardEditModal = ({ modalFunc, cardDescription, setcardDescription,
                     updateCardFunc(singleData?.id)
                 })}>
 
-                    <Button children={'Update'} styles={{
+                    <Button loading={postloading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

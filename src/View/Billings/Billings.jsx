@@ -123,7 +123,7 @@ const Billings = () => {
 
               </tr>
             </thead>
-            <tbody>
+            {!loading && <tbody>
               {currentItems?.length <= 0 && <td colSpan={12}>No Billing data found...</td>}
               {currentItems?.map((e, i) => (
                 <tr>
@@ -198,7 +198,7 @@ const Billings = () => {
                   </td>
                 </tr>
               ))}
-            </tbody>
+            </tbody>}
           </table>
         </div>
         <Pagination pageCount={pageCount}

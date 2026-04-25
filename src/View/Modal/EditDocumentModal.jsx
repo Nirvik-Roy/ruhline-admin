@@ -5,9 +5,10 @@ import { useParams } from 'react-router-dom'
 import { editDocuments } from '../../utils/Program.js'
 import toast from 'react-hot-toast'
 
-const EditDocumentModal = ({ seteditModal, singleFile, editId, setloading, fetchDocuments }) => {
+const EditDocumentModal = ({ seteditModal, singleFile, editId, fetchDocuments }) => {
     const [docName, setdocName] = useState('')
-    const { id } = useParams()
+    const { id } = useParams();
+    const [postloading,setpostloading] = useState(false)
     useEffect(() => {
         setdocName(singleFile?.original_name || '')
     }, [singleFile])
@@ -16,7 +17,7 @@ const EditDocumentModal = ({ seteditModal, singleFile, editId, setloading, fetch
     const editDocumentApi = async () => {
         if (docName != '') {
             try {
-                setloading(true)
+                setpostloading(true)
                 const res = await editDocuments({
                     original_name: docName
                 }, id, singleFile?.program_structure_id, editId)
@@ -27,7 +28,7 @@ const EditDocumentModal = ({ seteditModal, singleFile, editId, setloading, fetch
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error('Document name is required...')
@@ -41,8 +42,10 @@ const EditDocumentModal = ({ seteditModal, singleFile, editId, setloading, fetch
                 <i onClick={(() => { seteditModal(false) })} class="fa-solid fa-xmark"></i>
                 <form className='modal_form'>
                     <Input onChange={((e) => setdocName(e.target.value))} value={docName} label={'Document Name'} />
-                    <div className='change_cancel_wrapper'>
-                        <Button onClick={editDocumentApi} children={'Update'} />
+                    <div className=''>
+                        <Button loading={postloading} loadingText='Updating...' styles={{
+                            marginLeft:'auto'
+                        }} onClick={editDocumentApi} children={'Update'} />
                     </div>
                 </form>
 

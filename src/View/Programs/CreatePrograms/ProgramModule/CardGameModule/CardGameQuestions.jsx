@@ -34,6 +34,9 @@ const CardGameQuestions = () => {
     const [deleteModal, setdeleteModal] = useState(false);
     const [singleQuestionId, setsingleQuestionId] = useState('')
     const [editQuestionId, seteditQuestionId] = useState('')
+    const [postLoading, setpostLoading] = useState(false);
+    const [titleLoading, settitleLoading] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const [dynamicOptions, setdynamicOptions] = useState(
         [
             {
@@ -275,7 +278,7 @@ const CardGameQuestions = () => {
     const postQuestions = async () => {
         if (id) {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData()
                 dynamicOptions[selectedIndex]?.questions.forEach((element) => {
                     if (element.type && element.question_text) {
@@ -448,7 +451,7 @@ const CardGameQuestions = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         }
     }
@@ -456,7 +459,7 @@ const CardGameQuestions = () => {
     const editQuestions = async () => {
         if (id && editQuestionId && singleQuestionId) {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData()
                 formData.append(`type`, singleQuestion.type)
                 formData.append('question_text', singleQuestion.question_text)
@@ -481,7 +484,7 @@ const CardGameQuestions = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         }
     }
@@ -675,7 +678,7 @@ const CardGameQuestions = () => {
     const editQuestionSet = async (data) => {
         if (data) {
             try {
-                setloading(true)
+                settitleLoading(true)
                 const res = await editCardGameQuestionSet({
                     title: data
                 }, moduleId, id, questionId)
@@ -687,7 +690,7 @@ const CardGameQuestions = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                settitleLoading(false)
             }
         } else {
             toast.error('Plz enter the field...')
@@ -707,7 +710,7 @@ const CardGameQuestions = () => {
 
     const deleteFunc = async () => {
         try {
-            setloading(true)
+            setdeleteLoading(true)
             const res = await deleteQuestionsInsideSet(moduleId, id, deleteId, questionId)
             console.log(res)
             if (res?.success) {
@@ -717,7 +720,7 @@ const CardGameQuestions = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setdeleteLoading(false)
         }
     }
 
@@ -742,23 +745,23 @@ const CardGameQuestions = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deleteFunc} title={'Delete question?'} details={'Do you really want to delete this question?'} />}
-            {editTitletModal && <EditQuestionTitleModal singleSet={singleSet} seteditTitleModal={seteditTitleModal} editQuestionSet={editQuestionSet} />}
-            {tabs.editmultiChoice && <EditMultiChoiceModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} setdeleteModal={setdeleteModal} onClick={deleteFunc} title={'Delete question?'} details={'Do you really want to delete this question?'} />}
+            {editTitletModal && <EditQuestionTitleModal loading={titleLoading} singleSet={singleSet} seteditTitleModal={seteditTitleModal} editQuestionSet={editQuestionSet} />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal loading={postLoading} editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editropdown && <EditDropdownModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editropdown && <EditDropdownModal loading={postLoading} editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editsingleChoice && <EditSingleChoiceModal editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editsingleChoice && <EditSingleChoiceModal loading={postLoading} editQuestions={editQuestions} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editdescriptive && <EditDescriptiveModal editQuestions={editQuestions} editErrors={editErrors} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editdescriptive && <EditDescriptiveModal loading={postLoading} editQuestions={editQuestions} editErrors={editErrors} singleData={singleQuestion} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.descriptive && <CardGameDescriptiveModal errors={errors} postQuestions={postQuestions} selectedIndex={selectedIndex} updateQuestionText={updateQuestionText} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.descriptive && <CardGameDescriptiveModal loading={postLoading} errors={errors} postQuestions={postQuestions} selectedIndex={selectedIndex} updateQuestionText={updateQuestionText} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.multiChoice && <CardGameMultichoiceModal errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+            {tabs.multiChoice && <CardGameMultichoiceModal loading={postLoading} errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
 
-            {tabs.singleChoice && <CardGameSingleChoiceModal errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+            {tabs.singleChoice && <CardGameSingleChoiceModal loading={postLoading} errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
 
-            {tabs.dropdown && <CardGameDropdownModal errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
+            {tabs.dropdown && <CardGameDropdownModal loading={postLoading} errors={errors} postQuestions={postQuestions} updateOptionText={updateOptionText} dynamicOptions={dynamicOptions} updateQuestionText={updateQuestionText} addEmptyOption={addEmptyOption} removeOption={removeOption} selectedIndex={selectedIndex} tabsFunction={tabsFunction} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -767,7 +770,7 @@ const CardGameQuestions = () => {
                     </div>
                 </div>
 
-                <div className='card_game_questions_list_wrapper'>
+                {!loading && <div className='card_game_questions_list_wrapper'>
                     {allQuestionSets?.length > 0 && allQuestionSets?.map((e, i) => (
                         <>
 
@@ -860,7 +863,7 @@ const CardGameQuestions = () => {
                                         marginTop: '-10px',
                                         color: 'var(--primary-color)'
                                     }}>No questions added...</p>}
-                                    {e?.questions?.map((element,index) => {
+                                    {e?.questions?.map((element, index) => {
                                         return (
                                             <>
                                                 <div key={index} className='added_modules_wrapper'>
@@ -905,7 +908,7 @@ const CardGameQuestions = () => {
                         </>
                     ))}
 
-                </div>
+                </div>}
             </div>
         </>
     )

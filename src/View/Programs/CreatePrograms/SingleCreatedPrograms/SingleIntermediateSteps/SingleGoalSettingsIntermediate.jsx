@@ -13,6 +13,7 @@ const SingleGoalSettingsIntermediate = () => {
     const [description2, setdescription2] = useState("");
     const [goalSettingsData, setgoalSettingsData] = useState({})
     const [loading, setloading] = useState(false)
+    const [postloading, setpostloading] = useState(false)
     const [goalData, setgoalData] = useState({
         headline: "",
         quote: "",
@@ -63,7 +64,7 @@ const SingleGoalSettingsIntermediate = () => {
     const handleSubmit = async () => {
         if (goalData?.headline != '' && goalData?.quote != '' && goalData?.sub_heading_1 && goalData?.sub_heading_2) {
             try {
-                setloading(true)
+                setpostloading(true)
                 const formData = new FormData()
                 formData.append('headline', goalData.headline || "")
                 formData.append('quote', goalData.quote || "")
@@ -80,7 +81,7 @@ const SingleGoalSettingsIntermediate = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error("Plz enter all the required fileds")
@@ -92,7 +93,7 @@ const SingleGoalSettingsIntermediate = () => {
         try {
             setloading(true);
             const res = await getSpecificgoalSettingIntermediate(id, moduleId)
-            setgoalSettingsData(res?.data)
+            setgoalSettingsData(res?.data || {})
         } catch (err) {
             console.log(err)
         } finally {
@@ -139,7 +140,7 @@ const SingleGoalSettingsIntermediate = () => {
                             }} />
                         </div> */}
                         <div>
-                            <Button onClick={handleSubmit} children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' onClick={handleSubmit} children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -147,52 +148,55 @@ const SingleGoalSettingsIntermediate = () => {
 
 
                 </div>
-                <div className='values_inputs_wrapper462'>
-                    <Input value={goalData.headline} name={'headline'} onChange={handleChange} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
-                </div>
-                <div className='values_inputs_wrapper462'>
-                    <Input value={goalData.quote} name={'quote'} onChange={handleChange} label={'Quote'} required={'true'} placeholder={'Enter quote'} />
-                </div>
+                {!loading && <>
+                    <div className='values_inputs_wrapper462'>
+                        <Input value={goalData.headline} name={'headline'} onChange={handleChange} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
+                    </div>
+                    <div className='values_inputs_wrapper462'>
+                        <Input value={goalData.quote} name={'quote'} onChange={handleChange} label={'Quote'} required={'true'} placeholder={'Enter quote'} />
+                    </div>
 
-                <div className='values_inputs_wrapper462'>
-                    <Input value={goalData.sub_heading_1} name={'sub_heading_1'} onChange={handleChange} label={'Sub Heading 1'} required={'true'} placeholder={'Enter sub heading 1'} />
-                </div>
+                    <div className='values_inputs_wrapper462'>
+                        <Input value={goalData.sub_heading_1} name={'sub_heading_1'} onChange={handleChange} label={'Sub Heading 1'} required={'true'} placeholder={'Enter sub heading 1'} />
+                    </div>
 
 
 
-                <div className='cms_faq_wrapper'>
-                    {optionsData?.length > 0 && optionsData?.map((e, i) => (
-                        <div className='cms_faq_list'>
-                            <p>Option {i + 1}</p>
-                            <div className='cms_faq_questions_wrapper'>
-                                <CustomTextEditor onChange={((data) => handleOptions(data, e?.id))} defaultValue={e?.description} label={'Description'} />
+                    <div className='cms_faq_wrapper'>
+                        {optionsData?.length > 0 && optionsData?.map((e, i) => (
+                            <div className='cms_faq_list'>
+                                <p>Option {i + 1}</p>
+                                <div className='cms_faq_questions_wrapper'>
+                                    <CustomTextEditor onChange={((data) => handleOptions(data, e?.id))} defaultValue={e?.description} label={'Description'} />
+                                </div>
+                                <img onClick={(() => deleteOptions(e?.id))} style={i != 0 ? { visibility: "visible" } : {
+                                    visibility: 'hidden'
+                                }} src={crossIcon} />
                             </div>
-                            <img onClick={(() => deleteOptions(e?.id))} style={i != 0 ? { visibility: "visible" } : {
-                                visibility: 'hidden'
-                            }} src={crossIcon} />
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
 
 
-                <div onClick={addOptions}>
-                    <Button children={'Add Options'} styles={{
-                        color: 'var(--text-color)',
-                        border: '1px solid var(--primary-color)',
-                        padding: '12px 15px',
-                        background: 'transparent',
-                        fontSize: '13px'
-                    }} />
-                </div>
+                    <div onClick={addOptions}>
+                        <Button children={'Add Options'} styles={{
+                            color: 'var(--text-color)',
+                            border: '1px solid var(--primary-color)',
+                            padding: '12px 15px',
+                            background: 'transparent',
+                            fontSize: '13px'
+                        }} />
+                    </div>
 
-                <div className='values_inputs_wrapper462'>
-                    <Input label={'Sub Heading 2'} value={goalData.sub_heading_2} name={'sub_heading_2'} onChange={handleChange} required={'true'} placeholder={'Enter sub heading 2'} />
-                </div>
+                    <div className='values_inputs_wrapper462'>
+                        <Input label={'Sub Heading 2'} value={goalData.sub_heading_2} name={'sub_heading_2'} onChange={handleChange} required={'true'} placeholder={'Enter sub heading 2'} />
+                    </div>
 
 
-                <div className='values_inputs_wrapper462'>
-                    <CustomTextEditor defaultValue={description2} onChange={((data) => setdescription2(data))} label={'Description 2'} />
-                </div>
+                    <div className='values_inputs_wrapper462'>
+                        <CustomTextEditor defaultValue={description2} onChange={((data) => setdescription2(data))} label={'Description 2'} />
+                    </div>
+
+                </>}
             </div>
         </>
     )

@@ -15,7 +15,8 @@ const Coupons = () => {
     const [editCoupon, seteditCoupon] = useState(false);
     const dropdownRef = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [deletedId, setdeletedId] = useState()
+    const [deletedId, setdeletedId] = useState();
+    const [deleteloading, setdeleteloading] = useState(false)
     const [allCoupondata, setallCouponData] = useState([]);
     const [deleteModal, setdeleteModal] = useState(false)
     const indexFunction = (i) => {
@@ -60,7 +61,7 @@ const Coupons = () => {
 
     const deleteFunc = async () => {
         try {
-            setLoading(true)
+            setdeleteloading(true)
             const res = await deleteCoupons(deletedId);
             if (res.success) {
                 setdeleteModal(false)
@@ -69,7 +70,7 @@ const Coupons = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setLoading(false)
+            setdeleteloading(false)
         }
     }
     // Pagination logic & Search Logic...
@@ -96,7 +97,7 @@ const Coupons = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal title={'Delete coupons'} details={"Do you really want to delete this coupon?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
+            {deleteModal && <DeleteModal loading={deleteloading} title={'Delete coupons'} details={"Do you really want to delete this coupon?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
             {coupon && <AddCouponModal fetchCoupons={fetchCoupons} setCoupon={setCoupon} />}
             {editCoupon && <EditCouponModal fetchCoupons={fetchCoupons} couponId={couponId} seteditCoupon={seteditCoupon} />}
             <div className='dashboard_container'>
@@ -131,7 +132,7 @@ const Coupons = () => {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {currentItems.length <= 0 && <td colSpan={12} style={{
                                 textAlign: 'center'
                             }}>No coupons available</td>}
@@ -172,7 +173,7 @@ const Coupons = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}

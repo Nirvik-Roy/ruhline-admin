@@ -55,7 +55,6 @@ const SinglePayModal = ({ paymentFunction, checkOutId, getSinglePayoutFunc, upda
 
     return (
         <>
-            {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => paymentFunction(0))}></div>
             <div className='modal_div'>
                 <h4>#{checkOutId}</h4>
@@ -106,11 +105,11 @@ const SinglePayModal = ({ paymentFunction, checkOutId, getSinglePayoutFunc, upda
                         </div>
                     </div>
 
-                    {!update && <Button onClick={payNowFunc} children={'Mark as Paid'} styles={{
+                    {!update && <Button loading={loading} loadingText='Loading...' onClick={payNowFunc} children={'Mark as Paid'} styles={{
                         marginLeft: 'auto'
                     }} />}
 
-                    {update && <Button onClick={editPayment} children={'Update'} styles={{
+                    {update && <Button loading={loading} loadingText='Updating...' onClick={editPayment} children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />}
                 </div>

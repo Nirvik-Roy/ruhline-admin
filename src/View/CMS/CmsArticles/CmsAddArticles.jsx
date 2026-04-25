@@ -13,6 +13,7 @@ const CmsAddArticles = () => {
     const [dynamicFormstructure, setdynamicformstructure] = useState([]);
     const [articleCategories, setarticleCategories] = useState([])
     const [textAreaContent, settextareacontent] = useState();
+    const [postloading,setpostloading] = useState(false)
     const [articlesErrors, setarticlesErrors] = useState()
     const [fixedDescriptionContent, setfixedDescriptionContent] = useState()
     const [facebookCheck, setfacebookCheck] = useState();
@@ -83,12 +84,12 @@ const CmsAddArticles = () => {
 
     const handleSubmit = async () => {
         try {
-            setloading(true);
+            setpostloading(true);
             const dummyData = { ...fixedData };
             dummyData.share_facebook = facebookCheck ? 'true' : 'false',
-            dummyData.share_twitter = twitterCheck ? 'true' : 'false',
-            dummyData.share_linkedin = linkedinCheck ? 'true' : 'false',
-            setfixedData(dummyData)
+                dummyData.share_twitter = twitterCheck ? 'true' : 'false',
+                dummyData.share_linkedin = linkedinCheck ? 'true' : 'false',
+                setfixedData(dummyData)
             const formData = new FormData();
             { dummyData.article_category_id && formData.append('article_category_id', dummyData.article_category_id); }
             { dummyData.name && formData.append('name', dummyData.name); }
@@ -127,7 +128,7 @@ const CmsAddArticles = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
     return (
@@ -141,7 +142,7 @@ const CmsAddArticles = () => {
                         <h2>Add Articles / Add Article</h2>
                         <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/articles'))}>Articles</span></small>
                     </div>
-                    <div className='coaches_button_wapper'>
+                  { !loading && <div className='coaches_button_wapper'>
                         <div>
                             <Button children={'Cancel'} styles={{
                                 color: 'var(--text-color)',
@@ -153,23 +154,23 @@ const CmsAddArticles = () => {
                         </div>
 
                         <div onClick={(() => handleSubmit())}>
-                            <Button children={'Add'} styles={{
+                            <Button loadingText='Adding...' loading={postloading} children={'Add'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
-                    </div>
+                    </div>}
                 </div>
-                <form>
+                {!loading && <form>
                     <div className='add_articles_wrapper'>
                         <div className='articles_form_left'>
                             <div>
                                 <Input name={'name'} value={fixedData.name} onChange={fixedDataChange} label={'Article Name'} required={true} placeholder={'Enter article name'} />
 
-                                {articlesErrors?.name &&   <small style={{
-                                    color:'red',
-                                    marginLeft:'15px',
-                                    marginTop:'10px'
-                                }}>{articlesErrors?.name && articlesErrors?.name[0] }</small>}
+                                {articlesErrors?.name && <small style={{
+                                    color: 'red',
+                                    marginLeft: '15px',
+                                    marginTop: '10px'
+                                }}>{articlesErrors?.name && articlesErrors?.name[0]}</small>}
                             </div>
 
                             <div className='input_form'>
@@ -243,7 +244,7 @@ const CmsAddArticles = () => {
                                     <input checked={linkedinCheck} onChange={(() => setlinkedinCheck(!linkedinCheck))} type='checkbox' />
                                     <span>LinkedIn</span>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -330,7 +331,7 @@ const CmsAddArticles = () => {
                         }} />
                     </div>
 
-                </form>
+                </form>}
 
             </div>
         </>

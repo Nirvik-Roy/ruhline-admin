@@ -9,10 +9,11 @@ const CmsTermsConditions = () => {
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
     const [contentErrors, setcontentErrors] = useState();
+    const [postloading,setpostloading] = useState(false)
     const [content, setcontent] = useState('')
     const updatePrivacy = async () => {
         try {
-            setloading(true)
+            setpostloading(true)
             const res = await putAllCmsData('/admin/legal-page/terms-conditions', {
                 content: `${content}`
             });
@@ -20,7 +21,7 @@ const CmsTermsConditions = () => {
         } catch (err) {
             console.log(err);
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -61,20 +62,20 @@ const CmsTermsConditions = () => {
                             }} />
                         </div>
                         <div>
-                            <Button onClick={updatePrivacy} children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' onClick={updatePrivacy} children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
                         </div>
                     </div>
                 </div>
-                <div className='custom_editor_wrapper'>
+           { !loading &&    <div className='custom_editor_wrapper'>
                     <CustomTextEditor defaultValue={content} onChange={((data) => setcontent(data))} label={'Terms & Conditions Description'} required={true} />
                     {contentErrors?.content && <small style={{
                         color: 'red',
                         marginTop: '10px',
                         marginLeft: '15px',
                     }}>*{contentErrors?.content && contentErrors?.content[0]}</small>}
-                </div>
+                </div>}
 
             </div>
         </>

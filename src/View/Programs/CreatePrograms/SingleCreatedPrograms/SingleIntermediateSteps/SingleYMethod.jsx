@@ -14,6 +14,7 @@ const SingleYMethod = () => {
     const [headline, setheadLine] = useState('');
     const [ymethodData, setymethodData] = useState({})
     const [loading, setloading] = useState(false)
+    const [postloading, setpostloading] = useState(false)
     const [stepOptions, setstepOptions] = useState([
         {
             id: 0 + 1,
@@ -50,7 +51,7 @@ const SingleYMethod = () => {
     const handleSubmit = async () => {
         if (headline) {
             try {
-                setloading(true)
+                setpostloading(true)
                 const formData = new FormData();
                 formData.append('headline', headline)
                 if (stepOptions?.length > 0) {
@@ -59,12 +60,12 @@ const SingleYMethod = () => {
                         formData.append(`steps[${index}][sort_order]`, index)
                     })
                 }
-                const res = await putSpecificYmethod(formData,id,moduleId);
+                const res = await putSpecificYmethod(formData, id, moduleId);
                 console.log(res)
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
 
         } else {
@@ -119,44 +120,46 @@ const SingleYMethod = () => {
                             }} />
                         </div> */}
                         <div>
-                            <Button onClick={handleSubmit} children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' onClick={handleSubmit} children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
                     </div>
                 </div>
+                {!loading && <>
+                    <div className='values_inputs_wrapper462'>
+                        <Input value={headline} onChange={((e) => setheadLine(e.target.value))} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
+                    </div>
 
-                <div className='values_inputs_wrapper462'>
-                    <Input value={headline} onChange={((e) => setheadLine(e.target.value))} label={'Headline'} required={'true'} placeholder={'Enter headline'} />
-                </div>
 
-
-                <div className='cms_faq_wrapper'>
-                    {stepOptions?.length > 0 && stepOptions?.map((e, i) => {
-                        return (
-                            <div key={e?.id} className='cms_faq_list'>
-                                <p>Step {i + 1}</p>
-                                <div className='cms_faq_questions_wrapper'>
-                                    <CustomTextEditor name={'description'} defaultValue={e?.description} label={'Description'} onChange={((data) => handleSteps(data, e?.id))} />
+                    <div className='cms_faq_wrapper'>
+                        {stepOptions?.length > 0 && stepOptions?.map((e, i) => {
+                            return (
+                                <div key={e?.id} className='cms_faq_list'>
+                                    <p>Step {i + 1}</p>
+                                    <div className='cms_faq_questions_wrapper'>
+                                        <CustomTextEditor name={'description'} defaultValue={e?.description} label={'Description'} onChange={((data) => handleSteps(data, e?.id))} />
+                                    </div>
+                                    {<img onClick={(() => deleteSteps(e?.id))} style={i != 0 ? {
+                                        visibility: 'visible'
+                                    } : { visibility: "hidden" }} src={crossIcon} />}
                                 </div>
-                                {<img onClick={(() => deleteSteps(e?.id))} style={i != 0 ? {
-                                    visibility: 'visible'
-                                } : { visibility: "hidden" }} src={crossIcon} />}
-                            </div>
-                        )
-                    })}
-                </div>
+                            )
+                        })}
+                    </div>
 
 
-                <div onClick={addSteps}>
-                    <Button children={'Add step'} styles={{
-                        color: 'var(--text-color)',
-                        border: '1px solid var(--primary-color)',
-                        padding: '12px 15px',
-                        background: 'transparent',
-                        fontSize: '13px'
-                    }} />
-                </div>
+                    <div onClick={addSteps}>
+                        <Button children={'Add step'} styles={{
+                            color: 'var(--text-color)',
+                            border: '1px solid var(--primary-color)',
+                            padding: '12px 15px',
+                            background: 'transparent',
+                            fontSize: '13px'
+                        }} />
+                    </div>
+                </>}
+
             </div>
         </>
     )

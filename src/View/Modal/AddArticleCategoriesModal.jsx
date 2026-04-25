@@ -75,7 +75,7 @@ const AddArticleCategoriesModal = ({ setaddArticle, addArticle, fetchArticleCmsD
                 </div>
                 <div onClick={(() => handleSubmit())}>
 
-                    <Button children={'Add'} styles={{
+                    <Button loading={loading} loadingText='Adding...' children={'Add'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

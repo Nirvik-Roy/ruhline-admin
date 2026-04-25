@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../Components/Button'
 import { Document, Page, pdfjs } from "react-pdf";
 import upload from '../../assets/Vector (8).svg'
@@ -7,6 +7,7 @@ import { deleteDocuments, getDocuments, postDocuments } from '../../utils/Progra
 import { useParams } from 'react-router-dom';
 import EditDocumentModal from './EditDocumentModal';
 import DeleteModal from '../../Components/DeleteModal/DeleteModal.jsx'
+import ModalLoader from '../../Components/Loaders/ModalLoader.jsx';
 pdfjs.GlobalWorkerOptions.workerSrc =
     `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId }) => {
@@ -16,6 +17,8 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
     const [singleFile, setsingleFile] = useState()
     const [editModal, seteditModal] = useState(false)
     const [loading, setloading] = useState(false)
+    const [postloading, setpostloading] = useState(false)
+    const [deleteLoading, setdeletloading] = useState(false)
     const [structureId, setstructureId] = useState()
     const [deleteModal, setdeleteModal] = useState(false)
     const [documentId, setdocumentId] = useState()
@@ -47,7 +50,6 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
         try {
             setloading(true)
             const res = await getDocuments(id, documentModuleId)
-            console.log(res)
             if (res?.success) {
                 setFiles(res?.data?.data)
             }
@@ -66,7 +68,7 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
     }, [])
     const handleDocumentsApi = async () => {
         try {
-            setloading(true)
+            setpostloading(true)
             const formData = new FormData()
             if (files?.length == 1) {
                 if (files[0] instanceof File) {
@@ -93,7 +95,7 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -116,7 +118,7 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
 
     const deleteFunc = async () => {
         try {
-            setloading(true)
+            setdeletloading(true)
             const res = await deleteDocuments(id, structureId, documentId)
             if (res?.success) {
                 fetchDocuments()
@@ -125,7 +127,7 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setdeletloading(false)
         }
     }
 
@@ -137,9 +139,8 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
     }
     return (
         <>
-            {editModal && <EditDocumentModal fetchDocuments={fetchDocuments} setloading={setloading} editId={editId} singleFile={singleFile} seteditModal={seteditModal} />}
-            {deleteModal && <DeleteModal onClick={deleteFunc} setdeleteModal={setdeleteModal} title={'Delete Document'} details={'Do you really want to delete this document?'} />}
-            {loading && <Loaders />}
+            {editModal && <EditDocumentModal fetchDocuments={fetchDocuments}  editId={editId} singleFile={singleFile} seteditModal={seteditModal} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} onClick={deleteFunc} setdeleteModal={setdeleteModal} title={'Delete Document'} details={'Do you really want to delete this document?'} />}
             <div className='modal_wrapper'></div>
             <div className='modal_div' style={(editModal || deleteModal) ? { display: 'none' } : {}}>
                 <h4>Upload Documents</h4>
@@ -154,11 +155,19 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
                                 accept='.pdf' type='file' multiple />
                         </div>
                     </div>
+
+                  { loading && <div style={{
+                        position:'relative',
+                        marginTop:'50px'
+                    }}>
+                        {loading && <ModalLoader />}
+
+                    </div>}
                     {fileErrors?.file && <small style={{
                         fontSize: '13px',
                         color: 'red'
                     }}>*{'At least one file is required'}</small>}
-                    <div cla style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+                    {!loading && <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
                         {files?.length > 0 && files?.map((file, index) => (
                             <div
                                 key={index}
@@ -293,9 +302,11 @@ const UploadDocumentsModal = ({ setuploadModal, uploadModal, documentModuleId })
                                 </div>
                             </div>
                         ))}
-                    </div>
-                    <div className='change_cancel_wrapper'>
-                        <Button onClick={handleDocumentsApi} children={'Upload'} />
+                    </div>}
+                    <div className=''>
+                        <Button loading={postloading} loadingText='Uploading...' styles={{
+                            marginLeft: 'auto'
+                        }} onClick={handleDocumentsApi} children={'Upload'} />
                     </div>
                 </form>
             </div>

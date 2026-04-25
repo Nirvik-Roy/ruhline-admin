@@ -50,20 +50,18 @@ const Payouts = () => {
 
     const offset = currentPage * itemsPerPage;
 
-    const currentItems = items?.slice(offset, offset + itemsPerPage);
+    const currentItems = items?.slice(offset, offset + itemsPerPage) || [];
 
     const pageCount = Math.ceil(items?.length / itemsPerPage);
 
     const handlePageChange = (selectedItem) => {
         setCurrentPage(selectedItem.selected);
     };
-
     return (
         <>
             {commission && <AddCommisionModal setcommission={setcommission} />}
             {modalisOpen && <PayoutViewModal setmodalIsOpen={setmodalIsOpen} />}
             {modalIsOpen2 && <PayoutFrequencyModal payoutFrequency={payoutFrequency} callPayoutFunction={callPayoutFunction} setmodalIsOpen={setmodalIsOpen2} />}
-            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -122,9 +120,9 @@ const Payouts = () => {
                                 }}>View</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        {(currentItems?.length <=0 && !loading) && <td colSpan={12}>No payout details found..</td>}
-                            {currentItems.map((e) => (
+                        {!loading && <tbody>
+                            {currentItems?.length <= 0 && <td colSpan={12}>No payout details found..</td>}
+                            {currentItems?.map((e) => (
                                 <tr>
                                     <td>
                                         <div className='customer_wrapper' style={{
@@ -187,7 +185,7 @@ const Payouts = () => {
                                 }}>Month: January, 2026</td>
                             </tr> */}
 
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}
