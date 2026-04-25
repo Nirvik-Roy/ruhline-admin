@@ -7,9 +7,11 @@ import { getAllPhoneCountry } from '../../utils/location'
 import Loaders from '../../Components/Loaders/Loaders'
 import { addCustomer } from '../../utils/cutomer'
 import toast from 'react-hot-toast'
+import ModalLoader from '../../Components/Loaders/ModalLoader'
 const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
     const [passwordMsg, setPasswordMsg] = useState("");
     const [isLoading, setisLoading] = useState(false);
+    const [postLoading, setpostLoading] = useState(false)
     const [errors, setErrrors] = useState([]);
     const [phoneData, setPhoneData] = useState([]);
     const [type2, setType2] = useState()
@@ -80,7 +82,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
     }
 
     const handleSubmit = async () => {
-        setisLoading(true)
+        setpostLoading(true)
         try {
             if (formData.first_name != '' && formData.last_name != '' && formData.email != '' && formData.password != '' && formData.password_confirmation != '' && formData.phone_country_code_id != '' && formData.phone != '') {
                 const formdataNew = new FormData();
@@ -91,7 +93,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                 formdataNew.append("phone_country_code_id", formData.phone_country_code_id);
                 formdataNew.append("password", formData.password);
                 formdataNew.append("password_confirmation", formData.password_confirmation);
-                { file && formdataNew.append('profile_image', file) }
+                { file instanceof File && formdataNew.append('profile_image', file) }
                 const result = await addCustomer(formdataNew)
                 setErrrors(result)
                 if (result?.success) {
@@ -104,17 +106,19 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
         } catch (err) {
             console.log(err)
         } finally {
-            setisLoading(false)
+            setpostLoading(false)
         }
     }
     return (
         <>
-            {isLoading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setaddCustomer(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight: '80vh'
+            }}>
+                {isLoading && <ModalLoader/>}
                 <h4>Add Customer</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setaddCustomer(false))}></i>
-                <form className='modal_form'>
+                {!isLoading && <form onSubmit={((e) => e.preventDefault())} className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
                         <div>
                             <Input name={'first_name'} value={formData.first_name} onChange={handleChange} label={'First Name'} required={true} placeholder={'Enter first name'} />
@@ -260,10 +264,12 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                             color: 'red'
                         }}>{errors?.profile_image && errors?.profile_image[0]}</small>
                     </div>
-                    <div onClick={handleSubmit} className='change_cancel_wrapper'>
-                        <Button children={'Add'} />
+                    <div onClick={handleSubmit} className=''>
+                        <Button loading={postLoading} loadingText='Adding...' children={'Add'} styles={{
+                            marginLeft: 'auto'
+                        }} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

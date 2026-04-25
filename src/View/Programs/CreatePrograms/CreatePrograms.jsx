@@ -22,6 +22,7 @@ const CreatePrograms = () => {
     const [index, setIndex] = useState(1);
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false);
     const [allcoach, setallCoach] = useState([])
     const [data, setdata] = useState()
     const [dynamicFaq, setdynamicFaq] = useState([])
@@ -161,12 +162,12 @@ const CreatePrograms = () => {
             tag: i === 5 ? true : false
         })
     }
-    
+
 
     const handleSubmit = async () => {
 
         try {
-            setloading(true)
+            setpostloading(true)
             const formData = new FormData()
             formData.append('name', staticdata.name)
             if (childCategoryId === '') {
@@ -269,14 +270,14 @@ const CreatePrograms = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Create Program</h2>
@@ -293,7 +294,7 @@ const CreatePrograms = () => {
                             }} />
                         </div> */}
                         <div>
-                            <Button onClick={handleSubmit} children={'Create'} styles={{
+                            <Button loading={postloading} loadingText='Creating...' onClick={handleSubmit} children={'Create'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -587,7 +588,7 @@ const CreatePrograms = () => {
 
                     </div>
                 </form>
-            </div>
+            </div>}
         </>
     )
 }

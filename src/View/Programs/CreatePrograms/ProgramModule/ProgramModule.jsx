@@ -19,6 +19,7 @@ const ProgramModule = () => {
     const [programSettingsModal, setprogramSettingModal] = useState(false);
     const [documentModuleId, setdocumentModuleId] = useState()
     const [moduleData, setmoduleData] = useState([]);
+    const [programSettingsloading, setprogramSettingsloading] = useState(false)
     const [coachCanEditModule, setcatchCanEditModule] = useState(false);
     const [coacheEditedModules, setcoachEditedModules] = useState([])
     const [uploadModal, setuploadModal] = useState(false)
@@ -33,6 +34,7 @@ const ProgramModule = () => {
     const [moduleOrder, setModuleOrder] = useState([]);
     const [modulePositionChange, setmodulePositionChange] = useState(false)
     const [programSettingsData, setprogramSettingsData] = useState([])
+    const [deleteLoading,setdeleteLoading] = useState(false)
     const fetchModules = async () => {
         try {
             setloading(true);
@@ -50,12 +52,9 @@ const ProgramModule = () => {
         }
     }, [id])
 
-
-
-
     const fetchProgramSettings = async () => {
         try {
-            setloading(true)
+            setprogramSettingsloading(true)
             const res = await getProgramSettings(id)
             if (res?.success) {
                 setprogramSettingsData(res?.data)
@@ -63,7 +62,7 @@ const ProgramModule = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setprogramSettingsloading(false)
         }
     }
 
@@ -84,17 +83,6 @@ const ProgramModule = () => {
     }, [programSettingsData])
 
 
-    const data = {
-        'Values': `/dashboard/programs/single-program/${id}/values`,
-        card: `/dashboard/programs/single-program/${id} /card-game`,
-        'Wheel of Life': `/dashboard/programs/single-program/${id}/wheeloflife`,
-        notes: '',
-        goal: '',
-        documents: '',
-        'Find your Motivation': `/dashboard/programs/single-program/${id}/motivation`,
-        who: `/dashboard/programs/single-program/${id}/whoami`,
-    }
-
     const handleDelete = (id) => {
         setdeleteId(id)
         setdeletedModal(true)
@@ -102,7 +90,7 @@ const ProgramModule = () => {
 
     const deleteFunc = async () => {
         try {
-            setloading(true);
+            setdeleteLoading(true);
             const res = await deleteProgramModule(deleteId, id)
             if (res?.success) {
                 setdeletedModal(false)
@@ -111,7 +99,7 @@ const ProgramModule = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setdeleteLoading(false)
         }
     }
 
@@ -166,12 +154,12 @@ const ProgramModule = () => {
         <>
             {loading && <Loaders />}
             {setupModal && <CompleteSetupModal fetchModules={fetchModules} intermediateId={intermediateId} setsetupModal={setsetupModal} />}
-            {deletedModal && <DeleteModal onClick={deleteFunc} title={'Delete Module'} details={'Do you really want to remove this module?'} setdeleteModal={setdeletedModal} />}
+            {deletedModal && <DeleteModal loading={deleteLoading} onClick={deleteFunc} title={'Delete Module'} details={'Do you really want to remove this module?'} setdeleteModal={setdeletedModal} />}
             <Activity mode={modalIsOpen ? 'visible' : 'hidden'}>
                 <AddProgramModule programSettingsData={programSettingsData} cardCategoryId={cardCategoryId} fetchModules={fetchModules} setmodalIsOpen={setmodalIsOpen} />
             </Activity>
 
-            {programSettingsModal && <ProgramSettingsModal coacheEditedModules={coacheEditedModules} coachCanEditModule={coachCanEditModule} quoteCategoryId={quoteCategoryId} setquoteCategoryId={setquoteCategoryId} fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} setloading={setloading} />}
+            {programSettingsModal && <ProgramSettingsModal coacheEditedModules={coacheEditedModules} coachCanEditModule={coachCanEditModule} quoteCategoryId={quoteCategoryId} setquoteCategoryId={setquoteCategoryId} fetchProgramSettings={fetchProgramSettings} cardCategoryId={cardCategoryId} setcardCategoryId={setcardCategoryId} setprogramSettingModal={setprogramSettingModal} programSettingsloading={programSettingsloading} />}
 
 
             {uploadModal && <UploadDocumentsModal documentModuleId={documentModuleId} uploadModal={uploadModal} setuploadModal={setuploadModal} />}

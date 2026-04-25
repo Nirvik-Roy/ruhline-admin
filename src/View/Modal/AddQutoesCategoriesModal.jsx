@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
-const AddQutoesCategoriesModal = ({ setisModal, setquoteName, postCategories, quoteName }) => {
+const AddQutoesCategoriesModal = ({ setisModal, setquoteName, postCategories, quoteName, addLoading }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
@@ -15,7 +15,7 @@ const AddQutoesCategoriesModal = ({ setisModal, setquoteName, postCategories, qu
                 </div>
                 <div onClick={postCategories}>
 
-                    <Button children={'Add'} styles={{
+                    <Button loading={addLoading} loadingText='Adding...' children={'Add'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

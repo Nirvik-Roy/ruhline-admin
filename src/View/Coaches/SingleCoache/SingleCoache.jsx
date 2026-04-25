@@ -19,6 +19,7 @@ const SingleCoache = () => {
     const [updateErrors, setupdateErrors] = useState()
     const [updateLoading, setUpdateLoading] = useState(false);
     const [deleteModal, setdeleteModal] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const { id } = useParams();
     const getSingleCoachFunc = async (id) => {
         if (id) {
@@ -81,13 +82,13 @@ const SingleCoache = () => {
 
     const deletedCoachfunc = async () => {
         if (id) {
-            setisLoading(true)
+            setdeleteLoading(true)
             try {
                 await deleteCoach(id);
             } catch (err) {
                 console.log(err)
             } finally {
-                setisLoading(false);
+                setdeleteLoading(false);
                 navigate('/dashboard/coaches', { replace: true })
             }
         }
@@ -97,13 +98,13 @@ const SingleCoache = () => {
     }
     return (
         <>
-            {(isLoading || updateLoading) && <Loaders />}
+            {(isLoading) && <Loaders />}
             {
-                deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />
+                deleteModal && <DeleteModal loading={deleteLoading} setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />
             }
-            {ediCoachModal && <EditCoachModal editNewCoachfunc={editNewCoachfunc}
+            {ediCoachModal && <EditCoachModal updateLoading={updateLoading} editNewCoachfunc={editNewCoachfunc}
                 seteditCoachModal={seteditCoachModal} singleCoachLoading={isLoading} singleCoachdata={singleCoachdata} updateErrors={updateErrors} />}
-            <div className='dashboard_container'>
+            {!isLoading && <div className='dashboard_container'>
                 <div className='single_coache_head_Wrapper'>
                     <div className='single_coach_head'>
                         <h1>{singleCoachdata?.user?.name} </h1>
@@ -113,9 +114,9 @@ const SingleCoache = () => {
                     </div>
                     <div className='single_button_Wrapper'>
                         <button onClick={(() => { handleDelete() })}>Delete</button>
-                        <div onClick={(() => seteditCoachModal(true))}>
-                            <Button children={'Edit'} />
-                        </div>
+
+                        <Button onClick={(() => seteditCoachModal(true))} children={'Edit'} />
+
                     </div>
                 </div>
 
@@ -138,7 +139,7 @@ const SingleCoache = () => {
                 </div>
                 <UpcomingProgramSlider programs={upcomingPrograms} />
                 <ProgramAssignedSlider programs={assignedPrograms} />
-            </div>
+            </div>}
         </>
     )
 }

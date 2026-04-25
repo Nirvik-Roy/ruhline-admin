@@ -7,6 +7,7 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { getSingleCustomer } from '../../utils/cutomer'
 import { useDispatch, useSelector } from 'react-redux'
 import { EditCustomer } from '../../Store/Slices/CustomerSlice/EditCustomerSlice'
+import ModalLoader from '../../Components/Loaders/ModalLoader'
 const EditCustomerModal = ({ seteditCustomer, customerId }) => {
     const [phoneData, setPhoneData] = useState([]);
     const { editLoading, isEdited, errors } = useSelector(state => state.editCustomer)
@@ -24,18 +25,18 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
-    useEffect(() => {
-        const fetchPhone = async () => {
-            setisLoading(true)
-            try {
-                const result = await getAllPhoneCountry();
-                setPhoneData(result)
-            } catch (err) {
-                console.log(err)
-            } finally {
-                setisLoading(false)
-            }
+    const fetchPhone = async () => {
+        setisLoading(true)
+        try {
+            const result = await getAllPhoneCountry();
+            setPhoneData(result)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setisLoading(false)
         }
+    }
+    useEffect(() => {
         fetchPhone()
     }, [])
 
@@ -51,7 +52,6 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
         }
     }, [singleCustomerData])
 
-    console.log(errors)
 
     const fetchSingleCustomer = async () => {
         setisLoading(true)
@@ -88,7 +88,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
             formDataNew.append('phone', phone);
             formDataNew.append('phone_country_code_id', phone_country_code_id);
             { email != singleCustomerData.user?.email && formDataNew.append('email', email) }
-            { file && formDataNew.append('profile_image', file) }
+            { file instanceof File && formDataNew.append('profile_image', file) }
             const result = await dispatch(EditCustomer(
                 {
                     id: customerId,
@@ -100,14 +100,17 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
             }
         }
     }
+
     return (
         <>
-            {(isLoading || editLoading) && <Loaders />}
             <div className='modal_wrapper' onClick={(() => seteditCustomer(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'80vh'
+            }}>
+                {isLoading && <ModalLoader />}
                 <h4>Edit Customer </h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditCustomer(false))}></i>
-                <form className='modal_form'>
+                {!isLoading && <form className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
                         <div>
                             <Input onChange={handleChange} value={formData.first_name} name={'first_name'} label={'First Name'} required={true} placeholder={'Enter First Name'} />
@@ -212,10 +215,12 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                             color: 'red'
                         }}>{errors?.profile_image && errors?.profile_image[0]}</small>
                     </div>
-                    <div onClick={handleSubmit} className='change_cancel_wrapper'>
-                        <Button children={'Save'} />
+                    <div onClick={handleSubmit} className=''>
+                        <Button styles={{
+                            marginLeft: 'auto'
+                        }} loading={editLoading} loadingText='Updating...' children={'Update'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

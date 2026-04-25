@@ -6,7 +6,8 @@ import toast from 'react-hot-toast';
 import Loaders from '../../Components/Loaders/Loaders';
 const EditGoalTypesModal = ({ seteditModal, goalId, fetchData }) => {
     const [singleData, setsingleData] = useState();
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [editLoading,seteditLoading] = useState(false)
     const [goalType, setgoalType] = useState("")
     const fetchSingleData = async () => {
         try {
@@ -35,7 +36,7 @@ const EditGoalTypesModal = ({ seteditModal, goalId, fetchData }) => {
     const editGoalType = async () => {
         if (goalType != '') {
             try {
-                setloading(true);
+                seteditLoading(true);
                 const res = await editGoalTypes({
                     name: goalType
                 }, goalId)
@@ -46,7 +47,7 @@ const EditGoalTypesModal = ({ seteditModal, goalId, fetchData }) => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                seteditLoading(false)
             }
         } else {
             toast.error("Plz enter the field")
@@ -69,7 +70,7 @@ const EditGoalTypesModal = ({ seteditModal, goalId, fetchData }) => {
                 </div>
                 <div onClick={editGoalType}>
 
-                    <Button children={'Edit'} styles={{
+                    <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

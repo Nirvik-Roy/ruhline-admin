@@ -105,7 +105,6 @@ const Coaches = () => {
             try {
                 const result = await deleteCoach(deletedId);
                 getAllCoachesFunc()
-                console.log(result)
                 if (result?.success) {
                     setdeleteModal(false)
                 }
@@ -200,11 +199,11 @@ const Coaches = () => {
     return (
         <>
             {coachVerifyModal && <VerifyModal setverifymodal={setcoachVerifyModal} onClick={handleCoachVerification} title={'Coach Verification'} details={'Do you want to verify this coach?'} />}
-            {deleteModal && <DeleteModal setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
-            {(updateLoading || deletedloading || isLoading) && <Loaders />}
+            {deleteModal && <DeleteModal loading={deletedloading} setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
+            {(isLoading) && <Loaders />}
 
-            {coachModal && <AddCoachModal addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
-            {ediCoachModal && <EditCoachModal updateErrors={updateErrors} editNewCoachfunc={editNewCoachfunc} singleCoachdata={singleCoachdata} singleCoachLoading={singleCoachLoading} seteditCoachModal={seteditCoachModal} />}
+            {coachModal && <AddCoachModal updateLoading={updateLoading} addCoachError={addCoachError} addNewCoachFunc={addNewCoachFunc} setCoachModal={setCoachModal} />}
+            {ediCoachModal && <EditCoachModal updateLoading={updateLoading} updateErrors={updateErrors} editNewCoachfunc={editNewCoachfunc} singleCoachdata={singleCoachdata} singleCoachLoading={singleCoachLoading} seteditCoachModal={seteditCoachModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Coaches</h2>
@@ -245,7 +244,7 @@ const Coaches = () => {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {!isLoading && <tbody>
                             {(currentItems?.length <= 0 && !isLoading) && <td colSpan={12} style={{
                                 textAlign: 'center',
                                 fontWeight: '600',
@@ -298,7 +297,7 @@ const Coaches = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}

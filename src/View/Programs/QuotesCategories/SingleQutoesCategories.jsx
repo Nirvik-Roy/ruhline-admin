@@ -15,7 +15,8 @@ const SingleQutoesCategories = () => {
     const [index, setIndex] = useState([]);
     const navigate = useNavigate();
     const [isModal, setisModal] = useState(false);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [addLoading, setaddLoading] = useState(false)
     const [allQuotesData, setallQuotesData] = useState([]);
     const [isEditModal, setisEditModal] = useState(false)
     const [quoteId, setquoteId] = useState()
@@ -24,6 +25,7 @@ const SingleQutoesCategories = () => {
     const [singleQuoteData, setsingleQuoteData] = useState({})
     const [deleteId, setdeleId] = useState();
     const [deleleteModal, setdeleteModal] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const { id } = useParams()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -71,7 +73,7 @@ const SingleQutoesCategories = () => {
 
     const addQuoteFunc = async () => {
         if (quoteName != "") {
-            setloading(true)
+            setaddLoading(true)
             const res = await postQuote({
                 quote: quoteName,
                 quote_category_id: id
@@ -81,20 +83,20 @@ const SingleQutoesCategories = () => {
                 fetchSingleQuoteCategory()
                 setisModal(false)
             }
-            setloading(false)
+            setaddLoading(false)
         } else {
             toast.error("Plz enter the field")
         }
     }
     const deleteFunc = async () => {
-        setloading(true)
+        setdeleteLoading(true)
         const res = await commonDelelteApi('/admin/quote-category/quotes', deleteId);
         if (res?.success) {
-            setloading(false)
+            setdeleteLoading(false)
             setdeleteModal(false)
             fetchQuotes();
         }
-        setloading(false)
+        setdeleteLoading(false)
     }
 
     const handleDelete = (id) => {
@@ -123,8 +125,8 @@ const SingleQutoesCategories = () => {
     };
     return (
         <>
-            {isModal && <AddQuoteModal addQuoteFunc={addQuoteFunc} quoteName={quoteName} setquoteName={setquoteName} setisModal={setisModal} />}
-            {deleleteModal && <DeleteModal details={'Do you really want to delete this quote?'} title={'Delete Quote'} setdeleteModal={setdeleteModal} onClick={deleteFunc} />}
+            {isModal && <AddQuoteModal addLoading={addLoading} addQuoteFunc={addQuoteFunc} quoteName={quoteName} setquoteName={setquoteName} setisModal={setisModal} />}
+            {deleleteModal && <DeleteModal loading={deleteLoading} details={'Do you really want to delete this quote?'} title={'Delete Quote'} setdeleteModal={setdeleteModal} onClick={deleteFunc} />}
             {isEditModal && <EditQuoteModal fetchQuotes={fetchQuotes} quoteId={quoteId} setisEditModal={setisEditModal} />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
@@ -160,7 +162,7 @@ const SingleQutoesCategories = () => {
                                 }}>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {currentItems.length <= 0 && <td colSpan={12}>No quotes available</td>}
                             {currentItems.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
@@ -187,7 +189,7 @@ const SingleQutoesCategories = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}

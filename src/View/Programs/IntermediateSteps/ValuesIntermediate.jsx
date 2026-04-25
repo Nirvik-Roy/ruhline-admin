@@ -11,6 +11,7 @@ import Loaders from '../../../Components/Loaders/Loaders'
 import { getValuesIntermediate, postValuesIntermediate } from '../../../utils/Program'
 const ValuesIntermediate = () => {
     const navigate = useNavigate()
+    const [postLoading, setpostLoading] = useState(false)
     const [headline, setheadLine] = useState('');
     const [valuesData, setvaluesData] = useState({})
     const [loading, setloading] = useState(false)
@@ -49,7 +50,7 @@ const ValuesIntermediate = () => {
     const handleSubmit = async () => {
         if (headline != '') {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData();
                 formData.append('headline', headline || "")
                 if (pointsData.length > 0) {
@@ -62,7 +63,7 @@ const ValuesIntermediate = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         } else {
             toast.error('Plz enter the headline field')
@@ -98,7 +99,7 @@ const ValuesIntermediate = () => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Values Intermediate Page</h2>
@@ -115,7 +116,7 @@ const ValuesIntermediate = () => {
                             }} />
                         </div> */}
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postLoading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -152,7 +153,7 @@ const ValuesIntermediate = () => {
                         fontSize: '13px'
                     }} />
                 </div>
-            </div>
+            </div>}
         </>
     )
 }

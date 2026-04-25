@@ -5,18 +5,25 @@ const Loaders = () => {
         <>
             <div style={{
                 position: 'fixed',
-                top: '0',
-                left: '0',
-                width: '100%',
+                top: '0px',
+                right: '0',
+                width: 'calc(100% - 260px)',
                 height: '100vh',
-                background: 'rgba(0,0,0,0.5)',
+                // background: 'rgba(0,0,0,0.5)',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                zIndex:'9999999999999999'
+                zIndex: '9',
+                pointerEvents:'none',
+                flexDirection:'column'
             }}>
 
                 <span class="loader"></span>
+                <p style={{
+                    marginTop:'10px',
+                    fontWeight:'500',
+                    color:'var(--text-color-)'
+                }}>Loading...</p>
             </div>
         </>
     )

@@ -10,12 +10,12 @@ import { commonDelelteApi } from '../../utils/common';
 const Programs = () => {
     const [index, setIndex] = useState([]);
     const dropdownRef = useRef(null);
-
     const navigate = useNavigate()
     const [dropdown, setdropdown] = useState(false);
     const [loading, setloading] = useState();
     const [deleteId, setdeleteId] = useState('')
     const [deletedModal, setdeletedModal] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const [programData, setprogramData] = useState([])
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -47,7 +47,7 @@ const Programs = () => {
 
     const deleteFunc = async () => {
         try {
-            setloading(true)
+            setdeleteLoading(true)
             const res = await commonDelelteApi('/admin/program', deleteId);
             if (res.success) {
                 setdeletedModal(false)
@@ -57,7 +57,7 @@ const Programs = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setdeleteLoading(false)
         }
     }
 
@@ -100,8 +100,8 @@ const Programs = () => {
         <>
             {loading
                 && <Loaders />}
-            {deletedModal && <DeleteModal setdeleteModal={setdeletedModal} onClick={deleteFunc} title={'Delete program'} details={'Do you really want to delete this program?'} />}
-            <div className='dashboard_container'>
+            {deletedModal && <DeleteModal loading={deleteLoading} setdeleteModal={setdeletedModal} onClick={deleteFunc} title={'Delete program'} details={'Do you really want to delete this program?'} />}
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Programs</h2>
                     <div className='coaches_button_wapper'>
@@ -123,7 +123,7 @@ const Programs = () => {
                         </div>
 
                         <div className='coaches_search_wrapper'>
-                            <input onChange={((e)=>setSearchTerm(e?.target?.value))} placeholder='Search' />
+                            <input onChange={((e) => setSearchTerm(e?.target?.value))} placeholder='Search' />
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
 
@@ -198,7 +198,7 @@ const Programs = () => {
                 <Pagination pageCount={pageCount}
                     currentPage={currentPage}
                     onPageChange={handlePageChange} />
-            </div>
+            </div>}
         </>
     )
 }

@@ -6,13 +6,14 @@ import Input from '../../Components/Input';
 import toast from 'react-hot-toast';
 
 const EditCardCategory = ({ cardId, seteditModal, fetchCards }) => {
-    const [cardname, setcardname] = useState();
-    const [singlecard, setsinglecard] = useState([])
+    const [cardname, setcardname] = useState('');
+    const [singlecard, setsinglecard] = useState([]);
+    const [editLoading,seteditLoading] = useState(false)
     const [loading, setloading] = useState(false);
     const editCategories = async () => {
         if (cardname != '') {
             try {
-                setloading(true);
+                seteditLoading(true);
                 const res = await editCardCategory({
                     name: cardname
                 }, cardId);
@@ -23,7 +24,7 @@ const EditCardCategory = ({ cardId, seteditModal, fetchCards }) => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                seteditLoading(false)
             }
         } else {
             toast.error('Plz enter the field...')
@@ -65,7 +66,7 @@ const EditCardCategory = ({ cardId, seteditModal, fetchCards }) => {
                   <Input value={cardname} onChange={((e) => setcardname(e.target.value))} label={'Card Category Name'} required={true} placeholder={'Enter category name'} />
               </div>
               <div onClick={editCategories}>
-                  <Button children={'Edit'} styles={{
+                  <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                       marginLeft: 'auto'
                   }} />
               </div>

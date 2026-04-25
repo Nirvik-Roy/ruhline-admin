@@ -15,7 +15,8 @@ const SingleCategories = () => {
     const [index, setIndex] = useState([]);
     const navigate = useNavigate();
     const [isModal, setisModal] = useState(false);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [addCardLoading, setaddCardLoading] = useState(false)
     const [allCardsdata, setallCardsdata] = useState([]);
     const [isEditModal, setisEditModal] = useState(false)
     const [cardId, setcardId] = useState()
@@ -25,6 +26,7 @@ const SingleCategories = () => {
     const [singleCardData, setsingleCardData] = useState({})
     const [deleteId, setdeleId] = useState();
     const [deleleteModal, setdeleteModal] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const { id } = useParams()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -41,8 +43,6 @@ const SingleCategories = () => {
         }
         setloading(false)
     }
-
-    console.log(allCardsdata)
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -72,7 +72,7 @@ const SingleCategories = () => {
     }, [id])
     const addCardFunc = async () => {
         if (cardName != "" && cardDescription != '') {
-            setloading(true)
+            setaddCardLoading(true)
             const res = await postCard({
                 name: cardName,
                 card_category_id: id,
@@ -85,21 +85,21 @@ const SingleCategories = () => {
                 setcardDescription("")
                 setcardName("")
             }
-            setloading(false)
+            setaddCardLoading(false)
         } else {
             toast.error("Plz enter the fields")
         }
     }
     const deleteFunc = async () => {
-        setloading(true)
+        setdeleteLoading(true)
         const res = await commonDelelteApi('/admin/card-category/cards', deleteId);
         if (res?.success) {
-            setloading(false)
+            setdeleteLoading(false)
             setdeleteModal(false)
             fetchCards();
             setIndex([])
         }
-        setloading(false)
+        setdeleteLoading(false)
     }
 
     const handleDelete = (id) => {
@@ -130,10 +130,10 @@ const SingleCategories = () => {
     return (
         <>
             {loading && <Loaders />}
-            {isModal && <AddCardModal addCardFunc={addCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} setisModal={setisModal} />}
-            {deleleteModal && <DeleteModal details={'Do you really want to delete this card?'} setdeleteModal={setdeleteModal} title={'Delete card'} onClick={deleteFunc} />}
+            {isModal && <AddCardModal addCardLoading={addCardLoading} addCardFunc={addCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} setisModal={setisModal} />}
+            {deleleteModal && <DeleteModal loading={deleteLoading} details={'Do you really want to delete this card?'} setdeleteModal={setdeleteModal} title={'Delete card'} onClick={deleteFunc} />}
             {isEditModal && <EditCardModal setisEditModal={setisEditModal} fetchCards={fetchCards} cardId={cardId} />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>{singleCardData?.name}</h2>
@@ -214,7 +214,7 @@ const SingleCategories = () => {
                 <Pagination pageCount={pageCount}
                     currentPage={currentPage}
                     onPageChange={handlePageChange} />
-            </div>
+            </div>}
         </>
     )
 }

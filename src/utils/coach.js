@@ -28,7 +28,9 @@ export const addNewCoach = async (data, file) => {
     const Token = localStorage.getItem('token');
     if (data && Token) {
         const formData = new FormData()
-        formData.append("profile_image", file)
+        if(file instanceof File){
+            formData.append("profile_image", file)
+        }
         formData.append("first_name", data.first_name);
         formData.append("last_name", data?.last_name);
         formData.append("gender", data?.gender);
@@ -51,7 +53,6 @@ export const addNewCoach = async (data, file) => {
         } catch (err) {
             console.log(err.response?.data?.errors)
             return err.response?.data?.errors;
-
         }
     }
 }

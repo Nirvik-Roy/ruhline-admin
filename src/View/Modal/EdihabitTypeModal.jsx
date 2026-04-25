@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 const EdihabitTypeModal = ({ seteditModal, habitId, fetchData }) => {
     const [habitName, sethabitName] = useState("");
     const [loading, setloading] = useState(false);
+    const [editLoading,seteditLoading] = useState(false)
     const [singleHabit, setsingleHabit] = useState()
     const fetchSingleData = async () => {
         try {
@@ -33,9 +34,8 @@ const EdihabitTypeModal = ({ seteditModal, habitId, fetchData }) => {
 
     const editHabitFunc = async (data) => {
         try {
-            setloading(true);
+            seteditLoading(true);
             const res = await editHabitTypes(data, habitId);
-            console.log(res);
             if (res?.success) {
                 seteditModal(false)
                 fetchData()
@@ -43,7 +43,7 @@ const EdihabitTypeModal = ({ seteditModal, habitId, fetchData }) => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            seteditLoading(false)
         }
     }
     return (
@@ -71,7 +71,7 @@ const EdihabitTypeModal = ({ seteditModal, habitId, fetchData }) => {
                     }
                 })}>
 
-                    <Button children={'Edit'} styles={{
+                    <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

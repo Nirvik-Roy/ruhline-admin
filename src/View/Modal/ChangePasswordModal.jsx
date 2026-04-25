@@ -67,11 +67,10 @@ const ChangePasswordModal = ({ modalFunction }) => {
             try {
                 const result = await Changeuserpassword(formData);
                 setuserPasswordErrors(result);
-                console.log(result)
-                if(result.message == "Your password has been changed successfully."){
-                     dispatch(AuthlogOut()) 
+                if (result.success) {
+                    dispatch(AuthlogOut())
                 }
-              
+
             } catch (err) {
                 toast.error(err.response?.data?.message);
             } finally {
@@ -84,12 +83,11 @@ const ChangePasswordModal = ({ modalFunction }) => {
 
     return (
         <>
-            {isLoading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => modalFunction(0))}></div>
             <div className='modal_div'>
                 <h4>Change Password</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => modalFunction(0))}></i>
-                <form className='modal_form'>
+                <form onSubmit={((e)=>e.preventDefault())} className='modal_form'>
                     <div className='input_form' style={{
                         position: 'relative'
                     }}>
@@ -190,7 +188,7 @@ const ChangePasswordModal = ({ modalFunction }) => {
                     <div className='change_cancel_wrapper'>
                         <button onClick={(() => modalFunction(0))}>Cancel</button>
                         <div onClick={(() => handleChangePassword())}>
-                            <Button children={'Change'} />
+                            <Button loading={isLoading} loadingText='Changing...' children={'Change'} />
                         </div>
                     </div>
                 </form>

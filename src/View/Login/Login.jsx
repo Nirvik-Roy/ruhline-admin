@@ -72,7 +72,7 @@ const Login = () => {
     }, [isLogin, location.pathname, navigate]);
     return (
         <>
-            {isLoading && <Loaders />}
+            {/* {isLoading && <Loaders />} */}
             <div className='login_wrapper'>
                 <form className='login_form'>
                     <img src={logo} />
@@ -131,7 +131,7 @@ const Login = () => {
                         }}>Forget Password?</small> */}
                     </div>
                     <div onClick={(() => loginFunc())}>
-                        <Button children={'Log In'} styles={{
+                        <Button loading={isLoading} loadingText='Login you in..' children={'Log In'} styles={{
                             width: '100%',
                             padding: '15px 0px'
                         }} />

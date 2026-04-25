@@ -6,13 +6,14 @@ import  Input  from '../../Components/Input.jsx';
 import Button from '../../Components/Button';
 
 const EditQuoteCategory = ({ seteditModal, quoteId, fetchQuotes }) => {
-    const [quoteName, setquoteName] = useState();
+    const [quoteName, setquoteName] = useState('');
     const [singleQuote, setsingleQuote] = useState([])
     const [loading, setloading] = useState(false);
+    const [editLoading,seteditLoading] = useState(false)
     const editCategories = async () => {
         if (quoteName != '') {
             try {
-                setloading(true);
+                seteditLoading(true);
                 const res = await editQuoteCategory({
                     name: quoteName
                 }, quoteId);
@@ -23,7 +24,7 @@ const EditQuoteCategory = ({ seteditModal, quoteId, fetchQuotes }) => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                seteditLoading(false)
             }
         } else {
             toast.error('Plz enter the field...')
@@ -49,7 +50,7 @@ const EditQuoteCategory = ({ seteditModal, quoteId, fetchQuotes }) => {
     }, [])
 
     useEffect(()=>{
-      setquoteName(singleQuote?.name)
+      setquoteName(singleQuote?.name || '')
     },[singleQuote])
     return (
         <>
@@ -64,7 +65,7 @@ const EditQuoteCategory = ({ seteditModal, quoteId, fetchQuotes }) => {
                     <Input value={quoteName} onChange={((e) => setquoteName(e.target.value))} label={'Quotes Category Name'} required={true} placeholder={'Enter category name'} />
                 </div>
                 <div onClick={editCategories}>
-                    <Button children={'Edit'} styles={{
+                    <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

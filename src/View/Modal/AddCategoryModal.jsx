@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
-const AddCategoryModal = ({ setisModal, postCategories, setcardGame, cardGame }) => {
+const AddCategoryModal = ({ setisModal, postCategories, setcardGame, cardGame, addLoading }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
@@ -17,7 +17,7 @@ const AddCategoryModal = ({ setisModal, postCategories, setcardGame, cardGame })
                     <Input value={cardGame} onChange={((e) => setcardGame(e.target.value))} label={'Card Category Name'} required={true} placeholder={'Enter card category'} />
                 </div>
                 <div onClick={postCategories}>
-                    <Button children={'Add'} styles={{
+                    <Button loading={addLoading} loadingText='Adding...' children={'Add'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

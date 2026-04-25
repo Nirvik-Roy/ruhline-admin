@@ -5,7 +5,8 @@ import upload from '../../assets/Vector (8).svg'
 import Loaders from '../../Components/Loaders/Loaders.jsx'
 import toast from 'react-hot-toast'
 import { getAllPhoneCountry } from '../../utils/location.js'
-const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
+import ModalLoader from '../../Components/Loaders/ModalLoader.jsx'
+const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLoading }) => {
     const [emailerrorMessage, setEmailerrorMessage] = useState('');
     const [phoneCodes, setphoneCodes] = useState([]);
     const [contacterrorMessage, setContactErrorMessage] = useState();
@@ -119,6 +120,8 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
         const { first_name, last_name, email, phone,
             phone_country_code_id, gender, coach_type,
             password, password_confirmation } = formData
+
+
         if (first_name != '' && last_name != '' && email != '' && phone != '' &&
             phone_country_code_id != '', password != '', password_confirmation != '', gender != '', coach_type != '') {
             addNewCoachFunc(formData, file)
@@ -126,15 +129,15 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
             toast.error('Plz enter all the necessary fields...')
         }
     }
-    console.log(addCoachError)
     return (
         <>
-            {isLoading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setCoachModal(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'80vh'
+            }}>
                 <h4>Add a coach</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setCoachModal(false))}></i>
-                <form className='modal_form'>
+                {isLoading ? <ModalLoader /> : <form onSubmit={((e) => e.preventDefault())} className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
                         <div>
                             <Input onChange={handleChange} name="first_name" value={formData.first_name} label={'First Name'} required={true} placeholder={'Enter first name'} />
@@ -322,10 +325,12 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError }) => {
                             color: 'red'
                         }}>{addCoachError?.profile_image && addCoachError.profile_image[1]}</small>
                     </div>
-                    <div onClick={(() => sendCoachData())} className='change_cancel_wrapper'>
-                        <Button children={'Add'} />
+                    <div onClick={(() => sendCoachData())} className=''>
+                        <Button styles={{
+                            marginLeft: 'auto'
+                        }} loading={updateLoading} loadingText='Adding...' children={'Add'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

@@ -12,12 +12,14 @@ const HabitTypes = () => {
     const [dropdown, setdropdown] = useState(null);
     const [loading, setloading] = useState(false)
     const [isModal, setisModal] = useState(false);
+    const [habitLoading, sethabitLoading] = useState(false)
     const [editModal, seteditModal] = useState(false);
     const [allHabitData, setallHabitData] = useState([]);
     const [habitId, sethabitId] = useState()
     const dropdownRef = useRef(null);
     const [deleteId, setdeleId] = useState();
     const [deleleteModal, setdeleteModal] = useState(false)
+    const [deleteloading, setdeleteLoading] = useState(false)
     const navigate = useNavigate()
     const dropdownFunction = (i) => {
         if (dropdown === i) {
@@ -45,7 +47,7 @@ const HabitTypes = () => {
 
     const addHabitType = async (data) => {
         try {
-            setloading(true);
+            sethabitLoading(true);
             const res = await postHabitType(data);
             console.log(res);
             if (res?.success) {
@@ -55,7 +57,7 @@ const HabitTypes = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            sethabitLoading(false)
         }
     }
     const handleClickOutside = (event) => {
@@ -72,14 +74,15 @@ const HabitTypes = () => {
 
 
     const deleteFunc = async () => {
-        setloading(true)
+        setdeleteLoading(true)
         const res = await commonDelelteApi('/admin/habit-type', deleteId);
         if (res?.success) {
-            setloading(false)
+            setdeleteLoading(false)
             setdeleteModal(false)
             fetchData();
             setdropdown(null)
         }
+        setdeleteLoading(false)
     }
 
     const handleDelete = (id) => {
@@ -88,11 +91,11 @@ const HabitTypes = () => {
     }
     return (
         <>
-            {deleleteModal && <DeleteModal onClick={deleteFunc} details={'Do you want delete this habit?'} setdeleteModal={setdeleteModal} title={"Delete Habit"} />}
-            {isModal && <AddHabitTypeModal addHabitType={addHabitType} setisModal={setisModal} />}
+            {deleleteModal && <DeleteModal loading={deleteloading} onClick={deleteFunc} details={'Do you want delete this habit?'} setdeleteModal={setdeleteModal} title={"Delete Habit"} />}
+            {isModal && <AddHabitTypeModal habitLoading={habitLoading} addHabitType={addHabitType} setisModal={setisModal} />}
             {editModal && <EdihabitTypeModal fetchData={fetchData} habitId={habitId} seteditModal={seteditModal} />}
-            {loading && <Loaders />}
             <div className='dashboard_container'>
+                {loading && <Loaders />}
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Habit Types</h2>
@@ -113,7 +116,7 @@ const HabitTypes = () => {
                 </div>
 
 
-                <div className='coaches_shift_card_wrapper' style={{
+                {!loading && <div className='coaches_shift_card_wrapper' style={{
                     gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr)'
                 }}>
                     {allHabitData?.length <= 0 && <p style={{
@@ -147,7 +150,7 @@ const HabitTypes = () => {
                         </div>
 
                     ))}
-                </div>
+                </div>}
             </div>
         </>
     )

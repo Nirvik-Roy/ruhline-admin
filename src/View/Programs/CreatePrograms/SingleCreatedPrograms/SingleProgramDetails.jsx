@@ -14,7 +14,6 @@ const SingleProgramDetails = ({ singleData }) => {
         slidesToScroll: 1
     };
     const [imageSrc, setimageSrc] = useState('')
-    console.log(singleData)
     return (
         <>
 

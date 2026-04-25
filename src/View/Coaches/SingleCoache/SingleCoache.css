@@ -23,7 +23,7 @@
     cursor: pointer;
 }
 
-.single_button_Wrapper button {
+.single_button_Wrapper button:first-child {
     border: none;
     background-color: transparent;
     font-size: 15px;

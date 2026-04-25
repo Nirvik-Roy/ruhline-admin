@@ -8,6 +8,7 @@ import Textarea from '../../Components/Textarea';
 
 const EditCardModal = ({ setisEditModal, fetchCards, cardId }) => {
     const [loading, setloading] = useState(false);
+    const [editLoading,seteditLoading] = useState(false)
     const [cardName, setcardName] = useState();
     const [singleCard, setsingleCard] = useState();
     const [cardDescription,setcardDescription] = useState()
@@ -34,7 +35,7 @@ const EditCardModal = ({ setisEditModal, fetchCards, cardId }) => {
     const editCardFunc = async () => {
         if (cardName != '' && cardDescription!="") {
             try {
-                setloading(true);
+                seteditLoading(true);
                 const res = await editCard({
                     name: cardName,
                     card_category_id: singleCard?.card_category?.id,
@@ -47,7 +48,7 @@ const EditCardModal = ({ setisEditModal, fetchCards, cardId }) => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                seteditLoading(false)
             }
         } else {
             toast.error('Plz enter the fields')
@@ -72,7 +73,7 @@ const EditCardModal = ({ setisEditModal, fetchCards, cardId }) => {
                     </div>
                 </div>
                 <div onClick={editCardFunc}>
-                    <Button children={'Edit'} styles={{
+                    <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

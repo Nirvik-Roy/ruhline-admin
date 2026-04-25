@@ -65,7 +65,9 @@ const NewShiftModal = ({ shiftFunction, onSuccess }) => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className='change_cancel_wrapper'>
+                    <div style={{
+                        marginLeft:'auto'
+                    }} className=''>
                         <Button children={saving ? 'Adding...' : 'Add'} onClick={handleSubmit} />
                     </div>
                 </form>

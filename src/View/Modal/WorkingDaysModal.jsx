@@ -57,8 +57,10 @@ const WorkingDaysModal = ({ shiftFunction }) => {
                                 </div>
                             ))}
                         </div>
-                        <div className='change_cancel_wrapper'>
-                            <Button children={saving ? 'Saving...' : 'Save'} onClick={handleSave} />
+                        <div className=''>
+                            <Button styles={{
+                                marginLeft:'auto'
+                            }} children={saving ? 'Saving...' : 'Save'} onClick={handleSave} />
                         </div>
                     </form>
                 )}

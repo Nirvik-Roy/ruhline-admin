@@ -8,6 +8,7 @@ import { clearErrors, Editprogram } from '../../Store/Slices/ProgramCategorySlic
 const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, allPrograms, editModal }) => {
     const [singleProgram, setsingleProgram] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [editLoading,seteditLoading] = useState(false)
     const [editErrors, setEditErrors] = useState()
     const { errors } = useSelector(state => state.editProgram)
     const dispatch = useDispatch()
@@ -54,7 +55,7 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
 
     const handleSubmit = async (editId) => {
         try {
-            setLoading(true)
+            seteditLoading(true)
             const formDataNew = new FormData();
             formDataNew.append('name', formData.name);
             if (formData.parent_id != '') {
@@ -71,7 +72,7 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
             }
         } catch (err) { console.log(err) }
         finally {
-            setLoading(false);
+            seteditLoading(false);
         }
     }
 
@@ -112,7 +113,7 @@ const EditProgramCategoriesModal = ({ setEditModal, editIndex, fetchPrograms, al
                     }}>{editErrors?.name && editErrors?.name[0]}</small>
                 </div>
                 <div onClick={(() => { handleSubmit(editIndex) })}>
-                    <Button children={'Add'} styles={{
+                    <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

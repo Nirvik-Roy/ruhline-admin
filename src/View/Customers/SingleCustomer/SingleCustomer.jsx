@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import '../../Coaches/SingleCoache/SingleCoache.css'
 import Button from '../../../Components/Button'
 import photo from '../../../assets/Avatar.png'
@@ -19,8 +19,8 @@ const SingleCustomer = () => {
     const { id } = useParams();
     const [editCustomer, seteditCustomer] = useState(false);
     const [customerId, setCustomerId] = useState();
-    const [deleteModal,setdeleteModal] = useState(false)
-
+    const [deleteModal, setdeleteModal] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
 
     const singleDataFetch = async () => {
         if (id) {
@@ -36,34 +36,39 @@ const SingleCustomer = () => {
         }
     }
 
-    const deleteFunc = async()=>{
-        setLoading(true)
-        try{
-         const res = await deleteCustomer(id);
-         if(res.success){
-            navigate('/dashboard/customers',{replace:true})
-         }
-        }catch(err){
-          console.log(err)
-        }finally{
-            setLoading(false)
+    const deleteFunc = async () => {
+        setdeleteLoading(true)
+        try {
+            const res = await deleteCustomer(id);
+            if (res.success) {
+                navigate('/dashboard/customers', { replace: true })
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setdeleteLoading(false)
         }
     }
 
     useEffect(() => {
         singleDataFetch()
+    }, [id])
+    useEffect(() => {
+        if (isEdited) {
+            singleDataFetch()
+        }
     }, [isEdited])
 
-    const handleDelete = () =>{
+    const handleDelete = () => {
         setdeleteModal(true)
     }
-    
+
     return (
         <>
             {editCustomer && <EditCustomerModal customerId={customerId} seteditCustomer={seteditCustomer} />}
-            {deleteModal && <DeleteModal onClick={deleteFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} onClick={deleteFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'} />}
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='single_coache_head_Wrapper'>
                     <div className='single_coach_head'>
                         <h1>{singleData?.user?.name} </h1>
@@ -73,11 +78,12 @@ const SingleCustomer = () => {
                     </div>
                     <div className='single_button_Wrapper'>
                         <button onClick={(() => handleDelete())}>Delete</button>
-                        <div onClick={(() =>{ setCustomerId(singleData?.id)
-                        seteditCustomer(true)
-                        })}>
-                            <Button children={'Edit'} />
-                        </div>
+
+                        <Button onClick={(() => {
+                            setCustomerId(singleData?.id)
+                            seteditCustomer(true)
+                        })} children={'Edit'} />
+
                     </div>
                 </div>
 
@@ -107,7 +113,7 @@ const SingleCustomer = () => {
                 </div>
                 <UpcomingProgramSlider />
                 <CompletedProgramSlider />
-            </div>
+            </div>}
         </>
     )
 }

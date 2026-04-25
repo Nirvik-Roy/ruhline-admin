@@ -44,7 +44,6 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
     
     return (
         <>
-            {loading && <Loaders />}
             <Activity mode={quoteModal ? 'visible' : 'hidden'}>
                 <AddQuoteModuleModal />
             </Activity>
@@ -208,6 +207,8 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                                 // If we get here, it's safe to proceed
                                 postProgramModuleFunc();
                             }}
+                            loading={loading}
+                            loadingText='Adding...'
                             children={'Add'}
                         />}
 

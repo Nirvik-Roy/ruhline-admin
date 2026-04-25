@@ -12,7 +12,8 @@ import Loaders from '../../../Components/Loaders/Loaders'
 const TheYMethod = () => {
     const navigate = useNavigate();
     const [headline, setheadLine] = useState('');
-    const [ymethodData,setymethodData] = useState({})
+    const [ymethodData, setymethodData] = useState({})
+    const [postLoading, setpostLoading] = useState(false)
     const [loading, setloading] = useState(false)
     const [stepOptions, setstepOptions] = useState([
         {
@@ -50,7 +51,7 @@ const TheYMethod = () => {
     const handleSubmit = async () => {
         if (headline) {
             try {
-                setloading(true)
+                setpostLoading(true)
                 const formData = new FormData();
                 formData.append('headline', headline)
                 if (stepOptions?.length > 0) {
@@ -64,7 +65,7 @@ const TheYMethod = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
 
         } else {
@@ -88,19 +89,19 @@ const TheYMethod = () => {
         fetchData()
     }, [])
 
-    useEffect(()=>{
-      setheadLine(ymethodData?.headline || "")
+    useEffect(() => {
+        setheadLine(ymethodData?.headline || "")
         setstepOptions(ymethodData?.steps || [{
-            id:0+1,
-            title:"",
-            description:""
+            id: 0 + 1,
+            title: "",
+            description: ""
         }])
-    },[ymethodData])
+    }, [ymethodData])
 
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>The Y Method Page</h2>
@@ -117,7 +118,7 @@ const TheYMethod = () => {
                             }} />
                         </div> */}
                         <div>
-                            <Button onClick={handleSubmit} children={'Save'} styles={{
+                            <Button loading={postLoading} loadingText='Saving...' onClick={handleSubmit} children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -155,7 +156,7 @@ const TheYMethod = () => {
                         fontSize: '13px'
                     }} />
                 </div>
-            </div>
+            </div>}
         </>
     )
 }

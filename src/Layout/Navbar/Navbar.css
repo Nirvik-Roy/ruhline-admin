@@ -7,7 +7,7 @@
     background-color: var(--body-color);
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 99;
 }
 
 .navbar_content_wrapper {
@@ -46,8 +46,8 @@
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    bottom: -150px;
-    right: 45%;
+    top: 150%;
+    right: 25%;
     border: 1px solid rgba(220, 224, 229, 1);
     z-index: 9;
 }

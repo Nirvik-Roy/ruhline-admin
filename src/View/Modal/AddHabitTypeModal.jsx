@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import toast from 'react-hot-toast'
-const AddHabitTypeModal = ({ setisModal, addHabitType }) => {
+const AddHabitTypeModal = ({ setisModal, addHabitType, habitLoading }) => {
     const [habitName, sethabitName] = useState("")
     return (
         <>
@@ -27,7 +27,7 @@ const AddHabitTypeModal = ({ setisModal, addHabitType }) => {
                         toast.error("Plz enter the field..")
                     }
                 })}>
-                    <Button children={'Add'} styles={{
+                    <Button loading={habitLoading} loadingText='Adding...' children={'Add'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

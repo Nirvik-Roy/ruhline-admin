@@ -14,8 +14,10 @@ import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx';
 const QuotesCategories = () => {
     const [index, setIndex] = useState([]);
     const dropdownRef = useRef(null);
-    const [quoteName, setquoteName] = useState()
+    const [quoteName, setquoteName] = useState('')
     const [loading, setloading] = useState(false);
+    const [deleteLoading, setdeleteLoading] = useState(false)
+    const [addLoading, setaddLoading] = useState(false)
     const [quoteCategoryData, setquoteCategoryData] = useState([])
     const navigate = useNavigate();
     const [isModal, setisModal] = useState(false);
@@ -34,8 +36,9 @@ const QuotesCategories = () => {
         try {
             setloading(true)
             const res = await getAllquoteCategory()
-            console.log(res);
-            setquoteCategoryData(res?.data?.data)
+            if (res?.success) {
+                setquoteCategoryData(res?.data?.data || [])
+            }
         } catch (err) {
             console.log(err)
         } finally {
@@ -49,7 +52,7 @@ const QuotesCategories = () => {
     const postCategories = async () => {
         if (quoteName != '') {
             try {
-                setloading(true);
+                setaddLoading(true);
                 const res = await postQuoteCategory({
                     name: quoteName
                 });
@@ -61,7 +64,7 @@ const QuotesCategories = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setaddLoading(false)
             }
         } else {
             toast.error('Plz enter the filed...')
@@ -81,14 +84,14 @@ const QuotesCategories = () => {
     }, []);
 
     const deleteFunc = async () => {
-        setloading(true)
+        setdeleteLoading(true)
         const res = await commonDelelteApi('/admin/quote-category', deleteId);
         if (res?.success) {
-            setloading(false)
+            setdeleteLoading(false)
             setdeleteModal(false)
             fetchQuotes();
-
         }
+        setdeleteLoading(false)
     }
 
     const handleDelete = (id) => {
@@ -119,8 +122,8 @@ const QuotesCategories = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleleteModal && <DeleteModal details={'Do you really want to delete this category?'} title={'Delete Quote Category'} setdeleteModal={setdeleteModal} onClick={deleteFunc} />}
-            {isModal && <AddQutoesCategoriesModal quoteName={quoteName} setquoteName={setquoteName} postCategories={postCategories} setisModal={setisModal} />}
+            {deleleteModal && <DeleteModal loading={deleteLoading} details={'Do you really want to delete this category?'} title={'Delete Quote Category'} setdeleteModal={setdeleteModal} onClick={deleteFunc} />}
+            {isModal && <AddQutoesCategoriesModal addLoading={addLoading} quoteName={quoteName} setquoteName={setquoteName} postCategories={postCategories} setisModal={setisModal} />}
             {editModal && <EditQuoteCategory fetchQuotes={fetchQuotes} quoteId={quoteId} seteditModal={seteditModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
@@ -159,7 +162,7 @@ const QuotesCategories = () => {
 
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {currentItems?.length <= 0 && <td colSpan={12}>No quotes categories available...</td>}
                             {currentItems?.length > 0 && currentItems?.map((e, i) => (
                                 <tr>
@@ -186,7 +189,7 @@ const QuotesCategories = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}

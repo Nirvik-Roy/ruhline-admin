@@ -11,12 +11,14 @@ import { commonDelelteApi } from '../../../utils/common.js'
 const GoalTypes = () => {
     const [dropdown, setdropdown] = useState(null)
     const [isModal, setisModal] = useState(false);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [goalLoading, setgoalLoading] = useState(false)
     const [editModal, seteditModal] = useState(false);
     const [allGoalData, setallGoalData] = useState([]);
     const [goalId, setgoalId] = useState();
     const [deleteId, setdeleId] = useState();
     const [deleleteModal, setdeleteModal] = useState(false)
+    const [deleteLoading,setdeleteLoading] = useState(false)
     const dropdownRef = useRef(null);
     const navigate = useNavigate()
     const dropdownFunction = (i) => {
@@ -44,7 +46,7 @@ const GoalTypes = () => {
 
     const addGoal = async (data) => {
         try {
-            setloading(true);
+            setgoalLoading(true);
             const res = await postGoalType(data);
             if (res?.success) {
                 fetchData()
@@ -53,7 +55,7 @@ const GoalTypes = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setgoalLoading(false)
         }
     }
 
@@ -76,9 +78,9 @@ const GoalTypes = () => {
 
     const deleteFunc = async () => {
         try {
-            setloading(true)
-            const res = await commonDelelteApi("/admin/goal-type",deleteId)
-            if(res?.success){
+            setdeleteLoading(true)
+            const res = await commonDelelteApi("/admin/goal-type", deleteId)
+            if (res?.success) {
                 setdeleteModal(false)
                 setdeleId('')
                 fetchData()
@@ -87,16 +89,16 @@ const GoalTypes = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setdeleteLoading(false)
         }
     }
     return (
         <>
-            {isModal && <AddGoalTypesModal addGoal={addGoal} setisModal={setisModal} />}
+            {isModal && <AddGoalTypesModal goalLoading={goalLoading} addGoal={addGoal} setisModal={setisModal} />}
             {editModal && <EditGoalTypesModal fetchData={fetchData} goalId={goalId} seteditModal={seteditModal} />}
-            {deleleteModal && <DeleteModal onClick={deleteFunc} title={"Delete Goal Type"} details={'Do you really want to delete this goal type?'} />}
+            {deleleteModal && <DeleteModal loading={deleteLoading} onClick={deleteFunc} title={"Delete Goal Type"} details={'Do you really want to delete this goal type?'} />}
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            { <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Goal Types</h2>
@@ -117,7 +119,7 @@ const GoalTypes = () => {
                 </div>
 
 
-                <div className='coaches_shift_card_wrapper' style={{
+                {!loading &&  <div className='coaches_shift_card_wrapper' style={{
                     gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr)'
                 }}>
                     {allGoalData?.length <= 0 && <p style={{
@@ -149,13 +151,13 @@ const GoalTypes = () => {
                                     setgoalId(e?.id);
                                     seteditModal(true)
                                 })}>Edit</small>
-                                <small onClick={(()=>handleDelete(e?.id))}>Delete</small>
+                                <small onClick={(() => handleDelete(e?.id))}>Delete</small>
                             </div>}
                         </div>
 
                     ))}
-                </div>
-            </div>
+                </div>}
+            </div>}
         </>
     )
 }

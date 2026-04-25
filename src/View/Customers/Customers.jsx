@@ -19,7 +19,8 @@ const Customers = () => {
     const { isEdited } = useSelector(state => state.editCustomer)
     const [deleteModal, setdeleteModal] = useState(false)
     const [customerId, setCustomerId] = useState()
-    const [loading, setIsloading] = useState(false)
+    const [loading, setIsloading] = useState(false);
+    const [deleteLoading, setdeleteloading] = useState(false)
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -62,12 +63,18 @@ const Customers = () => {
             setIsloading(false)
         }
     }
+
     useEffect(() => {
         fetchCustomer()
+    }, [])
+    useEffect(() => {
+        if (isEdited) {
+            fetchCustomer()
+        }
     }, [isEdited])
 
     const deleteCustomerFunc = async () => {
-        setIsloading(true)
+        setdeleteloading(true)
         if (deletedId) {
             try {
                 const result = await deleteCustomer(deletedId);
@@ -79,7 +86,7 @@ const Customers = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setIsloading(false)
+                setdeleteloading(false)
             }
         }
     }
@@ -105,7 +112,7 @@ const Customers = () => {
     }, []);
     return (
         <>
-            {deleteModal && <DeleteModal onClick={deleteCustomerFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} onClick={deleteCustomerFunc} setdeleteModal={setdeleteModal} title={'Delete Customer'} details={'Are you sure you want to delete this customer?...'} />}
             {loading && <Loaders />}
             {addCustomer && <AddCustomerModal fetchCustomer={fetchCustomer} setaddCustomer={setaddCustomer} />}
             {editCustomer && <EditCustomerModal customerId={customerId} seteditCustomer={seteditCustomer} />}
@@ -139,7 +146,14 @@ const Customers = () => {
 
                             </tr>
                         </thead>
-                        {currentItems?.length > 0 ? <tbody>
+
+                        {!loading && <tbody>
+
+                            {currentItems?.length <= 0 && <td colSpan={12} style={{
+                                textAlign: 'center',
+                                color: 'var(--primary-color)',
+                                fontWeight: '700'
+                            }}>No Customer data found...</td>}
                             {currentItems?.map((e, i) => (
                                 <tr>
                                     <td>
@@ -174,11 +188,7 @@ const Customers = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody> : <td colSpan={12} style={{
-                            textAlign: 'center',
-                            color: 'var(--primary-color)',
-                            fontWeight: '700'
-                        }}>No Customer data found...</td>}
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}

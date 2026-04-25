@@ -20,6 +20,7 @@ const ProgramCategories = () => {
     const [isModal, setisModal] = useState(false)
     const [deletedId, setdeletedId] = useState()
     const [deleteModal, setdeleteModal] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -64,7 +65,7 @@ const ProgramCategories = () => {
 
     const deleteFunc = async () => {
         try {
-            setLoading(true)
+            setdeleteLoading(true)
             const res = await deleteCategories(deletedId);
             if (res.success) {
                 setdeleteModal(false)
@@ -73,7 +74,7 @@ const ProgramCategories = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setLoading(false)
+            setdeleteLoading(false)
         }
     }
     // Pagination logic & Search Logic...
@@ -99,7 +100,7 @@ const ProgramCategories = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal title={'Delete program categories'} details={"Do you really want to delete this category?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} title={'Delete program categories'} details={"Do you really want to delete this category?"} onClick={deleteFunc} setdeleteModal={setdeleteModal} />}
             {editModal && <EditProgramCategoriesModal editModal={editModal} allPrograms={allPrograms} editIndex={editIndex} fetchPrograms={fetchPrograms} setEditModal={setEditModal} />}
             {isModal && <AddProgramCategoriesModal fetchPrograms={fetchPrograms} setisModal={setisModal} />}
             <div className='dashboard_container'>
@@ -138,7 +139,7 @@ const ProgramCategories = () => {
 
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {currentItems?.length <= 0 && <td colSpan={12} style={{
                                 textAlign: 'center'
                             }}>No program categories available...</td>}
@@ -203,7 +204,7 @@ const ProgramCategories = () => {
                                     </tr>}
                                 </>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}

@@ -11,7 +11,7 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
     const [isloading, setIsLoading] = useState(false)
     const [file, setFile] = useState(null);
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        setFile(e.target.files[0] || null);
     };
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,39 +28,42 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
 
 
     useEffect(() => {
-        setFirstName(userData?.first_name && userData?.first_name)
-        setLastName(userData?.last_name && userData?.last_name);
+        setFirstName(userData?.first_name && userData?.first_name || '')
+        setLastName(userData?.last_name && userData?.last_name || '');
     }, [userData])
 
     const UpdateFunc = async () => {
-        if (lastName != '' && firstName != '' && file != '') {
-            setIsLoading(true)
+        if (lastName != '' && firstName != '') {
             try {
+                setIsLoading(true)
                 const result = await UpdateuserProfile({
                     lastName,
                     firstName,
                     file,
-                    profileLink : userData?.profile_photo
+                    profileLink: userData?.profile_photo
                 })
-                await userDataFetch()
-                modalFunction(0)
+                if(result?.success){
+                    await userDataFetch()
+                    modalFunction(0)
+                }
+               
             } catch (err) {
                 toast.error(err.response?.data?.message);
             } finally {
                 setIsLoading(false)
             }
         } else {
-            toast.error('Plz enter the fields to update')
+            toast.error('Plz provide the required details..')
+            setIsLoading(false)
         }
     }
     return (
         <>
-            {isloading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => modalFunction(0))}></div>
             <div className='modal_div'>
                 <h4>Change Profile Picture</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => modalFunction(0))}></i>
-                <form className='modal_form'>
+                <form onSubmit={((e) => e.preventDefault())} className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
                         <Input value={firstName} onChange={handleChange} name={'firstName'} label={'First Name'} required={true} placeholder={'Enter first name'} />
                         <Input value={lastName} onChange={handleChange} name={'lastName'} label={'Last Name'} required={true} placeholder={'Enter last name'} />
@@ -109,10 +112,9 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
 
                     <div className='change_cancel_wrapper'>
                         <button onClick={(() => modalFunction(0))}>Cancel</button>
-                        <div onClick={(() => UpdateFunc())}>
-                            <Button children={'Change'} />
 
-                        </div>
+                        <Button onClick={(() => UpdateFunc())} loading={isloading} loadingText='Changing...' children={'Change'} />
+
                     </div>
                 </form>
             </div>

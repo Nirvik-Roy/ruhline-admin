@@ -3,7 +3,7 @@ import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import toast from 'react-hot-toast'
 
-const AddGoalTypesModal = ({ setisModal, addGoal }) => {
+const AddGoalTypesModal = ({ setisModal, addGoal, goalLoading }) => {
     const [goalType, setgoalType] = useState('')
     return (
         <>
@@ -20,7 +20,7 @@ const AddGoalTypesModal = ({ setisModal, addGoal }) => {
                     <Input value={goalType} onChange={((e) => setgoalType(e?.target?.value))} label={'Add Goal type'} required={true} placeholder={'Enter goal type'} />
                 </div>
 
-                <Button onClick={(()=>{
+                <Button loading={goalLoading} loadingText='Adding...' onClick={(()=>{
                     if(goalType!=''){
                         addGoal({
                             name:goalType

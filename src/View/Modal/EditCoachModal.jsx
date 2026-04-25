@@ -6,7 +6,8 @@ import eye from '../../assets/Union (1).svg'
 import { getAllPhoneCountry } from '../../utils/location'
 import toast from 'react-hot-toast'
 import Loaders from '../../Components/Loaders/Loaders'
-const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading, editNewCoachfunc, updateErrors }) => {
+import ModalLoader from '../../Components/Loaders/ModalLoader'
+const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading, editNewCoachfunc, updateErrors, updateLoading }) => {
     const [emailerrorMessage, setEmailerrorMessage] = useState('');
     const [phoneCodes, setphoneCodes] = useState([]);
     const [contacterrorMessage, setContactErrorMessage] = useState();
@@ -150,7 +151,9 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
                 formDataNew.append("password", formData.password)
                 formDataNew.append("password_confirmation", formData.password_confirmation)
                 // 👇 image file
-                formDataNew.append("profile_image", file)
+                if (file instanceof File) {
+                    formDataNew.append("profile_image", file)
+                }
                 await editNewCoachfunc(singleCoachdata.id, formDataNew);
             }
 
@@ -163,12 +166,13 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
 
     return (
         <>
-            {isLoading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => seteditCoachModal(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight: '80vh'
+            }}>
                 <h4>Edit a coach</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditCoachModal(false))}></i>
-                <form className='modal_form'>
+                {isLoading ? <ModalLoader /> : <form onSubmit={((e) => e.preventDefault())} className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
                         <Input onChange={handleChange} name="first_name" value={formData.first_name} label={'First Name'} required={true} placeholder={'Enter first name'} />
                         <Input onChange={handleChange} name='last_name' value={formData.last_name} label={'Last Name'} required={true} placeholder={'Enter last name'} />
@@ -322,10 +326,12 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
                             <input onChange={handleFileChange} type='file' />
                         </div>
                     </div>
-                    <div onClick={(() => sendCoachData())} className='change_cancel_wrapper'>
-                        <Button children={'Add'} />
+                    <div onClick={(() => sendCoachData())} className=''>
+                        <Button styles={{
+                            marginLeft: 'auto'
+                        }} loading={updateLoading} loadingText='Updating...' children={'Update'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

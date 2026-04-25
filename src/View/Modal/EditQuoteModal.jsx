@@ -7,8 +7,10 @@ import toast from 'react-hot-toast';
 
 const EditQuoteModal = ({ setisEditModal, quoteId, fetchQuotes }) => {
     const [loading, setloading] = useState(false);
-    const [quoteName, setquoteName] = useState();
-    const [singleQuote, setsingleQuote] = useState()
+    const [quoteName, setquoteName] = useState('');
+    const [singleQuote, setsingleQuote] = useState();
+    const [editLoading, seteditLoading] = useState(false)
+
     const fetchSingleQuote = async () => {
         try {
             setloading(true);
@@ -28,11 +30,11 @@ const EditQuoteModal = ({ setisEditModal, quoteId, fetchQuotes }) => {
     useEffect(() => {
         setquoteName(singleQuote?.quote)
     }, [singleQuote])
-    console.log(singleQuote)
+
     const editQuoteModal = async () => {
         if (quoteName != '') {
             try {
-                setloading(true);
+                seteditLoading(true);
                 const res = await editQuote({
                     quote: quoteName,
                     quote_category_id: singleQuote?.quote_category?.id
@@ -44,7 +46,7 @@ const EditQuoteModal = ({ setisEditModal, quoteId, fetchQuotes }) => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                seteditLoading(false)
             }
         } else {
             toast.error('Plz enter the field')
@@ -63,7 +65,7 @@ const EditQuoteModal = ({ setisEditModal, quoteId, fetchQuotes }) => {
                     <Input value={quoteName} onChange={((e) => setquoteName(e.target.value))} label={'Quote'} required={true} placeholder={'Add quote'} />
                 </div>
                 <div onClick={editQuoteModal}>
-                    <Button children={'Edit'} styles={{
+                    <Button loading={editLoading} loadingText='Updating...' children={'Update'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

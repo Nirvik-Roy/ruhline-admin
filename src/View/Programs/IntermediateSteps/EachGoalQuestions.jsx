@@ -19,6 +19,7 @@ const EachGoalQuestions = () => {
     const [description2, setdescription2] = useState("")
     const [description3, setdescription3] = useState("")
     const [loading, setloading] = useState(false)
+    const [postLoading, setpostLoading] = useState(false)
     const [staticData, setStaticData] = useState({
         headline_1: "",
         headline_2: "",
@@ -39,7 +40,7 @@ const EachGoalQuestions = () => {
     const handleSubmit = async () => {
         if (staticData.headline_1 != '') {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData();
                 formData.append("headline_1", staticData.headline_1 || "")
                 formData.append("headline_2", staticData.headline_2 || "")
@@ -58,12 +59,12 @@ const EachGoalQuestions = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
-        }else{
+        } else {
             toast.error("Plz enter the headline field...")
         }
-       
+
     }
 
     const fetchData = async () => {
@@ -101,11 +102,10 @@ const EachGoalQuestions = () => {
 
     }, [eachGoalData])
 
-    console.log(eachGoalData)
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Questions for each goal - why? Intermediate Page</h2>
@@ -122,7 +122,7 @@ const EachGoalQuestions = () => {
                             }} />
                         </div> */}
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postLoading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -191,7 +191,7 @@ const EachGoalQuestions = () => {
 
                     <Input onChange={handleChange} value={staticData.quote} name={'quote'} label={'Quote'} placeholder={'Enter quote'} />
                 </div>
-            </div>
+            </div>}
         </>
     )
 }

@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
     const [allPrograms, setallPrograms] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [addLoading,setaddLoading] = useState(false)
     const [formData, setformData] = useState({
         name: '',
         parent_id: ''
@@ -41,7 +42,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
         const { name, parent_id } = formData;
         if (name != '') {
             try {
-                setLoading(true)
+                setaddLoading(true)
                 const formDatanew = new FormData();
                 formDatanew.append('name', name);
                 if (parent_id != '') {
@@ -55,7 +56,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setLoading(false)
+                setaddLoading(false)
             }
         } else {
             toast.error('Plz enter all fields...')
@@ -88,7 +89,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
                     <Input value={formData.name} name={'name'} onChange={handleChange} type={'text'} label={'Category Name'} placeholder={"Enter category name"} />
                 </div>
                 <div onClick={(() => handleSubmit())}>
-                    <Button children={'Add'} styles={{
+                    <Button loading={addLoading} loadingText='Adding...' children={'Add'} styles={{
                         marginLeft: 'auto'
                     }} />
                 </div>

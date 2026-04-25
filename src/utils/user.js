@@ -16,7 +16,7 @@ export const UpdateuserProfile = async (data) => {
                 },);
                 if (res.data.success == true) {
                     toast.success(res.data?.message || 'Profile Updated Successfully');
-                    return res.data.data
+                    return res.data
                 }
             } catch (err) {
                 toast.error(err.response?.data?.message);
@@ -36,7 +36,7 @@ export const UpdateuserProfile = async (data) => {
                 },);
                 if (res.data.success == true) {
                     toast.success(res.data?.message || 'Profile Updated Successfully');
-                    return res.data.data
+                    return res.data
                 }
             } catch (err) {
                 console.log(err)
@@ -57,7 +57,7 @@ export const Changeuserpassword = async (data) => {
             },);
             if (res.data.success == true) {
                 toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data.data
+                return res.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);

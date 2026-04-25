@@ -73,6 +73,13 @@ function App() {
       behavior: 'instant'
     })
   }, [location.pathname])
+
+  // To prevent form reload globally
+  document.addEventListener('submit', (e) => {
+    if (!e.target.classList.contains('allow-submit')) {
+      e.preventDefault();
+    }
+  });
   return (
     <>
       <>

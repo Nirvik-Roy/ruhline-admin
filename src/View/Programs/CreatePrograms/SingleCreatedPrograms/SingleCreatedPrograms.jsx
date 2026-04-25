@@ -32,7 +32,7 @@ const SingleCreatedPrograms = () => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container one_time_content_wrapper'>
+            {!loading && <div className='dashboard_container one_time_content_wrapper'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>{singleData?.name}</h2>
@@ -58,9 +58,9 @@ const SingleCreatedPrograms = () => {
                     </div>
                 </div>
                 <SingleProgramDetails singleData={singleData} />
-                <ProgramTabs singleData={singleData}/>
-                <ProgramModule/>
-            </div>
+                <ProgramTabs singleData={singleData} />
+                <ProgramModule />
+            </div>}
         </>
     )
 }

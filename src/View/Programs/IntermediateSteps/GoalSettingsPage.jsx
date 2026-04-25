@@ -10,7 +10,8 @@ import toast from 'react-hot-toast'
 const GoalSettingsPage = () => {
     const navigate = useNavigate();
     const [description2, setdescription2] = useState("");
-    const [goalSettingsData,setgoalSettingsData] = useState({})
+    const [postLoading, setpostLoading] = useState(false)
+    const [goalSettingsData, setgoalSettingsData] = useState({})
     const [loading, setloading] = useState(false)
     const [goalData, setgoalData] = useState({
         headline: "",
@@ -60,9 +61,9 @@ const GoalSettingsPage = () => {
     }
 
     const handleSubmit = async () => {
-        if(goalData?.headline != '' && goalData?.quote !='' && goalData?.sub_heading_1 && goalData?.sub_heading_2){
+        if (goalData?.headline != '' && goalData?.quote != '' && goalData?.sub_heading_1 && goalData?.sub_heading_2) {
             try {
-                setloading(true)
+                setpostLoading(true)
                 const formData = new FormData()
                 formData.append('headline', goalData.headline || "")
                 formData.append('quote', goalData.quote || "")
@@ -79,12 +80,12 @@ const GoalSettingsPage = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
-        }else{
+        } else {
             toast.error("Plz enter all the required fileds")
         }
-       
+
     }
 
     const fetchData = async () => {
@@ -102,24 +103,24 @@ const GoalSettingsPage = () => {
         fetchData()
     }, [])
 
-    useEffect(()=>{
-     setgoalData({
-         headline: goalSettingsData?.headline || "",
-         quote: goalSettingsData?.quote || "",
-         sub_heading_1: goalSettingsData?.sub_heading_1 || "",
-         sub_heading_2: goalSettingsData?.sub_heading_2 || ""
-     })
+    useEffect(() => {
+        setgoalData({
+            headline: goalSettingsData?.headline || "",
+            quote: goalSettingsData?.quote || "",
+            sub_heading_1: goalSettingsData?.sub_heading_1 || "",
+            sub_heading_2: goalSettingsData?.sub_heading_2 || ""
+        })
 
         setdescription2(goalSettingsData?.description_2 || "")
         setoptionsData(goalSettingsData?.options || [{
-            id:0+1,
-            description:""
+            id: 0 + 1,
+            description: ""
         }])
-    },[goalSettingsData])
+    }, [goalSettingsData])
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Goal Settings Intermediate Page</h2>
@@ -136,7 +137,7 @@ const GoalSettingsPage = () => {
                             }} />
                         </div> */}
                         <div>
-                            <Button onClick={handleSubmit} children={'Save'} styles={{
+                            <Button loading={postLoading} loadingText='Saving...' onClick={handleSubmit} children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -190,7 +191,7 @@ const GoalSettingsPage = () => {
                 <div className='values_inputs_wrapper462'>
                     <CustomTextEditor defaultValue={description2} onChange={((data) => setdescription2(data))} label={'Description 2'} />
                 </div>
-            </div>
+            </div>}
         </>
     )
 }

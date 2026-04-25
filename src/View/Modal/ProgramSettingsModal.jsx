@@ -4,13 +4,16 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { useParams } from 'react-router-dom'
 import Button from '../../Components/Button'
 import toast from 'react-hot-toast'
+import ModalLoader from '../../Components/Loaders/ModalLoader'
 
-const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings, quoteCategoryId, setquoteCategoryId, coachCanEditModule, coacheEditedModules }) => {
+const ProgramSettingsModal = ({ setprogramSettingModal, setcardCategoryId, cardCategoryId, fetchProgramSettings, quoteCategoryId, setquoteCategoryId, coachCanEditModule, coacheEditedModules, programSettingsloading }) => {
     const [allQuotesCategory, setallQuotesCategory] = useState([])
     const [allCardsCategory, setallCardsCategory] = useState([]);
     const [coachEditModules, setcoachEditModules] = useState([]);
     const [coachCanEdit, setcoachCanEdit] = useState(false)
     const { id } = useParams()
+    const [settingsLoading,setsettingsLoading]=useState(false)
+    const [loading, setloading] = useState(false)
     const fetchQuotesCategory = async () => {
         try {
             setloading(true)
@@ -54,7 +57,7 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
     }, [coachCanEditModule, coacheEditedModules])
     const sendProgramSettings = async () => {
         try {
-            setloading(true)
+            setsettingsLoading(true)
             const formData = new FormData()
             formData.append('card_category_id', cardCategoryId || null,)
             formData.append('quote_category_id', quoteCategoryId || null)
@@ -79,7 +82,7 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setsettingsLoading(false)
         }
     }
 
@@ -101,13 +104,16 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
     return (
         <>
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'75vh'
+            }}>
                 <h4>Program Settings</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => {
                     setprogramSettingModal(false)
                     setcardCategoryId('')
                 })}></i>
-                <form className='modal_form'>
+                {(loading && programSettingsloading) && <ModalLoader/>}
+                {(!loading && !programSettingsloading) &&   <form className='modal_form'>
                     <div className='input_form'>
                         <label>Select Quotes Category<span>*</span></label>
                         <select value={quoteCategoryId} onChange={((e) => setquoteCategoryId(e?.target.value))}>
@@ -184,9 +190,9 @@ const ProgramSettingsModal = ({ setloading, setprogramSettingModal, setcardCateg
                     <div style={{
                         marginLeft: 'auto'
                     }}>
-                        <Button onClick={sendProgramSettings} children={'Save'} />
+                        <Button loading={settingsLoading} loadingText='Saving...' onClick={sendProgramSettings} children={'Save'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

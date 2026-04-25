@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 const CommonMistakes = () => {
     const navigate = useNavigate();
     const [allMistakesData, setallMistakesData] = useState({})
+    const [postLoading, setpostLoading] = useState(false)
     const [headline, setheadline] = useState("");
     const [loading, setloading] = useState(false)
     const [mistakesData, setmistakesData] = useState([
@@ -50,7 +51,7 @@ const CommonMistakes = () => {
     const handleSubmit = async () => {
         if (headline != '') {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData();
                 formData.append('headline', headline || "")
                 if (mistakesData.length > 0) {
@@ -63,7 +64,7 @@ const CommonMistakes = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         } else {
             toast.error('Plz enter the headline field')
@@ -98,7 +99,7 @@ const CommonMistakes = () => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='dashboard_container'>
+            {!loading &&     <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Eight most common mistakes Intermediate Page</h2>
@@ -115,7 +116,7 @@ const CommonMistakes = () => {
                             }} />
                         </div> */}
                         <div onClick={handleSubmit}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postLoading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -154,7 +155,7 @@ const CommonMistakes = () => {
                         fontSize: '13px'
                     }} />
                 </div>
-            </div>
+            </div>}
         </>
     )
 }
