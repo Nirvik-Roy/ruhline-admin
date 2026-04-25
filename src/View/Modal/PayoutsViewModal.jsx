@@ -1,19 +1,23 @@
 import React from 'react'
+import ModalLoader from '../../Components/Loaders/ModalLoader'
 
-const PayoutViewModal = ({ paymentFunction, singlePayout, payoutFrequency }) => {
+const PayoutViewModal = ({ paymentFunction, singlePayout, payoutFrequency, loading }) => {
     return (
         <>
             <div className='modal_wrapper' onClick={(() => paymentFunction(0))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight:'30vh'
+            }}>
+                {loading && <ModalLoader />}
                 <i class="fa-solid fa-xmark" onClick={(() => paymentFunction(0))}></i>
-                <div className='payout_content_wrapper'>
+                {!loading && <div className='payout_content_wrapper'>
                     <ul>
                         <li><strong>Coach Name:</strong>{singlePayout?.coach?.name}</li>
                         <li><strong>Coach ID:</strong>#{singlePayout?.coach?.id}</li>
                         <li><strong>Program:</strong>{singlePayout?.program?.name}</li>
                         <li><strong>Commission %</strong>{singlePayout?.commission_rate}</li>
                         <li style={{
-                            textTransform:'capitalize'
+                            textTransform: 'capitalize'
                         }}><strong>Payout Frequency:</strong>{payoutFrequency}</li>
                         <li><strong>Total Amount:</strong>{singlePayout?.currency} {singlePayout?.order_total_amount}</li>
                         <li><strong>Coach Amount:</strong>{singlePayout?.currency} {singlePayout?.coach_earning_amount}</li>
@@ -38,7 +42,7 @@ const PayoutViewModal = ({ paymentFunction, singlePayout, payoutFrequency }) => 
                         }
                         }>{singlePayout?.status}</span></li>
                     </ul>
-                </div>
+                </div>}
             </div>
 
         </>

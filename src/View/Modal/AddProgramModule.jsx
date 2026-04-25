@@ -9,7 +9,8 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
     const [quoteModal, setquoteModal] = useState(false);
     const [radioValue, setradioValue] = useState();
     const [radioTitle, setradioTitle] = useState('modules')
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [moduleLoading,setmoduleLoading] = useState(false)
     const { id } = useParams()
 
     const handleChange = (e) => {
@@ -20,7 +21,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
     const postProgramModuleFunc = async () => {
         if (id && radioValue) {
             try {
-                setloading(true)
+                setmoduleLoading(true)
                 const res = await postProgramModule({
                     module_type: radioValue
                 }, id)
@@ -31,7 +32,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setmoduleLoading(false)
             }
         } else {
             toast.error("Required data not found...")
@@ -212,7 +213,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                             children={'Add'}
                         />}
 
-                        {radioTitle === 'intermediatesteps' && <Button onClick={(() => {
+                        {radioTitle === 'intermediatesteps' && <Button loading={moduleLoading} loadingText='Adding...' onClick={(() => {
                             postProgramModuleFunc();
 
                         })} children={'Add'} />}

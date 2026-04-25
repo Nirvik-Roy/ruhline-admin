@@ -8,11 +8,12 @@ import Loaders from '../../../Components/Loaders/Loaders'
 const CmsPrivacy = () => {
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
+    const [postloading,setpostloading] = useState(false)
     const [contentErrors, setcontentErrors] = useState();
     const [content, setcontent] = useState('')
     const updatePrivacy = async () => {
         try {
-            setloading(true)
+            setpostloading(true)
             const res = await putAllCmsData('/admin/legal-page/privacy-policy', {
                 content:`${content}`
             });
@@ -20,7 +21,7 @@ const CmsPrivacy = () => {
         } catch (err) {
             console.log(err);
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -61,20 +62,20 @@ const CmsPrivacy = () => {
                             }} />
                         </div>
                         <div onClick={(() => { updatePrivacy() })}>
-                            <Button children={'Save'} styles={{
+                            <Button loading={postloading} loadingText='Saving...' children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
                         </div>
                     </div>
                 </div>
-                <div className='custom_editor_wrapper'>
+             { !loading &&  <div className='custom_editor_wrapper'>
                     <CustomTextEditor defaultValue={content} onChange={((data) => setcontent(data))} label={'Privacy Policy Description'} required={true} />
                     {contentErrors?.content && <small style={{
                         color: 'red',
                         marginTop: '10px',
                         marginLeft: '15px',
                     }}>*{contentErrors?.content && contentErrors?.content[0]}</small>}
-                </div>
+                </div>}
 
             </div>
         </>

@@ -15,6 +15,8 @@ const CmsContact = () => {
     const [deleteId, setdeleteId] = useState();
     const [deleteModal, setdeletModal] = useState(false)
     const [contactId, setContactId] = useState('')
+    const [postloading, setpostloading] = useState(false)
+    const [deleteloading, setdeleteloading] = useState(false)
     const navigate = useNavigate()
     const indexFunction = (i) => {
         if (index.includes(i)) {
@@ -27,7 +29,7 @@ const CmsContact = () => {
         setIsloading(true)
         try {
             const result = await getAllContactEnquires();
-            setcontactData(result.data);
+            setcontactData(result.data || []);
         } catch (err) {
             console.log(err)
         } finally {
@@ -40,9 +42,9 @@ const CmsContact = () => {
 
 
     const deleteContactEnquiresFunc = async () => {
-        setIsloading(true)
         if (deleteId) {
             try {
+                setdeleteloading(true)
                 const result = await deleteContactEnquires(deleteId);
                 console.log(result)
                 if (result.success) {
@@ -52,7 +54,7 @@ const CmsContact = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setIsloading(false)
+                setdeleteloading(false)
             }
         }
     }
@@ -79,7 +81,7 @@ const CmsContact = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal details={'Do you really want to delete this contact enquiry?'} title={'Delete contact enquiry'} setdeleteModal={setdeletModal} onClick={deleteContactEnquiresFunc} />}
+            {deleteModal && <DeleteModal loading={deleteloading} details={'Do you really want to delete this contact enquiry?'} title={'Delete contact enquiry'} setdeleteModal={setdeletModal} onClick={deleteContactEnquiresFunc} />}
             {isModal && <ContactInqueriesModal contactId={contactId} setisModal={setisModal} />}
 
             <div className='dashboard_container'>
@@ -87,7 +89,6 @@ const CmsContact = () => {
                     <div>
                         <h1>Contact Inquiries</h1>
                         <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/contact-queries'))}>Contact Inquiries</span></small>
-
                     </div>
                 </div>
                 <div className='table_container'>
@@ -101,7 +102,9 @@ const CmsContact = () => {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        {contactData.length > 0 ? <tbody>
+
+                        {!loading && <tbody>
+                            {contactData.length <= 0 && <td colSpan={12}>No contact inquiries found...</td>}
                             {contactData?.map((e, i) => (
                                 <tr>
                                     <td>
@@ -111,9 +114,10 @@ const CmsContact = () => {
                                     <td>+{e?.phone_country_code?.phone_code} {e?.phone}</td>
                                     <td>{e?.message}</td>
                                     <td ref={dropdownRef}>
-                                        <img onClick={((e) =>{ 
+                                        <img onClick={((e) => {
                                             e.stopPropagation()
-                                            indexFunction(i)})} src={ellipse} />
+                                            indexFunction(i)
+                                        })} src={ellipse} />
                                         {index.includes(i) && <div className='actions_wrapper' style={{
                                             bottom: '-75px'
                                         }}>
@@ -126,7 +130,7 @@ const CmsContact = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody> : <td colSpan={12}>No contact details found</td>}
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination />

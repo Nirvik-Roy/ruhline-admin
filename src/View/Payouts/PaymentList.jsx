@@ -73,9 +73,9 @@ const PaymentList = () => {
     return (
         <>
             {loading && <Loaders />}
-            {(payment.paymentPay || payment.editPayment) && <SinglePayModal singlePayout={singlePayout} update={payment?.editPayment} getSinglePayoutFunc={getSinglePayoutFunc} checkOutId={checkOutId} paymentFunction={paymentFunction} />}
+            {(payment.paymentPay || payment.editPayment) && <SinglePayModal loading={loading} singlePayout={singlePayout} update={payment?.editPayment} getSinglePayoutFunc={getSinglePayoutFunc} checkOutId={checkOutId} paymentFunction={paymentFunction} />}
 
-            {payment.viewDetails && <PayoutViewModal payoutFrequency={payoutFrequency} singlePayout={singlePayout} paymentFunction={paymentFunction} />}
+            {payment.viewDetails && <PayoutViewModal loading={loading}  payoutFrequency={payoutFrequency} singlePayout={singlePayout} paymentFunction={paymentFunction} />}
 
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>

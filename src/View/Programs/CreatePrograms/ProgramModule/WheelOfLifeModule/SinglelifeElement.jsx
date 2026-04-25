@@ -62,14 +62,16 @@ const SinglelifeElement = () => {
         editropdown: false
     })
 
-    const [singleProgramData, setsingleProgramData] = useState([])
+    const [singleProgramData, setsingleProgramData] = useState({})
     const [loading, setloading] = useState(false);
+    const [postLoading, setpostLoading] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
 
     const fetchSingleProgram = async () => {
         try {
             setloading(true)
             const res = await getprogramById(id);
-            setsingleProgramData(res?.data)
+            setsingleProgramData(res?.data || {})
         } catch (err) {
             console.log(err)
         } finally {
@@ -87,8 +89,9 @@ const SinglelifeElement = () => {
         try {
             setloading(true)
             const res = await getwheelofLifeElements(id, moduleId);
-            console.log(res)
-            setlifelements(res?.data?.data)
+            if (res?.success) {
+                setlifelements(res?.data?.data || [])
+            }
         } catch (err) {
             console.log(err)
         } finally {
@@ -126,9 +129,8 @@ const SinglelifeElement = () => {
         try {
             setloading(true)
             const res = await getWheelOfLifeQuestions(id, moduleId, elementId)
-            console.log(res)
             if (res?.success) {
-                setallQuestions(res?.data?.data)
+                setallQuestions(res?.data?.data || [])
             }
         } catch (err) {
             console.log(err)
@@ -266,7 +268,7 @@ const SinglelifeElement = () => {
     const postQuestions = async () => {
         if (id) {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData()
                 dynamicOptions.forEach((element) => {
                     if (element.type && element.question_text) {
@@ -315,7 +317,7 @@ const SinglelifeElement = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         }
     }
@@ -323,7 +325,7 @@ const SinglelifeElement = () => {
     const editQuestions = async (questionId) => {
         if (id && questionId) {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData()
                 formData.append(`type`, singleData.type)
                 formData.append('question_text', singleData.question_text)
@@ -344,14 +346,14 @@ const SinglelifeElement = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         }
     }
     const deleteQuestions = async () => {
         if (deleteId) {
             try {
-                setloading(true)
+                setdeleteLoading(true)
                 const res = await deleteWheelofLifeQuestion(moduleId, id, deleteId, elementId);
                 if (res?.success) {
                     setdeleteModal(false)
@@ -361,7 +363,7 @@ const SinglelifeElement = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setdeleteLoading(false)
             }
         } else {
             toast.error('Reuired data not found!')
@@ -370,22 +372,22 @@ const SinglelifeElement = () => {
     return (
         <>
             {loading && <Loaders />}
-            {deleteModal && <DeleteModal onClick={deleteQuestions} title={'Delete Questions'} details={'Do you really want to delete this question?'} setdeleteModal={setdeleteModal} />}
-            {tabs.descriptive && <DescriptiveModal errors={errors} updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
-            {tabs.multiChoice && <MultiChoiceModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} onClick={deleteQuestions} title={'Delete Questions'} details={'Do you really want to delete this question?'} setdeleteModal={setdeleteModal} />}
+            {tabs.descriptive && <DescriptiveModal loading={postLoading} errors={errors} updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.multiChoice && <MultiChoiceModal loading={postLoading} errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.singleChoice && <SingleChoiceModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.singleChoice && <SingleChoiceModal loading={postLoading} errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.dropdown && <DropdownModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.dropdown && <DropdownModal loading={postLoading} errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
 
-            {tabs.editmultiChoice && <EditMultiChoiceModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal loading={postLoading} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editropdown && <EditDropdownModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editropdown && <EditDropdownModal loading={postLoading} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editsingleChoice && <EditSingleChoiceModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editsingleChoice && <EditSingleChoiceModal loading={postLoading} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editdescriptive && <EditDescriptiveModal editErrors={editErrors} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editdescriptive && <EditDescriptiveModal loading={postLoading} editErrors={editErrors} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -444,7 +446,7 @@ const SinglelifeElement = () => {
                     </div>
                 </div>
 
-                <div className='questions_list_wrapper4562'>
+               {!loading && <div className='questions_list_wrapper4562'>
                     {allQuestions?.length <= 0 && <p style={{
                         textAlign: 'center',
                         fontWeight: '600',
@@ -482,7 +484,7 @@ const SinglelifeElement = () => {
                     ))}
 
 
-                </div>
+                </div>}
             </div>
         </>
     )

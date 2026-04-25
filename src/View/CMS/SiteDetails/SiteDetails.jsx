@@ -9,10 +9,12 @@ import ContactInfo from './ContactInfo'
 import { useNavigate } from 'react-router-dom'
 import { getSiteDetails, postSiteDetails } from '../../../utils/cms'
 import Loaders from '../../../Components/Loaders/Loaders'
+import ModalLoader from '../../../Components/Loaders/ModalLoader'
 const SiteDetails = () => {
     const [index, setIndex] = useState(0);
     const navigate = useNavigate();
     const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false)
     const [siteDetails, setsiteDetails] = useState()
     const [siteErrors, setsiteErrors] = useState()
     const [siteFavicon, setSiteFavicon] = useState();
@@ -51,8 +53,7 @@ const SiteDetails = () => {
         try {
             setloading(true)
             const res = await getSiteDetails();
-            setsiteDetails(res?.data);
-            console.log(res?.data)
+            setsiteDetails(res?.data || {});
         } catch (err) {
             console.log(err)
         } finally {
@@ -104,7 +105,7 @@ const SiteDetails = () => {
 
     const hanleSubmit = async () => {
         try {
-            setloading(true);
+            setpostloading(true);
             const formData = new FormData();
             { siteFavicon && formData.append('favicon', siteFavicon) }
             { headerLogo && formData.append('header_logo', headerLogo) }
@@ -127,7 +128,7 @@ const SiteDetails = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -156,7 +157,6 @@ const SiteDetails = () => {
 
     return (
         <>
-            {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper single_coach_head'>
                     <div>
@@ -177,7 +177,7 @@ const SiteDetails = () => {
                         </div>
 
                         <div onClick={(() => hanleSubmit())}>
-                            <Button children={'Save'} styles={{
+                            <Button loadingText='Saving...' loading={postloading} children={'Save'} styles={{
                                 fontSize: '15px'
                             }} />
                         </div>
@@ -201,32 +201,36 @@ const SiteDetails = () => {
 
                     </div>
                     <div className='site_right_wrapper'>
-                        {<Activity mode={sitetabs.favicon ? 'visible' : 'hidden'}>
-                            <SiteFavicon siteErrors={siteErrors} siteDetailsForm={siteDetailsForm} siteFavicon={siteFavicon} setSiteFavicon={setSiteFavicon} />
-                        </Activity>
-                        }
-                        {
+                        {loading && <ModalLoader />}
+                        {!loading && <>
+                            <Activity mode={sitetabs.favicon ? 'visible' : 'hidden'}>
+                                <SiteFavicon siteErrors={siteErrors} siteDetailsForm={siteDetailsForm} siteFavicon={siteFavicon} setSiteFavicon={setSiteFavicon} />
+                            </Activity>
+
+
                             <Activity mode={sitetabs.header ? 'visible' : 'hidden'}>
                                 <SiteHeader siteErrors={siteErrors} siteDetailsForm={siteDetailsForm} pageHeaderlogo={pageHeaderlogo} setpageheaderlogo={setpageheaderlogo} headerLogo={headerLogo} setheaderLogo={setheaderLogo} />
                             </Activity>
-                        }
 
-                        {
+
+
                             <Activity mode={sitetabs.footer ? 'visible' : 'hidden'}>
                                 <SiteFooter siteErrors={siteErrors} footerDescription={footerDescription} siteDetailsForm={siteDetailsForm} handleChange={handleChange} setfooterDescription={setfooterDescription} footerLogo={footerLogo} setfooterLogo={setfooterLogo} />
                             </Activity>
-                        }
 
-                        {
+
+
                             <Activity mode={sitetabs.socialMedia ? 'visible' : 'hidden'}>
                                 <SiteLinks siteErrors={siteErrors} handleChange={handleChange} siteDetailsForm={siteDetailsForm} />
                             </Activity>
-                        }
-                        {
+
+
                             <Activity mode={sitetabs.contactInfo ? 'visible' : 'hidden'}>
                                 <ContactInfo handleChange={handleChange} siteDetailsForm={siteDetailsForm} />
                             </Activity>
-                        }
+
+                        </>}
+
 
                     </div>
                 </div>

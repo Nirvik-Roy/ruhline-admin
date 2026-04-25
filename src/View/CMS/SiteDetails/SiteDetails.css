@@ -27,6 +27,7 @@
 
 .site_right_wrapper {
     width: 78%;
+    position: relative;
 }
 
 .site_header_logo_wrapper {

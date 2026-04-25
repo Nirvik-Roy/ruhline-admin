@@ -13,6 +13,7 @@ const CmsEditArticles = () => {
     const [dynamicFormstructure, setdynamicformstructure] = useState([]);
     const [articleCategories, setarticleCategories] = useState([]);
     const [singleArticle, setsingleArticle] = useState([])
+    const [postloading, setpostloading] = useState(false)
     const [textAreaContent, settextareacontent] = useState();
     const [articlesErrors, setarticlesErrors] = useState()
     const [fixedDescriptionContent, setfixedDescriptionContent] = useState()
@@ -132,10 +133,9 @@ const CmsEditArticles = () => {
 
     }, [success])
 
-    console.log(singleArticle)
     const handleSubmit = async () => {
         try {
-            setloading(true);
+            setpostloading(true);
             const dummyData = { ...fixedData };
             dummyData.share_facebook = facebookCheck ? 'true' : 'false',
                 dummyData.share_twitter = twitterCheck ? 'true' : 'false',
@@ -181,12 +181,10 @@ const CmsEditArticles = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false);
-            console.log(dynamicFormstructure)
+            setpostloading(false);
         }
     }
 
-    console.log(dynamicFormstructure)
     return (
         <>
             {loading && <Loaders />}
@@ -198,7 +196,7 @@ const CmsEditArticles = () => {
                         <h2> Articles / Edit Article</h2>
                         <small> <span onClick={(() => navigate('/dashboard/cms'))}>CMS</span> / <span onClick={(() => navigate('/dashboard/cms/articles'))}>Articles</span></small>
                     </div>
-                    <div className='coaches_button_wapper'>
+                    {!loading && <div className='coaches_button_wapper'>
                         <div>
                             <Button children={'Cancel'} styles={{
                                 color: 'var(--text-color)',
@@ -210,13 +208,13 @@ const CmsEditArticles = () => {
                         </div>
 
                         <div onClick={(() => handleSubmit())}>
-                            <Button children={'Update'} styles={{
+                            <Button loading={postloading} loadingText='Updating...' children={'Update'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
-                    </div>
+                    </div>}
                 </div>
-                <form>
+                {!loading && <form>
                     <div className='add_articles_wrapper'>
                         <div className='articles_form_left'>
                             <div>
@@ -402,7 +400,7 @@ const CmsEditArticles = () => {
                         }} />
                     </div>
 
-                </form>
+                </form>}
 
             </div>
         </>

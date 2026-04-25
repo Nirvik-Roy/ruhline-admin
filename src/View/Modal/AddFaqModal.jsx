@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input'
 import CustomTextEditor from '../../Components/CustomTextEditor/CustomTextEditor'
-const AddFaqModal = ({ addFunction, setaddModal }) => {
+const AddFaqModal = ({ addFunction, setaddModal, faqloading }) => {
     const [description, setdescription] = useState();
     const [heading, setheading] = useState('');
     return (
@@ -29,8 +29,10 @@ const AddFaqModal = ({ addFunction, setaddModal }) => {
                     <div onClick={(() => addFunction({
                         description,
                         heading
-                    }))} className='change_cancel_wrapper' >
-                        <Button children={'Add'} />
+                    }))} className='' >
+                        <Button loading={faqloading} loadingText='Adding...' styles={{
+                            marginLeft:'auto'
+                        }} children={'Add'} />
                     </div>
                 </form>
             </div>

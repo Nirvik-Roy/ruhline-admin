@@ -14,6 +14,7 @@ const CmsArticles = () => {
     const [loading, setloading] = useState(false);
     const [deleteId,setdeleteId] = useState()
     const [deleteModal,setdeleModal] = useState(false)
+    const [deleteloading,setdeleteloading] = useState(false);
     const [articleData,setarticleData] = useState([])
     const getdata = async () => {
         try {
@@ -39,7 +40,7 @@ const CmsArticles = () => {
 
     const deleteFunc = async ()=>{
         try{
-           setloading(true);
+           setdeleteloading(true);
             const res = await deleteCmsData('/admin/article/article', deleteId)
             if(res?.success){
                 setdeleModal(false)
@@ -48,13 +49,13 @@ const CmsArticles = () => {
         }catch(err){
             console.log(err)
         }finally{
-            setloading(false)
+            setdeleteloading(false)
         }
     }
     return (
         <>
             {loading && <Loaders/>}
-            {deleteModal && <DeleteModal onClick={deleteFunc} title={'Delete Article'} details={'Do you really want to delete this article?'} setdeleteModal={setdeleModal} />}
+            {deleteModal && <DeleteModal loading={deleteloading} onClick={deleteFunc} title={'Delete Article'} details={'Do you really want to delete this article?'} setdeleteModal={setdeleModal} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -80,11 +81,12 @@ const CmsArticles = () => {
                         </div>
                     </div>
                 </div>
-                {articleData?.length <= 0 && <p style={{
-                    textAlign: 'center'
-                }}>No articles found!...</p>}
-                <div className='cms_articles_grid_wrapper'>
                
+               {!loading && <div className='cms_articles_grid_wrapper'>
+                    {articleData?.length <= 0 && <p style={{
+                        textAlign: 'center',
+                        gridColumn:'1/-1'
+                    }}>No articles found!...</p>}
                     {articleData?.map((e,i)=>(
                         <div key={i} className='cms_card_articles'>
                             <div className='cms_card_img'>
@@ -110,7 +112,7 @@ const CmsArticles = () => {
                     ))}
                 
 
-                </div>
+                </div>}
             </div>
         </>
     )

@@ -33,7 +33,7 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
     }, [userData])
 
     const UpdateFunc = async () => {
-        if (lastName != '' && firstName != '') {
+        if (lastName != '' && firstName != '' && file!=null) {
             try {
                 setIsLoading(true)
                 const result = await UpdateuserProfile({

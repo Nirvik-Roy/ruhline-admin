@@ -14,7 +14,9 @@ const CardGameModule = () => {
     const [index, setIndex] = useState([]);
     const { id, moduleId } = useParams();
     const [singleData, setsingleData] = useState()
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false);
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const [allQuestions, setallQuestions] = useState([]);
     const [cardDescription, setcardDescription] = useState('')
     const [cardName, setcardName] = useState('')
@@ -34,6 +36,13 @@ const CardGameModule = () => {
         }
     }
 
+    useEffect(()=>{
+       if(modal.editCard == false){
+        setcardName("")
+        setcardDescription("")
+       }
+    },[modal])
+
     const Modalfunc = (i) => {
         setModal({
             viewCard: i === 1 ? true : false,
@@ -44,7 +53,6 @@ const CardGameModule = () => {
         try {
             setloading(true)
             const res = await getCardGameQuestions(id, moduleId)
-            console.log(res)
             if (res?.success) {
                 setallQuestions(res?.data?.data)
             }
@@ -63,7 +71,7 @@ const CardGameModule = () => {
 
     const addCardFunc = async () => {
         if (cardName != "" && cardDescription != '') {
-            setloading(true)
+            setpostloading(true)
             const res = await postCardGamecards({
                 name: cardName,
                 // card_category_id: cardCategoryId,
@@ -75,7 +83,7 @@ const CardGameModule = () => {
                 setcardDescription("")
                 setcardName("")
             }
-            setloading(false)
+            setpostloading(false)
         } else {
             toast.error("Plz enter the fields")
         }
@@ -84,7 +92,7 @@ const CardGameModule = () => {
     const editCardFunc = async (singleCardId) => {
         if (cardName != '' && cardDescription != "") {
             try {
-                setloading(true);
+                setpostloading(true);
                 const res = await editCardGamecards({
                     name: cardName,
                     description: cardDescription
@@ -97,7 +105,7 @@ const CardGameModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostloading(false)
             }
         } else {
             toast.error('Plz enter the fields')
@@ -111,7 +119,7 @@ const CardGameModule = () => {
 
     const deleteFunc = async () => {
         try {
-            setloading(true)
+            setdeleteLoading(true)
             const res = await deleteCardGameCards(id, moduleId, deletedId)
             if (res?.success) {
                 fetchCardGameQuestions()
@@ -121,7 +129,7 @@ const CardGameModule = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setdeleteLoading(false)
         }
     }
 
@@ -169,18 +177,16 @@ const CardGameModule = () => {
     };
     return (
         <>
-            {deleteModal && <DeleteModal onClick={deleteFunc} title={'Delete Card'} details={'Do you really want to delete this card?'} setdeleteModal={setdeleteModal} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} onClick={deleteFunc} title={'Delete Card'} details={'Do you really want to delete this card?'} setdeleteModal={setdeleteModal} />}
             {modal.viewCard && <CardViewModal singleData={singleData} setModal={setModal} />}
-            {modal.editCard && <CardGameCardEditModal singleData={singleData} updateCardFunc={editCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} modalFunc={Modalfunc} />}
-            {isModal && <AddCardModal addCardFunc={addCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} setisModal={setisModal} />}
+            {modal.editCard && <CardGameCardEditModal postloading={postloading} singleData={singleData} updateCardFunc={editCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} modalFunc={Modalfunc} />}
+            {isModal && <AddCardModal postloading={postloading} addCardFunc={addCardFunc} cardName={cardName} setcardName={setcardName} cardDescription={cardDescription} setcardDescription={setcardDescription} setisModal={setisModal} />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>Card Game</h2>
                         <small><span onClick={(() => navigate('/dashboard/programs/create-program'))}>Program Creation</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}`))}>{singleProgramData?.name}</span> / <span onClick={(() => navigate(`/dashboard/programs/single-program/${id}/card-game/${moduleId}`))}>Card Game</span></small>
-
-
                     </div>
 
                     <div className='coaches_button_wapper'>
@@ -208,7 +214,7 @@ const CardGameModule = () => {
                                 }}>Edit</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {currentItems?.length <= 0 && <td style={{
                                 color: 'var(--primary-color)'
                             }} colSpan={12}>No cards found...</td>}
@@ -257,7 +263,7 @@ const CardGameModule = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
 

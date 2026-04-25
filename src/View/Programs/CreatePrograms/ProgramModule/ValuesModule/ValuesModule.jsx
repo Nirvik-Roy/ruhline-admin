@@ -27,6 +27,8 @@ const ValuesModule = () => {
     const [singleData, setsingleData] = useState();
     const [errors, setErrors] = useState()
     const [editErrors, seteditErrors] = useState()
+    const [postLoading, setpostLoading] = useState(false)
+    const [deleteLoading, setdeleteLoading] = useState(false)
     const [dynamicOptions, setdynamicOptions] = useState([
         {
             id: 1,
@@ -160,7 +162,7 @@ const ValuesModule = () => {
     const postQuestions = async () => {
         if (id) {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData()
                 dynamicOptions.forEach((element) => {
                     if (element.type && element.question_text) {
@@ -209,7 +211,7 @@ const ValuesModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         }
     }
@@ -218,7 +220,7 @@ const ValuesModule = () => {
     const editQuestions = async (questionId) => {
         if (id && questionId) {
             try {
-                setloading(true);
+                setpostLoading(true);
                 const formData = new FormData()
                 formData.append(`type`, singleData.type)
                 formData.append('question_text', singleData.question_text)
@@ -239,7 +241,7 @@ const ValuesModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setpostLoading(false)
             }
         }
     }
@@ -295,7 +297,6 @@ const ValuesModule = () => {
         try {
             setloading(true)
             const res = await getValuesQuestion(id, moduleId)
-            console.log(res)
             if (res?.success) {
                 setallQuestions(res?.data?.data)
             }
@@ -320,7 +321,7 @@ const ValuesModule = () => {
     const deleteQuestions = async () => {
         if (deleteId) {
             try {
-                setloading(true)
+                setdeleteLoading(true)
                 const res = await deleteValuesQuestion(moduleId, id, deleteId);
                 if (res?.success) {
                     setdeleteModal(false)
@@ -330,7 +331,7 @@ const ValuesModule = () => {
             } catch (err) {
                 console.log(err)
             } finally {
-                setloading(false)
+                setdeleteLoading(false)
             }
         } else {
             toast.error('Reuired data not found!')
@@ -344,22 +345,23 @@ const ValuesModule = () => {
 
     return (
         <>
-            {deleteModal && <DeleteModal onClick={deleteQuestions} title={'Delete Questions'} details={'Do you really want to delete this question?'} setdeleteModal={setdeleteModal} />}
-            {tabs.descriptive && <DescriptiveModal errors={errors} updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
-            {tabs.multiChoice && <MultiChoiceModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {deleteModal && <DeleteModal loading={deleteLoading} onClick={deleteQuestions} title={'Delete Questions'} details={'Do you really want to delete this question?'} setdeleteModal={setdeleteModal} />}
+            {tabs.descriptive && <DescriptiveModal loading={postLoading} errors={errors} updateQuestionText={updateQuestionText} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.singleChoice && <SingleChoiceModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.multiChoice && <MultiChoiceModal loading={postLoading} errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
-            {tabs.dropdown && <DropdownModal errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+            {tabs.singleChoice && <SingleChoiceModal loading={postLoading} errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
+
+            {tabs.dropdown && <DropdownModal loading={postLoading} errors={errors} updateOptionText={updateOptionText} updateQuestionText={updateQuestionText} removeOption={removeOption} addEmptyOption={addEmptyOption} postQuestions={postQuestions} dynamicOptions={dynamicOptions} setdynamicOptions={setdynamicOptions} tabsFunction={tabsFunction} />}
 
 
-            {tabs.editmultiChoice && <EditMultiChoiceModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editmultiChoice && <EditMultiChoiceModal loading={postLoading} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editropdown && <EditDropdownModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editropdown && <EditDropdownModal loading={postLoading} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editsingleChoice && <EditSingleChoiceModal editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editsingleChoice && <EditSingleChoiceModal loading={postLoading} editErrors={editErrors} editdeleteOption={editdeleteOption} editAddEmptyOption={editAddEmptyOption} editOptionValue={editOptionValue} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
 
-            {tabs.editdescriptive && <EditDescriptiveModal editErrors={editErrors} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
+            {tabs.editdescriptive && <EditDescriptiveModal loading={postLoading} editErrors={editErrors} singleData={singleData} editQuestions={editQuestions} tabsFunction={tabsFunction} editQuestionText={editQuestionText} />}
             {loading && <Loaders />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
@@ -386,96 +388,98 @@ const ValuesModule = () => {
                     </div>
                 </div>
 
-                <div className='questions_wrapper'>
-                    <h3>Questions</h3>
-                    <div className='questions_tabs_wrapper'>
-                        <div onClick={(() => tabsFunction(1))}>
+                {!loading && <>
+                    <div className='questions_wrapper'>
+                        <h3>Questions</h3>
+                        <div className='questions_tabs_wrapper'>
+                            <div onClick={(() => tabsFunction(1))}>
 
-                            <Button children={'Descriptive'} styles={{
-                                border: '1px solid var(--primary-color)',
-                                fontSize: '14px',
-                                color: 'var(--text-color)',
-                                borderRadius: '5px',
-                                padding: '8px 20px',
-                                backgroundColor: 'transparent'
-                            }} />
-                        </div>
+                                <Button children={'Descriptive'} styles={{
+                                    border: '1px solid var(--primary-color)',
+                                    fontSize: '14px',
+                                    color: 'var(--text-color)',
+                                    borderRadius: '5px',
+                                    padding: '8px 20px',
+                                    backgroundColor: 'transparent'
+                                }} />
+                            </div>
 
-                        <div onClick={(() => tabsFunction(2))}>
-                            <Button children={'Multi Choice'} styles={{
-                                border: '1px solid var(--primary-color)',
-                                fontSize: '14px',
-                                color: 'var(--text-color)',
-                                borderRadius: '5px',
-                                padding: '8px 20px',
-                                backgroundColor: 'transparent'
-                            }} />
-                        </div>
+                            <div onClick={(() => tabsFunction(2))}>
+                                <Button children={'Multi Choice'} styles={{
+                                    border: '1px solid var(--primary-color)',
+                                    fontSize: '14px',
+                                    color: 'var(--text-color)',
+                                    borderRadius: '5px',
+                                    padding: '8px 20px',
+                                    backgroundColor: 'transparent'
+                                }} />
+                            </div>
 
 
-                        <div onClick={(() => tabsFunction(3))}>
-                            <Button children={'Single Choice'} styles={{
-                                border: '1px solid var(--primary-color)',
-                                fontSize: '14px',
-                                color: 'var(--text-color)',
-                                borderRadius: '5px',
-                                padding: '8px 20px',
-                                backgroundColor: 'transparent'
-                            }} />
-                        </div>
+                            <div onClick={(() => tabsFunction(3))}>
+                                <Button children={'Single Choice'} styles={{
+                                    border: '1px solid var(--primary-color)',
+                                    fontSize: '14px',
+                                    color: 'var(--text-color)',
+                                    borderRadius: '5px',
+                                    padding: '8px 20px',
+                                    backgroundColor: 'transparent'
+                                }} />
+                            </div>
 
-                        <div onClick={(() => tabsFunction(4))}>
-                            <Button children={'Dropdown'} styles={{
-                                border: '1px solid var(--primary-color)',
-                                fontSize: '14px',
-                                color: 'var(--text-color)',
-                                borderRadius: '5px',
-                                padding: '8px 20px',
-                                backgroundColor: 'transparent'
-                            }} />
+                            <div onClick={(() => tabsFunction(4))}>
+                                <Button children={'Dropdown'} styles={{
+                                    border: '1px solid var(--primary-color)',
+                                    fontSize: '14px',
+                                    color: 'var(--text-color)',
+                                    borderRadius: '5px',
+                                    padding: '8px 20px',
+                                    backgroundColor: 'transparent'
+                                }} />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className='questions_list_wrapper4562'>
-                    {allQuestions?.length <= 0 && <p style={{
-                        textAlign: 'center',
-                        fontWeight: '600',
-                        color: 'var(--primary-color)'
-                    }}>No questions found...</p>}
-                    {allQuestions?.length > 0 && allQuestions?.map((element, index) => (
-                        <div className='added_modules_wrapper' key={index}>
-                            <div className='add_modules_enu_wrapper'>
-                                <img src={menu} />
-                                <p>{element?.question_text} <small style={{
-                                    fontSize: '10px',
-                                    marginLeft: '5px'
-                                }}>{element?.type}</small></p>
+                    <div className='questions_list_wrapper4562'>
+                        {allQuestions?.length <= 0 && <p style={{
+                            textAlign: 'center',
+                            fontWeight: '600',
+                            color: 'var(--primary-color)'
+                        }}>No questions found...</p>}
+                        {allQuestions?.length > 0 && allQuestions?.map((element, index) => (
+                            <div className='added_modules_wrapper' key={index}>
+                                <div className='add_modules_enu_wrapper'>
+                                    <img src={menu} />
+                                    <p>{element?.question_text} <small style={{
+                                        fontSize: '10px',
+                                        marginLeft: '5px'
+                                    }}>{element?.type}</small></p>
+                                </div>
+                                <div className='edit_modules_wrapper'>
+                                    <img onClick={(() => {
+                                        getSingleData(index)
+                                        if (element?.type === 'descriptive') {
+                                            tabsFunction(5)
+                                        }
+                                        if (element?.type == 'multi_choice') {
+                                            tabsFunction(6)
+                                        }
+                                        if (element?.type === 'single_choice') {
+                                            tabsFunction(7)
+                                        }
+
+                                        if (element?.type === 'dropdown') {
+                                            tabsFunction(8)
+                                        }
+                                    })} src={edit} />
+                                    <img onClick={(() => handleChange(element?.id))} src={deleteicon} />
+                                </div>
                             </div>
-                            <div className='edit_modules_wrapper'>
-                                <img onClick={(() => {
-                                    getSingleData(index)
-                                    if (element?.type === 'descriptive') {
-                                        tabsFunction(5)
-                                    }
-                                    if (element?.type == 'multi_choice') {
-                                        tabsFunction(6)
-                                    }
-                                    if (element?.type === 'single_choice') {
-                                        tabsFunction(7)
-                                    }
-
-                                    if (element?.type === 'dropdown') {
-                                        tabsFunction(8)
-                                    }
-                                })} src={edit} />
-                                <img onClick={(() => handleChange(element?.id))} src={deleteicon} />
-                            </div>
-                        </div>
-                    ))}
+                        ))}
 
 
-                </div>
+                    </div>
+                </>}
             </div>
         </>
     )

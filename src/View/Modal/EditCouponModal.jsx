@@ -5,6 +5,7 @@ import { getAllPrograms } from '../../utils/Program';
 import Loaders from '../../Components/Loaders/Loaders';
 import Select from 'react-select/base';
 import { editCoupons, getSingleCoupons } from '../../utils/coupons';
+import ModalLoader from '../../Components/Loaders/ModalLoader';
 const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
     const [loading, setLoading] = useState(false);
     const [allPrograms, setallPrograms] = useState([]);
@@ -12,6 +13,7 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isActive, setisActive] = useState(false);
     const [applies, setapplies] = useState(false);
+    const [postloading, setpostloading] = useState(false)
     const [couponErrors, setcouponErrors] = useState()
     const [inputValue, setInputValue] = useState("");
     const [singleCoupon, setSingleCoupon] = useState()
@@ -115,7 +117,7 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
 
     const handleSubmit = async () => {
         try {
-            setLoading(true)
+            setpostloading(true)
             const dummyData = { ...formData };
             dummyData.is_active = isActive ? 'true' : 'false',
                 dummyData.applies_to_all = applies ? 'true' : 'false';
@@ -124,14 +126,14 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
             }
             const res = await editCoupons(dummyData, couponId);
             setcouponErrors(res)
-            if(res.success){
+            if (res.success) {
                 fetchCoupons();
                 seteditCoupon(false)
             }
         } catch (err) {
             console.log(err)
         } finally {
-            setLoading(false)
+            setpostloading(false)
         }
     }
     useEffect(() => {
@@ -143,10 +145,13 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
         <>
             {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => seteditCoupon(false))}></div>
-            <div className='modal_div'>
+            <div className='modal_div' style={{
+                minHeight: '90vh'
+            }}>
+            {loading && <ModalLoader/>}
                 <h4>Edit Coupon</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditCoupon(false))}></i>
-                <form className='modal_form'>
+                {!loading && <form className='modal_form'>
                     <div className='codeName_input'>
                         <Input name={'code'} onChange={handleChange} value={formData.code} label={'Coupon Code'} required={true} placeholder={'Enter coupon code'} />
 
@@ -272,9 +277,9 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
                         </div>}
                     </div>
                     <div className='change_cancel_wrapper' onClick={(() => handleSubmit())}>
-                        <Button children={'Edit'} />
+                        <Button loading={postloading} loadingText='Updating...' children={'Update'} />
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

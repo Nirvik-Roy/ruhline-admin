@@ -29,7 +29,6 @@ const PayoutFrequencyModal = ({ setmodalIsOpen, callPayoutFunction, payoutFreque
     }
     return (
         <>
-            {loading && <Loaders />}
             <div className='modal_wrapper' onClick={(() => setmodalIsOpen(false))}></div>
             <div className='modal_div'>
                 <h4>Payout frequency</h4>
@@ -93,7 +92,7 @@ const PayoutFrequencyModal = ({ setmodalIsOpen, callPayoutFunction, payoutFreque
                     </div>
                 </div>
 
-                <Button onClick={callPostPrequency} styles={{
+                <Button loading={loading} loadingText='Saving...' onClick={callPostPrequency} styles={{
                     marginLeft: 'auto'
                 }} children={'Save'} />
             </div>

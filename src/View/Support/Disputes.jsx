@@ -12,7 +12,7 @@ const Disputes = () => {
     const [loading, setloading] = useState(false)
     const [disputesData, setdisputesData] = useState([])
     const [singleDisputeData, setsingleDisputeData] = useState([])
-    const [disputeId, setdisputeId] = useState()
+    const [disputeId, setdisputeId] = useState();
     const indexFunction = (i) => {
         if (index.includes(i)) {
             setIndex(prev => prev.filter((e) => e != i))
@@ -104,7 +104,7 @@ const Disputes = () => {
     return (
         <>
             {loading && <Loaders />}
-            {disputes && <DisputeViewModal changeDisputeStatus={changeDisputeStatus} singleDisputeData={singleDisputeData} setdisputes={setdisputes} />}
+            {disputes && <DisputeViewModal loading={loading} changeDisputeStatus={changeDisputeStatus} singleDisputeData={singleDisputeData} setdisputes={setdisputes} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Disputes</h2>
@@ -129,7 +129,7 @@ const Disputes = () => {
                                 }}>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {(currentItems?.length <= 0 && !loading) && <td style={{
                                 color: 'var(--primary-color)',
                                 fontWeight: '600'
@@ -190,7 +190,7 @@ const Disputes = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
 

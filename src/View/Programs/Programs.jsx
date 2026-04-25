@@ -101,7 +101,7 @@ const Programs = () => {
             {loading
                 && <Loaders />}
             {deletedModal && <DeleteModal loading={deleteLoading} setdeleteModal={setdeletedModal} onClick={deleteFunc} title={'Delete program'} details={'Do you really want to delete this program?'} />}
-            {!loading && <div className='dashboard_container'>
+            <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Programs</h2>
                     <div className='coaches_button_wapper'>
@@ -162,7 +162,7 @@ const Programs = () => {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {!loading && <tbody>
                             {currentItems?.length <= 0 && <td style={{
                                 color: 'var(--primary-color)'
                             }} colSpan={12}>No programs added...</td>}
@@ -192,13 +192,13 @@ const Programs = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
+                        </tbody>}
                     </table>
                 </div>
                 <Pagination pageCount={pageCount}
                     currentPage={currentPage}
                     onPageChange={handlePageChange} />
-            </div>}
+            </div>
         </>
     )
 }
