@@ -1,5 +1,5 @@
 // axiosInstance.js
-// This axiosInstance is currently is not in use.. I made this for future uses.. Specially handling of Refresh TOkens...
+// This axiosInstance is currently not in use.. I made this for future uses.. Specially handling of Refresh TOkens...
 import axios from "axios";
 
 // create instance
