@@ -29,24 +29,24 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
 
     useEffect(() => {
         setFirstName(userData?.first_name && userData?.first_name || '')
-        setLastName(userData?.last_name && userData?.last_name || '');
+        setLastName(userData?.last_name && userData?.last_name || '')
+        setFile(userData?.profile_photo || null);
     }, [userData])
 
     const UpdateFunc = async () => {
-        if (lastName != '' && firstName != '' && file!=null) {
+        if (lastName != '' && firstName != '') {
             try {
                 setIsLoading(true)
                 const result = await UpdateuserProfile({
                     lastName,
                     firstName,
                     file,
-                    profileLink: userData?.profile_photo
                 })
-                if(result?.success){
+                if (result?.success) {
                     await userDataFetch()
                     modalFunction(0)
                 }
-               
+
             } catch (err) {
                 toast.error(err.response?.data?.message);
             } finally {
@@ -87,7 +87,7 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
                                         );
                                     }
 
-                                    if (file) {
+                                    if (file  instanceof File) {
                                         return (
                                             <img
                                                 style={{ width: '100%', height: '90%', objectFit: 'contain' }}
@@ -96,7 +96,6 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
                                             />
                                         );
                                     }
-
                                     return (
                                         <img
                                             style={{ width: '100%', height: '90%', objectFit: 'contain' }}

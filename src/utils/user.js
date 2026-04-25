@@ -3,46 +3,27 @@ import axios from "axios";
 export const UpdateuserProfile = async (data) => {
     const Token = localStorage.getItem('token');
     if (Token && data) {
-        if (data.file) {
-            const formData = new FormData()
-            formData.append("first_name", data.firstName);   // text
-            formData.append("last_name", data.lastName);     // text
+        const formData = new FormData()
+        formData.append("first_name", data.firstName);   // text
+        formData.append("last_name", data.lastName);
+        if (data.file instanceof File) {
             formData.append("profile_photo", data.file);
-            try {
-                const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/profile`, formData, {
-                    headers: {
-                        'Authorization': `Bearer ${Token}`
-                    }
-                },);
-                if (res.data.success == true) {
-                    toast.success(res.data?.message || 'Profile Updated Successfully');
-                    return res.data
+        }     // text
+        try {
+            const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/profile`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${Token}`
                 }
-            } catch (err) {
-                toast.error(err.response?.data?.message);
+            },);
+            if (res.data.success == true) {
+                toast.success(res.data?.message || 'Profile Updated Successfully');
+                return res.data
             }
+        } catch (err) {
+            toast.error(err.response?.data?.message);
         }
 
-        if (data?.profileLink) {
-            try {
-                const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/profile`, {
-                    first_name: data?.firstName,
-                    last_name: data?.lastName,
-                    
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${Token}`
-                    }
-                },);
-                if (res.data.success == true) {
-                    toast.success(res.data?.message || 'Profile Updated Successfully');
-                    return res.data
-                }
-            } catch (err) {
-                console.log(err)
-                toast.error(err.response?.data?.message);
-            }
-        }
+
     }
 }
 
