@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Input from '../../../Components/Input'
 import { getAllPhoneCountry, getCities, getCountries, getStates } from '../../../utils/location';
 import Loaders from '../../../Components/Loaders/Loaders';
+import ModalLoader from '../../../Components/Loaders/ModalLoader';
 const ContactInfo = ({ siteDetailsForm, handleChange }) => {
     const [phoneCodes, setphoneCodes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -71,8 +72,9 @@ const ContactInfo = ({ siteDetailsForm, handleChange }) => {
 
     return (
         <>
-            {isLoading && <Loaders />}
-            <div className='contact_info_grid_Wrapper'>
+            {isLoading && <ModalLoader />}
+
+            {!isLoading && <div className='contact_info_grid_Wrapper'>
                 <div>
                     <Input onChange={handleChange} value={siteDetailsForm.address_line_1} name={'address_line_1'} label={'Address Line 1'} required={true} placeholder={'Enter address line 1'} />
                 </div>
@@ -135,7 +137,7 @@ const ContactInfo = ({ siteDetailsForm, handleChange }) => {
                         <input disabled={phoneCodes?.length <= 0} name='phone' placeholder='1234567890' />
                     </div>
                 </div> */}
-            </div>
+            </div>}
         </>
     )
 }
