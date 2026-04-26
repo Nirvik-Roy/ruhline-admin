@@ -105,7 +105,7 @@ const ProgramSettingsModal = ({ setprogramSettingModal, setcardCategoryId, cardC
         <>
             <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
             <div className='modal_div' style={{
-                minHeight:'75vh'
+                minHeight:'57vh'
             }}>
                 <h4>Program Settings</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => {
