@@ -208,14 +208,13 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
                                 // If we get here, it's safe to proceed
                                 postProgramModuleFunc();
                             }}
-                            loading={loading}
+                            loading={moduleLoading}
                             loadingText='Adding...'
                             children={'Add'}
                         />}
 
                         {radioTitle === 'intermediatesteps' && <Button loading={moduleLoading} loadingText='Adding...' onClick={(() => {
                             postProgramModuleFunc();
-
                         })} children={'Add'} />}
                     </div>
                 </div>
