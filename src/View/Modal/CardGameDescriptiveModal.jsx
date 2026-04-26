@@ -37,9 +37,7 @@ const CardGameDescriptiveModal = ({ tabsFunction, dynamicOptions, postQuestions,
                                     className=''
                                     style={{ margin: '20px 0 0 auto' }}
                                 >
-                                    <button onClick={() => tabsFunction(0)}>
-                                        Cancel
-                                    </button>
+                                  
                                     <Button
                                         loading={loading}
                                         loadingText='Adding...'
