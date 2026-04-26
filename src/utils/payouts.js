@@ -10,9 +10,9 @@ export const getPayoutList = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data.success == true) {
-                // toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data
+            if (res?.data?.success == true) {
+                // toast.success(res?.data?.message || 'Password Update Successfully');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)
@@ -32,9 +32,9 @@ export const getPayoutFrequency = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data.success == true) {
-                // toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data.data
+            if (res?.data?.success == true) {
+                // toast.success(res?.data?.message || 'Password Update Successfully');
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)
@@ -53,14 +53,14 @@ export const postPayoutFrequency = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Commission added Success..');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Commission added Success..');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
             console.log(err)
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -74,9 +74,9 @@ export const getSinglePayout = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data.success == true) {
-                // toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data.data
+            if (res?.data?.success == true) {
+                // toast.success(res?.data?.message || 'Password Update Successfully');
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)
@@ -95,9 +95,9 @@ export const updatePayoutStatus = async (id,data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Status Updated Successfully');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Status Updated Successfully');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)

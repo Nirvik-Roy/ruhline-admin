@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 export const postCoupons = async (data) => {
     const Token = localStorage.getItem('token');
-    console.log(data)
+
     if (Token && data) {
         try {
             const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/coupon`, data, {
@@ -10,13 +10,13 @@ export const postCoupons = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coupon Added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coupon Added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -30,12 +30,12 @@ export const getAllCoupons = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data
+            if (res?.data?.success == true) {
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -49,18 +49,18 @@ export const getSingleCoupons = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data
+            if (res?.data?.success == true) {
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
 export const editCoupons = async (data,id) => {
     const Token = localStorage.getItem('token');
-    console.log(data)
+
     if (Token && data && id) {
         try {
             const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/coupon/${id}`, data, {
@@ -68,13 +68,13 @@ export const editCoupons = async (data,id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coupon Added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coupon Added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -88,8 +88,8 @@ export const deleteCoupons = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Coach Deleted Successfully');
-            return res.data
+            toast.success(res?.data?.message || 'Coach Deleted Successfully');
+            return res?.data
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');

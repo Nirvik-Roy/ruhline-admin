@@ -10,12 +10,12 @@ export const getAllContactEnquires = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data.data
+            if (res?.data?.success == true) {
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -29,12 +29,12 @@ export const getSingleContactEnquires = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data.data
+            if (res?.data?.success == true) {
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -49,8 +49,8 @@ export const deleteContactEnquires = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Contact inquiry deleted succesfully');
-            return res.data
+            toast.success(res?.data?.message || 'Contact inquiry deleted succesfully');
+            return res?.data
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');

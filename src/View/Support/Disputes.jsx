@@ -9,7 +9,8 @@ const Disputes = () => {
     const [index, setIndex] = useState([]);
     const [disputes, setdisputes] = useState(false);
     const dropdownRef = useRef()
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [changeLoading,setchangeLoading] = useState(false)
     const [disputesData, setdisputesData] = useState([])
     const [singleDisputeData, setsingleDisputeData] = useState([])
     const [disputeId, setdisputeId] = useState();
@@ -66,7 +67,7 @@ const Disputes = () => {
 
     const changeDisputeStatus = async () => {
         try {
-            setloading(true)
+            setchangeLoading(true)
             const res = await markDisputeStatus({
                 status: "closed"
             }, disputeId
@@ -78,7 +79,7 @@ const Disputes = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setchangeLoading(false)
         }
     }
     // Pagination logic & Search Logic...
@@ -104,7 +105,7 @@ const Disputes = () => {
     return (
         <>
             {loading && <Loaders />}
-            {disputes && <DisputeViewModal loading={loading} changeDisputeStatus={changeDisputeStatus} singleDisputeData={singleDisputeData} setdisputes={setdisputes} />}
+            {disputes && <DisputeViewModal changeLoading={changeLoading} loading={loading} changeDisputeStatus={changeDisputeStatus} singleDisputeData={singleDisputeData} setdisputes={setdisputes} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <h2>Disputes</h2>

@@ -7,16 +7,18 @@ import Loaders from '../../Components/Loaders/Loaders'
 import { getPayoutFrequency, getSinglePayout } from '../../utils/payouts'
 import { getSingleCoach } from '../../utils/coach'
 import PayoutViewModal from '../Modal/PayoutsViewModal'
+import ModalLoader from '../../Components/Loaders/ModalLoader'
 const PaymentList = () => {
     const [dropdown, setdropdown] = useState(false);
     const { id } = useParams()
     const [singlePayout, setsinglePayout] = useState([]);
     const [loading, setloading] = useState(false);
+    const [singlePayoutLoading, setsinglePayoutLoading] = useState(false)
     const [coachId, setcoachId] = useState('')
     const [checkOutId, setcheckOutId] = useState();
     const [payoutFrequency, setpayoutFrequency] = useState(false)
     const [coachData, setcoachData] = useState([])
-    const navigate  = useNavigate()
+    const navigate = useNavigate()
 
     const getFrequency = async () => {
         setloading(true)
@@ -43,11 +45,11 @@ const PaymentList = () => {
 
 
     const getSinglePayoutFunc = async () => {
-        setloading(true)
+        setsinglePayoutLoading(true)
         const res = await getSinglePayout(id)
         setsinglePayout(res)
         setcoachId(res?.coach?.id)
-        setloading(false)
+        setsinglePayoutLoading(false)
     }
 
     useEffect(() => {
@@ -72,16 +74,15 @@ const PaymentList = () => {
 
     return (
         <>
-            {loading && <Loaders />}
             {(payment.paymentPay || payment.editPayment) && <SinglePayModal loading={loading} singlePayout={singlePayout} update={payment?.editPayment} getSinglePayoutFunc={getSinglePayoutFunc} checkOutId={checkOutId} paymentFunction={paymentFunction} />}
 
-            {payment.viewDetails && <PayoutViewModal loading={loading}  payoutFrequency={payoutFrequency} singlePayout={singlePayout} paymentFunction={paymentFunction} />}
-
-            <div className='dashboard_container'>
+            {payment.viewDetails && <PayoutViewModal loading={loading} payoutFrequency={payoutFrequency} singlePayout={singlePayout} paymentFunction={paymentFunction} />}
+            {loading && <Loaders />}
+            {!loading && <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
                         <h2>{singlePayout?.coach?.name}</h2>
-                        <small onClick={(()=>navigate('/dashboard/payouts'))}>Payouts / {singlePayout?.coach?.name}</small>
+                        <small onClick={(() => navigate('/dashboard/payouts'))}>Payouts / {singlePayout?.coach?.name}</small>
                     </div>
                 </div>
                 <div className='payment_owner_wrapper'>
@@ -144,6 +145,12 @@ const PaymentList = () => {
                         </div>
                     </div>
                     <div className='table_container'>
+                        {singlePayoutLoading && <div style={{
+                            height:'50vh',
+                            position:'relative'
+                        }}>
+                            <ModalLoader />
+                        </div>}
                         <table className='total_table_order_wrapper coaches_table_wrapper'>
                             <thead>
                                 <tr>
@@ -160,11 +167,12 @@ const PaymentList = () => {
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                           
+                            {!singlePayoutLoading && <tbody>
                                 <tr>
                                     <td>#{singlePayout?.checkout_order_id}</td>
                                     <td>{new Date(singlePayout?.created_at)
-                                        .toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short",timeZone:'utc' })}</td>
+                                        .toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: 'utc' })}</td>
                                     <td>
                                         {singlePayout?.program?.name}
                                     </td>
@@ -238,12 +246,12 @@ const PaymentList = () => {
                                         }}>Pay Now</Link>}
                                     </td>
                                 </tr>
-                            </tbody>
+                            </tbody>}
                         </table>
                     </div>
 
                 </div>
-            </div>
+            </div>}
         </>
     )
 }

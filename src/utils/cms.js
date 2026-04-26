@@ -9,13 +9,13 @@ export const postSiteDetails = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coupon Added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coupon Added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }
@@ -29,12 +29,12 @@ export const getSiteDetails = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data
+            if (res?.data?.success == true) {
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }
@@ -49,13 +49,13 @@ export const postArticleCategories = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coupon Added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coupon Added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }
@@ -70,13 +70,13 @@ export const editArticleCategories = async (data, id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Article updated succesfully');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Article updated succesfully');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }
@@ -91,12 +91,12 @@ export const getAllCmsData = async (url) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data
+            if (res?.data?.success == true) {
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }
@@ -111,12 +111,12 @@ export const getAllSingleCmsData = async (url, id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data
+            if (res?.data?.success == true) {
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }
@@ -130,8 +130,8 @@ export const deleteCmsData = async (url, id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Coach Deleted Successfully');
-            return res.data
+            toast.success(res?.data?.message || 'Coach Deleted Successfully');
+            return res?.data
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');
@@ -149,13 +149,13 @@ export const postAllCmsData = async (url,data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coupon Added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coupon Added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }else{
         toast.error('Plz provide all the info..')
@@ -172,13 +172,13 @@ export const putAllCmsData = async (url, data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coupon Added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coupon Added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     } else {
         toast.error('Plz provide all the info..')
@@ -194,13 +194,13 @@ export const editAllCmsData = async (url,data, id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Article updated succesfully');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Article updated succesfully');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err.response?.data?.errors
         }
     }
 }

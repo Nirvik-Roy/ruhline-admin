@@ -22,6 +22,8 @@ const EditPrograms = () => {
     const [index, setIndex] = useState(1);
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [loading, setloading] = useState(false);
+    const [postloading, setpostloading] = useState(false)
+    const [galleryloading, setgalleryloading] = useState(false)
     const [allcoach, setallCoach] = useState([])
     const [data, setdata] = useState()
     const [dynamicFaq, setdynamicFaq] = useState([])
@@ -165,10 +167,15 @@ const EditPrograms = () => {
             tag: i === 5 ? true : false
         })
     }
+    const handleGalleryImageDelete = (id) => {
+        const dummyData = [...galleryImage]
+        const filteredData = dummyData.filter((e) => e.id != id)
+        setgalleryImage(filteredData)
+    }
     const handleSubmit = async () => {
 
         try {
-            setloading(true)
+            setpostloading(true)
             const formData = new FormData()
             formData.append('name', staticdata.name)
             if (childCategoryId == '') {
@@ -266,7 +273,7 @@ const EditPrograms = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setpostloading(false)
         }
     }
 
@@ -341,7 +348,7 @@ const EditPrograms = () => {
 
     const deleteGalleryImage = async () => {
         try {
-            setloading(true)
+            setgalleryloading(true)
             const res = await deleteGalleryImageApi(id, galleryImageId)
             if (res?.success) {
                 setgalleryImageDeleteModal(false)
@@ -350,7 +357,7 @@ const EditPrograms = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setloading(false)
+            setgalleryloading(false)
         }
     }
 
@@ -361,7 +368,7 @@ const EditPrograms = () => {
     return (
         <>
             {loading && <Loaders />}
-            {galleryImageDeleteModal && <DeleteModal setdeleteModal={setgalleryImageDeleteModal} onClick={deleteGalleryImage} title={'Remove gallery image'} details={'Do you really want to remove this gallery image?'} />}
+            {galleryImageDeleteModal && <DeleteModal loading={galleryloading} setdeleteModal={setgalleryImageDeleteModal} onClick={deleteGalleryImage} title={'Remove gallery image'} details={'Do you really want to remove this gallery image?'} />}
             <div className='dashboard_container'>
                 <div className='coaches_head_wrapper'>
                     <div>
@@ -370,22 +377,22 @@ const EditPrograms = () => {
                     </div>
                     <div className='coaches_button_wapper'>
 
-                        <div>
+                     { !loading &&  <div>
                             <Button children={'Cancel'} styles={{
                                 fontSize: '13px',
                                 color: 'var(--text-color)',
                                 background: 'transparent',
                                 border: 'none'
                             }} />
-                        </div>
-                        <div>
-                            <Button onClick={handleSubmit} children={'Edit'} styles={{
+                        </div>}
+                        {!loading && <div>
+                            <Button loading={postloading} loadingText='Updating...' onClick={handleSubmit} children={'Edit'} styles={{
                                 fontSize: '13px'
                             }} />
-                        </div>
+                        </div>}
                     </div>
                 </div>
-                <form className='create_programs_content_wrapper'>
+                {!loading && <form className='create_programs_content_wrapper'>
                     <div className='create_programs_left'>
                         <h4>Basic Details</h4>
                         <div className='create_program_form_wrapper'>
@@ -525,7 +532,7 @@ const EditPrograms = () => {
                                             borderRadius: '10px',
                                             position: 'relative'
                                         }}>
-                                            <i onClick={(() => handleDelelte(e?.id))} style={{
+                                            <i onClick={(() => { e.img instanceof File ? handleGalleryImageDelete(e?.id) : handleDelelte(e?.id) })} style={{
                                                 position: 'absolute',
                                                 top: '-10px',
                                                 right: '-20px',
@@ -670,7 +677,7 @@ const EditPrograms = () => {
                         </div>
 
                     </div>
-                </form>
+                </form>}
             </div>
         </>
     )

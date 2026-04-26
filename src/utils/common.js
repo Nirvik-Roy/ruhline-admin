@@ -10,7 +10,7 @@ export const commonDelelteApi = async (url,id) => {
                 }
             });
             toast.success(res.data?.message || 'Data Deleted Successfully');
-            return res.data
+            return res?.data
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');

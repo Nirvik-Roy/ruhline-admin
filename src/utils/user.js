@@ -15,9 +15,9 @@ export const UpdateuserProfile = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Profile Updated Successfully');
-                return res.data
+            if ( res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Profile Updated Successfully');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
@@ -36,13 +36,14 @@ export const Changeuserpassword = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data
+            if ( res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Password Update Successfully');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
+            
         }
     }
 }
@@ -56,13 +57,13 @@ export const getUserDetails = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
-                return res.data.data
+            if (res?.data?.success) {
+                return res?.data?.data
             }
         } catch (err) {
             toast.error('Error fetching admin details');
             console.log(err?.response?.data)
-            return err.response.data
+            return err?.response?.data
         }
     }
 }

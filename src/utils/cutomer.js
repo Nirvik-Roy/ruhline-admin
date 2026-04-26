@@ -9,13 +9,13 @@ export const addCustomer = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Customer added success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Customer added success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -30,12 +30,12 @@ export const getAllCutomer = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data.data
+            if (res?.data?.success == true) {
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -49,12 +49,12 @@ export const getSingleCustomer = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                return res.data.data
+            if (res?.data?.success == true) {
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -68,13 +68,13 @@ export const editProfile = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Customer Edited Successfully');
-                return res.data.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Customer Edited Successfully');
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }
@@ -88,8 +88,8 @@ export const deleteCustomer = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Coach Deleted Successfully');
-            return res.data
+            toast.success(res?.data?.message || 'Coach Deleted Successfully');
+            return res?.data
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');

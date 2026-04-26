@@ -10,8 +10,8 @@ export const getShifts = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
-                return res.data.data;
+            if (res?.data?.success) {
+                return res?.data?.data;
             }
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error fetching shifts');
@@ -31,9 +31,9 @@ export const createShift = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
+            if (res?.data?.success) {
                 toast.success(res.data?.message || 'Shift created successfully');
-                return res.data.data;
+                return res?.data?.data;
             }
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error creating shift');
@@ -53,8 +53,8 @@ export const getShiftById = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
-                return res.data.data;
+            if (res?.data?.success) {
+                return res?.data?.data;
             }
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error fetching shift');
@@ -74,7 +74,7 @@ export const deleteShift = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
+            if (res?.data?.success) {
                 toast.success(res.data?.message || 'Shift deleted successfully');
                 return true;
             }
@@ -96,9 +96,9 @@ export const updateShift = async (id, data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
+            if (res?.data?.success) {
                 toast.success(res.data?.message || 'Shift updated successfully');
-                return res.data.data;
+                return res?.data?.data;
             }
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error updating shift');

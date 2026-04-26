@@ -11,11 +11,11 @@ export const getAllDisputes = async () => {
                 }
             },);
             if (res?.data?.success == true) {
-                return res.data
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data
+            return err?.response?.data
         }
     }
 }
@@ -31,11 +31,11 @@ export const getSingleDisputes = async (id) => {
                 }
             },);
             if (res?.data?.success == true) {
-                return res.data
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data
+            return err?.response?.data
         }
     }
 }
@@ -56,7 +56,7 @@ export const markDisputeStatus = async (data, id) => {
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data
+            return err?.response?.data
         }
     }
 }

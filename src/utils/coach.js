@@ -10,9 +10,9 @@ export const getAllCoaches = async () => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data.success == true) {
-                // toast.success(res.data?.message || 'Password Update Successfully');
-                return res.data.data
+            if (res?.data?.success == true) {
+                // toast.success(res?.data?.message || 'Password Update Successfully');
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)
@@ -46,9 +46,9 @@ export const addNewCoach = async (data, file) => {
                     'Authorization': `Bearer ${Token}`
                 }
             })
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coach Added succesfully');
-                return res.data;
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coach Added succesfully');
+                return res?.data;
             }
         } catch (err) {
             console.log(err.response?.data?.errors)
@@ -67,8 +67,8 @@ export const deleteCoach = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            toast.success(res.data?.message || 'Coach Deleted Successfully');
-            return res.data
+            toast.success(res?.data?.message || 'Coach Deleted Successfully');
+            return res?.data
         } catch (err) {
             console.log(err.response.data)
             toast.error(err.response?.data?.message || 'Unexpected Error Occured');
@@ -87,7 +87,7 @@ export const getSingleCoach = async (id) => {
                 }
             });
             if (res?.data?.success == true) {
-                return res.data.data;
+                return res?.data?.data;
             }
 
         } catch (err) {
@@ -107,8 +107,8 @@ export const updateCoach = async (id, data) => {
                 }
             })
             if (res?.data?.success == true) {
-                toast.success(res.data?.message || 'Coach Updated Successfully');
-                return res.data;
+                toast.success(res?.data?.message || 'Coach Updated Successfully');
+                return res?.data;
 
             }
         } catch (err) {
@@ -125,7 +125,7 @@ export const getCoachUpcomingPrograms = async (coachId) => {
             const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach/${coachId}/upcoming-programs`, {
                 headers: { 'Authorization': `Bearer ${Token}` }
             })
-            if (res?.data?.success === true) return res.data?.data ?? res.data?.upcoming_programs ?? []
+            if (res?.data?.success === true) return res?.data?.data ?? res?.data?.upcoming_programs ?? []
             return []
         } catch (err) {
             return []
@@ -141,7 +141,7 @@ export const getCoachAssignedPrograms = async (coachId) => {
             const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/coach/${coachId}/assigned-programs`, {
                 headers: { 'Authorization': `Bearer ${Token}` }
             })
-            if (res?.data?.success === true) return res.data?.data ?? res.data?.assigned_programs ?? []
+            if (res?.data?.success === true) return res?.data?.data ?? res?.data?.assigned_programs ?? []
             return []
         } catch (err) {
             return []
@@ -160,13 +160,13 @@ export const verifyCoach = async (id) => {
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
-                toast.success(res.data?.message || 'Coach verified success');
-                return res.data
+            if (res?.data?.success == true) {
+                toast.success(res?.data?.message || 'Coach verified success');
+                return res?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message);
-            return err.response.data.errors
+            return err?.response?.data?.errors
         }
     }
 }

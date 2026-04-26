@@ -277,6 +277,7 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
                         </div>}
                     </div>
                     <div className='change_cancel_wrapper' onClick={(() => handleSubmit())}>
+                    <button></button>
                         <Button loading={postloading} loadingText='Updating...' children={'Update'} />
                     </div>
                 </form>}

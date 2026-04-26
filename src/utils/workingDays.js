@@ -11,7 +11,7 @@ export const getWorkingDays = async () => {
                 }
             });
             if (res.data?.success) {
-                return res.data.data;
+                return res?.data?.data;
             } else {
                 toast.error(res.data?.message || 'Error fetching working days');
                 return null;
@@ -34,9 +34,9 @@ export const updateWorkingDays = async (data) => {
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data?.success) {
+            if (res?.data?.success) {
                 toast.success(res.data?.message || 'Working days updated successfully');
-                return res.data.data;
+                return res.data?.data;
             } else {
                 toast.error(res.data?.message || 'Error updating working days');
                 return null;
