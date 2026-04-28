@@ -7,9 +7,9 @@ export const Auth = createAsyncThunk('Auth', async (loginParams, { rejectWithVal
     if (formData) {
         try {
             const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/admin/login`, formData);
-            if (res.data.success == true) {
+            if (res?.data?.success == true) {
                 toast.success(res.data?.message || 'Login Success');
-                return res.data.data
+                return res?.data?.data
             }
         } catch (err) {
             // toast.error(err.response?.data?.data.errors?.email[0])
@@ -27,10 +27,10 @@ export const AuthlogOut = createAsyncThunk('AuthlogOut', async (loginParams, { r
                     'Authorization': `Bearer ${Token}`
                 }
             },);
-            if (res.data.success == true) {
+            if (res?.data?.success == true) {
                 toast.success(res.data?.message || 'Logut Success');
                 localStorage.removeItem('token')
-                return res.data.data
+                return res?.data?.data
             }
         } catch (err) {
             toast.error(err.response?.data?.message)

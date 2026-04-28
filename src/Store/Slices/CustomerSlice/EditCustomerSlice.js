@@ -13,9 +13,9 @@ export const EditCustomer = createAsyncThunk('EditCustomer', async (loginParams,
                     'Authorization': `Bearer ${Token}`
                 }
             });
-            if (res.data.success == true) {
+            if (res?.data?.success == true) {
                 toast.success(res.data?.message || 'Customer edited success');
-                return res.data.data
+                return res?.data?.data
             }
         } catch (err) {
             // toast.error(err.response?.data?.data.errors?.email[0])
