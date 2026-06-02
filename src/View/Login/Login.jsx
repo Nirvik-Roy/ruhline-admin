@@ -13,7 +13,8 @@ const Login = () => {
     const [type, setType] = useState(false)
     const location = useLocation()
     const navigate = useNavigate();
-    const [adminErrors, setadminErrrors] = useState()
+    const [adminErrors, setadminErrrors] = useState();
+    const [passwordErrorMessage, setPassworderrorMessage] = useState('');
     const { isLogin, isLoading, errors } = useSelector(state => state.auth)
     const dispatch = useDispatch()
     const [formData, setformData] = useState({
@@ -23,7 +24,8 @@ const Login = () => {
 
     useEffect(() => {
         setadminErrrors(errors)
-    }, [errors])
+    }, [errors,isLoading])
+
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const ValidateEmail = (email) => {
@@ -49,14 +51,24 @@ const Login = () => {
     }
 
     const loginFunc = () => {
+        if(formData.email == ''){
+            setEmailerrorMessage('Email is required');
+            return false;
+        }
+        if(formData.password == ''){
+            setPassworderrorMessage('Password is required');
+            return false;
+        }
         if (formData.email == '' && formData.password == '') {
             toast.error('Plz enter all required fields...')
         }
         else {
+            setEmailerrorMessage('')
+            setPassworderrorMessage('')
             dispatch(Auth({ formData: formData }))
         }
     }
-
+    
     useEffect(() => {
         dispatch(verifyToken());
     }, [dispatch]);
@@ -95,10 +107,10 @@ const Login = () => {
                         <small style={{
                             marginLeft: '15px',
                             fontSize: '11px',
-                            marginTop: '-15px',
+                            marginTop: '-10px',
                             color: 'rgba(255, 0, 0, 1)',
                             cursor: 'pointer'
-                        }}>{errors?.password && errors.password[0] }</small>
+                        }}>{errors?.password && errors.password[0] || passwordErrorMessage}</small>
                         {type && <i style={{
                             position: 'absolute',
                             top: '47px',

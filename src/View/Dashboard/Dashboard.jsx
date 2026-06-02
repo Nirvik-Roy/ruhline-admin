@@ -1,10 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './Dashboard.css'
 import DashboardCard from './DashboardCard'
 import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
 import ellipse from '../../assets/_MoreIcon_.svg'
 const Dashboard = () => {
     const [dropdown, setdropdown] = useState(false)
+    const dropdownRef = useRef(null)
+
+    useEffect(() => {
+        if (!dropdown) return
+
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setdropdown(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [dropdown])
+
     return (
         <>
             <div className='dashboard_container'>
@@ -16,7 +31,7 @@ const Dashboard = () => {
                     <div className='total_order_head_wrapper'>
                         <h1>Total orders</h1>
                         <div className='total_orders_select_wrapper'>
-                            <div onClick={(() => setdropdown(!dropdown))} style={{
+                            <div ref={dropdownRef} onClick={(() => setdropdown(!dropdown))} style={{
                                 position: 'relative',
                                 cursor:'pointer'
                             }}>
@@ -25,7 +40,7 @@ const Dashboard = () => {
                                 </p>
                                 <i  class="fa-solid fa-angle-down"></i>
 
-                                {dropdown && <div onClick={((e)=>e.stopPropagation())} className='dropdown_wrapper'>
+                                {dropdown && <div className='dropdown_wrapper'>
                                     <p>Last month</p>
                                     <p>Last 7 days</p>
                                 </div>}

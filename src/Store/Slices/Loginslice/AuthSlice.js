@@ -12,7 +12,7 @@ export const Auth = createAsyncThunk('Auth', async (loginParams, { rejectWithVal
                 return res?.data?.data
             }
         } catch (err) {
-            // toast.error(err.response?.data?.data.errors?.email[0])
+            toast.error(err.response?.data?.errors?.password[0])
             toast.error(err.response?.data?.errors?.email[0])
             return rejectWithValue(err.response?.data || "Something went wrong");
         }
@@ -69,7 +69,8 @@ const AuthSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(Auth.pending, (state) => {
             state.isLoading = true;
-            state.isLogin = false
+            state.isLogin = false;
+            state.errors = ''
         })
 
         builder.addCase(AuthlogOut.pending, (state) => {
@@ -85,17 +86,17 @@ const AuthSlice = createSlice({
             state.isLogin = true;
         })
         builder.addCase(Auth.fulfilled, (state, action) => {
-            if (action.payload.token) {
+            if (action?.payload?.token) {
                 state.isLogin = true;
                 state.isLoading = false;
-                localStorage.setItem('token', action.payload.token);
+                localStorage.setItem('token', action?.payload?.token);
                 localStorage.setItem("expiry", Date.now() + 24 * 60 * 60 * 1000);
             }
         })
         builder.addCase(Auth.rejected, (state, action) => {
             state.isLoading = false;
             state.isLogin = false;
-            state.errors = action.payload.errors
+            state.errors = action?.payload?.errors
         })
     }
 })

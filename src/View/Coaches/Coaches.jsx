@@ -209,7 +209,7 @@ const Coaches = () => {
                     <h2>Coaches</h2>
                     <div className='coaches_button_wapper'>
                         <div onClick={(() => navigate('/dashboard/coaches/working-shift'))}>
-                            <Button children={'Working hours and shifts'} styles={{
+                            <Button children={'	Working Hours and Shifts'} styles={{
                                 color: 'var(--primary-color)',
                                 border: '1px solid var(--primary-color)',
                                 padding: '12px 15px',
@@ -219,7 +219,7 @@ const Coaches = () => {
                         </div>
 
                         <div onClick={(() => setCoachModal(!coachModal))}>
-                            <Button children={'Add a coach'} styles={{
+                            <Button children={'Add a Coach'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>
@@ -267,9 +267,9 @@ const Coaches = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{e?.profile?.coach_type}</td>
+                                    <td>{e?.profile?.coach_type || '--not-selected--'}</td>
                                     <td>{e?.user?.email}</td>
-                                    <td>+{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone}</td>
+                                    <td>{ e?.profile?.phone_country_code?.phone_code && '+'}{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone || '--not-selected--'}</td>
                                     <td>{e?.is_admin_verified ? <p style={{
                                         color: 'rgba(36, 159, 50, 1)'
                                     }}>Verified</p> : <p style={{
