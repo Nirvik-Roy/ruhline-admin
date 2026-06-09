@@ -50,7 +50,7 @@ const AddArticleCategoriesModal = ({ setaddArticle, addArticle, fetchArticleCmsD
     return (
         <>
             {loading && <Loaders />}
-            <div className='modal_wrapper' onClick={(() => setaddArticle(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add Article Category</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setaddArticle(false))}></i>

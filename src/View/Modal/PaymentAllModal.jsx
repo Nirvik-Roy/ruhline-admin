@@ -6,7 +6,7 @@ const PaymentAllModal = ({paymentFunction}) => {
     const [enable, setenable] = useState(true)
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => paymentFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Pay All</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => paymentFunction(0))}></i>

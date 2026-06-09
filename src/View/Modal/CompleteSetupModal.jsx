@@ -27,7 +27,7 @@ const CompleteSetupModal = ({ setsetupModal, intermediateId, fetchModules }) => 
     }
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setsetupModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Complete Setup</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setsetupModal(false))}></i>

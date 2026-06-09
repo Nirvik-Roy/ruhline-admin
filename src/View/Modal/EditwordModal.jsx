@@ -4,7 +4,7 @@ import Button from '../../Components/Button'
 const EditwordModal = ({ seteditModal, singleData, handleChange, updateWord, loading }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => seteditModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit word</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditModal(false))}></i>

@@ -7,7 +7,7 @@ const CardGameMultichoiceModal = ({ tabsFunction, addEmptyOption, removeOption, 
     const { moduleId } = useParams()
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Multi Choice</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>

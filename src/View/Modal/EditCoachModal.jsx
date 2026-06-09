@@ -166,11 +166,11 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
 
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => seteditCoachModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight: '80vh'
             }}>
-                <h4>Edit a coach</h4>
+                <h4>Edit a Coach</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditCoachModal(false))}></i>
                 {isLoading ? <ModalLoader /> : <form onSubmit={((e) => e.preventDefault())} className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
@@ -236,7 +236,7 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
 
                         </div>
                         <div className='input_form confirm_input_form'>
-                            <label>Phone no<span>*</span></label>
+                            <label>Phone No<span>*</span></label>
                             <div className='phone_input_Wrapper656'>
                                 <select onChange={handleChange} value={formData.phone_country_code_id} name='phone_country_code_id' style={{
                                     border: 'none',
@@ -247,7 +247,7 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
                                         <option value={e.id} key={e.id}>+ {e.phone_code}</option>
                                     ))}
                                 </select>
-                                <input disabled={phoneCodes?.length <= 0} onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter your phone number' />
+                                <input type='number' min={0} disabled={phoneCodes?.length <= 0} onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter your phone number' />
 
                                 <small style={{
                                     fontSize: '0.7rem',

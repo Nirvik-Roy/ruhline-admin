@@ -12,7 +12,7 @@ export const Auth = createAsyncThunk('Auth', async (loginParams, { rejectWithVal
                 return res?.data?.data
             }
         } catch (err) {
-            toast.error(err.response?.data?.errors?.password[0])
+            // toast.error(err.response?.data?.errors?.password[0])
             toast.error(err.response?.data?.errors?.email[0])
             return rejectWithValue(err.response?.data || "Something went wrong");
         }

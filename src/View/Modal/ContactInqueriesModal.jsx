@@ -27,7 +27,7 @@ const ContactInqueriesModal = ({ setisModal, contactId }) => {
 
   return (
     <>
-      <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
+      <div className='modal_wrapper'></div>
       <div className='modal_div' style={{
         minHeight:'30vh'
       }}>

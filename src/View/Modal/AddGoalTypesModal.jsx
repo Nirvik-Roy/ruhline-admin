@@ -7,7 +7,7 @@ const AddGoalTypesModal = ({ setisModal, addGoal, goalLoading }) => {
     const [goalType, setgoalType] = useState('')
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add Goal type</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setisModal(false))}></i>

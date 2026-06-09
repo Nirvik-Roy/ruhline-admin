@@ -82,7 +82,7 @@ const EditArticleModal = ({ seteditArticle, editArticle, fetchArticleCmsData, ar
     }, [editArticle])
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => seteditArticle(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight:'30vh'
             }}>

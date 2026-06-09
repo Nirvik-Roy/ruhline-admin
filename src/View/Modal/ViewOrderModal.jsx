@@ -20,7 +20,7 @@ const ViewOrderModal = ({ id, setviewModal }) => {
     }, [])
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setviewModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight: '30vh'
             }}>

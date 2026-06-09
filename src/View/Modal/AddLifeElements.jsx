@@ -7,7 +7,7 @@ const AddLifeElements = ({ setisModal, addFunction, loading }) => {
     const { id, moduleId } = useParams()
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
+            <div className='modal_wrapper' ></div>
             <div className='modal_div'>
                 <h4>Add life Elements</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setisModal(false))}></i>

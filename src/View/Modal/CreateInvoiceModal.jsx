@@ -16,7 +16,7 @@ const CreateInvoiceModal = ({modalFunction}) => {
     }
     return (
         <>
-            <div className='modal_wrapper' onClick={(()=>modalFunction(0))}></div>
+            <div className='modal_wrapper' ></div>
             <div className='modal_div'>
                 <h4>Create Invoice</h4>
                 <i  onClick={(()=>modalFunction(0))} class="fa-solid fa-xmark"></i>

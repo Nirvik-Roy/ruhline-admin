@@ -16,14 +16,7 @@ const EditInvoiceModal = ({ modalFunction, setModal }) => {
     }
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => {
-                if (setModal) {
-                    setModal(false)
-                }
-                modalFunction(0)
-
-
-            })}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>#3492</h4>
                 <i onClick={(() => {

@@ -93,7 +93,7 @@ const AddCouponModal = ({ setCoupon, fetchCoupons }) => {
     }, [setCoupon])
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setCoupon(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight: '90vh'
             }}>

@@ -37,9 +37,9 @@ const WorkingDaysModal = ({ shiftFunction }) => {
 
     return (
         <>
-            <div className='modal_wrapper' onClick={() => shiftFunction(0)}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
-                <h4>Working days</h4>
+                <h4>Working Days</h4>
                 <i className="fa-solid fa-xmark" onClick={() => shiftFunction(0)}></i>
                 {loading ? (
                     <p style={{ margin: '20px 0' }}>Loading...</p>

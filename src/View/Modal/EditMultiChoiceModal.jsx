@@ -7,7 +7,7 @@ const EditMultiChoiceModal = ({ tabsFunction, singleData, editAddEmptyOption, ed
 
   return (
     <>
-      <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
+      <div className='modal_wrapper' ></div>
       <div className='modal_div'>
         <h4>Edit Multi Choice</h4>
         <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>

@@ -103,7 +103,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
 
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => seteditCustomer(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight:'80vh'
             }}>
@@ -140,7 +140,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                             }}>{errors?.email && errors?.email[0]}</small>
                         </div>
                         <div className='input_form confirm_input_form'>
-                            <label>Phone no<span>*</span></label>
+                            <label>Phone No<span>*</span></label>
                             <div className='phone_input_Wrapper656'>
                                 <select onChange={handleChange} name='phone_country_code_id' value={formData.phone_country_code_id} style={{
                                     border: 'none',
@@ -151,7 +151,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                                         <option value={e.id} key={e.id}>+{e.phone_code}</option>
                                     ))}
                                 </select>
-                                <input onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter phone number' />
+                                <input type='number' min={0} onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter phone number' />
                             </div>
 
                             <small style={{

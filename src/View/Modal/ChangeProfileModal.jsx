@@ -59,7 +59,7 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
     }
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => modalFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Change Profile Picture</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => modalFunction(0))}></i>

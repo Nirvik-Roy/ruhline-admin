@@ -5,7 +5,7 @@ import Button from '../../Components/Button'
 const EditDescriptiveModal = ({ tabsFunction, singleData, editQuestionText, editQuestions, editErrors, loading }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit Descriptive</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>

@@ -90,13 +90,13 @@ const Login = () => {
                     <img src={logo} />
                     <h1>Welcome Back Admin!</h1>
                     <Input name={'email'} onChange={handleChange} type={'email'} label={'Email Address'} required={true} placeholder={'Enter email'} />
-                    <small style={{
+                    {/* <small style={{
                         marginLeft: '15px',
                         fontSize: '11px',
                         marginTop: '-15px',
                         color: 'rgba(255, 0, 0, 1)',
                         cursor: 'pointer'
-                    }}>{errors?.email ? errors?.email[0] : emailErrormessage}</small>
+                    }}>{errors?.email ? errors?.email[0] : emailErrormessage}</small> */}
                     <div className='input_form' style={{
                         position: 'relative'
                     }}>

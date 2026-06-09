@@ -55,7 +55,7 @@ const EditQuoteCategory = ({ seteditModal, quoteId, fetchQuotes }) => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='modal_wrapper' onClick={(() => seteditModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit Quotes Category</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => seteditModal(false))}></i>

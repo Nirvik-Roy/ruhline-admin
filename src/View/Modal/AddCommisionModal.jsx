@@ -49,7 +49,7 @@ const AddCommisionModal = ({ setcommission }) => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='modal_wrapper' onClick={(() => setcommission(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add Global Commission</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setcommission(false))}></i>

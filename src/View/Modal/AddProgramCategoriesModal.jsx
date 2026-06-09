@@ -66,7 +66,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add Program Category</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setisModal(false))}></i>

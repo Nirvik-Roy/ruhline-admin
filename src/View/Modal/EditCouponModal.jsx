@@ -144,7 +144,7 @@ const EditCouponModal = ({ seteditCoupon, couponId, fetchCoupons }) => {
     return (
         <>
             {loading && <Loaders />}
-            <div className='modal_wrapper' onClick={(() => seteditCoupon(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight: '90vh'
             }}>

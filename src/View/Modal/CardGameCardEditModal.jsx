@@ -5,7 +5,7 @@ import Textarea from '../../Components/Textarea'
 const CardGameCardEditModal = ({ modalFunc, cardDescription, setcardDescription, cardName, setcardName, updateCardFunc, singleData, postloading }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => modalFunc(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit card</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => modalFunc(0))}></i>

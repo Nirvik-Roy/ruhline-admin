@@ -111,7 +111,7 @@ const CoachesShift = () => {
 
                     <div className='coaches_button_wapper'>
                         <div onClick={(() => shiftFunction(3))}>
-                            <Button children={'Working days'} styles={{
+                            <Button children={'Working Days'} styles={{
                                 color: 'var(--primary-color)',
                                 border: '1px solid var(--primary-color)',
                                 padding: '12px 15px',
@@ -121,7 +121,7 @@ const CoachesShift = () => {
                         </div>
 
                         <div onClick={(() => shiftFunction(1))}>
-                            <Button children={'Add new shift'} styles={{
+                            <Button children={'Add New Shift'} styles={{
                                 fontSize: '13px'
                             }} />
                         </div>

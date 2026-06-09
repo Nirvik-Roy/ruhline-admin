@@ -55,7 +55,7 @@ const SinglePayModal = ({ paymentFunction, checkOutId, getSinglePayoutFunc, upda
 
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => paymentFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>#{checkOutId}</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => paymentFunction(0))}></i>

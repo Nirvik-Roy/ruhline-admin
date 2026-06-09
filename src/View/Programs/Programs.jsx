@@ -106,7 +106,7 @@ const Programs = () => {
                     <h2>Programs</h2>
                     <div className='coaches_button_wapper'>
                         <div onClick={(() => navigate('/dashboard/programs/categories'))}>
-                            <Button children={'Program category'} styles={{
+                            <Button children={'Program Category'} styles={{
                                 color: 'var(--primary-color)',
                                 border: '1px solid var(--primary-color)',
                                 padding: '15px 15px',
@@ -116,7 +116,7 @@ const Programs = () => {
                         </div>
 
                         <div onClick={(() => navigate('/dashboard/programs/create-program'))}>
-                            <Button children={'Add program'} styles={{
+                            <Button children={'Add Program'} styles={{
                                 fontSize: '13px',
                                 padding: '15px 15px',
                             }} />

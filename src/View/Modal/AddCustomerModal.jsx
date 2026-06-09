@@ -23,7 +23,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
         last_name: '',
         email: '',
         phone: '',
-        phone_country_code_id: '',
+        phone_country_code_id: '4',
         password: '',
         password_confirmation: ''
     })
@@ -111,7 +111,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
     }
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setaddCustomer(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight: '80vh'
             }}>
@@ -215,7 +215,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                             }}>{errors?.password ? errors?.password[1] : confirmPasswordMsg}</small>
                         </div>
                         <div className='input_form confirm_input_form'>
-                            <label>Phone no<span>*</span></label>
+                            <label>Phone No<span>*</span></label>
                             <div className='phone_input_Wrapper656'>
                                 <select name='phone_country_code_id' onChange={handleChange} value={formData.phone_country_code_id} style={{
                                     border: 'none',
@@ -226,7 +226,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                                         <option key={e.id} value={e.id}>+{e.phone_code}</option>
                                     ))}
                                 </select>
-                                <input onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter phone number' />
+                                <input type='number' min={0} onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter phone number' />
                             </div>
 
                             <small style={{

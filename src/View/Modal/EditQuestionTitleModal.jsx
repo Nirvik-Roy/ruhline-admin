@@ -10,7 +10,7 @@ const EditQuestionTitleModal = ({ editQuestionSet, seteditTitleModal, singleSet,
     }, [singleSet])
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => seteditTitleModal(false))}></div>
+            <div className='modal_wrapper'></div>
 
             <div className='modal_div'>
                 <h4>Edit Question</h4>

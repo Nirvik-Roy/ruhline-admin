@@ -78,9 +78,9 @@ const EditCoachShift = ({ shiftId, shiftFunction, onSuccess }) => {
                     loading={deleting}
                 />
             )}
-            <div className='modal_wrapper' onClick={() => shiftFunction(0)}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
-                <h4>Edit shift</h4>
+                <h4>Edit Shift</h4>
                 <i className="fa-solid fa-xmark" onClick={() => shiftFunction(0)}></i>
                 {loading ? (
                     <p>Loading shift...</p>

@@ -6,7 +6,7 @@ import countryData from '../../../countries.json'
 const EditStaffModal = ({ staffFunction }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => staffFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit Staff</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => staffFunction(0))}></i>

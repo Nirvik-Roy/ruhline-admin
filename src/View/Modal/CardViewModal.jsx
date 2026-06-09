@@ -5,7 +5,7 @@ import Textarea from '../../Components/Textarea.jsx'
 const CardViewModal = ({ setModal, singleData }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>View card</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setModal(false))}></i>

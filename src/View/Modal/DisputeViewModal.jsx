@@ -5,7 +5,7 @@ const DisputeViewModal = ({ setdisputes, singleDisputeData, changeDisputeStatus,
 
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setdisputes(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight: '30vh'
             }}>

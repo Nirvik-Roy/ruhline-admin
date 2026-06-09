@@ -103,7 +103,7 @@ const ProgramSettingsModal = ({ setprogramSettingModal, setcardCategoryId, cardC
     // }, [coachCanEdit])
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setprogramSettingModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight:'57vh'
             }}>

@@ -4,7 +4,7 @@ import img from '../../assets/Photo (1).png'
 const ViewRoleModal = ({roleFunction}) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => roleFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div modal_img_div'>
                 <h4>Role 1</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => roleFunction(0))}></i>

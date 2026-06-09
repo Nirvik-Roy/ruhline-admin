@@ -4,7 +4,7 @@ import ModalLoader from '../../Components/Loaders/ModalLoader'
 const PayoutViewModal = ({ paymentFunction, singlePayout, payoutFrequency, loading }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => paymentFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight:'30vh'
             }}>

@@ -83,7 +83,7 @@ const ChangePasswordModal = ({ modalFunction }) => {
 
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => modalFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Change Password</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => modalFunction(0))}></i>

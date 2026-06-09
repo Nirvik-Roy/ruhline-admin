@@ -50,7 +50,7 @@ const AddProgramModule = ({ setmodalIsOpen, fetchModules, cardCategoryId, progra
             </Activity>
 
 
-            <div className='modal_wrapper' onClick={(() => setmodalIsOpen(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setmodalIsOpen(false))}></i>

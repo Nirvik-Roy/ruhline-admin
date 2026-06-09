@@ -28,7 +28,7 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLo
         last_name: '',
         email: '',
         phone: '',
-        phone_country_code_id: '1',
+        phone_country_code_id: '4',
         gender: '',
         coach_type: '',
         password: '',
@@ -131,11 +131,11 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLo
     }
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setCoachModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight:'80vh'
             }}>
-                <h4>Add a coach</h4>
+                <h4>Add a Coach</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setCoachModal(false))}></i>
                 {isLoading ? <ModalLoader /> : <form onSubmit={((e) => e.preventDefault())} className='modal_form'>
                     <div className='modal_input_grid_wrapper'>
@@ -227,7 +227,7 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLo
                             }}>{addCoachError?.password_confirmation ? addCoachError.password_confirmation : confirmPasswordMsg}</small>
                         </div>
                         <div className='input_form confirm_input_form'>
-                            <label>Phone no<span>*</span></label>
+                            <label>Phone No<span>*</span></label>
                             <div className='phone_input_Wrapper656'>
                                 <select onChange={handleChange} value={formData.phone_country_code_id} name='phone_country_code_id' style={{
                                     border: 'none',
@@ -238,7 +238,7 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLo
                                         <option value={e.id} key={e.id}>+ {e.phone_code}</option>
                                     ))}
                                 </select>
-                                <input disabled={phoneCodes?.length <= 0} onChange={handleChange} name='phone' value={formData.phone} placeholder='1234567890' />
+                                <input type='number' min={0} disabled={phoneCodes?.length <= 0} onChange={handleChange} name='phone' value={formData.phone} placeholder='Enter phone number' />
 
                                 <small style={{
                                     fontSize: '0.7rem',

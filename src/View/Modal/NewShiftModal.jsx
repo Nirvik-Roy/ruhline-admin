@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Button from '../../Components/Button'
 import Input from '../../Components/Input.jsx'
 import { createShift } from '../../utils/shift'
+import toast from 'react-hot-toast'
 
 const NewShiftModal = ({ shiftFunction, onSuccess }) => {
     const [saving, setSaving] = useState(false)
@@ -17,6 +18,25 @@ const NewShiftModal = ({ shiftFunction, onSuccess }) => {
     }
 
     const handleSubmit = async (e) => {
+        if(form.start_time > form.end_time){
+            toast.error('Start time must be before end time')
+            return
+        }
+        if(form.start_time === '' || form.end_time === ''){
+            toast.error('Please select start and end time')
+            return
+        }
+
+        if(form.name === ''){
+            toast.error('Please enter shift name')
+            return
+        }
+
+        if(form.start_time === form.end_time){
+            toast.error('End time must be after start time')
+            return
+        }
+
         e.preventDefault()
         setSaving(true)
         const payload = {
@@ -34,11 +54,11 @@ const NewShiftModal = ({ shiftFunction, onSuccess }) => {
 
     return (
         <>
-            <div className='modal_wrapper' onClick={() => shiftFunction(0)}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
-                <h4>Add new shift</h4>
+                <h4>Add New Shift</h4>
                 <i className="fa-solid fa-xmark" onClick={() => shiftFunction(0)}></i>
-                <form className='modal_form' onSubmit={handleSubmit}>
+                <form className='modal_form' >
                     <Input
                         label={'Shift Name'}
                         required={true}

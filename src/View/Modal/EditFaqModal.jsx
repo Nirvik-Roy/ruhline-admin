@@ -34,7 +34,7 @@ const EditFaqModal = ({ editFunc, seteditModal, faqId, faqloading }) => {
     }, [singleFaq])
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => seteditModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div' style={{
                 minHeight:'65vh'
             }}>

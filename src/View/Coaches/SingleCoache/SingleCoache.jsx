@@ -131,7 +131,7 @@ const SingleCoache = () => {
                         </div>
 
                         <ul className='single_coach_list'>
-                            <li>Coach type: <span>{singleCoachdata?.profile?.coach_type}</span></li>
+                            <li>Coach Type: <span>{singleCoachdata?.profile?.coach_type}</span></li>
                             <li>Email: <span>{singleCoachdata?.user?.email}</span></li>
                             <li>Phone: <span>+{singleCoachdata?.profile?.phone_country_code?.phone_code} {singleCoachdata?.profile?.phone}</span></li>
                         </ul>

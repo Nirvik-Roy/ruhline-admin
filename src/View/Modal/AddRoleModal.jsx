@@ -7,7 +7,7 @@ import countryData from '../../../countries.json'
 const AddRoleModal = () => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setCoachModal(false))}></div>
+            <div className='modal_wrapper' ></div>
             <div className='modal_div'>
                 <h4>Add Role</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setCoachModal(false))}></i>

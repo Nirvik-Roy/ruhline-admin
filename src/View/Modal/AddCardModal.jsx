@@ -5,7 +5,7 @@ import Textarea from '../../Components/Textarea'
 const AddCardModal = ({ setisModal, cardDescription, setcardDescription, cardName, setcardName, addCardFunc, addCardLoading, postloading }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setisModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add card</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setisModal(false))}></i>

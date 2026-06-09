@@ -7,7 +7,7 @@ const AddFaqModal = ({ addFunction, setaddModal, faqloading }) => {
     const [heading, setheading] = useState('');
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => setaddModal(false))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Add FAQ</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => setaddModal(false))}></i>

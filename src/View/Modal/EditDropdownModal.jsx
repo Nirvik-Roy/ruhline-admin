@@ -6,7 +6,7 @@ import Button from '../../Components/Button'
 const EditDropdownModal = ({ tabsFunction, singleData, editAddEmptyOption, editdeleteOption, editOptionValue, editQuestionText, editQuestions, editErrors,loading }) => {
     return (
         <>
-            <div className='modal_wrapper' onClick={(() => tabsFunction(0))}></div>
+            <div className='modal_wrapper'></div>
             <div className='modal_div'>
                 <h4>Edit Dropdown</h4>
                 <i class="fa-solid fa-xmark" onClick={(() => tabsFunction(0))}></i>
