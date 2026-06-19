@@ -53,14 +53,17 @@ const Login = () => {
     const loginFunc = () => {
         if(formData.email == ''){
             setEmailerrorMessage('Email is required');
+            toast.error('Please enter email!');
             return false;
         }
         if(formData.password == ''){
             setPassworderrorMessage('Password is required');
+            toast.error('Please enter password!');
             return false;
         }
         if (formData.email == '' && formData.password == '') {
-            toast.error('Plz enter all required fields...')
+            toast.error('Please enter all the required fields!');
+            return false;
         }
         else {
             setEmailerrorMessage('')

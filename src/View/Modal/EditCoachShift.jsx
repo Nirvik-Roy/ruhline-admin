@@ -3,6 +3,7 @@ import Button from '../../Components/Button'
 import Input from '../../Components/Input.jsx'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import { getShiftById, updateShift, deleteShift } from '../../utils/shift'
+import toast from 'react-hot-toast'
 
 const EditCoachShift = ({ shiftId, shiftFunction, onSuccess }) => {
     const [enable, setenable] = useState(true)
@@ -40,6 +41,23 @@ const EditCoachShift = ({ shiftId, shiftFunction, onSuccess }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (!shiftId) return
+        if (form.name == '') {
+            toast.error('Shift name is required!');
+            return;
+        }
+        if (form.start_time === '' || form.end_time === '') {
+            toast.error('Please select start and end time')
+            return
+        }
+        if (form.start_time > form.end_time) {
+            toast.error('End time should be after start time!');
+            return;
+        }
+        if (form.start_time === form.end_time) {
+            toast.error('Start time and end time should not be equal!');
+            return;
+        }
+
         setSaving(true)
         const payload = {
             name: form.name,
