@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './SingleCoache.css'
 import Button from '../../../Components/Button'
-import photo from '../../../assets/Photo.png'
+import photo from '../../../assets/207-2074624_white-gray-circle-avatar-png-transparent-png.png'
 import UpcomingProgramSlider from './UpcomingProgramSlider'
 import ProgramAssignedSlider from './ProgramAssignedSlider'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -122,7 +122,7 @@ const SingleCoache = () => {
 
                 <div className='single_coaches_photos_wrapper'>
                     <div className='single_coache_img'>
-                        <img src={singleCoachdata?.profile?.profile_image} />
+                        <img src={singleCoachdata?.profile?.profile_image || photo} />
                     </div>
                     <div className='single_coache_details'>
                         <div className='single_coach_details_head_Wrapper'>

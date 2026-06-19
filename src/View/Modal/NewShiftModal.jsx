@@ -14,6 +14,10 @@ const NewShiftModal = ({ shiftFunction, onSuccess }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target
+        if(name == 'end_time' && form.start_time==''){
+            toast.error('Please select start time first!');
+            return;
+        }
         setForm((prev) => ({ ...prev, [name]: value }))
     }
 

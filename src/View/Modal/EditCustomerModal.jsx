@@ -20,7 +20,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
         last_name: '',
         email: '',
         phone: '',
-        phone_country_code_id: '5',
+        phone_country_code_id: '4',
     })
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -47,7 +47,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                 last_name: singleCustomerData?.user?.last_name || '',
                 email: singleCustomerData.user?.email || '',
                 phone: singleCustomerData.profile?.phone || '',
-                phone_country_code_id: singleCustomerData.profile?.phone_country_code?.id || 5
+                phone_country_code_id: singleCustomerData.profile?.phone_country_code?.id || 4
             })
         }
     }, [singleCustomerData])
@@ -172,7 +172,7 @@ const EditCustomerModal = ({ seteditCustomer, customerId }) => {
                         <label style={{
                             fontSize: '15px',
                             fontWeight: '600'
-                        }}>Upload Image<span>*</span></label>
+                        }}>Upload Image<span></span></label>
 
                         <div className='files_upload_wrapper'>
                             {(!file && !singleCustomerData?.profile?.profile_image) && (

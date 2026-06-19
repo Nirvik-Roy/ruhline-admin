@@ -167,7 +167,8 @@ const Customers = () => {
                                         </div>
                                     </td>
                                     <td>{e?.user?.email}</td>
-                                    <td>+{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone}</td>
+                                    {(e?.profile?.phone_country_code?.phone_code && e?.profile?.phone) &&   <td>+{e?.profile?.phone_country_code?.phone_code} {e?.profile?.phone}</td>}
+                                    {(!e?.profile?.phone_country_code?.phone_code && !e?.profile?.phone) && <td>--not-selected--</td>}
                                     <td ref={dropdownRef}>
                                         <img onClick={((e) => {
                                             e.stopPropagation()

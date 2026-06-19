@@ -200,7 +200,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                                 width: '20px',
                                 cursor: 'pointer'
                             }} class="fa-regular fa-eye-slash" onClick={(() => setType3(!type3))}></i>}
-                            {confirmPasswordMsg == '' && <img style={{
+                            {(formData.password === formData.password_confirmation && formData.password!='' && formData.password_confirmation!='') && <img style={{
                                 position: 'absolute',
                                 top: '50px',
                                 right: '40px',
@@ -242,7 +242,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                         <label style={{
                             fontSize: '15px',
                             fontWeight: '600'
-                        }}>Upload Image<span>*</span></label>
+                        }}>Upload Image<span></span></label>
 
                         <div className='files_upload_wrapper'>
                             {!file && <>

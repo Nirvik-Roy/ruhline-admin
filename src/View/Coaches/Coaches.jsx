@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import './Coaches.css'
 import Button from '../../Components/Button'
-import img from '../../assets/a1380e7f99749ba01d9fdc18ec22e32c85fd5a0e.jpg'
+import img from '../../assets/207-2074624_white-gray-circle-avatar-png-transparent-png.png'
 import ellipse from '../../assets/_MoreIcon_.svg'
 import Pagination from '../../Components/Pagination/Pagination'
 import AddCoachModal from '../Modal/AddCoachModal'
