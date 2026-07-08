@@ -22,6 +22,7 @@ import CmsTermsConditions from './View/CMS/CmsTermsConditions/CmsTermsConditions
 import CmsPrivacy from './View/CMS/CmsPrivacy/CmsPrivacy'
 import CmsRefundPolicy from './View/CMS/CmsRefundPolicy/CmsRefundPolicy'
 import CmsContact from './View/CMS/CmsContact/CmsContact'
+import CmsContactUs from './View/CMS/CmsContactUs/CmsContactUs'
 import CmsFaq from './View/CMS/CmsFaq/CmsFaq'
 import FaqMentee from './View/CMS/CmsFaq/FaqMentee'
 import FaqMentor from './View/CMS/CmsFaq/FaqMentor'
@@ -111,6 +112,7 @@ function App() {
               <Route path='cms/privacy-policy' element={<CmsPrivacy />} />
               <Route path='cms/refund-policy' element={<CmsRefundPolicy />} />
               <Route path='cms/contact-queries' element={<CmsContact />} />
+              <Route path='cms/contact-us' element={<CmsContactUs />} />
               <Route path='cms/faq/categories' element={<CmsFaq />} />
               <Route path='cms/faq/mentee' element={<FaqMentee />} />
               <Route path='cms/faq/mentor' element={<FaqMentor />} />

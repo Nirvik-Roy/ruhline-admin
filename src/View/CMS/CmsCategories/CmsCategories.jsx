@@ -17,6 +17,10 @@ const CmsCategories = () => {
             to: '/dashboard/cms/cms-about'
         },
         {
+            name: 'Contact Us',
+            to: '/dashboard/cms/contact-us'
+        },
+        {
             name: ' Contact Inquiries',
             to: '/dashboard/cms/contact-queries'
         },
