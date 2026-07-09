@@ -3,7 +3,7 @@ import Input from '../../../Components/Input'
 import { getAllPhoneCountry, getCities, getCountries, getStates } from '../../../utils/location';
 import Loaders from '../../../Components/Loaders/Loaders';
 import ModalLoader from '../../../Components/Loaders/ModalLoader';
-const ContactInfo = ({ siteDetailsForm, handleChange }) => {
+const ContactInfo = ({ siteDetailsForm, handleChange, siteErrors }) => {
     const [phoneCodes, setphoneCodes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [countries, setcountries] = useState([]);
@@ -121,22 +121,45 @@ const ContactInfo = ({ siteDetailsForm, handleChange }) => {
                 <div>
                     <Input label={'Zipcode'} onChange={handleChange} name={'zipcode'} value={siteDetailsForm.zipcode} required={true} placeholder={'Enter zip code'} />
                 </div>
-                {/* 
+                <div>
+                    <Input type={'email'} onChange={handleChange} value={siteDetailsForm.contact_email} name={'contact_email'} label={'Email'} placeholder={'Enter email address'} />
+                    {siteErrors?.contact_email && <small style={{
+                        marginLeft: '5px',
+                        color: 'red',
+                        fontSize: '12px',
+                        marginTop: '3px'
+                    }}>* {siteErrors?.contact_email[0]}</small>}
+                </div>
                 <div className='input_form confirm_input_form'>
-                    <label>Phone no<span>*</span></label>
+                    <label>Phone No</label>
                     <div className='phone_input_Wrapper656'>
-                        <select name='phone_country_code_id' style={{
+                        {/* <select onChange={handleChange} value={siteDetailsForm.contact_phone_country_code} name='contact_phone_country_code' style={{
                             border: 'none',
                             borderRight: '2px solid #000',
                             outline: 'none'
                         }}>
+                            <option value=''>--select-code--</option>
                             {phoneCodes?.map((e,) => (
-                                <option value={e.id} key={e.id}>+ {e.phone_code}</option>
+                                <option value={e.phone_code} key={e.id}>+ {e.phone_code}</option>
                             ))}
-                        </select>
-                        <input disabled={phoneCodes?.length <= 0} name='phone' placeholder='1234567890' />
+                        </select> */}
+                        <input type='number' min={0} max={9999999999} style={{
+                            width: '100%'
+                        }} disabled={phoneCodes?.length <= 0} onChange={handleChange} name='contact_phone_number' value={siteDetailsForm.contact_phone_number} placeholder='Enter phone number' />
                     </div>
-                </div> */}
+                    {siteErrors?.['contact_phone.country_code'] && <small style={{
+                        fontSize: '0.7rem',
+                        display: 'block',
+                        marginTop: '5px',
+                        color: 'red'
+                    }}>* {siteErrors?.['contact_phone.country_code'][0]}</small>}
+                    {siteErrors?.['contact_phone.number'] && <small style={{
+                        fontSize: '0.7rem',
+                        display: 'block',
+                        color: 'red',
+                        marginTop: '5px'
+                    }}>* {siteErrors?.['contact_phone.number'][0]}</small>}
+                </div>
             </div>}
         </>
     )

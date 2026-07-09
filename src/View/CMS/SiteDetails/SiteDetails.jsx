@@ -46,7 +46,10 @@ const SiteDetails = () => {
         city_id: '',
         state_id: '',
         country_id: '',
-        zipcode: ''
+        zipcode: '',
+        contact_email: '',
+        contact_phone_country_code: '',
+        contact_phone_number: ''
     })
 
     const fetchSiteDetails = async () => {
@@ -82,7 +85,10 @@ const SiteDetails = () => {
             city_id: siteDetails?.address?.city_id || '',
             state_id: siteDetails?.address?.state_id || '',
             country_id: siteDetails?.address?.country_id || '',
-            zipcode: siteDetails?.address?.zipcode || ''
+            zipcode: siteDetails?.address?.zipcode || '',
+            contact_email: siteDetails?.contact_email || '',
+            contact_phone_country_code: siteDetails?.contact_phone?.country_code || '',
+            contact_phone_number: siteDetails?.contact_phone?.number || ''
         })
     }, [siteDetails])
 
@@ -123,6 +129,9 @@ const SiteDetails = () => {
             { siteDetailsForm.state_id && formData.append('state_id', siteDetailsForm.state_id) }
             { siteDetailsForm.country_id && formData.append('country_id', siteDetailsForm.country_id) }
             { siteDetailsForm.zipcode && formData.append('zipcode', siteDetailsForm.zipcode) }
+            formData.append('contact_email', siteDetailsForm.contact_email || "")
+            formData.append('country_code', siteDetailsForm.contact_phone_country_code || "")
+            formData.append('contact_phone', JSON.stringify(Number(siteDetailsForm.contact_phone_number)) || "")
             const res = await postSiteDetails(formData);
             setsiteErrors(res)
         } catch (err) {
@@ -149,7 +158,10 @@ const SiteDetails = () => {
             city_id: '',
             state_id: '',
             country_id: '',
-            zipcode: ''
+            zipcode: '',
+            contact_email: '',
+            contact_phone_country_code: '',
+            contact_phone_number: ''
         })
     }
 
@@ -226,7 +238,7 @@ const SiteDetails = () => {
 
 
                             <Activity mode={sitetabs.contactInfo ? 'visible' : 'hidden'}>
-                                <ContactInfo handleChange={handleChange} siteDetailsForm={siteDetailsForm} />
+                                <ContactInfo handleChange={handleChange} siteDetailsForm={siteDetailsForm} siteErrors={siteErrors} />
                             </Activity>
 
                         </>}
