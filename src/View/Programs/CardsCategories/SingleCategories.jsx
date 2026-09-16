@@ -87,7 +87,7 @@ const SingleCategories = () => {
             }
             setaddCardLoading(false)
         } else {
-            toast.error("Plz enter the fields")
+            toast.error("Please enter the fields")
         }
     }
     const deleteFunc = async () => {

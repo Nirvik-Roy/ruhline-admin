@@ -67,7 +67,7 @@ const QuotesCategories = () => {
                 setaddLoading(false)
             }
         } else {
-            toast.error('Plz enter the filed...')
+            toast.error('Please enter the filed...')
         }
     }
 

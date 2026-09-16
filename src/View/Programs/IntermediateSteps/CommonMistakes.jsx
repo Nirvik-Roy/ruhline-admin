@@ -67,7 +67,7 @@ const CommonMistakes = () => {
                 setpostLoading(false)
             }
         } else {
-            toast.error('Plz enter the headline field')
+            toast.error('Please enter the headline field')
         }
 
     }

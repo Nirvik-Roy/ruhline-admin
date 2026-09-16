@@ -24,7 +24,7 @@ const AddHabitTypeModal = ({ setisModal, addHabitType, habitLoading }) => {
                             name: habitName
                         })
                     }else{
-                        toast.error("Plz enter the field..")
+                        toast.error("Please enter the field..")
                     }
                 })}>
                     <Button loading={habitLoading} loadingText='Adding...' children={'Add'} styles={{

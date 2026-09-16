@@ -53,7 +53,7 @@ const ChangeProfileModal = ({ modalFunction, userDataFetch, userData }) => {
                 setIsLoading(false)
             }
         } else {
-            toast.error('Plz provide the required details..')
+            toast.error('Please provide the required details..')
             setIsLoading(false)
         }
     }

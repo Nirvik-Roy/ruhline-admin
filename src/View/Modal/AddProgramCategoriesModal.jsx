@@ -59,7 +59,7 @@ const AddProgramCategoriesModal = ({ setisModal, fetchPrograms }) => {
                 setaddLoading(false)
             }
         } else {
-            toast.error('Plz enter all fields...')
+            toast.error('Please enter all fields...')
         }
     }
 

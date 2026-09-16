@@ -49,7 +49,7 @@ const EditQuoteModal = ({ setisEditModal, quoteId, fetchQuotes }) => {
                 seteditLoading(false)
             }
         } else {
-            toast.error('Plz enter the field')
+            toast.error('Please enter the field')
         }
     }
     return (

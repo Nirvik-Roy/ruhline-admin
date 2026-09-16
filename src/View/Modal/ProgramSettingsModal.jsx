@@ -64,7 +64,7 @@ const ProgramSettingsModal = ({ setprogramSettingModal, setcardCategoryId, cardC
             if (coachCanEdit) {
                 formData.append('coach_can_edit_modules', "1")
                 if (coachEditModules?.length <= 0) {
-                    toast.error('Plz select atleast one module..')
+                    toast.error('Please select atleast one module..')
                     return false;
                 }
                 coachEditModules?.forEach((item) => {

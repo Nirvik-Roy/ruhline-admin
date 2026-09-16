@@ -101,7 +101,7 @@ const AddCustomerModal = ({ setaddCustomer, fetchCustomer }) => {
                     setaddCustomer(false)
                 }
             } else {
-                toast.error('Plz enter all the fields...')
+                toast.error('Please enter all the fields...')
             }
         } catch (err) {
             console.log(err)

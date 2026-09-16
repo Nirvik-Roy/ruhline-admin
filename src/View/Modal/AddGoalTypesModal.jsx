@@ -26,7 +26,7 @@ const AddGoalTypesModal = ({ setisModal, addGoal, goalLoading }) => {
                             name:goalType
                         })
                     }else{
-                        toast.error("Plz enter the field")
+                        toast.error("Please enter the field")
                     }
                 })} children={'Add'} styles={{
                     marginLeft: 'auto'

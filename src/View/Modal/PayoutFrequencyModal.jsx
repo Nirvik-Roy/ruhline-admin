@@ -24,7 +24,7 @@ const PayoutFrequencyModal = ({ setmodalIsOpen, callPayoutFunction, payoutFreque
             }
             setloading(false)
         } else {
-            toast.error('Plz make any one selection...')
+            toast.error('Please make any one selection...')
         }
     }
     return (

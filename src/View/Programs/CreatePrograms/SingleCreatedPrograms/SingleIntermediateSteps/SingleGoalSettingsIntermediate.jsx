@@ -84,7 +84,7 @@ const SingleGoalSettingsIntermediate = () => {
                 setpostloading(false)
             }
         } else {
-            toast.error("Plz enter all the required fileds")
+            toast.error("Please enter all the required fileds")
         }
 
     }

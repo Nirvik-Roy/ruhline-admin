@@ -50,7 +50,7 @@ const EditGoalTypesModal = ({ seteditModal, goalId, fetchData }) => {
                 seteditLoading(false)
             }
         } else {
-            toast.error("Plz enter the field")
+            toast.error("Please enter the field")
         }
     }
     return (

@@ -83,7 +83,7 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
             return setContactErrorMessage('* Contact Number is Required')
         }
         if (!contactRegex.test(number)) {
-            return setContactErrorMessage('* Plz enter a 10 digit number')
+            return setContactErrorMessage('* Please enter a 10 digit number')
         }
         return setContactErrorMessage('')
     }
@@ -158,7 +158,7 @@ const EditCoachModal = ({ seteditCoachModal, singleCoachdata, singleCoachLoading
             }
 
         } else {
-            toast.error('Plz enter all the fields...')
+            toast.error('Please enter all the fields...')
         }
     }
 

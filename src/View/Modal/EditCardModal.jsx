@@ -51,7 +51,7 @@ const EditCardModal = ({ setisEditModal, fetchCards, cardId }) => {
                 seteditLoading(false)
             }
         } else {
-            toast.error('Plz enter the fields')
+            toast.error('Please enter the fields')
         }
     }
     return (

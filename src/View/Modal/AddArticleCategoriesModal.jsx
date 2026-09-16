@@ -39,7 +39,7 @@ const AddArticleCategoriesModal = ({ setaddArticle, addArticle, fetchArticleCmsD
                 setloading(false)
             }
         } else {
-            toast.error('Plz enter the field...')
+            toast.error('Please enter the field...')
         }
     }
     useEffect(()=>{

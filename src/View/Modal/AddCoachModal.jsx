@@ -68,7 +68,7 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLo
             return setContactErrorMessage('* Contact Number is Required')
         }
         if (!contactRegex.test(number)) {
-            return setContactErrorMessage('* Plz enter a 10 digit number')
+            return setContactErrorMessage('* Please enter a 10 digit number')
         }
         return setContactErrorMessage('')
     }
@@ -126,7 +126,7 @@ const AddCoachModal = ({ setCoachModal, addNewCoachFunc, addCoachError, updateLo
             phone_country_code_id != '', password != '', password_confirmation != '', gender != '', coach_type != '') {
             addNewCoachFunc(formData, file)
         } else {
-            toast.error('Plz enter all the necessary fields...')
+            toast.error('Please enter all the necessary fields...')
         }
     }
     return (

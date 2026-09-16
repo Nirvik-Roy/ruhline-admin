@@ -77,7 +77,7 @@ const ChangePasswordModal = ({ modalFunction }) => {
                 setisLoading(false)
             }
         } else {
-            toast.error('Plz enter all the fields..')
+            toast.error('Please enter all the fields..')
         }
     }
 
