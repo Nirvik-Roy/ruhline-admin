@@ -26,6 +26,7 @@
 }
 .table_container {
   min-height: 70vh;
+  overflow: visible !important;
 }
 th {
   text-wrap: nowrap;

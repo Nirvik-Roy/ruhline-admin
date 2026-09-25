@@ -198,7 +198,7 @@ const Coaches = () => {
 
     return (
         <>
-            {coachVerifyModal && <VerifyModal setverifymodal={setcoachVerifyModal} onClick={handleCoachVerification} title={'Coach Verification'} details={'Do you want to verify this coach?'} />}
+            {coachVerifyModal && <VerifyModal loading={isLoading} setverifymodal={setcoachVerifyModal} onClick={handleCoachVerification} title={'Coach Verification'} details={'Do you want to verify this coach?'} />}
             {deleteModal && <DeleteModal loading={deletedloading} setdeleteModal={setdeleteModal} onClick={deletedCoachfunc} title={'Delete Coach'} details={'Are you sure you want to delete this coach...'} />}
             {(isLoading) && <Loaders />}
 
@@ -284,7 +284,10 @@ const Coaches = () => {
                                             top: '50px',
                                             height: 'fit-content'
                                         } : {}}>
-                                            {!e?.is_admin_verified && <p onClick={(() => handleCoach(e?.id))}>Verify Coach</p>}
+                                            {!e?.is_admin_verified && <p style={{
+                                                opacity:isLoading ? 0.5 : 1,
+                                                cursor: isLoading ? 'not-allowed' : 'pointer'
+                                            }} onClick={(() => handleCoach(e?.id))}>Verify Coach</p>}
                                             <p onClick={(() => {
                                                 navigate(`/dashboard/coaches/single-coache/${e?.id}`)
                                             })}>View</p>

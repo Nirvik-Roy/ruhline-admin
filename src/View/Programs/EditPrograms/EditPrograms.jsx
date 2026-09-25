@@ -17,6 +17,7 @@ import { getAllCoaches } from '../../../utils/coach'
 import Loaders from '../../../Components/Loaders/Loaders.jsx'
 import { createProgram, editProgramsById, getAllPrograms, getGlobalComission, getprogramById, deleteGalleryImageApi } from '../../../utils/Program.js'
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal.jsx'
+import toast from 'react-hot-toast'
 const EditPrograms = () => {
     const navigate = useNavigate()
     const [index, setIndex] = useState(1);
@@ -172,7 +173,82 @@ const EditPrograms = () => {
         const filteredData = dummyData.filter((e) => e.id != id)
         setgalleryImage(filteredData)
     }
+
+    const isEmptyHtml = (html) => {
+        if (!html) return true
+        return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() === ''
+    }
+
+    const validateRequiredFields = () => {
+        const errors = {}
+
+        if (!staticdata.name?.trim()) {
+            errors.name = ['The program name field is required.']
+        }
+        if (!programCategoryId) {
+            errors.program_category_id = ['The program category field is required.']
+        } else if (programSubCategory?.length > 0 && !childCategoryId) {
+            errors.program_category_id = ['The program sub category field is required.']
+        }
+        if (isEmptyHtml(programDescription)) {
+            errors.description = ['The description field is required.']
+        }
+        if (!(mainImage instanceof File) && typeof mainImage !== 'string') {
+            errors.main_image = ['The main image field is required.']
+        }
+
+        if (occurenceType === 'One Time') {
+            if (!staticdata.oneTimeSession) {
+                errors.session_duration_minutes = ['The session duration field is required.']
+            }
+        } else {
+            if (!staticdata.tenureWeeks?.toString().trim()) {
+                errors.tenure_weeks = ['The tenure field is required.']
+            }
+            if (!staticdata.noofSessions?.toString().trim()) {
+                errors.sessions_per_week = ['The no of sessions field is required.']
+            }
+            if (!staticdata.recurringSession) {
+                errors.session_duration_minutes = ['The session duration field is required.']
+            }
+        }
+
+        if (!staticdata.originalPrice?.toString().trim()) {
+            errors.original_price = ['The original price field is required.']
+        }
+        if (!staticdata.salePrice?.toString().trim()) {
+            errors.sale_price = ['The sale price field is required.']
+        }
+
+        if (commissionTab === 'Custom' && !staticdata.customcommisionRate?.toString().trim()) {
+            errors.custom_commission_rate = ['The commission rate field is required.']
+        }
+
+        if (!staticdata.tag) {
+            errors.tag = ['The tag field is required.']
+        }
+
+        return errors
+    }
+
     const handleSubmit = async () => {
+        const clientErrors = validateRequiredFields()
+        if (Object.keys(clientErrors).length > 0) {
+            setprogramErrors(clientErrors)
+            Object.values(clientErrors).forEach((msgs) => {
+                if (msgs?.[0]) toast.error(msgs[0])
+            })
+            if (clientErrors.session_duration_minutes || clientErrors.tenure_weeks || clientErrors.sessions_per_week) {
+                tabsFunction(1)
+            } else if (clientErrors.original_price || clientErrors.sale_price) {
+                tabsFunction(2)
+            } else if (clientErrors.custom_commission_rate) {
+                tabsFunction(4)
+            } else if (clientErrors.tag) {
+                tabsFunction(5)
+            }
+            return
+        }
 
         try {
             setpostloading(true)
@@ -630,7 +706,7 @@ const EditPrograms = () => {
                                         {/* Tag Content */}
 
                                         <Activity mode={tabs.tag ? 'visible' : 'hidden'}>
-                                            <TagContent staticdata={staticdata} handleChange={handleChange} />
+                                            <TagContent programErrors={programErrors} staticdata={staticdata} handleChange={handleChange} />
                                         </Activity>
                                     </div>
                                 </div>
@@ -642,7 +718,7 @@ const EditPrograms = () => {
 
                         <div className='faq_dropdown_main'>
                             <div className='faq_dropdown_wrapper'>
-                                <h5>FaQs</h5>
+                                <h5>FAQs</h5>
                                 <div style={toggle.programFaq ? { background: 'var(--primary-color)' } : {}} className='dropdown_button' onClick={(() => toggleFunction(1))}>
                                     <i class="fa-solid fa-angle-down" style={toggle.programFaq ? { color: '#fff', rotate: '90deg' } : {}}></i>
                                 </div>

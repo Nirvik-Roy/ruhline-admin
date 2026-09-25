@@ -180,7 +180,7 @@ const Programs = () => {
                                         </div>
                                     </td>
                                     <td>{e?.program_category?.name}</td>
-                                    <td>{e?.occurrence_type}</td>
+                                    <td >{e?.occurrence_type === 'one_time' ? 'One Time' : 'Recurring'}</td>
                                     <td>SAR{e?.sale_price}</td>
                                     <td ref={dropdownRef} onClick={((e) => e.stopPropagation())}>
                                         <img onClick={(() => indexFunction(i))} src={ellipse} />

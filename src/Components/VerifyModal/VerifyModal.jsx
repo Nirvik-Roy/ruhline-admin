@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../Button'
 
-const VerifyModal = ({ title, onClick, details, setverifymodal }) => {
+const VerifyModal = ({ title, onClick, details, setverifymodal,isLoading }) => {
     return (
         <>
             <div className='modal_wrapper'></div>
@@ -29,7 +29,7 @@ const VerifyModal = ({ title, onClick, details, setverifymodal }) => {
                     </div>
                     <div onClick={onClick}>
 
-                        <Button children={'Confirm'} />
+                        <Button loadingText='Verifying...' loading={isLoading} children={'Confirm'} />
                     </div>
                 </div>
             </div>
